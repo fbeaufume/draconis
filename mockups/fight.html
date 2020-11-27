@@ -12,25 +12,36 @@
     <!-- Tailwind Custom Forms - use to standardise form fields - https://github.com/tailwindcss/custom-forms -->
     <link href="https://unpkg.com/@tailwindcss/custom-forms/dist/custom-forms.min.css" rel="stylesheet">
 </head>
-<body class="font-mono bg-black">
+<body class="font-mono bg-black text-gray-500">
 <div class="container mx-auto">
-    <div class="text-2xl font-bold text-gray-500 pt-2 pb-6">Draconis UI mockup (in progress)</div>
+    <div class="text-2xl font-bold pt-2 pb-6">Draconis UI mockup (in progress)</div>
 
     <div class="flex">
         <!-- Actions order -->
-        <div class="flex-1">
-            <p class="text-gray-500">Order</p>
+        <div class="w-1/4">
+            <div class="">
+                <p>Action order</p>
+            </div>
+            <div class="bg-gray-800 mr-4">
+                <p>TODO</p>
+            </div>
         </div>
 
-        <div class="flex-4">
+        <div class="w-3/4">
             <!-- Enemies -->
-            <div class="flex-1">
-                <p class="text-gray-500">Enemies</p>
+            <div class="">
+                <p>Enemies</p>
+            </div>
+            <div class="bg-gray-800">
+                <p>TODO</p>
             </div>
 
             <!-- Party -->
+            <div class="mt-4">
+                <p>Party</p>
+            </div>
             <div class="flex space-x-4 pb-4">
-                <div class="flex-1 shadow bg-gray-800 p-4">
+                <div class="w-1/4 bg-gray-800 p-4">
                     <div class="flex space-x-6 items-center">
                         <p class="uppercase text-xl font-bold text-gray-300">Melkan</p>
                         <p class="font-bold text-gray-300">Warrior</p>
@@ -41,7 +52,7 @@
                         <p class="pl-2 text-purple-400">Tech <span class="text-purple-400 font-bold">14/14</span></p>
                     </div>
                 </div>
-                <div class="flex-1 shadow bg-gray-800 p-4">
+                <div class="w-1/4 bg-gray-800 p-4">
                     <div class="flex space-x-6 items-center">
                         <p class="uppercase text-xl font-bold text-gray-300">Cyl</p>
                         <p class="font-bold text-gray-300">Rogue</p>
@@ -52,7 +63,7 @@
                         <p class="pl-2 text-purple-400">Tech <span class="text-purple-400 font-bold">17/17</span></p>
                     </div>
                 </div>
-                <div class="flex-1 shadow bg-gray-800 p-4">
+                <div class="w-1/4 bg-gray-800 p-4">
                     <div class="flex space-x-6 items-center">
                         <p class="uppercase text-xl font-bold text-gray-300">Arwin</p>
                         <p class="font-bold text-gray-300">Paladin</p>
@@ -65,7 +76,7 @@
                 </div>
             </div>
             <div class="flex space-x-4">
-                <div class="flex-1 shadow bg-gray-800 p-4">
+                <div class="w-1/4 bg-gray-800 p-4">
                     <div class="flex space-x-6 items-center">
                         <p class="uppercase text-xl font-bold text-gray-300">Faren</p>
                         <p class="font-bold text-gray-300">Archer</p>
@@ -76,7 +87,7 @@
                         <p class="pl-2 text-purple-400">Tech <span class="text-purple-400 font-bold">17/17</span></p>
                     </div>
                 </div>
-                <div class="flex-1 shadow bg-gray-800 p-4">
+                <div class="w-1/4 bg-gray-800 p-4">
                     <div class="flex space-x-6 items-center">
                         <p class="uppercase text-xl font-bold text-gray-300">Nairo</p>
                         <p class="font-bold text-gray-300">Priest</p>
@@ -87,7 +98,7 @@
                         <p class="pl-2 text-blue-400">Mana <span class="text-blue-400 font-bold">20/20</span></p>
                     </div>
                 </div>
-                <div class="flex-1 shadow bg-gray-800 p-4">
+                <div class="w-1/4 bg-gray-800 p-4">
                     <div class="flex space-x-6 items-center">
                         <p class="uppercase text-xl font-bold text-gray-300">Harika</p>
                         <p class="font-bold text-gray-300">Sorceress</p>
@@ -100,15 +111,13 @@
                 </div>
             </div>
         </div>
-
-        <!-- Skills -->
-        <div class="flex-1">
-            <p class="text-gray-500">Skills</p>
-        </div>
     </div>
     <!-- Logs -->
-    <div class="flex-1">
-        <p class="text-gray-500">Combat logs</p>
+    <div class="mt-4">
+        <p>Combat logs</p>
+    </div>
+    <div class="bg-gray-800">
+        <p>TODO</p>
     </div>
 </div>
 </body>

@@ -10,7 +10,7 @@
     <!-- Replace with your tailwind.css once created -->
     <link href="https://unpkg.com/tailwindcss/dist/tailwind.min.css" rel="stylesheet">
     <!-- Tailwind Custom Forms - use to standardise form fields - https://github.com/tailwindcss/custom-forms -->
-    <link href="https://unpkg.com/@tailwindcss/custom-forms/dist/custom-forms.min.css" rel="stylesheet">
+    <!--<link href="https://unpkg.com/@tailwindcss/custom-forms/dist/custom-forms.min.css" rel="stylesheet">-->
 </head>
 <body class="font-mono bg-gray-900 text-gray-500">
 <div class="container mx-auto">
@@ -21,52 +21,29 @@
 
     <div class="flex">
         <!-- Actions order -->
-        <div class="w-1/4">
+        <div class="w-1/5">
             <div class="bg-gray-800 mr-4 p-4">
-                <div>
-                    <p class="text-gray-300">Cyl</p>
-                </div>
-                <div>
-                    <p class="text-yellow-200">Goblin archer A</p>
-                </div>
-                <div>
-                    <p class="text-gray-300">Arwin</p>
-                </div>
-                <div>
-                    <p class="text-yellow-200">Goblin soldier A</p>
-                </div>
-                <div>
-                    <p class="text-gray-300">Faren</p>
-                </div>
-                <div>
-                    <p class="text-yellow-200">Goblin shaman A</p>
-                </div>
-                <div>
-                    <p class="text-yellow-200">Goblin soldier B</p>
-                </div>
-                <div>
-                    <p class="text-gray-300">Melkan</p>
-                </div>
-                <div>
-                    <p class="text-yellow-200">Goblin chief A</p>
-                </div>
-                <div>
-                    <p class="text-gray-300">Harika</p>
-                </div>
-                <div>
-                    <p class="text-gray-300">Nairo</p>
-                </div>
-
+                <p class="text-gray-300">Cyl</p>
+                <p class="text-yellow-200">Goblin archer A</p>
+                <p class="text-gray-300">Arwin</p>
+                <p class="text-yellow-200">Goblin soldier A</p>
+                <p class="text-gray-300">Faren</p>
+                <p class="text-yellow-200">Goblin shaman A</p>
+                <p class="text-yellow-200">Goblin soldier B</p>
+                <p class="text-gray-300">Melkan</p>
+                <p class="text-yellow-200">Goblin chief A</p>
+                <p class="text-gray-300">Harika</p>
+                <p class="text-gray-300">Nairo</p>
             </div>
         </div>
 
-        <div class="w-3/4">
+        <div class="w-4/5">
             <!-- Enemies -->
             <div class="bg-gray-800 p-4">
                 <!-- Row 3 -->
                 <div class="flex justify-center space-x-6">
-                    <div>
-                        <p class="text-yellow-200">Goblin chief <span class="">A</span></p>
+                    <div class="flex flex-col items-center">
+                        <p class="text-yellow-200">Goblin chief A</p>
                         <p class="pr-2 text-red-400">Life <span class="font-bold">23/23</span></p>
                     </div>
                 </div>
@@ -75,12 +52,12 @@
 
                 <!-- Row 2 -->
                 <div class="flex justify-center space-x-6">
-                    <div>
-                        <p class="text-yellow-200">Goblin archer <span class="">A</span></p>
+                    <div class="flex flex-col items-center">
+                        <p class="text-yellow-200">Goblin archer A</p>
                         <p class="pr-2 text-red-400">Life <span class="font-bold">14/14</span></p>
                     </div>
-                    <div>
-                        <p class="text-yellow-200">Goblin shaman <span class="">A</span></p>
+                    <div class="flex flex-col items-center">
+                        <p class="text-yellow-200">Goblin shaman A</p>
                         <p class="pr-2 text-red-400">Life <span class="font-bold">12/12</span></p>
                     </div>
                 </div>
@@ -89,12 +66,12 @@
 
                 <!-- Row 1 -->
                 <div class="flex justify-center space-x-6">
-                    <div>
-                        <p class="text-yellow-200">Goblin soldier <span class="">A</span></p>
+                    <div class="flex flex-col items-center">
+                        <p class="text-yellow-200">Goblin soldier A</p>
                         <p class="pr-2 text-red-400">Life <span class="font-bold">15/15</span></p>
                     </div>
-                    <div>
-                        <p class="text-yellow-200">Goblin soldier <span class="">B</span></p>
+                    <div class="flex flex-col items-center">
+                        <p class="text-yellow-200">Goblin soldier B</p>
                         <p class="pr-2 text-red-400">Life <span class="font-bold">15/15</span></p>
                     </div>
                 </div>
@@ -103,34 +80,34 @@
             <!-- Party -->
             <div class="flex justify-center space-x-4 pb-4 mt-4">
                 <div class="w-1/4 bg-gray-800 p-4">
-                    <div class="flex space-x-6 items-center">
+                    <div class="flex justify-between items-center">
                         <p class="text-xl font-bold text-gray-300">Melkan</p>
                         <p class="text-gray-300">Warrior</p>
                         <p class="text-gray-400">Lv.<span class="text-gray-200 font-bold">1</span></p>
                     </div>
-                    <div class="flex pt-2">
+                    <div class="flex justify-around pt-2">
                         <p class="pr-2 text-green-400">Life <span class="font-bold">20/20</span></p>
                         <p class="pl-2 text-purple-400">Tech <span class="font-bold">14/14</span></p>
                     </div>
                 </div>
                 <div class="w-1/4 bg-gray-800 p-4">
-                    <div class="flex space-x-6 items-center">
+                    <div class="flex justify-between items-center">
                         <p class="text-xl font-bold text-gray-300">Cyl</p>
                         <p class="text-gray-300">Rogue</p>
                         <p class="text-gray-400">Lv.<span class="text-gray-200 font-bold">1</span></p>
                     </div>
-                    <div class="flex pt-2">
+                    <div class="flex justify-around pt-2">
                         <p class="pr-2 text-green-400">Life <span class="font-bold">17/17</span></p>
                         <p class="pl-2 text-purple-400">Tech <span class="font-bold">17/17</span></p>
                     </div>
                 </div>
                 <div class="w-1/4 bg-gray-800 p-4">
-                    <div class="flex space-x-6 items-center">
+                    <div class="flex justify-between items-center">
                         <p class="text-xl font-bold text-gray-300">Arwin</p>
                         <p class="text-gray-300">Paladin</p>
                         <p class="text-gray-400">Lv.<span class="text-gray-200 font-bold">1</span></p>
                     </div>
-                    <div class="flex pt-2">
+                    <div class="flex justify-around pt-2">
                         <p class="pr-2 text-green-400">Life <span class="font-bold">20/20</span></p>
                         <p class="pl-2 text-blue-400">Mana <span class="font-bold">14/14</span></p>
                     </div>
@@ -138,34 +115,34 @@
             </div>
             <div class="flex justify-center space-x-4">
                 <div class="w-1/4 bg-gray-800 p-4">
-                    <div class="flex space-x-6 items-center">
+                    <div class="flex justify-between items-center">
                         <p class="text-xl font-bold text-gray-300">Faren</p>
                         <p class="text-gray-300">Archer</p>
                         <p class="text-gray-400">Lv.<span class="text-gray-200 font-bold">1</span></p>
                     </div>
-                    <div class="flex pt-2">
+                    <div class="flex justify-around pt-2">
                         <p class="pr-2 text-green-400">Life <span class="font-bold">17/17</span></p>
                         <p class="pl-2 text-purple-400">Tech <span class="font-bold">17/17</span></p>
                     </div>
                 </div>
                 <div class="w-1/4 bg-gray-800 p-4">
-                    <div class="flex space-x-6 items-center">
+                    <div class="flex justify-between items-center">
                         <p class="text-xl font-bold text-gray-300">Nairo</p>
                         <p class="text-gray-300">Priest</p>
                         <p class="text-gray-400">Lv.<span class="text-gray-200 font-bold">1</span></p>
                     </div>
-                    <div class="flex pt-2">
+                    <div class="flex justify-around pt-2">
                         <p class="pr-2 text-green-400">Life <span class="font-bold">14/14</span></p>
                         <p class="pl-2 text-blue-400">Mana <span class="font-bold">20/20</span></p>
                     </div>
                 </div>
                 <div class="w-1/4 bg-gray-800 p-4">
-                    <div class="flex space-x-6 items-center">
+                    <div class="flex justify-between items-center">
                         <p class="text-xl font-bold text-gray-300">Harika</p>
                         <p class="text-gray-300">Sorceress</p>
                         <p class="text-gray-400">Lv.<span class="text-gray-200 font-bold">1</span></p>
                     </div>
-                    <div class="flex pt-2">
+                    <div class="flex justify-around pt-2">
                         <p class="pr-2 text-green-400">Life <span class="font-bold">14/14</span></p>
                         <p class="pl-2 text-blue-400">Mana <span class="font-bold">20/20</span></p>
                     </div>
@@ -176,7 +153,8 @@
 
     <!-- Logs -->
     <div class="bg-gray-800 h-48 mt-4 p-4">
-        <p>Entering area <span class="text-gray-200 font-bold">1</span> of <span class="text-gray-200 font-bold">goblin camp</span>.</p>
+        <p>Entering area <span class="text-gray-200 font-bold">1</span> of <span class="text-gray-200 font-bold">goblin camp</span>.
+        </p>
         <p>Round <span class="text-gray-200 font-bold">1</span> started.</p>
     </div>
 </div>

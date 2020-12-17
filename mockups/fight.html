@@ -19,30 +19,31 @@
         <div class="text-xl">Goblin camp / Area 1 / Fight 1</div>
     </div>
 
-    <div class="flex">
-        <div class="w-1/5">
-            <!-- Turn order -->
+    <div class="grid grid-cols-5 gap-8">
 
-            <div class="border border-gray-700 bg-gray-800 mr-8 p-4 h-full">
-                <p class="mb-4">Turn order</p>
-                <p class="text-gray-300">Cyl</p>
-                <p class="text-yellow-200">Goblin archer A</p>
-                <p class="text-gray-300">Arwin</p>
-                <p class="text-yellow-200">Goblin soldier A</p>
-                <p class="text-gray-300">Faren</p>
-                <p class="text-yellow-200">Goblin shaman A</p>
-                <p class="text-yellow-200">Goblin soldier B</p>
-                <p class="text-gray-300">Melkan</p>
-                <p class="text-yellow-200">Goblin chief A</p>
-                <p class="text-gray-300">Harika</p>
-                <p class="text-gray-300">Nairo</p>
-                <p>- Next turn -</p>
-                <p class="text-gray-300">Cyl</p>
-                <p class="text-yellow-200">Goblin archer A</p>
+        <!-- Turn order -->
+
+        <div class="border border-gray-700 bg-gray-800 p-4 h-full">
+            <div class="flex justify-center mb-4">
+                <p>Turn order</p>
             </div>
+            <p class="text-gray-300">Cyl</p>
+            <p class="text-yellow-200">Goblin archer A</p>
+            <p class="text-gray-300">Arwin</p>
+            <p class="text-yellow-200">Goblin soldier A</p>
+            <p class="text-gray-300">Faren</p>
+            <p class="text-yellow-200">Goblin shaman A</p>
+            <p class="text-yellow-200">Goblin soldier B</p>
+            <p class="text-gray-300">Melkan</p>
+            <p class="text-yellow-200">Goblin chief A</p>
+            <p class="text-gray-300">Harika</p>
+            <p class="text-gray-300">Nairo</p>
+            <p>- Next turn -</p>
+            <p class="text-gray-300">Cyl</p>
+            <p class="text-yellow-200">Goblin archer A</p>
         </div>
 
-        <div class="w-3/5">
+        <div class="col-span-3">
             <!-- Enemies -->
 
             <div class="border border-gray-700 bg-gray-800 p-4">
@@ -62,7 +63,7 @@
                     </div>
                 </div>
 
-                <hr class="border-black my-4">
+                <hr class="border-gray-900 my-4">
 
                 <!-- Row 2 -->
 
@@ -88,7 +89,7 @@
                     </div>
                 </div>
 
-                <hr class="border-black my-4">
+                <hr class="border-gray-900 my-4">
 
                 <!-- Row 1 -->
 
@@ -121,7 +122,7 @@
 
             <div class="flex justify-center space-x-4 pb-4 mt-8">
 
-                <!-- Party character 1 -->
+                <!-- Character 1 -->
 
                 <div class="border border-gray-700 w-1/3 bg-gray-800 p-4">
                     <div class="flex justify-between items-center">
@@ -147,7 +148,7 @@
                     </div>
                 </div>
 
-                <!-- Party character 2 -->
+                <!-- Character 2 -->
 
                 <div class="border border-gray-700 w-1/3 bg-gray-800 p-4">
                     <div class="flex justify-between items-center">
@@ -174,7 +175,7 @@
                     </div>
                 </div>
 
-                <!-- Party character 3 -->
+                <!-- Character 3 -->
 
                 <div class="border border-gray-700 w-1/3 bg-gray-800 p-4">
                     <div class="flex justify-between items-center">
@@ -202,7 +203,7 @@
                 </div>
             </div>
 
-            <!-- Party character 4 -->
+            <!-- Character 4 -->
 
             <div class="flex justify-center space-x-4">
                 <div class="border border-gray-700 w-1/3 bg-gray-800 p-4">
@@ -230,7 +231,7 @@
                     </div>
                 </div>
 
-                <!-- Party character 5 -->
+                <!-- Character 5 -->
 
                 <div class="border border-gray-700 w-1/3 bg-gray-800 p-4">
                     <div class="flex justify-between items-center">
@@ -256,7 +257,7 @@
                     </div>
                 </div>
 
-                <!-- Party character 6 -->
+                <!-- Character 6 -->
 
                 <div class="border border-gray-700 w-1/3 bg-gray-800 p-4">
                     <div class="flex justify-between items-center">
@@ -285,11 +286,14 @@
             </div>
         </div>
 
-        <!-- Actions -->
+        <div class="row-span-2 flex flex-col space-y-8">
 
-        <div class="w-1/5">
-            <div class="border border-gray-700 bg-gray-800 ml-8 p-4 h-full">
-                <p class="mb-4">Actions</p>
+            <!-- Actions -->
+
+            <div class="flex-grow border border-gray-700 bg-gray-800 p-4">
+                <div class="flex justify-center mb-4">
+                    <p>Actions</p>
+                </div>
                 <p class="text-gray-300">Defend</p>
                 <p class="text-gray-300">Use</p>
                 <p class="text-gray-300">Attack</p>
@@ -306,23 +310,37 @@
                     <p>10</p>
                 </div>
             </div>
+
+            <!-- Selected action -->
+
+            <div class="flex-grow border border-gray-700 bg-gray-800 p-4 h-full_">
+                <p class="text-purple-400 mb-4">Venom</p>
+                <p>Cost: <span class="text-gray-300">15</span></p>
+                <p>Range: <span class="text-gray-300">1</span></p>
+                <p class="mb-4">Cooldown: <span class="text-gray-300">0</span></p>
+                <p class="text-gray-300">Hits the target for <span class="text-red-500">100%</span> WD and inflicts a
+                    poison DOT of <span class="text-red-500">60%</span> WD over 3 turns. </p>
+            </div>
         </div>
-    </div>
 
-    <!-- Logs -->
+        <!-- Logs -->
 
-    <div class="border border-gray-700 bg-gray-800 h-60 mt-8 p-4">
-        <p>Entering area <span class="text-gray-200">1</span> of <span class="text-gray-200">goblin camp</span>.
-        </p>
-        <p>Round <span class="text-gray-200">1</span> started.</p>
-        <p><span class="text-yellow-200">Goblin shaman A</span> casts <span class="text-blue-400">might</span> on <span
-                class="text-yellow-200">Goblin soldier B</span>.</p>
-        <p><span class="text-yellow-200">Goblin soldier A</span> uses <span class="text-purple-400">bash</span> on <span
-                class="text-gray-200">Arwin</span> for <span class="text-red-500">8</span> hp and inflicts
-            <span class="text-red-500">stun</span>.</p>
-        <p><span class="text-gray-200">Cyl</span> uses <span class="text-purple-400">venom</span> on <span
-                class="text-yellow-200">goblin soldier B</span> for <span class="text-red-500">10</span> hp and inflicts
-            <span class="text-red-500">poison</span>.</p>
+        <div class="col-span-4 border border-gray-700 bg-gray-800 h-60 p-4">
+            <p>Entering area <span class="text-gray-200">1</span> of <span class="text-gray-200">goblin camp</span>.
+            </p>
+            <p>Round <span class="text-gray-200">1</span> started.</p>
+            <p><span class="text-yellow-200">Goblin shaman A</span> casts <span class="text-blue-400">might</span> on
+                <span
+                        class="text-yellow-200">Goblin soldier B</span>.</p>
+            <p><span class="text-yellow-200">Goblin soldier A</span> uses <span class="text-purple-400">bash</span> on
+                <span
+                        class="text-gray-200">Arwin</span> for <span class="text-red-500">8</span> hp and inflicts
+                <span class="text-red-500">stun</span>.</p>
+            <p><span class="text-gray-200">Cyl</span> uses <span class="text-purple-400">venom</span> on <span
+                    class="text-yellow-200">goblin soldier B</span> for <span class="text-red-500">10</span> hp and
+                inflicts
+                <span class="text-red-500">poison</span>.</p>
+        </div>
     </div>
 </div>
 </body>

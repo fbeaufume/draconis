@@ -1,5 +1,11 @@
-### IntelliJ IDEA ###
+# IntelliJ IDEA
 .idea
 *.iws
 *.iml
 *.ipr
+
+# Node.JS
+node_modules/
+
+# Generated
+styles.css

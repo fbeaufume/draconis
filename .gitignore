@@ -1,11 +1,47 @@
-# IntelliJ IDEA
-.idea
+# Generated
+/dist
+/tmp
+/out-tsc
+# Only exists if Bazel was run
+/bazel-out
+mockups/mockups.css
+
+# Dependencies
+node_modules
+mockups/node_modules
+
+# Profiling files
+chrome-profiler-events*.json
+speed-measure-plugin*.json
+
+# IDEs and editors
+/.idea
 *.iws
 *.iml
 *.ipr
+.project
+.classpath
+.c9/
+*.launch
+.settings/
+*.sublime-workspace
+.vscode/*
+!.vscode/settings.json
+!.vscode/tasks.json
+!.vscode/launch.json
+!.vscode/extensions.json
+.history/*
 
-# Node.JS
-node_modules/
+# Misc
+/.sass-cache
+/connect.lock
+/coverage
+/libpeerconnection.log
+npm-debug.log
+yarn-error.log
+testem.log
+/typings
 
-# Generated
-styles.css
+# System files
+.DS_Store
+Thumbs.db

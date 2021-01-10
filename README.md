@@ -3,6 +3,7 @@
 Early stages of a simple, web based, old school RPG.
 
 The current design choices and objectives for the first major version are:
+
 - No install, but playable with a web browser
 - Single player, no backend
 - Not text based per se, but textual look and feel
@@ -14,3 +15,14 @@ The current design choices and objectives for the first major version are:
 - Generated loot
 - Some crafting
 - Misc (consumables such as potions, combat statuses, etc)
+
+Roadmap:
+
+- Basic combat system (turns, actions, rows, etc)
+- Progression system (classes, skills, attributes, levels, etc)
+- Combat system (attack, defense)
+- Equipment (slots, rarities, etc) and loot (affixes)
+- Dungeons and monsters
+- Cities
+- Quests
+- Crafting

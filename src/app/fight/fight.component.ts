@@ -1,4 +1,6 @@
 import {Component, OnInit} from '@angular/core';
+import {Party} from './model';
+import {FightService} from './fight.service';
 
 @Component({
   selector: 'app-fight',
@@ -7,7 +9,11 @@ import {Component, OnInit} from '@angular/core';
 })
 export class FightComponent implements OnInit {
 
-  constructor() {
+  constructor(private fightService: FightService) {
+  }
+
+  get party(): Party {
+    return this.fightService.party;
   }
 
   ngOnInit(): void {

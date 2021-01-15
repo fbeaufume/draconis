@@ -32,15 +32,12 @@
 
       <!-- Row 3 -->
 
-      <div class="flex justify-center space-x-6">
+      <div class="flex justify-center space-x-6 h-24">
         <div class="flex flex-col items-center">
           <p class="text-yellow-200">Goblin chief</p>
           <p class="pr-2 text-red-500">HP <span class="font-bold">23/23</span></p>
           <div class="w-32 bg-red-900">
             <div class="h-1 bg-red-500" style="width: 100%"></div>
-          </div>
-          <div class="flex justify-center space-x-2 pt-3 text-sm">
-            <div class="border border-green-400 bg-green-900 rounded px-2 py-1 text-green-400">Att</div>
           </div>
         </div>
       </div>
@@ -49,7 +46,7 @@
 
       <!-- Row 2 -->
 
-      <div class="flex justify-center space-x-6">
+      <div class="flex justify-center space-x-6 h-24">
         <div class="flex flex-col items-center">
           <p class="text-yellow-200">Goblin archer</p>
           <p class="pr-2 text-red-500">HP <span class="font-bold">14/14</span></p>
@@ -65,9 +62,6 @@
           <div class="w-32 bg-red-900">
             <div class="h-1 bg-red-500" style="width: 83%"></div>
           </div>
-          <div class="flex justify-center space-x-2 pt-3 text-sm">
-            <div class="border border-red-400 bg-red-900 rounded px-2 py-1 text-red-400">Stn</div>
-          </div>
         </div>
       </div>
 
@@ -75,7 +69,7 @@
 
       <!-- Row 1 -->
 
-      <div class="flex justify-center space-x-6">
+      <div class="flex justify-center space-x-6 h-24">
         <div class="flex flex-col items-center">
           <p class="text-yellow-200">Goblin soldier A</p>
           <p class="pr-2 text-red-500">HP <span class="font-bold">3/15</span></p>
@@ -104,165 +98,70 @@
 
     <div class="flex justify-center space-x-4 pb-4 mt-8">
 
-      <!-- Character 1 -->
+      <!-- Row 1 characters -->
 
-      <div class="border border-gray-700 w-1/3 bg-gray-800 p-4">
+      <div *ngFor="let character of party.row1Characters" class="border border-gray-700 w-1/3 bg-gray-800 p-4 h-36">
         <div class="flex justify-between items-center">
-          <p class="text-xl font-bold text-gray-300">Melkan</p>
-          <p class="text-gray-300">Warrior</p>
-          <p class="text-gray-400">Lv.<span class="text-gray-200 font-bold">1</span></p>
+          <p class="text-xl font-bold text-gray-300">{{ character.name }}</p>
+          <p class="text-gray-300">{{ character.clazz }}</p>
+          <p class="text-gray-400">Lv.<span class="text-gray-200 font-bold">{{ character.level }}</span></p>
         </div>
         <div class="flex justify-around pt-2">
           <div class="flex flex-col items-center">
-            <p class="pr-2 text-green-400">HP <span class="font-bold">6/20</span></p>
+            <p class="pr-2 text-green-400">HP <span class="font-bold">{{ character.life}}/{{ character.lifeMax }}</span></p>
             <div class="w-28 bg-green-900">
-              <div class="h-1 bg-green-500" style="width: 40%"></div>
+              <div class="h-1 bg-green-500" [style]="'width: ' + character.lifePercent + '%'"></div>
             </div>
           </div>
-          <div class="flex flex-col items-center">
-            <p class="pl-2 text-purple-400">TP <span class="font-bold">30/50</span></p>
+          <div *ngIf="!character.useMana" class="flex flex-col items-center">
+            <p class="pl-2 text-purple-400">TP <span class="font-bold">{{ character.energy}}/{{ character.energyMax }}</span></p>
             <div class="w-28 bg-purple-900">
-              <div class="h-1 bg-purple-500" style="width: 60%"></div>
+              <div class="h-1 bg-purple-500" [style]="'width: ' + character.energyPercent + '%'"></div>
             </div>
           </div>
-        </div>
-        <div class="flex justify-center space-x-2 pt-4 text-sm">
-        </div>
-      </div>
-
-      <!-- Character 2 -->
-
-      <div class="border border-gray-700 w-1/3 bg-gray-800 p-4">
-        <div class="flex justify-between items-center">
-          <p class="text-xl font-bold text-gray-300">Cyl</p>
-          <p class="text-gray-300">Rogue</p>
-          <p class="text-gray-400">Lv.<span class="text-gray-200 font-bold">1</span></p>
-        </div>
-        <div class="flex justify-around pt-2">
-          <div class="flex flex-col items-center">
-            <p class="pr-2 text-green-400">HP <span class="font-bold">16/20</span></p>
-            <div class="w-28 bg-green-900">
-              <div class="h-1 bg-green-500" style="width: 80%"></div>
-            </div>
-          </div>
-          <div class="flex flex-col items-center">
-            <p class="pl-2 text-purple-400">TP <span class="font-bold">40/50</span></p>
-            <div class="w-28 bg-purple-900">
-              <div class="h-1 bg-purple-500" style="width: 80%"></div>
-            </div>
-          </div>
-        </div>
-        <div class="flex justify-center space-x-2 pt-4 text-sm">
-          <div class="border border-green-400 bg-green-900 rounded px-2 py-1 text-green-400">Hid</div>
-        </div>
-      </div>
-
-      <!-- Character 3 -->
-
-      <div class="border border-gray-700 w-1/3 bg-gray-800 p-4">
-        <div class="flex justify-between items-center">
-          <p class="text-xl font-bold text-gray-300">Arwin</p>
-          <p class="text-gray-300">Paladin</p>
-          <p class="text-gray-400">Lv.<span class="text-gray-200 font-bold">1</span></p>
-        </div>
-        <div class="flex justify-around pt-2">
-          <div class="flex flex-col items-center">
-            <p class="pr-2 text-green-400">HP <span class="font-bold">12/20</span></p>
-            <div class="w-28 bg-green-900">
-              <div class="h-1 bg-green-500" style="width: 60%"></div>
-            </div>
-          </div>
-          <div class="flex flex-col items-center">
-            <p class="pl-2 text-blue-400">MP <span class="font-bold">35/50</span></p>
+          <div *ngIf="character.useMana" class="flex flex-col items-center">
+            <p class="pl-2 text-blue-400">MP <span class="font-bold">{{ character.energy}}/{{ character.energyMax }}</span></p>
             <div class="w-28 bg-blue-900">
-              <div class="h-1 bg-blue-500" style="width: 70%"></div>
+              <div class="h-1 bg-blue-500" [style]="'width: ' + character.energyPercent + '%'"></div>
             </div>
           </div>
         </div>
         <div class="flex justify-center space-x-2 pt-4 text-sm">
-          <div class="border border-red-400 bg-red-900 rounded px-2 py-1 text-red-400">Stn</div>
         </div>
       </div>
     </div>
 
-    <!-- Character 4 -->
-
     <div class="flex justify-center space-x-4">
-      <div class="border border-gray-700 w-1/3 bg-gray-800 p-4">
+
+      <!-- Row 2 characters -->
+
+      <div *ngFor="let character of party.row2Characters" class="border border-gray-700 w-1/3 bg-gray-800 p-4 h-36">
         <div class="flex justify-between items-center">
-          <p class="text-xl font-bold text-gray-300">Faren</p>
-          <p class="text-gray-300">Archer</p>
-          <p class="text-gray-400">Lv.<span class="text-gray-200 font-bold">1</span></p>
+          <p class="text-xl font-bold text-gray-300">{{ character.name }}</p>
+          <p class="text-gray-300">{{ character.clazz }}</p>
+          <p class="text-gray-400">Lv.<span class="text-gray-200 font-bold">{{ character.level }}</span></p>
         </div>
         <div class="flex justify-around pt-2">
           <div class="flex flex-col items-center">
-            <p class="pr-2 text-green-400">HP <span class="font-bold">20/20</span></p>
+            <p class="pr-2 text-green-400">HP <span class="font-bold">{{ character.life}}/{{ character.lifeMax }}</span></p>
             <div class="w-28 bg-green-900">
-              <div class="h-1 bg-green-500" style="width: 100%"></div>
+              <div class="h-1 bg-green-500" [style]="'width: ' + character.lifePercent + '%'"></div>
             </div>
           </div>
-          <div class="flex flex-col items-center">
-            <p class="pl-2 text-purple-400">TP <span class="font-bold">30/50</span></p>
+          <div *ngIf="!character.useMana" class="flex flex-col items-center">
+            <p class="pl-2 text-purple-400">TP <span class="font-bold">{{ character.energy}}/{{ character.energyMax }}</span></p>
             <div class="w-28 bg-purple-900">
-              <div class="h-1 bg-purple-500" style="width: 60%"></div>
+              <div class="h-1 bg-purple-500" [style]="'width: ' + character.energyPercent + '%'"></div>
             </div>
           </div>
-        </div>
-        <div class="flex justify-center space-x-2 pt-4 text-sm">
-          <div class="border border-green-400 bg-green-900 rounded px-2 py-1 text-green-400">Att</div>
-        </div>
-      </div>
-
-      <!-- Character 5 -->
-
-      <div class="border border-gray-700 w-1/3 bg-gray-800 p-4">
-        <div class="flex justify-between items-center">
-          <p class="text-xl font-bold text-gray-300">Harika</p>
-          <p class="text-gray-300">Sorceress</p>
-          <p class="text-gray-400">Lv.<span class="text-gray-200 font-bold">1</span></p>
-        </div>
-        <div class="flex justify-around pt-2">
-          <div class="flex flex-col items-center">
-            <p class="pr-2 text-green-400">HP <span class="font-bold">20/20</span></p>
-            <div class="w-28 bg-green-900">
-              <div class="h-1 bg-green-500" style="width: 100%"></div>
-            </div>
-          </div>
-          <div class="flex flex-col items-center">
-            <p class="pl-2 text-blue-400">MP <span class="font-bold">20/50</span></p>
+          <div *ngIf="character.useMana" class="flex flex-col items-center">
+            <p class="pl-2 text-blue-400">MP <span class="font-bold">{{ character.energy}}/{{ character.energyMax }}</span></p>
             <div class="w-28 bg-blue-900">
-              <div class="h-1 bg-blue-500" style="width: 40%"></div>
+              <div class="h-1 bg-blue-500" [style]="'width: ' + character.energyPercent + '%'"></div>
             </div>
           </div>
         </div>
         <div class="flex justify-center space-x-2 pt-4 text-sm">
-        </div>
-      </div>
-
-      <!-- Character 6 -->
-
-      <div class="border border-gray-700 w-1/3 bg-gray-800 p-4">
-        <div class="flex justify-between items-center">
-          <p class="text-xl font-bold text-gray-300">Nairo</p>
-          <p class="text-gray-300">Priest</p>
-          <p class="text-gray-400">Lv.<span class="text-gray-200 font-bold">1</span></p>
-        </div>
-        <div class="flex justify-around pt-2">
-          <div class="flex flex-col items-center">
-            <p class="pr-2 text-green-400">HP <span class="font-bold">16/20</span></p>
-            <div class="w-28 bg-green-900">
-              <div class="h-1 bg-green-500" style="width: 80%"></div>
-            </div>
-          </div>
-          <div class="flex flex-col items-center">
-            <p class="pl-2 text-blue-400">MP <span class="font-bold">20/50</span></p>
-            <div class="w-28 bg-blue-900">
-              <div class="h-1 bg-blue-500" style="width: 40%"></div>
-            </div>
-          </div>
-        </div>
-        <div class="flex justify-center space-x-2 pt-4 text-sm">
-          <div class="border border-green-400 bg-green-900 rounded px-2 py-1 text-green-400">Shd</div>
         </div>
       </div>
     </div>

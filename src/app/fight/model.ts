@@ -3,32 +3,25 @@
 // The player party
 export class Party {
 
-  characters: Character[];
-
-  constructor(characters: Character[]) {
-    this.characters = characters;
+  constructor(
+    // Front row characters
+    public row1Characters: Character[],
+    // Back row characters
+    public row2Characters: Character[]) {
   }
 }
 
 // A party character
 export class Character {
 
-  name: string;
-
-  // Character class, could be an enum
-  clazz: string;
-
-  level: number;
-
   life: number;
 
-  lifeMax: number;
+  lifePercent: number;
 
   // Current mana or tech points (depends on the character class)
   energy: number;
 
-  // Max mana or tech points (depends on the character class)
-  energyMax: number;
+  energyPercent: number;
 
   // Character bonuses, a.k.a. "buffs"
   bonuses: string[] = [];
@@ -36,13 +29,19 @@ export class Character {
   // Character bonuses, a.k.a. "debuffs"
   maluses: string[] = [];
 
-  constructor(name: string, clazz: string, level: number, life: number, lifeMax: number, energy: number, energyMax: number) {
-    this.name = name;
-    this.clazz = clazz;
-    this.level = level;
-    this.life = life;
-    this.lifeMax = lifeMax;
-    this.energy = energy;
-    this.energyMax = energyMax;
+  constructor(
+    public name: string,
+    // Character class, could be an enum
+    public clazz: string,
+    public level: number,
+    public lifeMax: number,
+    public useMana: boolean,
+    // Max mana or tech points (depends on the character class)
+    public energyMax: number) {
+    this.life = lifeMax;
+    this.lifePercent = 100 * this.life / lifeMax;
+
+    this.energy = energyMax;
+    this.energyPercent = 100 * this.energy / energyMax;
   }
 }

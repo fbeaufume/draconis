@@ -4,11 +4,13 @@ import {NgModule} from '@angular/core';
 import {AppRoutingModule} from './app-routing.module';
 import {AppComponent} from './app.component';
 import {FightComponent} from './fight/fight.component';
+import {CharacterComponent} from './fight/character/character.component';
 
 @NgModule({
   declarations: [
     AppComponent,
-    FightComponent
+    FightComponent,
+    CharacterComponent
   ],
   imports: [
     BrowserModule,

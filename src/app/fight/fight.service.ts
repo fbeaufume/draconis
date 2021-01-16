@@ -16,10 +16,10 @@ export class FightService {
       new Character('Nairo', 'Priest', 1, 20, true, 50)
     ]);
 
-  group: Group = new Group([], [], [
-    new Enemy("Bear A", 28),
-    new Enemy("Bear B", 28)
-  ])
+  group: Group = new Group([
+    new Enemy('Bear A', 28),
+    new Enemy('Bear B', 28)
+  ], [], []);
 
   constructor() {
   }

@@ -33,13 +33,8 @@
       <!-- Row 3 -->
 
       <div class="flex justify-center space-x-6 h-24">
-        <div class="flex flex-col items-center">
-          <p class="text-yellow-200">Goblin chief</p>
-          <p class="pr-2 text-red-500">HP <span class="font-bold">23/23</span></p>
-          <div class="w-32 bg-red-900">
-            <div class="h-1 bg-red-500" style="width: 100%"></div>
-          </div>
-        </div>
+        <app-enemy *ngFor="let enemy of group.row3Enemies" [enemy]="enemy" class="flex flex-col items-center">
+        </app-enemy>
       </div>
 
       <hr class="border-gray-700 my-4">
@@ -47,22 +42,8 @@
       <!-- Row 2 -->
 
       <div class="flex justify-center space-x-6 h-24">
-        <div class="flex flex-col items-center">
-          <p class="text-yellow-200">Goblin archer</p>
-          <p class="pr-2 text-red-500">HP <span class="font-bold">14/14</span></p>
-          <div class="w-32 bg-red-900">
-            <div class="h-1 bg-red-500" style="width: 100%"></div>
-          </div>
-          <div class="flex justify-center space-x-2 pt-3 text-sm">
-          </div>
-        </div>
-        <div class="flex flex-col items-center">
-          <p class="text-yellow-200">Goblin shaman</p>
-          <p class="pr-2 text-red-500">HP <span class="font-bold">10/12</span></p>
-          <div class="w-32 bg-red-900">
-            <div class="h-1 bg-red-500" style="width: 83%"></div>
-          </div>
-        </div>
+        <app-enemy *ngFor="let enemy of group.row2Enemies" [enemy]="enemy" class="flex flex-col items-center">
+        </app-enemy>
       </div>
 
       <hr class="border-gray-700 my-4">
@@ -70,27 +51,8 @@
       <!-- Row 1 -->
 
       <div class="flex justify-center space-x-6 h-24">
-        <div class="flex flex-col items-center">
-          <p class="text-yellow-200">Goblin soldier A</p>
-          <p class="pr-2 text-red-500">HP <span class="font-bold">3/15</span></p>
-          <div class="w-32 bg-red-900">
-            <div class="h-1 bg-red-500" style="width: 20%"></div>
-          </div>
-          <div class="flex justify-center space-x-2 pt-3 text-sm">
-            <div class="border border-red-400 bg-red-900 rounded px-2 py-1 text-red-400">Psn</div>
-          </div>
-        </div>
-        <div class="flex flex-col items-center">
-          <p class="text-yellow-200">Goblin soldier B</p>
-          <p class="pr-2 text-red-500">HP <span class="font-bold">6/15</span></p>
-          <div class="w-32 bg-red-900">
-            <div class="h-1 bg-red-500" style="width: 40%"></div>
-          </div>
-          <div class="flex justify-center space-x-2 pt-3 text-sm">
-            <div class="border border-green-400 bg-green-900 rounded px-2 py-1 text-green-400">Mgt</div>
-            <div class="border border-red-400 bg-red-900 rounded px-2 py-1 text-red-400">Psn</div>
-          </div>
-        </div>
+        <app-enemy *ngFor="let enemy of group.row1Enemies" [enemy]="enemy" class="flex flex-col items-center">
+        </app-enemy>
       </div>
     </div>
 
@@ -100,7 +62,8 @@
 
       <!-- Row 1 characters -->
 
-      <app-character *ngFor="let character of party.row1Characters" [character]="character" class="border border-gray-700 w-1/3 bg-gray-800 p-4 h-36">
+      <app-character *ngFor="let character of party.row1Characters" [character]="character"
+                     class="border border-gray-700 w-1/3 bg-gray-800 p-4 h-36">
       </app-character>
     </div>
 
@@ -108,7 +71,8 @@
 
       <!-- Row 2 characters -->
 
-      <app-character *ngFor="let character of party.row2Characters" [character]="character" class="border border-gray-700 w-1/3 bg-gray-800 p-4 h-36">
+      <app-character *ngFor="let character of party.row2Characters" [character]="character"
+                     class="border border-gray-700 w-1/3 bg-gray-800 p-4 h-36">
       </app-character>
     </div>
   </div>

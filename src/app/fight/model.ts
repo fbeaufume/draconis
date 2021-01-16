@@ -39,7 +39,7 @@ export class Group {
     // Second row enemies
     public row2Enemies: Enemy[],
     // Third row enemies
-    public row3Characters: Enemy[]) {
+    public row3Enemies: Enemy[]) {
   }
 }
 

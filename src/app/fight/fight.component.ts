@@ -1,5 +1,5 @@
 import {Component} from '@angular/core';
-import {Party} from './model';
+import {Group, Party} from './model';
 import {FightService} from './fight.service';
 
 @Component({
@@ -10,6 +10,10 @@ import {FightService} from './fight.service';
 export class FightComponent {
 
   constructor(private fightService: FightService) {
+  }
+
+  get group(): Group {
+    return this.fightService.group;
   }
 
   get party(): Party {

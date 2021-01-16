@@ -1,0 +1,5 @@
+<p class="text-yellow-200">{{ enemy.name }}</p>
+<p class="pr-2 text-red-500">HP <span class="font-bold">{{ enemy.life}}/{{ enemy.lifeMax }}</span></p>
+<div class="w-32 bg-red-900">
+  <div class="h-1 bg-red-500" [style]="'width: ' + enemy.lifePercent + '%'"></div>
+</div>

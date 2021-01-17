@@ -9,20 +9,8 @@
 
     <hr class="border-gray-700 my-4">
 
-    <p class="text-gray-300">Cyl</p>
-    <p class="text-yellow-200">Goblin archer</p>
-    <p class="text-gray-300">Arwin</p>
-    <p class="text-yellow-200">Goblin soldier A</p>
-    <p class="text-gray-300">Faren</p>
-    <p class="text-yellow-200">Goblin shaman</p>
-    <p class="text-yellow-200">Goblin soldier B</p>
-    <p class="text-gray-300">Melkan</p>
-    <p class="text-yellow-200">Goblin chief</p>
-    <p class="text-gray-300">Harika</p>
-    <p class="text-gray-300">Nairo</p>
+    <p *ngFor="let creature of turnOrder.creatures" [ngClass]="{ 'text-gray-300': creature.isCharacter, 'text-yellow-200': !creature.isCharacter}">{{ creature.name }}</p>
     <p>- Next turn -</p>
-    <p class="text-gray-300">Cyl</p>
-    <p class="text-yellow-200">Goblin archer</p>
   </div>
 
   <div class="col-span-3">

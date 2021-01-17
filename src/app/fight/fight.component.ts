@@ -1,5 +1,5 @@
 import {Component} from '@angular/core';
-import {Group, Party} from './model';
+import {Group, Party, TurnOrder} from './model';
 import {FightService} from './fight.service';
 
 @Component({
@@ -18,5 +18,9 @@ export class FightComponent {
 
   get party(): Party {
     return this.fightService.party;
+  }
+
+  get turnOrder(): TurnOrder {
+    return this.fightService.turnOrder;
   }
 }

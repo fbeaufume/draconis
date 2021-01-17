@@ -1,7 +1,7 @@
 // The model classes of the application
 
 // Base class for enemies and characters
-export class Creature {
+export abstract class Creature {
 
   life: number;
 
@@ -13,7 +13,8 @@ export class Creature {
   // Maluses, a.k.a. "debuffs"
   maluses: string[] = [];
 
-  constructor(
+  protected constructor(
+    public  isCharacter: boolean,
     public name: string,
     public lifeMax: number
   ) {
@@ -26,7 +27,7 @@ export class Creature {
 export class Enemy extends Creature {
 
   constructor(name: string, lifeMax: number) {
-    super(name, lifeMax);
+    super(false, name, lifeMax);
   }
 }
 
@@ -62,7 +63,7 @@ export class Character extends Creature {
     // Max mana or tech points (depends on the character class)
     public energyMax: number
   ) {
-    super(name, lifeMax);
+    super(true, name, lifeMax);
 
     this.energy = energyMax;
     this.energyPercent = 100 * this.energy / energyMax;
@@ -77,5 +78,32 @@ export class Party {
     public row1Characters: Character[],
     // Back row characters
     public row2Characters: Character[]) {
+  }
+}
+
+// The action order of characters and enemies during a turn
+export class TurnOrder {
+
+  creatures: Creature[] = [];
+
+  constructor(
+    party: Party,
+    group: Group) {
+    // Add all characters and enemies
+    this.creatures.push(...party.row1Characters);
+    this.creatures.push(...party.row2Characters);
+    this.creatures.push(...group.row1Enemies);
+    this.creatures.push(...group.row2Enemies);
+    this.creatures.push(...group.row3Enemies);
+
+    // Then shuffle
+    TurnOrder.shuffle(this.creatures);
+  }
+
+  private static shuffle(array: Creature[]) {
+    for (let i = array.length - 1; i > 0; i--) {
+      const j = Math.floor(Math.random() * (i + 1));
+      [array[i], array[j]] = [array[j], array[i]];
+    }
   }
 }

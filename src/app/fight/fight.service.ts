@@ -1,5 +1,5 @@
 import {Injectable} from '@angular/core';
-import {Character, Enemy, Group, Party} from './model';
+import {Character, Enemy, Group, Party, TurnOrder} from './model';
 
 @Injectable({
   providedIn: 'root'
@@ -20,6 +20,8 @@ export class FightService {
     new Enemy('Bear A', 28),
     new Enemy('Bear B', 28)
   ], [], []);
+
+  turnOrder: TurnOrder = new TurnOrder(this.party, this.group);
 
   constructor() {
   }

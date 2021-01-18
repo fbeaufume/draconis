@@ -1,5 +1,20 @@
 // The model classes of the application
 
+// A character skill
+export class Skill {
+
+  constructor(
+    public name: string,
+    // Skill cost, in energy points
+    public cost: number,
+    // Skill range in number of rows, 0 if not applicable
+    public range: number,
+    public coolDown: number,
+    public description: string
+  ) {
+  }
+}
+
 // Base class for enemies and characters
 export abstract class Creature {
 
@@ -61,7 +76,8 @@ export class Character extends Creature {
     // True for mana based character class, false for tech based
     public useMana: boolean,
     // Max mana or tech points (depends on the character class)
-    public energyMax: number
+    public energyMax: number,
+    public skills: Skill[],
   ) {
     super(true, name, lifeMax);
 
@@ -84,20 +100,20 @@ export class Party {
 // The action order of characters and enemies during a turn
 export class TurnOrder {
 
-  creatures: Creature[] = [];
+  initialOrderCreatures: Creature[] = [];
 
   constructor(
     party: Party,
     group: Group) {
     // Add all characters and enemies
-    this.creatures.push(...party.row1Characters);
-    this.creatures.push(...party.row2Characters);
-    this.creatures.push(...group.row1Enemies);
-    this.creatures.push(...group.row2Enemies);
-    this.creatures.push(...group.row3Enemies);
+    this.initialOrderCreatures.push(...party.row1Characters);
+    this.initialOrderCreatures.push(...party.row2Characters);
+    this.initialOrderCreatures.push(...group.row1Enemies);
+    this.initialOrderCreatures.push(...group.row2Enemies);
+    this.initialOrderCreatures.push(...group.row3Enemies);
 
     // Then shuffle
-    TurnOrder.shuffle(this.creatures);
+    TurnOrder.shuffle(this.initialOrderCreatures);
   }
 
   private static shuffle(array: Creature[]) {

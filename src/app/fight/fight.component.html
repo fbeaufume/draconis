@@ -9,7 +9,9 @@
 
     <hr class="border-gray-700 my-4">
 
-    <p *ngFor="let creature of turnOrder.creatures" [ngClass]="{ 'text-gray-300': creature.isCharacter, 'text-yellow-200': !creature.isCharacter}">{{ creature.name }}</p>
+    <p *ngFor="let creature of turnOrder.initialOrderCreatures"
+       [ngClass]="{ 'text-gray-300': creature.isCharacter, 'text-yellow-200': !creature.isCharacter }">
+      {{ creature.name }}</p>
     <p>- Next turn -</p>
   </div>
 
@@ -76,20 +78,10 @@
 
       <hr class="border-gray-700 my-4">
 
-      <p class="text-gray-300">Attack</p>
-      <p class="text-gray-300">Use</p>
-      <p class="text-gray-300">Defend</p>
-      <div class="flex justify-between text-purple-400">
-        <p>Venow</p>
-        <p>15</p>
-      </div>
-      <div class="flex justify-between text-purple-400">
-        <p>Vanish</p>
-        <p>10</p>
-      </div>
-      <div class="flex justify-between text-purple-400">
-        <p>Back stab</p>
-        <p>10</p>
+      <div *ngFor="let skill of currentActiveCharacter.skills" class="flex justify-between"
+           [ngClass]="{ 'text-purple-400': skill.cost > 0, 'text-gray-300': skill.cost <= 0 }">
+        <p>{{ skill.name }}</p>
+        <p>{{ skill.cost > 0 ? skill.cost : '' }}</p>
       </div>
     </div>
 

@@ -1,10 +1,12 @@
 import {Injectable} from '@angular/core';
-import {Character, Enemy, Group, Party, Skill, TurnOrder} from './model';
+import {Character, Enemy, Group, Party, PartyLocation, Skill, TurnOrder} from './model';
 
 @Injectable({
   providedIn: 'root'
 })
 export class FightService {
+
+  partyLocation: PartyLocation = new PartyLocation('Goblin Camp', 'Inner Camp', 'Fight 1');
 
   party: Party = new Party([
       new Character('Cyl', 'Rogue', 1, 20, false, 50,[

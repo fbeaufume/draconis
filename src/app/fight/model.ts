@@ -1,5 +1,16 @@
 // The model classes of the application
 
+// The party location in the "world"
+export class PartyLocation {
+
+  constructor(
+    public region: string,
+    public zone: string,
+    public room: string
+  ) {
+  }
+}
+
 // A character skill
 export class Skill {
 

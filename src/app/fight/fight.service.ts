@@ -1,5 +1,6 @@
 import {Injectable} from '@angular/core';
 import {Character, Enemy, Group, Party, PartyLocation, Skill, TurnOrder} from './model';
+import {Log, LogType} from './log.model';
 
 @Injectable({
   providedIn: 'root'
@@ -43,6 +44,10 @@ export class FightService {
 
   currentActiveCharacter: Character = this.party.row1Characters[0];
 
+  logs: Log[] = [];
+
   constructor() {
+    this.logs.push(new Log(LogType.EnterZone, this.partyLocation.region, this.partyLocation.zone));
+    this.logs.push(new Log(LogType.StartFight, 1));
   }
 }

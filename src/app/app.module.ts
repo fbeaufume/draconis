@@ -6,13 +6,15 @@ import {AppComponent} from './app.component';
 import {FightComponent} from './fight/fight.component';
 import {CharacterComponent} from './fight/character/character.component';
 import { EnemyComponent } from './fight/enemy/enemy.component';
+import { LogsComponent } from './fight/logs/logs.component';
 
 @NgModule({
   declarations: [
     AppComponent,
     FightComponent,
     CharacterComponent,
-    EnemyComponent
+    EnemyComponent,
+    LogsComponent
   ],
   imports: [
     BrowserModule,

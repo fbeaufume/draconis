@@ -1,4 +1,4 @@
-// The model classes of the application
+// Core model classes of the application
 
 // The party location in the "world"
 export class PartyLocation {

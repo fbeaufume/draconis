@@ -1,5 +1,5 @@
 import {Component} from '@angular/core';
-import {Character, Group, Party, TurnOrder} from './model';
+import {Character, Opposition, Party, TurnOrder} from './model';
 import {FightService} from './fight.service';
 
 @Component({
@@ -12,8 +12,8 @@ export class FightComponent {
   constructor(private fightService: FightService) {
   }
 
-  get group(): Group {
-    return this.fightService.group;
+  get opposition(): Opposition {
+    return this.fightService.opposition;
   }
 
   get party(): Party {
@@ -24,7 +24,7 @@ export class FightComponent {
     return this.fightService.turnOrder;
   }
 
-  get currentActiveCharacter(): Character {
-    return this.fightService.currentActiveCharacter;
+  get activeCharacter(): Character | null {
+    return this.fightService.activeCharacter;
   }
 }

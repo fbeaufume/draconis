@@ -1,5 +1,5 @@
 import {Component} from '@angular/core';
-import {Character, Opposition, Party, TurnOrder} from './model';
+import {Character, Enemy, Opposition, Party, TurnOrder} from './model';
 import {FightService} from './fight.service';
 
 @Component({
@@ -26,5 +26,9 @@ export class FightComponent {
 
   get activeCharacter(): Character | null {
     return this.fightService.activeCharacter;
+  }
+
+  get activeEnemy(): Enemy | null {
+    return this.fightService.activeEnemy;
   }
 }

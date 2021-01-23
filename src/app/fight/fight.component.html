@@ -10,9 +10,10 @@
     <hr class="border-gray-700 my-4">
 
     <p *ngFor="let creature of turnOrder.currentOrder"
-       [ngClass]="{ 'text-gray-300': creature.isCharacter, 'text-yellow-200': !creature.isCharacter }">
+       class="border border-gray-800 p-1"
+       [ngClass]="{ 'text-yellow-200': !creature.isCharacter }">
       {{ creature.name }}</p>
-    <p>- Next turn -</p>
+    <p class="border border-gray-800 p-1 text-gray-500">- Next turn -</p>
   </div>
 
   <div class="col-span-3">
@@ -22,8 +23,9 @@
 
       <!-- Row 3 -->
 
-      <div class="flex justify-center space-x-6 h-24">
-        <app-enemy *ngFor="let enemy of opposition.row3Enemies" [enemy]="enemy" class="flex flex-col items-center">
+      <div class="flex justify-center space-x-6 h-28">
+        <app-enemy *ngFor="let enemy of opposition.row3Enemies" [enemy]="enemy"
+                   class="border border-gray-800 p-2 flex flex-col items-center">
         </app-enemy>
       </div>
 
@@ -31,8 +33,9 @@
 
       <!-- Row 2 -->
 
-      <div class="flex justify-center space-x-6 h-24">
-        <app-enemy *ngFor="let enemy of opposition.row2Enemies" [enemy]="enemy" class="flex flex-col items-center">
+      <div class="flex justify-center space-x-6 h-28">
+        <app-enemy *ngFor="let enemy of opposition.row2Enemies" [enemy]="enemy"
+                   class="border border-gray-800 p-2 flex flex-col items-center">
         </app-enemy>
       </div>
 
@@ -40,8 +43,9 @@
 
       <!-- Row 1 -->
 
-      <div class="flex justify-center space-x-6 h-24">
-        <app-enemy *ngFor="let enemy of opposition.row1Enemies" [enemy]="enemy" class="flex flex-col items-center">
+      <div class="flex justify-center space-x-6 h-28">
+        <app-enemy *ngFor="let enemy of opposition.row1Enemies" [enemy]="enemy"
+                   class="border border-gray-800 p-2 flex flex-col items-center">
         </app-enemy>
       </div>
     </div>
@@ -69,52 +73,51 @@
 
   <div class="row-span-2 flex flex-col space-y-8">
 
-    <!-- Actions -->
+    <!-- Skills -->
 
     <div class="flex-grow border border-gray-700 bg-gray-800 p-4">
       <div class="flex justify-center">
-        <p>Actions</p>
+        <p>Skills</p>
       </div>
 
       <hr class="border-gray-700 my-4">
 
-      <div *ngFor="let skill of activeCharacter?.skills" class="flex justify-between"
-           [ngClass]="{ 'text-purple-400': skill.cost > 0, 'text-gray-300': skill.cost <= 0 }">
+      <div *ngFor="let skill of activeCharacter?.skills" class="border border-gray-800 p-1 flex justify-between">
         <p>{{ skill.name }}</p>
         <p>{{ skill.cost > 0 ? skill.cost : '' }}</p>
       </div>
     </div>
 
-    <!-- Selected action -->
+    <!-- Selected skill -->
 
     <div class="flex-grow border border-gray-700 bg-gray-800 p-4">
       <div class="flex justify-center">
-        <p class="text-purple-400">Venom</p>
+        <p>Venom</p>
       </div>
 
       <hr class="border-gray-700 my-4">
 
       <div class="flex">
-        <p class="flex-1">Cost</p>
-        <p class="flex-1 text-gray-300">15</p>
+        <p class="flex-1 text-gray-500">Cost</p>
+        <p class="flex-1">15</p>
       </div>
       <div class="flex">
-        <p class="flex-1">Range</p>
-        <p class="flex-1 text-gray-300">1</p>
+        <p class="flex-1 text-gray-500">Range</p>
+        <p class="flex-1">1</p>
       </div>
       <div class="flex">
-        <p class="flex-1">Cooldown</p>
-        <p class="flex-1 text-gray-300">0</p>
+        <p class="flex-1 text-gray-500">Cooldown</p>
+        <p class="flex-1">0</p>
       </div>
 
       <hr class="border-gray-700 my-4">
 
-      <p class="text-gray-300">Hits the target for 100% WD and inflicts a
+      <p>Hits the target for 100% WD and inflicts a
         poison DOT of 60% WD over 3 turns. </p>
     </div>
   </div>
 
   <!-- Logs -->
 
-  <app-logs class="col-span-4 border border-gray-700 bg-gray-800 h-60 p-4"></app-logs>
+  <app-logs class="col-span-4 border border-gray-700 bg-gray-800 text-gray-500 h-60 p-4"></app-logs>
 </div>

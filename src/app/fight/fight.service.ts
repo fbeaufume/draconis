@@ -44,6 +44,8 @@ export class FightService {
 
   activeCharacter: Character | null;
 
+  activeEnemy: Enemy | null;
+
   logs: Log[] = [];
 
   constructor() {
@@ -61,8 +63,10 @@ export class FightService {
 
     if (activeCreature.isCharacter) {
       this.activeCharacter = activeCreature as Character;
+      this.activeEnemy = null;
     } else {
       this.activeCharacter = null;
+      this.activeEnemy = activeCreature as Enemy
 
       // Process the enemy turn after a little pause
       window.setTimeout(() => {
@@ -75,7 +79,7 @@ export class FightService {
   processEnemyTurn(enemy: Enemy) {
     // Do some damage to character 1
     const targetCharacter = this.party.row1Characters[0];
-    const damage = 12;
+    const damage = 4;
     targetCharacter.inflictDamage(damage);
 
     this.logs.push(new Log(LogType.EnemyHit, enemy.name, targetCharacter.name, damage));

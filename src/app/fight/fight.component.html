@@ -26,7 +26,8 @@
       <div class="flex justify-center space-x-6 h-28">
         <app-enemy *ngFor="let enemy of opposition.row3Enemies" [enemy]="enemy"
                    class="border p-2 flex flex-col items-center"
-                   [ngClass]="activeEnemy?.name == enemy.name ? 'border-yellow-200': 'border-gray-800'">
+                   [ngClass]="isSelectedEnemy(enemy) ? 'border-yellow-200': 'border-gray-800'"
+                   (click)="selectEnemy(enemy)">
         </app-enemy>
       </div>
 
@@ -37,7 +38,8 @@
       <div class="flex justify-center space-x-6 h-28">
         <app-enemy *ngFor="let enemy of opposition.row2Enemies" [enemy]="enemy"
                    class="border p-2 flex flex-col items-center"
-                   [ngClass]="activeEnemy?.name == enemy.name ? 'border-yellow-200': 'border-gray-800'">
+                   [ngClass]="isSelectedEnemy(enemy) ? 'border-yellow-200': 'border-gray-800'"
+                   (click)="selectEnemy(enemy)">
         </app-enemy>
       </div>
 
@@ -48,7 +50,8 @@
       <div class="flex justify-center space-x-6 h-28">
         <app-enemy *ngFor="let enemy of opposition.row1Enemies" [enemy]="enemy"
                    class="border p-2 flex flex-col items-center"
-                   [ngClass]="activeEnemy?.name == enemy.name ? 'border-yellow-200': 'border-gray-800'">
+                   [ngClass]="isSelectedEnemy(enemy) ? 'border-yellow-200': 'border-gray-800'"
+                   (click)="selectEnemy(enemy)">
         </app-enemy>
       </div>
     </div>

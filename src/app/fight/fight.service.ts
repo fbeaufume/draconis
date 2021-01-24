@@ -11,33 +11,34 @@ export class FightService {
 
   party: Party = new Party([
       new Character('Cyl', 'Rogue', 1, 20, false, 50, [
-        new Skill('Attack', 0, 1, 0, 'Basic attack, does 100% WD'),
-        new Skill('Defend', 0, 1, 0, 'Reduce taken damage by 30% until next turn'),
-        new Skill('Venom', 15, 1, 0, 'Hits the target for 100% damage and inflicts 60% poison damage over 3 turns'),
-        new Skill('Vanish', 10, 0, 4, 'Disappear and become immune to attacks'),
-        new Skill('Back Stab', 10, 1, 0, 'Hits the target for 180% damage')
+        new Skill('Attack', 0, 1, 0, 8, 'Basic attack, does 100% WD'),
+        new Skill('Big Attack', 0, 1, 0, 12, 'Basic attack, does 150% WD'),
+        // new Skill('Defend', 0, 1, 0, 'Reduce taken damage by 30% until next turn'),
+        // new Skill('Venom', 15, 1, 0, 'Hits the target for 100% damage and inflicts 60% poison damage over 3 turns'),
+        // new Skill('Vanish', 10, 0, 4, 'Disappear and become immune to attacks'),
+        // new Skill('Back Stab', 10, 1, 0, 'Hits the target for 180% damage')
       ]),
       new Character('Melkan', 'Warrior', 1, 20, false, 50, [
-        new Skill('Attack', 0, 1, 0, 'Basic attack, does 100% WD')
+        new Skill('Attack', 0, 1, 0, 8, 'Basic attack, does 100% WD')
       ]),
       new Character('Arwin', 'Paladin', 1, 20, true, 50, [
-        new Skill('Attack', 0, 1, 0, 'Basic attack, does 100% WD')
+        new Skill('Attack', 0, 1, 0, 8, 'Basic attack, does 100% WD')
       ])],
     [
       new Character('Faren', 'Archer', 1, 20, false, 50, [
-        new Skill('Attack', 0, 2, 0, 'Basic attack, does 100% WD')
+        new Skill('Attack', 0, 2, 0, 8, 'Basic attack, does 100% WD')
       ]),
       new Character('Harika', 'Mage', 1, 20, true, 50, [
-        new Skill('Attack', 0, 2, 0, 'Basic attack, does 100% WD')
+        new Skill('Attack', 0, 2, 0, 8, 'Basic attack, does 100% WD')
       ]),
       new Character('Nairo', 'Priest', 1, 20, true, 50, [
-        new Skill('Attack', 0, 2, 0, 'Basic attack, does 100% WD')
+        new Skill('Attack', 0, 2, 0, 8, 'Basic attack, does 100% WD')
       ])
     ]);
 
   opposition: Opposition = new Opposition([
-    new Enemy('Bear A', 30),
-    new Enemy('Bear B', 30)
+    new Enemy('Wolf A', 30, 4),
+    new Enemy('Wolf B', 30, 4)
   ], [], []);
 
   turnOrder: TurnOrder;
@@ -45,6 +46,8 @@ export class FightService {
   activeCharacter: Character | null;
 
   selectedSkill: Skill | null;
+
+  selectedEnemy: Enemy | null;
 
   activeEnemy: Enemy | null;
 
@@ -65,6 +68,7 @@ export class FightService {
 
     this.activeCharacter = null;
     this.selectedSkill = null;
+    this.selectedEnemy = null;
     this.activeEnemy = null;
 
     if (activeCreature.isCharacter) {
@@ -83,18 +87,40 @@ export class FightService {
   processEnemyTurn(enemy: Enemy) {
     // Do some damage to character 1
     const targetCharacter = this.party.row1Characters[0];
-    const damage = 4;
+    const damage = enemy.damage;
     targetCharacter.inflictDamage(damage);
 
+    // Log the action
     this.logs.push(new Log(LogType.EnemyHit, enemy.name, targetCharacter.name, damage));
 
+    // Process the next turn
     this.turnOrder.nextCreature();
-
     this.processTurn();
   }
 
   // Select a character skill
   selectSkill(skill: Skill) {
     this.selectedSkill = skill;
+  }
+
+  // Select an enemy target for a skill
+  selectEnemy(enemy: Enemy) {
+    // This "if" is a poor man turn workflow
+    if (this.selectedSkill != null) {
+      this.selectedEnemy = enemy;
+
+      // Resolve the skill
+      const damage = this.selectedSkill.damage;
+      enemy.inflictDamage(damage);
+
+      // Log the action
+      this.logs.push(new Log(LogType.CharacterHit, this.activeCharacter?.name, enemy.name, damage));
+
+      // Process the next turn
+      window.setTimeout(() => {
+        this.turnOrder.nextCreature();
+        this.processTurn();
+      }, 1000);
+    }
   }
 }

@@ -21,6 +21,7 @@ export class Skill {
     // Skill range in number of rows, 0 if not applicable
     public range: number,
     public coolDown: number,
+    public damage: number,
     public description: string
   ) {
   }
@@ -34,10 +35,10 @@ export abstract class Creature {
   lifePercent: number;
 
   // Bonuses, a.k.a. "buffs"
-  bonuses: string[] = [];
+  // bonuses: string[] = [];
 
   // Maluses, a.k.a. "debuffs"
-  maluses: string[] = [];
+  // maluses: string[] = [];
 
   protected constructor(
     public  isCharacter: boolean,
@@ -51,12 +52,26 @@ export abstract class Creature {
   updateLifePercent() {
     this.lifePercent = 100 * this.life / this.lifeMax;
   }
+
+  inflictDamage(amount: number) {
+    this.life -= amount;
+
+    // Check against min and max possible values
+    if (this.life < 0) {
+      this.life = 0;
+    }
+    if (this.life > this.lifeMax) {
+      this.life = this.lifeMax;
+    }
+
+    this.updateLifePercent();
+  }
 }
 
 // An enemy
 export class Enemy extends Creature {
 
-  constructor(name: string, lifeMax: number) {
+  constructor(name: string, lifeMax: number, public damage: number) {
     super(false, name, lifeMax);
   }
 }
@@ -98,16 +113,6 @@ export class Character extends Creature {
 
     this.energy = energyMax;
     this.energyPercent = 100 * this.energy / energyMax;
-  }
-
-  inflictDamage(amount: number) {
-    this.life -= amount;
-
-    if (this.life < 0) {
-      this.life = 0;
-    }
-
-    this.updateLifePercent();
   }
 }
 

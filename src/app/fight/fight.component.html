@@ -87,7 +87,9 @@
 
       <hr class="border-gray-700 my-4">
 
-      <div *ngFor="let skill of activeCharacter?.skills" class="border border-gray-800 p-1 flex justify-between">
+      <div *ngFor="let skill of activeCharacter?.skills" class="border p-1 flex justify-between"
+           [ngClass]="isSelectedSkill(skill) ?  'border-gray-200' : 'border-gray-800'"
+           (click)="selectSkill(skill)">
         <p>{{ skill.name }}</p>
         <p>{{ skill.cost > 0 ? skill.cost : '' }}</p>
       </div>

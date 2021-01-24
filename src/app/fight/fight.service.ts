@@ -44,6 +44,8 @@ export class FightService {
 
   activeCharacter: Character | null;
 
+  selectedSkill: Skill | null;
+
   activeEnemy: Enemy | null;
 
   logs: Log[] = [];
@@ -61,12 +63,14 @@ export class FightService {
   processTurn() {
     const activeCreature: Creature = this.turnOrder.currentOrder[0];
 
+    this.activeCharacter = null;
+    this.selectedSkill = null;
+    this.activeEnemy = null;
+
     if (activeCreature.isCharacter) {
       this.activeCharacter = activeCreature as Character;
-      this.activeEnemy = null;
     } else {
-      this.activeCharacter = null;
-      this.activeEnemy = activeCreature as Enemy
+      this.activeEnemy = activeCreature as Enemy;
 
       // Process the enemy turn after a little pause
       window.setTimeout(() => {
@@ -87,5 +91,10 @@ export class FightService {
     this.turnOrder.nextCreature();
 
     this.processTurn();
+  }
+
+  // Select a character skill
+  selectSkill(skill: Skill) {
+    this.selectedSkill = skill;
   }
 }

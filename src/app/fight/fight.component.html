@@ -25,7 +25,7 @@
 
       <div class="flex justify-center space-x-6 h-28">
         <app-enemy *ngFor="let enemy of opposition.row3Enemies" [enemy]="enemy"
-                   class="border p-2 flex flex-col items-center"
+                   class="border p-2 flex flex-col items-center cursor-pointer"
                    [ngClass]="isSelectedEnemy(enemy) ? 'border-yellow-200': 'border-gray-800'"
                    (click)="selectEnemy(enemy)">
         </app-enemy>
@@ -37,7 +37,7 @@
 
       <div class="flex justify-center space-x-6 h-28">
         <app-enemy *ngFor="let enemy of opposition.row2Enemies" [enemy]="enemy"
-                   class="border p-2 flex flex-col items-center"
+                   class="border p-2 flex flex-col items-center cursor-pointer"
                    [ngClass]="isSelectedEnemy(enemy) ? 'border-yellow-200': 'border-gray-800'"
                    (click)="selectEnemy(enemy)">
         </app-enemy>
@@ -49,7 +49,7 @@
 
       <div class="flex justify-center space-x-6 h-28">
         <app-enemy *ngFor="let enemy of opposition.row1Enemies" [enemy]="enemy"
-                   class="border p-2 flex flex-col items-center"
+                   class="border p-2 flex flex-col items-center cursor-pointer"
                    [ngClass]="isSelectedEnemy(enemy) ? 'border-yellow-200': 'border-gray-800'"
                    (click)="selectEnemy(enemy)">
         </app-enemy>
@@ -63,7 +63,7 @@
       <!-- Row 1 characters -->
 
       <app-character *ngFor="let character of party.row1Characters" [character]="character"
-                     class="border w-1/3 bg-gray-800 p-4 h-36"
+                     class="border w-1/3 bg-gray-800 p-4 h-36 cursor-pointer"
                      [ngClass]="activeCharacter?.name == character.name ? 'border-gray-200' : 'border-gray-700'">
       </app-character>
     </div>
@@ -73,7 +73,7 @@
       <!-- Row 2 characters -->
 
       <app-character *ngFor="let character of party.row2Characters" [character]="character"
-                     class="border w-1/3 bg-gray-800 p-4 h-36"
+                     class="border w-1/3 bg-gray-800 p-4 h-36 cursor-pointer"
                      [ngClass]="activeCharacter?.name == character.name ? 'border-gray-200' : 'border-gray-700'">
       </app-character>
     </div>
@@ -90,7 +90,7 @@
 
       <hr class="border-gray-700 my-4">
 
-      <div *ngFor="let skill of activeCharacter?.skills" class="border p-1 flex justify-between"
+      <div *ngFor="let skill of activeCharacter?.skills" class="border p-1 flex justify-between cursor-pointer"
            [ngClass]="isSelectedSkill(skill) ?  'border-gray-200' : 'border-gray-800'"
            (click)="selectSkill(skill)">
         <p>{{ skill.name }}</p>

@@ -11,8 +11,8 @@ export class FightService {
 
   party: Party = new Party([
       new Character('Cyl', 'Rogue', 1, 20, false, 50, [
-        new Skill('Attack', 0, 1, 0, 8, 'Basic attack, does 100% WD'),
-        new Skill('Big Attack', 0, 1, 0, 12, 'Basic attack, does 150% WD'),
+        new Skill('Attack', 5, 1, 0, 8, 'Basic attack, does 100% WD'),
+        new Skill('Big Attack', 10, 1, 0, 12, 'Basic attack, does 150% WD'),
         // new Skill('Defend', 0, 1, 0, 'Reduce taken damage by 30% until next turn'),
         // new Skill('Venom', 15, 1, 0, 'Hits the target for 100% damage and inflicts 60% poison damage over 3 turns'),
         // new Skill('Vanish', 10, 0, 4, 'Disappear and become immune to attacks'),
@@ -111,6 +111,7 @@ export class FightService {
 
       // Resolve the skill
       const damage = this.selectedSkill.damage;
+      this.activeCharacter?.useSkill(this.selectedSkill);
       enemy.inflictDamage(damage);
 
       // Log the action

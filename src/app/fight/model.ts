@@ -56,7 +56,7 @@ export abstract class Creature {
   inflictDamage(amount: number) {
     this.life -= amount;
 
-    // Check against min and max possible values
+    // Enforce min and max values
     if (this.life < 0) {
       this.life = 0;
     }
@@ -112,7 +112,22 @@ export class Character extends Creature {
     super(true, name, lifeMax);
 
     this.energy = energyMax;
-    this.energyPercent = 100 * this.energy / energyMax;
+    this.updateEnergyPercent();
+  }
+
+  updateEnergyPercent() {
+    this.energyPercent = 100 * this.energy / this.energyMax;
+  }
+
+  useSkill(skill: Skill) {
+    this.energy -= skill.cost;
+
+    // Enforce min and max values
+    if (this.energy < 0) {
+      this.energy = 0;
+    }
+
+    this.updateEnergyPercent();
   }
 }
 

@@ -25,8 +25,8 @@
 
       <div class="flex justify-center space-x-6 h-28">
         <app-enemy *ngFor="let enemy of opposition.row3Enemies" [enemy]="enemy"
-                   class="border p-2 flex flex-col items-center cursor-pointer"
-                   [ngClass]="getEnemyBorderClass(enemy)"
+                   class="border p-2 flex flex-col items-center"
+                   [ngClass]="[getEnemyBorderClass(enemy), usePointerForStep(2)]"
                    (click)="selectEnemy(enemy)">
         </app-enemy>
       </div>
@@ -37,8 +37,8 @@
 
       <div class="flex justify-center space-x-6 h-28">
         <app-enemy *ngFor="let enemy of opposition.row2Enemies" [enemy]="enemy"
-                   class="border p-2 flex flex-col items-center cursor-pointer"
-                   [ngClass]="getEnemyBorderClass(enemy)"
+                   class="border p-2 flex flex-col items-center"
+                   [ngClass]="[getEnemyBorderClass(enemy), usePointerForStep(2)]"
                    (click)="selectEnemy(enemy)">
         </app-enemy>
       </div>
@@ -49,8 +49,8 @@
 
       <div class="flex justify-center space-x-6 h-28">
         <app-enemy *ngFor="let enemy of opposition.row1Enemies" [enemy]="enemy"
-                   class="border p-2 flex flex-col items-center cursor-pointer"
-                   [ngClass]="getEnemyBorderClass(enemy)"
+                   class="border p-2 flex flex-col items-center"
+                   [ngClass]="[getEnemyBorderClass(enemy), usePointerForStep(2)]"
                    (click)="selectEnemy(enemy)">
         </app-enemy>
       </div>
@@ -63,8 +63,8 @@
       <!-- Row 1 characters -->
 
       <app-character *ngFor="let character of party.row1Characters" [character]="character"
-                     class="border w-1/3 bg-gray-800 p-4 h-36 cursor-pointer"
-                     [ngClass]="getCharacterBorderClass(character)">
+                     class="border w-1/3 bg-gray-800 p-4 h-36"
+                     [ngClass]="[getCharacterBorderClass(character), usePointerForStep(3)]">
       </app-character>
     </div>
 
@@ -73,8 +73,8 @@
       <!-- Row 2 characters -->
 
       <app-character *ngFor="let character of party.row2Characters" [character]="character"
-                     class="border w-1/3 bg-gray-800 p-4 h-36 cursor-pointer"
-                     [ngClass]="getCharacterBorderClass(character)">
+                     class="border w-1/3 bg-gray-800 p-4 h-36"
+                     [ngClass]="[getCharacterBorderClass(character), usePointerForStep(3)]">
       </app-character>
     </div>
   </div>
@@ -90,8 +90,8 @@
 
       <hr class="border-gray-700 my-4">
 
-      <div *ngFor="let skill of selectedCharacter?.skills" class="border p-1 flex justify-between cursor-pointer"
-           [ngClass]="getSkillBorderClass(skill)"
+      <div *ngFor="let skill of selectedCharacter?.skills" class="border p-1 flex justify-between"
+           [ngClass]="[getSkillBorderClass(skill), usePointerForStep(1)]"
            (click)="selectSkill(skill)">
         <p>{{ skill.name }}</p>
         <p>{{ skill.cost > 0 ? skill.cost : '' }}</p>

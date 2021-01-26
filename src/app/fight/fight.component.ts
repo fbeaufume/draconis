@@ -1,5 +1,5 @@
 import {Component} from '@angular/core';
-import {Character, Enemy, Opposition, Party, Skill, TurnOrder} from './model';
+import {Character, Enemy, FightStep, Opposition, Party, Skill, TurnOrder} from './model';
 import {FightService} from './fight.service';
 
 @Component({
@@ -24,6 +24,10 @@ export class FightComponent {
     return this.fightService.turnOrder;
   }
 
+  get fightStep(): FightStep {
+    return this.fightService.fightStep;
+  }
+
   get selectedCharacter(): Character | null {
     return this.fightService.selectedCharacter;
   }
@@ -33,7 +37,7 @@ export class FightComponent {
   }
 
   getSkillBorderClass(skill: Skill): string {
-    return skill.name == this.fightService.selectedSkill?.name ?  'border-gray-200' : 'border-gray-800';
+    return skill.name == this.fightService.selectedSkill?.name ? 'border-gray-200' : 'border-gray-800';
   }
 
   selectSkill(skill: Skill) {
@@ -41,10 +45,15 @@ export class FightComponent {
   }
 
   getEnemyBorderClass(enemy: Enemy): string {
-    return enemy.name == this.fightService.selectedEnemy?.name ? 'border-yellow-200': 'border-gray-800';
+    return enemy.name == this.fightService.selectedEnemy?.name ? 'border-yellow-200' : 'border-gray-800';
   }
 
   selectEnemy(enemy: Enemy) {
     this.fightService.selectEnemy(enemy);
+  }
+
+  // Use a pointer cursor when in a given fight step, or else the default cursor
+  usePointerForStep(fightStep: FightStep) {
+    return this.fightService.fightStep == fightStep ? 'cursor-pointer' : 'cursor-default';
   }
 }

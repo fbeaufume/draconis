@@ -1,5 +1,5 @@
 import {Injectable} from '@angular/core';
-import {Character, FightStep, Creature, Enemy, Opposition, Party, PartyLocation, Skill, TurnOrder} from './model';
+import {Character, Creature, Enemy, FightStep, Opposition, Party, PartyLocation, Skill, TurnOrder} from './model';
 import {Log, LogType} from './log.model';
 
 @Injectable({
@@ -71,11 +71,11 @@ export class FightService {
     this.selectedEnemy = null;
 
     if (activeCreature.isCharacter) {
-      this.fightStep = FightStep.SELECT_SKILL;
       this.selectedCharacter = activeCreature as Character;
+      this.fightStep = FightStep.SELECT_SKILL;
     } else {
-      this.fightStep = FightStep.ENEMY_TURN;
       this.selectedEnemy = activeCreature as Enemy;
+      this.fightStep = FightStep.ENEMY_TURN;
 
       // Process the enemy turn after a little pause
       window.setTimeout(() => {
@@ -102,6 +102,7 @@ export class FightService {
   // Select a character skill
   selectSkill(skill: Skill) {
     this.selectedSkill = skill;
+    this.fightStep = FightStep.SELECT_ENEMY;
   }
 
   // Select an enemy target for a skill

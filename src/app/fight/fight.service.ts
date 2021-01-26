@@ -1,5 +1,5 @@
 import {Injectable} from '@angular/core';
-import {Character, Creature, Enemy, Opposition, Party, PartyLocation, Skill, TurnOrder} from './model';
+import {Character, FightStep, Creature, Enemy, Opposition, Party, PartyLocation, Skill, TurnOrder} from './model';
 import {Log, LogType} from './log.model';
 
 @Injectable({
@@ -12,7 +12,7 @@ export class FightService {
   party: Party = new Party([
       new Character('Cyl', 'Rogue', 1, 20, false, 50, [
         new Skill('Attack', 5, 1, 0, 8, 'Basic attack, does 100% WD'),
-        new Skill('Big Attack', 10, 1, 0, 12, 'Basic attack, does 150% WD'),
+        new Skill('Big Attack', 10, 1, 0, 12, 'Big attack, does 150% WD'),
         // new Skill('Defend', 0, 1, 0, 'Reduce taken damage by 30% until next turn'),
         // new Skill('Venom', 15, 1, 0, 'Hits the target for 100% damage and inflicts 60% poison damage over 3 turns'),
         // new Skill('Vanish', 10, 0, 4, 'Disappear and become immune to attacks'),
@@ -43,13 +43,13 @@ export class FightService {
 
   turnOrder: TurnOrder;
 
-  activeCharacter: Character | null;
+  fightStep: FightStep;
+
+  selectedCharacter: Character | null;
 
   selectedSkill: Skill | null;
 
   selectedEnemy: Enemy | null;
-
-  activeEnemy: Enemy | null;
 
   logs: Log[] = [];
 
@@ -66,15 +66,16 @@ export class FightService {
   processTurn() {
     const activeCreature: Creature = this.turnOrder.currentOrder[0];
 
-    this.activeCharacter = null;
+    this.selectedCharacter = null;
     this.selectedSkill = null;
     this.selectedEnemy = null;
-    this.activeEnemy = null;
 
     if (activeCreature.isCharacter) {
-      this.activeCharacter = activeCreature as Character;
+      this.fightStep = FightStep.SELECT_SKILL;
+      this.selectedCharacter = activeCreature as Character;
     } else {
-      this.activeEnemy = activeCreature as Enemy;
+      this.fightStep = FightStep.ENEMY_TURN;
+      this.selectedEnemy = activeCreature as Enemy;
 
       // Process the enemy turn after a little pause
       window.setTimeout(() => {
@@ -111,11 +112,11 @@ export class FightService {
 
       // Resolve the skill
       const damage = this.selectedSkill.damage;
-      this.activeCharacter?.useSkill(this.selectedSkill);
+      this.selectedCharacter?.useSkill(this.selectedSkill);
       enemy.inflictDamage(damage);
 
       // Log the action
-      this.logs.push(new Log(LogType.CharacterHit, this.activeCharacter?.name, enemy.name, damage));
+      this.logs.push(new Log(LogType.CharacterHit, this.selectedCharacter?.name, enemy.name, damage));
 
       // Process the next turn
       window.setTimeout(() => {

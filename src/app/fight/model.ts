@@ -180,3 +180,15 @@ export class TurnOrder {
     this.currentOrder[this.currentOrder.length - 1] = creature;
   }
 }
+
+// The current step in the fight workflow, used to enable of disable the selection of a target (skill, enemy, character)
+export enum FightStep {
+  // Enemy turn
+  ENEMY_TURN,
+  // Character turn, the player must select a skill
+  SELECT_SKILL,
+  // Character turn, the player must select an enemy (for example as the target of an attack)
+  SELECT_ENEMY,
+  // Character turn, the player must select (for example as the target of a heal)
+  SELECT_CHARACTER,
+}

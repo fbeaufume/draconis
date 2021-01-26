@@ -24,20 +24,24 @@ export class FightComponent {
     return this.fightService.turnOrder;
   }
 
-  get activeCharacter(): Character | null {
-    return this.fightService.activeCharacter;
+  get selectedCharacter(): Character | null {
+    return this.fightService.selectedCharacter;
   }
 
-  isSelectedSkill(skill: Skill): boolean {
-    return skill.name == this.fightService.selectedSkill?.name;
+  getCharacterBorderClass(character: Character): string {
+    return character.name == this.fightService.selectedCharacter?.name ? 'border-gray-200' : 'border-gray-700';
+  }
+
+  getSkillBorderClass(skill: Skill): string {
+    return skill.name == this.fightService.selectedSkill?.name ?  'border-gray-200' : 'border-gray-800';
   }
 
   selectSkill(skill: Skill) {
     this.fightService.selectSkill(skill);
   }
 
-  isSelectedEnemy(enemy: Enemy): boolean {
-    return enemy.name == this.fightService.activeEnemy?.name || enemy.name == this.fightService.selectedEnemy?.name;
+  getEnemyBorderClass(enemy: Enemy): string {
+    return enemy.name == this.fightService.selectedEnemy?.name ? 'border-yellow-200': 'border-gray-800';
   }
 
   selectEnemy(enemy: Enemy) {

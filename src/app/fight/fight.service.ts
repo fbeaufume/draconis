@@ -12,31 +12,24 @@ export class FightService {
 
   partyLocation: PartyLocation = new PartyLocation('Goblin Camp', 'Inner Camp', 'Fight 1');
 
+  // Currently using the same skills for all characters
+  skills: Skill[] = [
+    new Skill('Attack', 5, 1, 0, 8, 'Basic attack, does 100% WD'),
+    new Skill('Big Attack', 10, 1, 0, 12, 'Big attack, does 150% WD'),
+    // new Skill('Defend', 0, 1, 0, 'Reduce taken damage by 30% until next turn'),
+    // new Skill('Venom', 15, 1, 0, 'Hits the target for 100% damage and inflicts 60% poison damage over 3 turns'),
+    // new Skill('Vanish', 10, 0, 4, 'Disappear and become immune to attacks'),
+    // new Skill('Back Stab', 10, 1, 0, 'Hits the target for 180% damage')
+  ];
+
   party: Party = new Party([
-      new Character('Cyl', 'Rogue', 1, 20, false, 50, [
-        new Skill('Attack', 5, 1, 0, 8, 'Basic attack, does 100% WD'),
-        new Skill('Big Attack', 10, 1, 0, 12, 'Big attack, does 150% WD'),
-        // new Skill('Defend', 0, 1, 0, 'Reduce taken damage by 30% until next turn'),
-        // new Skill('Venom', 15, 1, 0, 'Hits the target for 100% damage and inflicts 60% poison damage over 3 turns'),
-        // new Skill('Vanish', 10, 0, 4, 'Disappear and become immune to attacks'),
-        // new Skill('Back Stab', 10, 1, 0, 'Hits the target for 180% damage')
-      ]),
-      new Character('Melkan', 'Warrior', 1, 20, false, 50, [
-        new Skill('Attack', 0, 1, 0, 8, 'Basic attack, does 100% WD')
-      ]),
-      new Character('Arwin', 'Paladin', 1, 20, true, 50, [
-        new Skill('Attack', 0, 1, 0, 8, 'Basic attack, does 100% WD')
-      ])],
+      new Character('Cyl', 'Rogue', 1, 20, false, 50, this.skills),
+      new Character('Melkan', 'Warrior', 1, 20, false, 50, this.skills),
+      new Character('Arwin', 'Paladin', 1, 20, true, 50, this.skills)],
     [
-      new Character('Faren', 'Archer', 1, 20, false, 50, [
-        new Skill('Attack', 0, 2, 0, 8, 'Basic attack, does 100% WD')
-      ]),
-      new Character('Harika', 'Mage', 1, 20, true, 50, [
-        new Skill('Attack', 0, 2, 0, 8, 'Basic attack, does 100% WD')
-      ]),
-      new Character('Nairo', 'Priest', 1, 20, true, 50, [
-        new Skill('Attack', 0, 2, 0, 8, 'Basic attack, does 100% WD')
-      ])
+      new Character('Faren', 'Archer', 1, 20, false, 50, this.skills),
+      new Character('Harika', 'Mage', 1, 20, true, 50, this.skills),
+      new Character('Nairo', 'Priest', 1, 20, true, 50, this.skills)
     ]);
 
   opposition: Opposition = new Opposition([

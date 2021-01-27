@@ -7,6 +7,9 @@ import {Log, LogType} from './log.model';
 })
 export class FightService {
 
+  // Pause in msec in the UI between actions
+  pause: number = 1000;
+
   partyLocation: PartyLocation = new PartyLocation('Goblin Camp', 'Inner Camp', 'Fight 1');
 
   party: Party = new Party([
@@ -43,7 +46,7 @@ export class FightService {
 
   turnOrder: TurnOrder;
 
-  fightStep: FightStep;
+  fightStep: FightStep = FightStep.END_OF_TURN;
 
   selectedCharacter: Character | null;
 
@@ -62,13 +65,11 @@ export class FightService {
     this.processTurn();
   }
 
-  // Process a character or enemy turn
+  /**
+   * Process a character or enemy turn.
+   */
   processTurn() {
     const activeCreature: Creature = this.turnOrder.currentOrder[0];
-
-    this.selectedCharacter = null;
-    this.selectedSkill = null;
-    this.selectedEnemy = null;
 
     if (activeCreature.isCharacter) {
       this.selectedCharacter = activeCreature as Character;
@@ -79,51 +80,90 @@ export class FightService {
 
       // Process the enemy turn after a little pause
       window.setTimeout(() => {
-        this.processEnemyTurn(activeCreature as Enemy);
-      }, 1000);
+        this.processEnemyTurnStep1(activeCreature as Enemy);
+      }, this.pause);
     }
   }
 
-  // Process an enemy turn
-  processEnemyTurn(enemy: Enemy) {
-    // Do some damage to character 1
-    const targetCharacter = this.party.row1Characters[0];
+  /**
+   * Process the first step of an enemy turn:
+   * - Choose the skill and the target
+   * - Display the selected target
+   */
+  processEnemyTurnStep1(enemy: Enemy) {
+    // Choose the enemy skill
     const damage = enemy.damage;
-    targetCharacter.inflictDamage(damage);
 
-    // Log the action
-    this.logs.push(new Log(LogType.EnemyHit, enemy.name, targetCharacter.name, damage));
+    // Choose the skill target
+    const targetCharacter = this.party.row1Characters[0];
+    this.selectedCharacter = targetCharacter;
 
-    // Process the next turn
-    this.turnOrder.nextCreature();
-    this.processTurn();
+    // Process the next step
+    window.setTimeout(() => {
+      this.processEnemyTurnStep2(enemy, damage, targetCharacter);
+    }, this.pause);
   }
 
-  // Select a character skill
+  /**
+   * Process the second step of an enemy turn:
+   * - Execute the skill
+   * - Log the skill result
+   */
+  processEnemyTurnStep2(enemy: Enemy, damage: number, targetCharacter: Character) {
+    // Execute the skill
+    targetCharacter.inflictDamage(damage);
+
+    // Log the result
+    this.logs.push(new Log(LogType.EnemyHit, enemy.name, targetCharacter.name, damage));
+
+    this.processNextTurn();
+  }
+
+  /**
+   * Select a character skill.
+   */
   selectSkill(skill: Skill) {
     this.selectedSkill = skill;
     this.fightStep = FightStep.SELECT_ENEMY;
   }
 
-  // Select an enemy target for a skill
+  /**
+   * Select an enemy target for a skill.
+   */
   selectEnemy(enemy: Enemy) {
     // This "if" is a poor man turn workflow
     if (this.selectedSkill != null) {
       this.selectedEnemy = enemy;
 
-      // Resolve the skill
+      // Execute the skill
       const damage = this.selectedSkill.damage;
       this.selectedCharacter?.useSkill(this.selectedSkill);
       enemy.inflictDamage(damage);
 
-      // Log the action
+      // Log the result
       this.logs.push(new Log(LogType.CharacterHit, this.selectedCharacter?.name, enemy.name, damage));
 
-      // Process the next turn
-      window.setTimeout(() => {
-        this.turnOrder.nextCreature();
-        this.processTurn();
-      }, 1000);
+      this.processNextTurn();
     }
   }
+
+  /**
+   * Process the next turn after some pauses.
+   */
+  processNextTurn() {
+    // Give some time to the player to see the skill result
+    window.setTimeout(() => {
+      // Then deselect everything
+      this.selectedCharacter = null;
+      this.selectedSkill = null;
+      this.selectedEnemy = null;
+
+      window.setTimeout(() => {
+        // Then start the new turn
+        this.turnOrder.nextCreature();
+        this.processTurn();
+      }, this.pause);
+    }, this.pause);
+  }
 }
+

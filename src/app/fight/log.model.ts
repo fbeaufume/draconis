@@ -1,6 +1,8 @@
 // Model classes for the log panel of the application
 
-// The various types of log messages
+/**
+ * The various types of log messages.
+ */
 export enum LogType {
   EnterZone,
   StartFight,
@@ -8,7 +10,9 @@ export enum LogType {
   CharacterHit,
 }
 
-// A log message
+/**
+ * A log message.
+ */
 export class Log {
 
   public args: any[];

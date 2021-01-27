@@ -1,6 +1,8 @@
 // Core model classes of the application
 
-// The party location in the "world"
+/**
+ * The party location in the "world".
+ */
 export class PartyLocation {
 
   constructor(
@@ -11,7 +13,9 @@ export class PartyLocation {
   }
 }
 
-// A character skill
+/**
+ * A character skill.
+ */
 export class Skill {
 
   constructor(
@@ -27,7 +31,9 @@ export class Skill {
   }
 }
 
-// Base class for enemies and characters
+/**
+ * Base class for enemies and characters.
+ */
 export abstract class Creature {
 
   life: number;
@@ -68,7 +74,9 @@ export abstract class Creature {
   }
 }
 
-// An enemy
+/**
+ * An enemy.
+ */
 export class Enemy extends Creature {
 
   constructor(name: string, lifeMax: number, public damage: number) {
@@ -76,7 +84,9 @@ export class Enemy extends Creature {
   }
 }
 
-// A group of enemies
+/**
+ * A group of enemies.
+ */
 export class Opposition {
 
   constructor(
@@ -89,7 +99,9 @@ export class Opposition {
   }
 }
 
-// A party character
+/**
+ * A party character.
+ */
 export class Character extends Creature {
 
   // Current mana or tech points (depends on the character class)
@@ -131,7 +143,9 @@ export class Character extends Creature {
   }
 }
 
-// The player party
+/**
+ * The player party.
+ */
 export class Party {
 
   constructor(
@@ -142,7 +156,9 @@ export class Party {
   }
 }
 
-// The action order of characters and enemies during a turn
+/**
+ * The action order of characters and enemies during a turn.
+ */
 export class TurnOrder {
 
   // Turn order with all creatures
@@ -181,14 +197,19 @@ export class TurnOrder {
   }
 }
 
-// The current step in the fight workflow, used to enable of disable the selection of a target (skill, enemy, character)
+/**
+ * The current step in the fight workflow.
+ * Used to enable of disable the selection of a target skill, enemy or character.
+ */
 export enum FightStep {
+  // Between creature turns
+  END_OF_TURN,
   // Enemy turn
   ENEMY_TURN,
   // Character turn, the player must select a skill
   SELECT_SKILL,
-  // Character turn, the player must select an enemy (for example as the target of an attack)
+  // Character turn, the player must select an enemy (for example as the target of an attack or debuff)
   SELECT_ENEMY,
-  // Character turn, the player must select (for example as the target of a heal)
+  // Character turn, the player must select a character (for example as the target of a heal or buff)
   SELECT_CHARACTER,
 }

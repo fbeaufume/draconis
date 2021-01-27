@@ -5,20 +5,20 @@
 </div>
 <div class="flex justify-around pt-2">
   <div class="flex flex-col items-center">
-    <p class="pr-2 text-green-400">HP <span class="font-bold">{{ character.life}}/{{ character.lifeMax }}</span></p>
+    <p class="pr-2 text-green-400">HP <span class="font-bold">{{ character.life }}/{{ character.lifeMax }}</span></p>
     <div class="w-28 bg-green-900">
       <div class="h-1 bg-green-500" [style]="'width: ' + character.lifePercent + '%'"></div>
     </div>
   </div>
   <div *ngIf="!character.useMana" class="flex flex-col items-center">
-    <p class="pl-2 text-purple-400">TP <span class="font-bold">{{ character.energy}}/{{ character.energyMax }}</span>
+    <p class="pl-2 text-purple-400">TP <span class="font-bold">{{ character.energy }}/{{ character.energyMax }}</span>
     </p>
     <div class="w-28 bg-purple-900">
       <div class="h-1 bg-purple-500" [style]="'width: ' + character.energyPercent + '%'"></div>
     </div>
   </div>
   <div *ngIf="character.useMana" class="flex flex-col items-center">
-    <p class="pl-2 text-blue-400">MP <span class="font-bold">{{ character.energy}}/{{ character.energyMax }}</span>
+    <p class="pl-2 text-blue-400">MP <span class="font-bold">{{ character.energy }}/{{ character.energyMax }}</span>
     </p>
     <div class="w-28 bg-blue-900">
       <div class="h-1 bg-blue-500" [style]="'width: ' + character.energyPercent + '%'"></div>

@@ -43,6 +43,8 @@ export class FightService {
 
   selectedCharacter: Character | null;
 
+  focusedSkill: Skill | null;
+
   selectedSkill: Skill | null;
 
   selectedEnemy: Enemy | null;
@@ -113,6 +115,13 @@ export class FightService {
   }
 
   /**
+   * Display a skill in the focused skill panel.
+   */
+  focusSkill(skill: Skill) {
+    this.focusedSkill = skill;
+  }
+
+  /**
    * Select a character skill.
    */
   selectSkill(skill: Skill) {
@@ -148,6 +157,7 @@ export class FightService {
     window.setTimeout(() => {
       // Then deselect everything
       this.selectedCharacter = null;
+      this.focusedSkill = null;
       this.selectedSkill = null;
       this.selectedEnemy = null;
 

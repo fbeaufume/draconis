@@ -81,7 +81,7 @@
 
   <div class="row-span-2 flex flex-col space-y-8">
 
-    <!-- Skills -->
+    <!-- Available skills -->
 
     <div class="flex-1 border border-gray-700 bg-gray-800 p-4">
       <div class="flex justify-center">
@@ -92,38 +92,40 @@
 
       <div *ngFor="let skill of selectedCharacter?.skills" class="border p-1 flex justify-between"
            [ngClass]="[getSkillBorderClass(skill), usePointerForStep(2)]"
+           (mouseenter)="focusSkill(skill)"
            (click)="selectSkill(skill)">
         <p>{{ skill.name }}</p>
         <p>{{ skill.cost > 0 ? skill.cost : '' }}</p>
       </div>
     </div>
 
-    <!-- Selected skill -->
+    <!-- Focused skill -->
 
     <div class="flex-1 border border-gray-700 bg-gray-800 p-4">
-      <div class="flex justify-center">
-        <p>Venom</p>
-      </div>
+      <div *ngIf="focusedSkill != null">
+        <div class="flex justify-center">
+          <p>{{ focusedSkill.name }}</p>
+        </div>
 
-      <hr class="border-gray-700 my-4">
+        <hr class="border-gray-700 my-4">
 
-      <div class="flex">
-        <p class="flex-1 text-gray-500">Cost</p>
-        <p class="flex-1">15</p>
-      </div>
-      <div class="flex">
-        <p class="flex-1 text-gray-500">Range</p>
-        <p class="flex-1">1</p>
-      </div>
-      <div class="flex">
-        <p class="flex-1 text-gray-500">Cooldown</p>
-        <p class="flex-1">0</p>
-      </div>
+        <div class="flex">
+          <p class="flex-1 text-gray-500">Cost</p>
+          <p class="flex-1">{{ focusedSkill.cost }}</p>
+        </div>
+        <div class="flex">
+          <p class="flex-1 text-gray-500">Range</p>
+          <p class="flex-1">{{ focusedSkill.range }}</p>
+        </div>
+        <div class="flex">
+          <p class="flex-1 text-gray-500">Cooldown</p>
+          <p class="flex-1">{{ focusedSkill.coolDown }}</p>
+        </div>
 
-      <hr class="border-gray-700 my-4">
+        <hr class="border-gray-700 my-4">
 
-      <p>Hits the target for 100% WD and inflicts a
-        poison DOT of 60% WD over 3 turns. </p>
+        <p>{{ focusedSkill.description }}</p>
+      </div>
     </div>
   </div>
 

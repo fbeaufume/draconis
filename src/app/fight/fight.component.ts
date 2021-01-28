@@ -40,6 +40,14 @@ export class FightComponent {
     this.fightService.selectSkill(skill);
   }
 
+  get focusedSkill(): Skill | null {
+    return this.fightService.focusedSkill;
+  }
+
+  focusSkill(skill: Skill) {
+    this.fightService.focusSkill(skill);
+  }
+
   getEnemyBorderClass(enemy: Enemy): string {
     return enemy.name == this.fightService.selectedEnemy?.name ? 'border-yellow-200' : 'border-gray-800';
   }

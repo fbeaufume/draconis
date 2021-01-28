@@ -24,12 +24,17 @@ export class FightComponent {
     return this.fightService.turnOrder;
   }
 
-  get selectedCharacter(): Character | null {
-    return this.fightService.selectedCharacter;
+  get activeCharacter(): Character | null {
+    return this.fightService.activeCharacter;
+  }
+
+  get targetCharacter(): Character | null {
+    return this.fightService.targetCharacter;
   }
 
   getCharacterBorderClass(character: Character): string {
-    return character.name == this.fightService.selectedCharacter?.name ? 'border-gray-200' : 'border-gray-700';
+    return character.name == this.fightService.activeCharacter?.name || character.name == this.fightService.targetCharacter?.name ?
+      'border-gray-200' : 'border-gray-700';
   }
 
   getSkillBorderClass(skill: Skill): string {
@@ -49,7 +54,8 @@ export class FightComponent {
   }
 
   getEnemyBorderClass(enemy: Enemy): string {
-    return enemy.name == this.fightService.selectedEnemy?.name ? 'border-yellow-200' : 'border-gray-800';
+    return enemy.name == this.fightService.activeEnemy?.name || enemy.name == this.fightService.targetEnemy?.name ?
+      'border-yellow-200' : 'border-gray-800';
   }
 
   selectEnemy(enemy: Enemy) {

@@ -41,13 +41,17 @@ export class FightService {
 
   fightStep: FightStep = FightStep.END_OF_TURN;
 
-  selectedCharacter: Character | null;
+  activeCharacter: Character | null;
+
+  targetCharacter: Character | null;
 
   focusedSkill: Skill | null;
 
   selectedSkill: Skill | null;
 
-  selectedEnemy: Enemy | null;
+  activeEnemy: Enemy | null;
+
+  targetEnemy: Enemy | null;
 
   logs: Log[] = [];
 
@@ -67,10 +71,10 @@ export class FightService {
     const activeCreature: Creature = this.turnOrder.currentOrder[0];
 
     if (activeCreature.isCharacter) {
-      this.selectedCharacter = activeCreature as Character;
+      this.activeCharacter = activeCreature as Character;
       this.fightStep = FightStep.SELECT_SKILL;
     } else {
-      this.selectedEnemy = activeCreature as Enemy;
+      this.activeEnemy = activeCreature as Enemy;
       this.fightStep = FightStep.ENEMY_TURN;
 
       // Process the enemy turn after a little pause
@@ -91,7 +95,7 @@ export class FightService {
 
     // Choose the skill target
     const targetCharacter = this.party.row1Characters[0];
-    this.selectedCharacter = targetCharacter;
+    this.targetCharacter = targetCharacter;
 
     // Process the next step
     window.setTimeout(() => {
@@ -135,15 +139,15 @@ export class FightService {
   selectEnemy(enemy: Enemy) {
     // This "if" is a poor man turn workflow
     if (this.selectedSkill != null) {
-      this.selectedEnemy = enemy;
+      this.targetEnemy = enemy;
 
       // Execute the skill
       const damage = this.selectedSkill.damage;
-      this.selectedCharacter?.useSkill(this.selectedSkill);
+      this.activeCharacter?.useSkill(this.selectedSkill);
       enemy.inflictDamage(damage);
 
       // Log the result
-      this.logs.push(new Log(LogType.CharacterHit, this.selectedCharacter?.name, enemy.name, damage));
+      this.logs.push(new Log(LogType.CharacterHit, this.activeCharacter?.name, enemy.name, damage));
 
       this.processNextTurn();
     }
@@ -156,10 +160,12 @@ export class FightService {
     // Give some time to the player to see the skill result
     window.setTimeout(() => {
       // Then deselect everything
-      this.selectedCharacter = null;
+      this.activeCharacter = null;
+      this.targetCharacter = null;
       this.focusedSkill = null;
       this.selectedSkill = null;
-      this.selectedEnemy = null;
+      this.activeEnemy = null;
+      this.targetEnemy = null;
 
       window.setTimeout(() => {
         // Then start the new turn

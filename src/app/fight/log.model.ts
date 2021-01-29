@@ -5,7 +5,7 @@
  */
 export enum LogType {
   EnterZone,
-  StartFight,
+  StartRound,
   EnemyHit,
   CharacterHit,
 }

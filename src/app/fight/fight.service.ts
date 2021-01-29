@@ -12,6 +12,8 @@ export class FightService {
 
   partyLocation: PartyLocation = new PartyLocation('Goblin Camp', 'Inner Camp', 'Fight 1');
 
+  round: number = 1;
+
   // Currently using the same skills for all characters
   skills: Skill[] = [
     new Skill('Attack', 5, 1, 0, 8, 'Basic attack, does 100% WD'),
@@ -57,7 +59,7 @@ export class FightService {
 
   constructor() {
     this.logs.push(new Log(LogType.EnterZone, this.partyLocation.region, this.partyLocation.zone));
-    this.logs.push(new Log(LogType.StartFight, 1));
+    this.logs.push(new Log(LogType.StartRound, this.round));
 
     this.turnOrder = new TurnOrder(this.party, this.opposition);
 
@@ -70,17 +72,18 @@ export class FightService {
   processTurn() {
     const activeCreature: Creature = this.turnOrder.currentOrder[0];
 
-    if (activeCreature.isCharacter) {
+    if (activeCreature.isCharacter()) {
       this.activeCharacter = activeCreature as Character;
       this.fightStep = FightStep.SELECT_SKILL;
-    } else {
+    } else if (activeCreature.isEnemy()) {
       this.activeEnemy = activeCreature as Enemy;
       this.fightStep = FightStep.ENEMY_TURN;
 
-      // Process the enemy turn after a little pause
       window.setTimeout(() => {
         this.processEnemyTurnStep1(activeCreature as Enemy);
       }, this.pause);
+    } else {
+      this.processEndOfRound();
     }
   }
 
@@ -154,6 +157,20 @@ export class FightService {
   }
 
   /**
+   * Process the end of round, e.g. apply DOTs or HOTs.
+   */
+  processEndOfRound() {
+    // Currently there is nothing to do,
+    // but where there is, wait a while before doing it
+
+    // Start the next round
+    this.round++;
+    this.logs.push(new Log(LogType.StartRound, this.round));
+
+    this.processNextTurn();
+  }
+
+  /**
    * Process the next turn after some pauses.
    */
   processNextTurn() {
@@ -175,4 +192,3 @@ export class FightService {
     }, this.pause);
   }
 }
-

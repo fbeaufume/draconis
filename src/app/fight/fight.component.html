@@ -10,9 +10,8 @@
     <hr class="border-gray-700 my-4">
 
     <p *ngFor="let creature of turnOrder.currentOrder; index as i" class="p-1"
-       [ngClass]="{ 'text-yellow-200': !creature.isCharacter }">
+       [ngClass]="{ 'text-yellow-200': creature.isEnemy(), 'text-gray-500': creature.isEndOfRound() }">
       {{ creature.name }}</p>
-    <p class="p-1 text-gray-500">- Next turn -</p>
   </div>
 
   <div class="col-span-3">

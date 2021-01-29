@@ -47,12 +47,23 @@ export abstract class Creature {
   // maluses: string[] = [];
 
   protected constructor(
-    public  isCharacter: boolean,
     public name: string,
     public lifeMax: number
   ) {
     this.life = lifeMax;
     this.updateLifePercent();
+  }
+
+  isCharacter(): boolean {
+    return this instanceof Character;
+  }
+
+  isEnemy(): boolean {
+    return this instanceof Enemy;
+  }
+
+  isEndOfRound(): boolean {
+    return this instanceof EndOfRound;
   }
 
   updateLifePercent() {
@@ -80,7 +91,7 @@ export abstract class Creature {
 export class Enemy extends Creature {
 
   constructor(name: string, lifeMax: number, public damage: number) {
-    super(false, name, lifeMax);
+    super(name, lifeMax);
   }
 }
 
@@ -121,7 +132,7 @@ export class Character extends Creature {
     public energyMax: number,
     public skills: Skill[],
   ) {
-    super(true, name, lifeMax);
+    super(name, lifeMax);
 
     this.energy = energyMax;
     this.updateEnergyPercent();
@@ -157,6 +168,16 @@ export class Party {
 }
 
 /**
+ * A special creature only used to mark the end of a round in thr turn order panel.
+ */
+export class EndOfRound extends Creature {
+
+  constructor() {
+    super("- End of round -", 0);
+  }
+}
+
+/**
  * The action order of characters and enemies during a turn.
  */
 export class TurnOrder {
@@ -181,12 +202,15 @@ export class TurnOrder {
     // Initialize the current turn order
     this.currentOrder.push(opposition.row1Enemies[0]);
     this.currentOrder.push(party.row1Characters[0]);
-    this.currentOrder.push(party.row1Characters[1]);
-    this.currentOrder.push(party.row1Characters[2]);
-    this.currentOrder.push(opposition.row1Enemies[1]);
-    this.currentOrder.push(party.row2Characters[0]);
-    this.currentOrder.push(party.row2Characters[1]);
-    this.currentOrder.push(party.row2Characters[2]);
+    // this.currentOrder.push(party.row1Characters[1]);
+    // this.currentOrder.push(party.row1Characters[2]);
+    // this.currentOrder.push(opposition.row1Enemies[1]);
+    // this.currentOrder.push(party.row2Characters[0]);
+    // this.currentOrder.push(party.row2Characters[1]);
+    // this.currentOrder.push(party.row2Characters[2]);
+
+    // Add a special creature to mark the end of round
+    this.currentOrder.push(new EndOfRound())
   }
 
   private static shuffle(array: Creature[]) {

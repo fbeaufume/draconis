@@ -202,12 +202,12 @@ export class TurnOrder {
     // Initialize the current turn order
     this.currentOrder.push(opposition.row1Enemies[0]);
     this.currentOrder.push(party.row1Characters[0]);
-    // this.currentOrder.push(party.row1Characters[1]);
-    // this.currentOrder.push(party.row1Characters[2]);
-    // this.currentOrder.push(opposition.row1Enemies[1]);
-    // this.currentOrder.push(party.row2Characters[0]);
-    // this.currentOrder.push(party.row2Characters[1]);
-    // this.currentOrder.push(party.row2Characters[2]);
+    this.currentOrder.push(party.row1Characters[1]);
+    this.currentOrder.push(party.row1Characters[2]);
+    this.currentOrder.push(opposition.row1Enemies[1]);
+    this.currentOrder.push(party.row2Characters[0]);
+    this.currentOrder.push(party.row2Characters[1]);
+    this.currentOrder.push(party.row2Characters[2]);
 
     // Add a special creature to mark the end of round
     this.currentOrder.push(new EndOfRound())

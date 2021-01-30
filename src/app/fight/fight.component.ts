@@ -1,6 +1,7 @@
 import {Component} from '@angular/core';
 import {Character, Enemy, FightStep, Opposition, Party, Skill, TurnOrder} from './model';
 import {FightService} from './fight.service';
+import {Log} from './log.model';
 
 @Component({
   selector: 'app-fight',
@@ -67,5 +68,9 @@ export class FightComponent {
    */
   usePointerForStep(fightStep: FightStep) {
     return this.fightService.fightStep == fightStep ? 'cursor-pointer' : 'cursor-default';
+  }
+
+  get logs(): Log[] {
+    return this.fightService.logs;
   }
 }

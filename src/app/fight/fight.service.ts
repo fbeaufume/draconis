@@ -105,7 +105,7 @@ export class FightService {
     const damage = enemy.damage;
 
     // Choose the skill target
-    const targetCharacter = this.party.row1Characters[0];
+    const targetCharacter = this.party.rows[0].characters[0];
     this.targetCharacter = targetCharacter;
 
     // Process the next step

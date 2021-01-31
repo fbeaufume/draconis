@@ -96,17 +96,31 @@ export class Enemy extends Creature {
 }
 
 /**
+ * A row of enemies.
+ */
+export class EnemyRow {
+
+  constructor(public enemies: Enemy[]) {
+  }
+}
+
+/**
  * A group of enemies.
  */
 export class Opposition {
 
+  rows: EnemyRow[] = [];
+
   constructor(
-    // First row enemies
-    public row1Enemies: Enemy[],
-    // Second row enemies
-    public row2Enemies: Enemy[],
-    // Third row enemies
-    public row3Enemies: Enemy[]) {
+    // Front row enemies
+    row1Enemies: Enemy[],
+    // Middle row enemies
+    row2Enemies: Enemy[],
+    // Back row enemies
+    row3Enemies: Enemy[]) {
+    this.rows.push(new EnemyRow(row1Enemies));
+    this.rows.push(new EnemyRow(row2Enemies));
+    this.rows.push(new EnemyRow(row3Enemies));
   }
 }
 
@@ -155,15 +169,28 @@ export class Character extends Creature {
 }
 
 /**
+ * A row of characters.
+ */
+export class CharacterRow {
+
+  constructor(public characters: Character[]) {
+  }
+}
+
+/**
  * The player party.
  */
 export class Party {
 
+  rows: CharacterRow[] = [];
+
   constructor(
     // Front row characters
-    public row1Characters: Character[],
+    row1Characters: Character[],
     // Back row characters
-    public row2Characters: Character[]) {
+    row2Characters: Character[]) {
+    this.rows.push(new CharacterRow(row1Characters));
+    this.rows.push(new CharacterRow(row2Characters));
   }
 }
 
@@ -192,22 +219,22 @@ export class TurnOrder {
     party: Party,
     opposition: Opposition) {
     // Initialize the initial turn order with all characters and enemies
-    this.initialOrder.push(...party.row1Characters);
-    this.initialOrder.push(...party.row2Characters);
-    this.initialOrder.push(...opposition.row1Enemies);
-    this.initialOrder.push(...opposition.row2Enemies);
-    this.initialOrder.push(...opposition.row3Enemies);
+    this.initialOrder.push(...party.rows[0].characters);
+    this.initialOrder.push(...party.rows[1].characters);
+    this.initialOrder.push(...opposition.rows[0].enemies);
+    this.initialOrder.push(...opposition.rows[1].enemies);
+    this.initialOrder.push(...opposition.rows[2].enemies);
     TurnOrder.shuffle(this.initialOrder); // Shuffle the creatures
 
     // Initialize the current turn order
-    this.currentOrder.push(opposition.row1Enemies[0]);
-    this.currentOrder.push(party.row1Characters[0]);
-    this.currentOrder.push(party.row1Characters[1]);
-    this.currentOrder.push(party.row1Characters[2]);
-    this.currentOrder.push(opposition.row1Enemies[1]);
-    this.currentOrder.push(party.row2Characters[0]);
-    this.currentOrder.push(party.row2Characters[1]);
-    this.currentOrder.push(party.row2Characters[2]);
+    this.currentOrder.push(opposition.rows[0].enemies[0]);
+    this.currentOrder.push(party.rows[0].characters[0]);
+    this.currentOrder.push(party.rows[0].characters[1]);
+    this.currentOrder.push(party.rows[0].characters[2]);
+    this.currentOrder.push(opposition.rows[0].enemies[1]);
+    this.currentOrder.push(party.rows[1].characters[0]);
+    this.currentOrder.push(party.rows[1].characters[1]);
+    this.currentOrder.push(party.rows[1].characters[2]);
 
     // Add a special creature to mark the end of round
     this.currentOrder.push(new EndOfRound())

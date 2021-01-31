@@ -22,7 +22,7 @@
       <!-- Row 3 -->
 
       <div class="flex justify-center space-x-6 h-28">
-        <app-enemy *ngFor="let enemy of opposition.row3Enemies" [enemy]="enemy"
+        <app-enemy *ngFor="let enemy of opposition.rows[2].enemies" [enemy]="enemy"
                    class="border p-2 flex flex-col items-center"
                    [ngClass]="[getEnemyBorderClass(enemy), usePointerForStep(4)]"
                    (click)="selectEnemy(enemy)">
@@ -34,7 +34,7 @@
       <!-- Row 2 -->
 
       <div class="flex justify-center space-x-6 h-28">
-        <app-enemy *ngFor="let enemy of opposition.row2Enemies" [enemy]="enemy"
+        <app-enemy *ngFor="let enemy of opposition.rows[1].enemies" [enemy]="enemy"
                    class="border p-2 flex flex-col items-center"
                    [ngClass]="[getEnemyBorderClass(enemy), usePointerForStep(4)]"
                    (click)="selectEnemy(enemy)">
@@ -46,7 +46,7 @@
       <!-- Row 1 -->
 
       <div class="flex justify-center space-x-6 h-28">
-        <app-enemy *ngFor="let enemy of opposition.row1Enemies" [enemy]="enemy"
+        <app-enemy *ngFor="let enemy of opposition.rows[0].enemies" [enemy]="enemy"
                    class="border p-2 flex flex-col items-center"
                    [ngClass]="[getEnemyBorderClass(enemy), usePointerForStep(4)]"
                    (click)="selectEnemy(enemy)">
@@ -60,7 +60,7 @@
 
       <!-- Row 1 characters -->
 
-      <app-character *ngFor="let character of party.row1Characters" [character]="character"
+      <app-character *ngFor="let character of party.rows[0].characters" [character]="character"
                      class="border w-1/3 bg-gray-800 p-4 h-36"
                      [ngClass]="[getCharacterBorderClass(character), usePointerForStep(5)]">
       </app-character>
@@ -70,7 +70,7 @@
 
       <!-- Row 2 characters -->
 
-      <app-character *ngFor="let character of party.row2Characters" [character]="character"
+      <app-character *ngFor="let character of party.rows[1].characters" [character]="character"
                      class="border w-1/3 bg-gray-800 p-4 h-36"
                      [ngClass]="[getCharacterBorderClass(character), usePointerForStep(5)]">
       </app-character>

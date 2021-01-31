@@ -41,7 +41,7 @@ export class FightService {
 
   turnOrder: TurnOrder;
 
-  fightStep: FightStep = FightStep.END_OF_TURN;
+  fightStep: FightStep = FightStep.BEFORE_START;
 
   activeCharacter: Character | null;
 
@@ -59,9 +59,17 @@ export class FightService {
 
   constructor() {
     this.logs.push(new Log(LogType.EnterZone, this.partyLocation.region, this.partyLocation.zone));
-    this.logs.push(new Log(LogType.StartRound, this.round));
 
     this.turnOrder = new TurnOrder(this.party, this.opposition);
+  }
+
+  /**
+   * Start the fight.
+   */
+  startFight() {
+    this.fightStep = FightStep.END_OF_TURN;
+
+    this.logs.push(new Log(LogType.StartRound, this.round));
 
     this.processTurn();
   }

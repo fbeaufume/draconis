@@ -1,6 +1,9 @@
 <div class="container mx-auto">
   <div class="flex justify-between items-center pt-4 pb-4">
     <div class="text-4xl font-bold">Draconis</div>
+    <div *ngIf="displayStartFightButton()">
+      <button class="text-white bg-gray-500 font-bold px-4 py-2 rounded" (click)="startFight()">Start fight</button>
+    </div>
     <div class="text-xl">{{ partyLocation.region }} <span class="text-gray-500">/</span>
       {{ partyLocation.zone }} <span class="text-gray-500">/</span> {{ partyLocation.room }}</div>
   </div>

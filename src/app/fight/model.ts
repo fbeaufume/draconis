@@ -230,8 +230,11 @@ export class TurnOrder {
 /**
  * The current step in the fight workflow.
  * Used to enable of disable the selection of a target skill, enemy or character.
+ * When some numeric values are changed, update accordingly the call to 'usePointerForStep' in fight.component.html.
  */
 export enum FightStep {
+  // Before the fight starts (displays the "Start fight" button)
+  BEFORE_START,
   // Between creature turns
   END_OF_TURN,
   // Enemy turn

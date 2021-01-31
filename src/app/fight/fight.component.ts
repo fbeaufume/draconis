@@ -1,4 +1,4 @@
-import {Component} from '@angular/core';
+import {AfterViewInit, Component, ElementRef, QueryList, ViewChild, ViewChildren} from '@angular/core';
 import {Character, Enemy, FightStep, Opposition, Party, Skill, TurnOrder} from './model';
 import {FightService} from './fight.service';
 import {Log} from './log.model';
@@ -8,9 +8,29 @@ import {Log} from './log.model';
   templateUrl: './fight.component.html',
   styleUrls: ['./fight.component.css']
 })
-export class FightComponent {
+export class FightComponent implements AfterViewInit {
+
+  // These are used to scroll the log panels to the bottom when a log is added,
+  // inspired by https://pumpingco.de/blog/automatic-scrolling-only-if-a-user-already-scrolled-the-bottom-of-a-page-in-angular/
+  @ViewChild('logFrame', {static: false}) logFrameElementRef: ElementRef;
+  @ViewChildren('log') logItemElements: QueryList<any>;
+  private logFrameElement: any;
 
   constructor(private fightService: FightService) {
+  }
+
+  ngAfterViewInit(): void {
+    this.logFrameElement = this.logFrameElementRef.nativeElement;
+    this.logItemElements.changes.subscribe(_ => this.scrollLogFrameToBottom());
+  }
+
+  private scrollLogFrameToBottom(): void {
+    this.logFrameElement.scroll({
+      top: this.logFrameElement.scrollHeight,
+      left: 0,
+      behavior: 'smooth'
+    });
+    console.log("Done!");
   }
 
   get opposition(): Opposition {

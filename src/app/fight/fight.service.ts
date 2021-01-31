@@ -59,8 +59,6 @@ export class FightService {
 
   constructor() {
     this.logs.push(new Log(LogType.EnterZone, this.partyLocation.region, this.partyLocation.zone));
-
-    // Add 7 more of these for easy debugging of the logs panel overflow
     this.logs.push(new Log(LogType.StartRound, this.round));
 
     this.turnOrder = new TurnOrder(this.party, this.opposition);

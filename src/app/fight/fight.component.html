@@ -15,62 +15,29 @@
   </div>
 
   <div class="col-span-3">
+
     <!-- Enemies -->
 
     <div class="border border-gray-700 bg-gray-800 p-4">
 
-      <!-- Row 3 -->
+      <ng-container *ngFor="let row of opposition.rows; index as i">
+        <div class="flex justify-center space-x-6 h-28">
+          <app-enemy *ngFor="let enemy of opposition.rows[opposition.rows.length - i - 1].enemies" [enemy]="enemy"
+                     class="border p-2 flex flex-col items-center"
+                     [ngClass]="[getEnemyBorderClass(enemy), usePointerForStep(4)]"
+                     (click)="selectEnemy(enemy)">
+          </app-enemy>
+        </div>
 
-      <div class="flex justify-center space-x-6 h-28">
-        <app-enemy *ngFor="let enemy of opposition.rows[2].enemies" [enemy]="enemy"
-                   class="border p-2 flex flex-col items-center"
-                   [ngClass]="[getEnemyBorderClass(enemy), usePointerForStep(4)]"
-                   (click)="selectEnemy(enemy)">
-        </app-enemy>
-      </div>
-
-      <hr class="border-gray-700 my-4">
-
-      <!-- Row 2 -->
-
-      <div class="flex justify-center space-x-6 h-28">
-        <app-enemy *ngFor="let enemy of opposition.rows[1].enemies" [enemy]="enemy"
-                   class="border p-2 flex flex-col items-center"
-                   [ngClass]="[getEnemyBorderClass(enemy), usePointerForStep(4)]"
-                   (click)="selectEnemy(enemy)">
-        </app-enemy>
-      </div>
-
-      <hr class="border-gray-700 my-4">
-
-      <!-- Row 1 -->
-
-      <div class="flex justify-center space-x-6 h-28">
-        <app-enemy *ngFor="let enemy of opposition.rows[0].enemies" [enemy]="enemy"
-                   class="border p-2 flex flex-col items-center"
-                   [ngClass]="[getEnemyBorderClass(enemy), usePointerForStep(4)]"
-                   (click)="selectEnemy(enemy)">
-        </app-enemy>
-      </div>
+        <hr *ngIf="i < 2" class="border-gray-700 my-4">
+      </ng-container>
     </div>
 
     <!-- Party -->
 
-    <div class="flex justify-center space-x-4 pb-4 mt-8">
-
-      <!-- Row 1 characters -->
-
-      <app-character *ngFor="let character of party.rows[0].characters" [character]="character"
-                     class="border w-1/3 bg-gray-800 p-4 h-36"
-                     [ngClass]="[getCharacterBorderClass(character), usePointerForStep(5)]">
-      </app-character>
-    </div>
-
-    <div class="flex justify-center space-x-4">
-
-      <!-- Row 2 characters -->
-
-      <app-character *ngFor="let character of party.rows[1].characters" [character]="character"
+    <div *ngFor="let row of party.rows; index as r" class="flex justify-center space-x-4"
+         [ngClass]="{ 'pb-4 mt-8': r == 0}">
+      <app-character *ngFor="let character of row.characters" [character]="character"
                      class="border w-1/3 bg-gray-800 p-4 h-36"
                      [ngClass]="[getCharacterBorderClass(character), usePointerForStep(5)]">
       </app-character>
@@ -131,7 +98,7 @@
 
   <div class="col-span-4 border border-gray-700 bg-gray-800 text-gray-500 p-4">
     <div class="h-48 overflow-y-scroll" #logFrame>
-    <app-log *ngFor="let log of logs" [log]="log" #log></app-log>
+      <app-log *ngFor="let log of logs" [log]="log" #log></app-log>
     </div>
   </div>
 </div>

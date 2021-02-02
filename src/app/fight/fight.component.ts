@@ -30,7 +30,6 @@ export class FightComponent implements AfterViewInit {
       left: 0,
       behavior: 'smooth'
     });
-    console.log("Done!");
   }
 
   get opposition(): Opposition {
@@ -59,19 +58,27 @@ export class FightComponent implements AfterViewInit {
   }
 
   getSkillBorderClass(skill: Skill): string {
-    return skill.name == this.fightService.selectedSkill?.name ? 'border-gray-200' : 'border-gray-800';
-  }
-
-  selectSkill(skill: Skill) {
-    this.fightService.selectSkill(skill);
+    if (this.fightService.fightStep == FightStep.SELECT_SKILL) {
+      return skill.name == this.fightService.hoveredSkill?.name ? 'border-gray-400' : 'border-gray-800';
+    } else {
+      return skill.name == this.fightService.selectedSkill?.name ? 'border-gray-200' : 'border-gray-800';
+    }
   }
 
   get focusedSkill(): Skill | null {
     return this.fightService.focusedSkill;
   }
 
-  focusSkill(skill: Skill) {
-    this.fightService.focusSkill(skill);
+  enterSkill(skill: Skill) {
+    this.fightService.enterSkill(skill);
+  }
+
+  leaveSkill() {
+    this.fightService.leaveSkill();
+  }
+
+  selectSkill(skill: Skill) {
+    this.fightService.selectSkill(skill);
   }
 
   getEnemyBorderClass(enemy: Enemy): string {

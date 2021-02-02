@@ -57,7 +57,8 @@
 
       <div *ngFor="let skill of activeCharacter?.skills" class="border p-1 flex justify-between"
            [ngClass]="[getSkillBorderClass(skill), usePointerForStep(3)]"
-           (mouseenter)="focusSkill(skill)"
+           (mouseenter)="enterSkill(skill)"
+           (mouseleave)="leaveSkill()"
            (click)="selectSkill(skill)">
         <p>{{ skill.name }}</p>
         <p>{{ skill.cost > 0 ? skill.cost : '' }}</p>

@@ -47,8 +47,13 @@ export class FightService {
 
   targetCharacter: Character | null;
 
+  // Skill currently under the mouse pointer
+  hoveredSkill: Skill | null;
+
+  // Skill currently displayed in the focus skill panel
   focusedSkill: Skill | null;
 
+  // Skill selected by the player
   selectedSkill: Skill | null;
 
   activeEnemy: Enemy | null;
@@ -130,18 +135,28 @@ export class FightService {
   }
 
   /**
-   * Display a skill in the focused skill panel.
+   * The mouse pointer entered a skill.
    */
-  focusSkill(skill: Skill) {
+  enterSkill(skill: Skill) {
+    this.hoveredSkill = skill;
     this.focusedSkill = skill;
+  }
+
+  /**
+   * The mouse pointer entered a skill.
+   */
+  leaveSkill() {
+    this.hoveredSkill = null;
   }
 
   /**
    * Select a character skill.
    */
   selectSkill(skill: Skill) {
-    this.selectedSkill = skill;
-    this.fightStep = FightStep.SELECT_ENEMY;
+    if (this.fightStep == FightStep.SELECT_SKILL) {
+      this.selectedSkill = skill;
+      this.fightStep = FightStep.SELECT_ENEMY;
+    }
   }
 
   /**

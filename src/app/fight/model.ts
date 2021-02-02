@@ -272,4 +272,6 @@ export enum FightStep {
   SELECT_ENEMY,
   // Character turn, the player must select a character (for example as the target of a heal or buff)
   SELECT_CHARACTER,
+  // Executing the player skill
+  EXECUTING_SKILL,
 }

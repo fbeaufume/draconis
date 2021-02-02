@@ -1,7 +1,6 @@
 import {AfterViewInit, Component, ElementRef, QueryList, ViewChild, ViewChildren} from '@angular/core';
-import {Character, Enemy, FightStep, Opposition, Party, Skill, TurnOrder} from './model';
+import {Character, Enemy, FightStep, Skill} from './model';
 import {FightService} from './fight.service';
-import {Log} from './log.model';
 
 @Component({
   selector: 'app-fight',
@@ -16,7 +15,7 @@ export class FightComponent implements AfterViewInit {
   @ViewChildren('log') logItemElements: QueryList<any>;
   private logFrameElement: any;
 
-  constructor(private fightService: FightService) {
+  constructor(public fightService: FightService) {
   }
 
   ngAfterViewInit(): void {
@@ -32,26 +31,6 @@ export class FightComponent implements AfterViewInit {
     });
   }
 
-  get opposition(): Opposition {
-    return this.fightService.opposition;
-  }
-
-  get party(): Party {
-    return this.fightService.party;
-  }
-
-  get turnOrder(): TurnOrder {
-    return this.fightService.turnOrder;
-  }
-
-  get activeCharacter(): Character | null {
-    return this.fightService.activeCharacter;
-  }
-
-  get targetCharacter(): Character | null {
-    return this.fightService.targetCharacter;
-  }
-
   getCharacterBorderClass(character: Character): string {
     return character.name == this.fightService.activeCharacter?.name || character.name == this.fightService.targetCharacter?.name ?
       'border-gray-200' : 'border-gray-700';
@@ -65,29 +44,13 @@ export class FightComponent implements AfterViewInit {
     }
   }
 
-  get focusedSkill(): Skill | null {
-    return this.fightService.focusedSkill;
-  }
-
-  enterSkill(skill: Skill) {
-    this.fightService.enterSkill(skill);
-  }
-
-  leaveSkill() {
-    this.fightService.leaveSkill();
-  }
-
-  selectSkill(skill: Skill) {
-    this.fightService.selectSkill(skill);
-  }
-
   getEnemyBorderClass(enemy: Enemy): string {
-    return enemy.name == this.fightService.activeEnemy?.name || enemy.name == this.fightService.targetEnemy?.name ?
-      'border-yellow-200' : 'border-gray-800';
-  }
-
-  selectEnemy(enemy: Enemy) {
-    this.fightService.selectEnemy(enemy);
+    if (this.fightService.fightStep == FightStep.SELECT_ENEMY) {
+      return enemy.name == this.fightService.hoveredEnemy?.name ? 'border-yellow-400' : 'border-gray-800';
+    } else {
+      return enemy.name == this.fightService.activeEnemy?.name || enemy.name == this.fightService.targetEnemy?.name ?
+        'border-yellow-200' : 'border-gray-800';
+    }
   }
 
   /**
@@ -95,9 +58,5 @@ export class FightComponent implements AfterViewInit {
    */
   usePointerForStep(fightStep: FightStep) {
     return this.fightService.fightStep == fightStep ? 'cursor-pointer' : 'cursor-default';
-  }
-
-  get logs(): Log[] {
-    return this.fightService.logs;
   }
 }

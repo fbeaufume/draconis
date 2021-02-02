@@ -9,18 +9,10 @@ import {FightStep, PartyLocation} from './fight/model';
 })
 export class AppComponent {
 
-  constructor(private fightService: FightService) {
+  constructor(public fightService: FightService) {
   }
 
   displayStartFightButton(): boolean {
     return this.fightService.fightStep == FightStep.BEFORE_START;
-  }
-
-  get partyLocation(): PartyLocation {
-    return this.fightService.partyLocation;
-  }
-
-  startFight() {
-    this.fightService.startFight();
   }
 }

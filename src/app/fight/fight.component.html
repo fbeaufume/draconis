@@ -9,7 +9,7 @@
 
     <hr class="border-gray-700 my-4">
 
-    <p *ngFor="let creature of turnOrder.currentOrder; index as i" class="p-1"
+    <p *ngFor="let creature of fightService.turnOrder.currentOrder; index as i" class="p-1"
        [ngClass]="{ 'text-yellow-200': creature.isEnemy(), 'text-gray-500': creature.isEndOfRound() }">
       {{ creature.name }}</p>
   </div>
@@ -20,12 +20,16 @@
 
     <div class="border border-gray-700 bg-gray-800 p-4">
 
-      <ng-container *ngFor="let row of opposition.rows; index as i">
+      <ng-container *ngFor="let row of fightService.opposition.rows; index as i">
         <div class="flex justify-center space-x-6 h-28">
-          <app-enemy *ngFor="let enemy of opposition.rows[opposition.rows.length - i - 1].enemies" [enemy]="enemy"
-                     class="border p-2 flex flex-col items-center"
-                     [ngClass]="[getEnemyBorderClass(enemy), usePointerForStep(4)]"
-                     (click)="selectEnemy(enemy)">
+          <app-enemy
+            *ngFor="let enemy of fightService.opposition.rows[fightService.opposition.rows.length - i - 1].enemies"
+            class="border p-2 flex flex-col items-center"
+            [ngClass]="[getEnemyBorderClass(enemy), usePointerForStep(4)]"
+            (mouseenter)="fightService.enterEnemy(enemy)"
+            (mouseleave)="fightService.leaveEnemy()"
+            (click)="fightService.selectEnemy(enemy)"
+            [enemy]="enemy">
           </app-enemy>
         </div>
 
@@ -35,7 +39,7 @@
 
     <!-- Party -->
 
-    <div *ngFor="let row of party.rows; index as r" class="flex justify-center space-x-4"
+    <div *ngFor="let row of fightService.party.rows; index as r" class="flex justify-center space-x-4"
          [ngClass]="{ 'pb-4 mt-8': r == 0}">
       <app-character *ngFor="let character of row.characters" [character]="character"
                      class="border w-1/3 bg-gray-800 p-4 h-36"
@@ -55,11 +59,11 @@
 
       <hr class="border-gray-700 my-4">
 
-      <div *ngFor="let skill of activeCharacter?.skills" class="border p-1 flex justify-between"
+      <div *ngFor="let skill of fightService.activeCharacter?.skills" class="border p-1 flex justify-between"
            [ngClass]="[getSkillBorderClass(skill), usePointerForStep(3)]"
-           (mouseenter)="enterSkill(skill)"
-           (mouseleave)="leaveSkill()"
-           (click)="selectSkill(skill)">
+           (mouseenter)="fightService.enterSkill(skill)"
+           (mouseleave)="fightService.leaveSkill()"
+           (click)="fightService.selectSkill(skill)">
         <p>{{ skill.name }}</p>
         <p>{{ skill.cost > 0 ? skill.cost : '' }}</p>
       </div>
@@ -68,29 +72,29 @@
     <!-- Focused skill -->
 
     <div class="flex-1 border border-gray-700 bg-gray-800 p-4">
-      <div *ngIf="focusedSkill != null">
+      <div *ngIf="fightService.focusedSkill != null">
         <div class="flex justify-center">
-          <p>{{ focusedSkill.name }}</p>
+          <p>{{ fightService.focusedSkill.name }}</p>
         </div>
 
         <hr class="border-gray-700 my-4">
 
         <div class="flex">
           <p class="flex-1 text-gray-500">Cost</p>
-          <p class="flex-1">{{ focusedSkill.cost }}</p>
+          <p class="flex-1">{{ fightService.focusedSkill.cost }}</p>
         </div>
         <div class="flex">
           <p class="flex-1 text-gray-500">Range</p>
-          <p class="flex-1">{{ focusedSkill.range }}</p>
+          <p class="flex-1">{{ fightService.focusedSkill.range }}</p>
         </div>
         <div class="flex">
           <p class="flex-1 text-gray-500">Cooldown</p>
-          <p class="flex-1">{{ focusedSkill.coolDown }}</p>
+          <p class="flex-1">{{ fightService.focusedSkill.coolDown }}</p>
         </div>
 
         <hr class="border-gray-700 my-4">
 
-        <p>{{ focusedSkill.description }}</p>
+        <p>{{ fightService.focusedSkill.description }}</p>
       </div>
     </div>
   </div>
@@ -99,7 +103,7 @@
 
   <div class="col-span-4 border border-gray-700 bg-gray-800 text-gray-500 p-4">
     <div class="h-48 overflow-y-scroll" #logFrame>
-      <app-log *ngFor="let log of logs" [log]="log" #log></app-log>
+      <app-log *ngFor="let log of fightService.logs" [log]="log" #log></app-log>
     </div>
   </div>
 </div>

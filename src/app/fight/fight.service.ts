@@ -45,12 +45,13 @@ export class FightService {
 
   activeCharacter: Character | null;
 
+  // The character targeted by a skill (from a character or an enemy)
   targetCharacter: Character | null;
 
-  // Skill currently under the mouse pointer
+  // The skill currently under the mouse pointer during the selection of a skill
   hoveredSkill: Skill | null;
 
-  // Skill currently displayed in the focus skill panel
+  // The skill currently displayed in the focus skill panel
   focusedSkill: Skill | null;
 
   // Skill selected by the player
@@ -58,6 +59,10 @@ export class FightService {
 
   activeEnemy: Enemy | null;
 
+  // The enemy under the mouse pointer during the selection of an enemy
+  hoveredEnemy: Enemy | null;
+
+  // The enemy targeted by a skill (from a character or an enemy)
   targetEnemy: Enemy | null;
 
   logs: Log[] = [];
@@ -143,7 +148,7 @@ export class FightService {
   }
 
   /**
-   * The mouse pointer entered a skill.
+   * The mouse pointer left a skill.
    */
   leaveSkill() {
     this.hoveredSkill = null;
@@ -157,6 +162,20 @@ export class FightService {
       this.selectedSkill = skill;
       this.fightStep = FightStep.SELECT_ENEMY;
     }
+  }
+
+  /**
+   * The mouse pointer entered an enemy.
+   */
+  enterEnemy(enemy: Enemy) {
+    this.hoveredEnemy = enemy;
+  }
+
+  /**
+   * The mouse pointer left an enemy.
+   */
+  leaveEnemy() {
+    this.hoveredEnemy = null;
   }
 
   /**
@@ -174,6 +193,8 @@ export class FightService {
 
       // Log the result
       this.logs.push(new Log(LogType.CharacterHit, this.activeCharacter?.name, enemy.name, damage));
+
+      this.fightStep = FightStep.EXECUTING_SKILL;
 
       this.processNextTurn();
     }

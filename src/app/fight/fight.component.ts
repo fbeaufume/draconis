@@ -38,15 +38,36 @@ export class FightComponent implements AfterViewInit {
 
   getSkillBorderClass(skill: Skill): string {
     if (this.fightService.fightStep == FightStep.SELECT_SKILL) {
-      return skill.name == this.fightService.hoveredSkill?.name ? 'border-gray-400' : 'border-gray-800';
+      // Choosing a skill
+
+      if (skill.name == this.fightService.hoveredSkill?.name) {
+        // The skill is hovered
+
+        if (skill.cost > (this.fightService.activeCharacter?.energy ?? 0)) {
+          // The skill is too expensive
+          return 'border-red-500';
+        } else {
+          // The skill cost is ok
+          return 'border-gray-200';
+        }
+      } else {
+        return 'border-gray-800';
+      }
     } else {
-      return skill.name == this.fightService.selectedSkill?.name ? 'border-gray-200' : 'border-gray-800';
+      // Not choosing a skill
+
+      if (skill.name == this.fightService.selectedSkill?.name) {
+        // The skill is selected
+        return 'border-gray-200';
+      } else {
+        return 'border-gray-800';
+      }
     }
   }
 
   getEnemyBorderClass(enemy: Enemy): string {
     if (this.fightService.fightStep == FightStep.SELECT_ENEMY) {
-      return enemy.name == this.fightService.hoveredEnemy?.name ? 'border-yellow-400' : 'border-gray-800';
+      return enemy.name == this.fightService.hoveredEnemy?.name ? 'border-yellow-200' : 'border-gray-800';
     } else {
       return enemy.name == this.fightService.activeEnemy?.name || enemy.name == this.fightService.targetEnemy?.name ?
         'border-yellow-200' : 'border-gray-800';

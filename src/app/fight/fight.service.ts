@@ -18,6 +18,7 @@ export class FightService {
   skills: Skill[] = [
     new Skill('Attack', 0, 1, 0, 10, 'Basic attack, does 10 damage'),
     new Skill('Special Attack', 10, 1, 0, 15, 'Special attack, does 15 damage'),
+    new Skill('Ultimate Attack', 60, 1, 0, 40, 'Ultimate attack, does 40 damage'),
     // new Skill('Defend', 0, 1, 0, 'Reduce taken damage by 30% until next turn'),
     // new Skill('Venom', 15, 1, 0, 'Hits the target for 100% damage and inflicts 60% poison damage over 3 turns'),
     // new Skill('Vanish', 10, 0, 4, 'Disappear and become immune to attacks'),
@@ -158,7 +159,11 @@ export class FightService {
    * Select a character skill.
    */
   selectSkill(skill: Skill) {
-    if (this.fightStep == FightStep.SELECT_SKILL) {
+    if (
+      // Cannot select a skill after we selected one
+      this.fightStep == FightStep.SELECT_SKILL
+      // Check the skill cost
+      && (skill.cost <= (this.activeCharacter?.energy ?? 0))) {
       this.selectedSkill = skill;
       this.fightStep = FightStep.SELECT_ENEMY;
     }

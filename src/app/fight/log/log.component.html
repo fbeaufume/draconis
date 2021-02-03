@@ -14,4 +14,7 @@
     <span class="text-gray-200">{{ log.args[0] }}</span> hits <span class="text-yellow-200">{{ log.args[1] }}</span>
     for <span class="text-red-500">{{ log.args[2] }}</span> HP.
   </div>
+  <div *ngSwitchCase="4">
+    <span class="text-yellow-200">{{ log.args[0] }}</span> was defeated.
+  </div>
 </div>

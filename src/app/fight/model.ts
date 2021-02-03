@@ -122,6 +122,38 @@ export class Opposition {
     this.rows.push(new EnemyRow(row2Enemies));
     this.rows.push(new EnemyRow(row3Enemies));
   }
+
+  /**
+   * Return true if there is at least one dead enemy.
+   */
+  hasDeadEnemies(): boolean {
+    for (const row of this.rows) {
+      for (const enemy of row.enemies) {
+        if (enemy.life <= 0) {
+          return true;
+        }
+      }
+    }
+    return false;
+  }
+
+  /**
+   * Remove dead enemies and return the names of the removed enemies.
+   */
+  removeDeadEnemies(): string[] {
+    let removedNames = [];
+
+    for (const row of this.rows) {
+      for (let i = 0; i < row.enemies.length; i++) {
+        if (row.enemies[i].life <= 0) {
+          removedNames.push(row.enemies[i].name);
+          row.enemies.splice(i, 1);
+        }
+      }
+    }
+
+    return removedNames;
+  }
 }
 
 /**
@@ -200,7 +232,7 @@ export class Party {
 export class EndOfRound extends Creature {
 
   constructor() {
-    super("- End of round -", 0);
+    super('- End of round -', 0);
   }
 }
 
@@ -237,7 +269,7 @@ export class TurnOrder {
     this.currentOrder.push(party.rows[1].characters[2]);
 
     // Add a special creature to mark the end of round
-    this.currentOrder.push(new EndOfRound())
+    this.currentOrder.push(new EndOfRound());
   }
 
   private static shuffle(array: Creature[]) {
@@ -251,6 +283,16 @@ export class TurnOrder {
     const creature = this.currentOrder[0];
     this.currentOrder.copyWithin(0, 1);
     this.currentOrder[this.currentOrder.length - 1] = creature;
+  }
+
+  removeDeadEnemies() {
+    for (let i = 0; i < this.currentOrder.length; i++) {
+      const creature = this.currentOrder[i];
+
+      if (creature.life <= 0 && creature instanceof Enemy) {
+        this.currentOrder.splice(i, 1);
+      }
+    }
   }
 }
 

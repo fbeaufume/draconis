@@ -37,7 +37,7 @@ export class FightService {
 
   opposition: Opposition = new Opposition([
     new Enemy('Wolf A', 30, 4),
-    new Enemy('Wolf B', 30, 4)
+    new Enemy('Wolf B', 60, 4)
   ], [], []);
 
   turnOrder: TurnOrder;
@@ -201,7 +201,26 @@ export class FightService {
 
       this.fightStep = FightStep.EXECUTING_SKILL;
 
-      this.processNextTurn();
+      // If there are dead enemies, remove them after a pause
+      if (this.opposition.hasDeadEnemies()) {
+        window.setTimeout(() => {
+          // Remove dead enemies from the opposition
+          const removedNames = this.opposition.removeDeadEnemies();
+
+          // Remove dead enemies from the turn order
+          this.turnOrder.removeDeadEnemies();
+
+          // Log the defeated enemies
+          for (const name of removedNames) {
+            this.logs.push(new Log(LogType.DefeatedEnemy, name));
+          }
+
+          this.processNextTurn();
+        }, this.pause);
+      }
+      else {
+        this.processNextTurn();
+      }
     }
   }
 

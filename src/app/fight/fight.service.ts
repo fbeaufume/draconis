@@ -12,7 +12,9 @@ export class FightService {
 
   partyLocation: PartyLocation = new PartyLocation('Goblin Camp', 'Inner Camp', 'Fight 1');
 
-  round: number = 1;
+  fightStep: FightStep = FightStep.BEFORE_START;
+
+  round: number = 0;
 
   // Currently using the same skills for all characters
   skills: Skill[] = [
@@ -25,24 +27,11 @@ export class FightService {
     // new Skill('Back Stab', 10, 1, 0, 'Hits the target for 180% damage')
   ];
 
-  party: Party = new Party([
-      new Character('Cyl', 'Rogue', 1, 20, false, 50, this.skills),
-      new Character('Melkan', 'Warrior', 1, 20, false, 50, this.skills),
-      new Character('Arwin', 'Paladin', 1, 20, true, 50, this.skills)],
-    [
-      new Character('Faren', 'Archer', 1, 20, false, 50, this.skills),
-      new Character('Harika', 'Mage', 1, 20, true, 50, this.skills),
-      new Character('Nairo', 'Priest', 1, 20, true, 50, this.skills)
-    ]);
+  party: Party = new Party([], []);
 
-  opposition: Opposition = new Opposition([
-    new Enemy('Wolf A', 15, 4),
-    new Enemy('Wolf B', 15, 4)
-  ], [], []);
+  opposition: Opposition = new Opposition([], [], []);
 
   turnOrder: TurnOrder;
-
-  fightStep: FightStep = FightStep.BEFORE_START;
 
   activeCharacter: Character | null;
 
@@ -69,9 +58,41 @@ export class FightService {
   logs: Log[] = [];
 
   constructor() {
-    this.logs.push(new Log(LogType.EnterZone, this.partyLocation.region, this.partyLocation.zone));
+    this.initializeFight();
+  }
+
+  initializeFight() {
+    this.fightStep = FightStep.BEFORE_START;
+    this.round = 1;
+
+    this.party = new Party([
+        new Character('Cyl', 'Rogue', 1, 20, false, 50, this.skills),
+        new Character('Melkan', 'Warrior', 1, 20, false, 50, this.skills),
+        new Character('Arwin', 'Paladin', 1, 20, true, 50, this.skills)],
+      [
+        new Character('Faren', 'Archer', 1, 20, false, 50, this.skills),
+        new Character('Harika', 'Mage', 1, 20, true, 50, this.skills),
+        new Character('Nairo', 'Priest', 1, 20, true, 50, this.skills)
+      ]);
+
+    this.opposition = new Opposition([
+      new Enemy('Wolf A', 15, 4),
+      new Enemy('Wolf B', 15, 4)
+    ], [], []);
+
+    this.activeCharacter = null;
+    this.targetCharacter = null;
+    this.hoveredSkill = null;
+    this.focusedSkill = null;
+    this.selectedSkill = null;
+    this.activeEnemy = null;
+    this.hoveredEnemy = null;
+    this.targetEnemy = null;
 
     this.turnOrder = new TurnOrder(this.party, this.opposition);
+
+    this.logs = [];
+    this.logs.push(new Log(LogType.EnterZone, this.partyLocation.region, this.partyLocation.zone));
   }
 
   /**

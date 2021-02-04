@@ -15,4 +15,8 @@ export class AppComponent {
   displayStartFightButton(): boolean {
     return this.fightService.fightStep == FightStep.BEFORE_START;
   }
+
+  displayResetFightButton(): boolean {
+    return this.fightService.fightStep == FightStep.PARTY_VICTORY;
+  }
 }

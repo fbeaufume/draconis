@@ -36,8 +36,8 @@ export class FightService {
     ]);
 
   opposition: Opposition = new Opposition([
-    new Enemy('Wolf A', 30, 4),
-    new Enemy('Wolf B', 60, 4)
+    new Enemy('Wolf A', 15, 4),
+    new Enemy('Wolf B', 15, 4)
   ], [], []);
 
   turnOrder: TurnOrder;
@@ -215,10 +215,17 @@ export class FightService {
             this.logs.push(new Log(LogType.DefeatedEnemy, name));
           }
 
-          this.processNextTurn();
+          // Check if the party won
+          if (this.opposition.isWiped()) {
+            window.setTimeout(() => {
+              this.logs.push(new Log(LogType.PartyVictory));
+              this.fightStep = FightStep.PARTY_VICTORY;
+            }, this.pause);
+          } else {
+            this.processNextTurn();
+          }
         }, this.pause);
-      }
-      else {
+      } else {
         this.processNextTurn();
       }
     }

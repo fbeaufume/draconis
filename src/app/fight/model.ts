@@ -154,6 +154,30 @@ export class Opposition {
 
     return removedNames;
   }
+
+  /**
+   * Return the number of alive creatures
+   */
+  countAliveCreatures(): number {
+    let count = 0;
+
+    for (const row of this.rows) {
+      for (let i = 0; i < row.enemies.length; i++) {
+        if (row.enemies[i].life > 0) {
+          count++;
+        }
+      }
+    }
+
+    return count;
+  }
+
+  /**
+   * Return true is there is no alive creature.
+   */
+  isWiped(): boolean {
+    return this.countAliveCreatures() <= 0;
+  }
 }
 
 /**
@@ -316,4 +340,5 @@ export enum FightStep {
   SELECT_CHARACTER,
   // Executing the player skill
   EXECUTING_SKILL,
+  PARTY_VICTORY,
 }

@@ -9,6 +9,7 @@ export enum LogType {
   EnemyHit,
   CharacterHit,
   DefeatedEnemy,
+  PartyVictory,
 }
 
 /**

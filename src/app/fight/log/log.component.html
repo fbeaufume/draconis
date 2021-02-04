@@ -1,7 +1,6 @@
 <div [ngSwitch]="log.type">
   <div *ngSwitchCase="0">
-    Entering <span class="text-gray-200">{{ log.args[1] }}</span>
-    of <span class="text-gray-200">{{ log.args[0] }}</span>.
+    Entering <span class="text-gray-200">{{ log.args[0] }}</span>.
   </div>
   <div *ngSwitchCase="1">
     Round <span class="text-gray-200">{{ log.args[0] }}</span> of fight started.

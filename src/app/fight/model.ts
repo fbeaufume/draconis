@@ -7,8 +7,7 @@ export class PartyLocation {
 
   constructor(
     public region: string,
-    public zone: string,
-    public room: string
+    public fight: number
   ) {
   }
 }

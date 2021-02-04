@@ -10,7 +10,7 @@ export class FightService {
   // Pause in msec in the UI between actions
   pause: number = 1000;
 
-  partyLocation: PartyLocation = new PartyLocation('Goblin Camp', 'Inner Camp', 'Fight 1');
+  partyLocation: PartyLocation = new PartyLocation('Fang Forest', 1);
 
   fightStep: FightStep = FightStep.BEFORE_START;
 
@@ -92,7 +92,7 @@ export class FightService {
     this.turnOrder = new TurnOrder(this.party, this.opposition);
 
     this.logs = [];
-    this.logs.push(new Log(LogType.EnterZone, this.partyLocation.region, this.partyLocation.zone));
+    this.logs.push(new Log(LogType.EnterZone, this.partyLocation.region));
   }
 
   /**

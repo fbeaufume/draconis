@@ -1,6 +1,6 @@
 import {Component} from '@angular/core';
 import {FightService} from './fight/fight.service';
-import {FightStep, PartyLocation} from './fight/model';
+import {FightStep} from './fight/model';
 
 @Component({
   selector: 'app-root',

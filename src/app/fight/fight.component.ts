@@ -1,5 +1,6 @@
 import {AfterViewInit, Component, ElementRef, QueryList, ViewChild, ViewChildren} from '@angular/core';
-import {Character, Enemy, FightStep, Skill} from './model';
+import {Character, Enemy, FightStep} from './model';
+import {Skill} from './skill.model';
 import {FightService} from './fight.service';
 
 @Component({
@@ -32,8 +33,13 @@ export class FightComponent implements AfterViewInit {
   }
 
   getCharacterBorderClass(character: Character): string {
-    return character.name == this.fightService.activeCharacter?.name || character.name == this.fightService.targetCharacter?.name ?
-      'border-gray-200' : 'border-gray-700';
+    if (this.fightService.fightStep == FightStep.SELECT_CHARACTER) {
+      return character.name == this.fightService.hoveredCharacter?.name || character.name == this.fightService.activeCharacter?.name ?
+        'border-gray-200' : 'border-gray-700';
+    } else {
+      return character.name == this.fightService.activeCharacter?.name || character.name == this.fightService.targetCharacter?.name ?
+        'border-gray-200' : 'border-gray-700';
+    }
   }
 
   getSkillBorderClass(skill: Skill): string {

@@ -8,6 +8,7 @@ export enum LogType {
   StartRound,
   EnemyHit,
   CharacterHit,
+  CharacterHeal,
   DefeatedEnemy,
   PartyVictory,
 }

@@ -1,4 +1,6 @@
-// Core model classes of the application
+// Base model classes of the application
+
+import {Skill} from './skill.model';
 
 /**
  * The party location in the "world".
@@ -8,24 +10,6 @@ export class PartyLocation {
   constructor(
     public region: string,
     public fight: number
-  ) {
-  }
-}
-
-/**
- * A character skill.
- */
-export class Skill {
-
-  constructor(
-    public name: string,
-    // Skill cost, in energy points
-    public cost: number,
-    // Skill range in number of rows, 0 if not applicable
-    public range: number,
-    public coolDown: number,
-    public damage: number,
-    public description: string
   ) {
   }
 }

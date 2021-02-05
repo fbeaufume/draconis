@@ -1,5 +1,6 @@
 import {Injectable} from '@angular/core';
-import {Character, Creature, Enemy, FightStep, Opposition, Party, PartyLocation, Skill, TurnOrder} from './model';
+import {Character, Creature, Enemy, FightStep, Opposition, Party, PartyLocation, TurnOrder} from './model';
+import {attack, bigAttack, heal, Skill, SkillTarget} from './skill.model';
 import {Log, LogType} from './log.model';
 
 @Injectable({
@@ -18,13 +19,9 @@ export class FightService {
 
   // Currently using the same skills for all characters
   skills: Skill[] = [
-    new Skill('Attack', 0, 1, 0, 10, 'Basic attack, does 10 damage'),
-    new Skill('Special Attack', 10, 1, 0, 15, 'Special attack, does 15 damage'),
-    new Skill('Ultimate Attack', 60, 1, 0, 40, 'Ultimate attack, does 40 damage'),
-    // new Skill('Defend', 0, 1, 0, 'Reduce taken damage by 30% until next turn'),
-    // new Skill('Venom', 15, 1, 0, 'Hits the target for 100% damage and inflicts 60% poison damage over 3 turns'),
-    // new Skill('Vanish', 10, 0, 4, 'Disappear and become immune to attacks'),
-    // new Skill('Back Stab', 10, 1, 0, 'Hits the target for 180% damage')
+    attack,
+    bigAttack,
+    heal,
   ];
 
   party: Party = new Party([], []);
@@ -34,6 +31,9 @@ export class FightService {
   turnOrder: TurnOrder;
 
   activeCharacter: Character | null;
+
+  // The character under the mouse pointer during the selection of a character
+  hoveredCharacter: Character | null;
 
   // The character targeted by a skill (from a character or an enemy)
   targetCharacter: Character | null;
@@ -180,14 +180,20 @@ export class FightService {
    * Select a character skill.
    */
   selectSkill(skill: Skill) {
-    if (
-      // Cannot select a skill after we selected one
-      this.fightStep == FightStep.SELECT_SKILL
-      // Check the skill cost
-      && (skill.cost <= (this.activeCharacter?.energy ?? 0))) {
-      this.selectedSkill = skill;
-      this.fightStep = FightStep.SELECT_ENEMY;
+    // The player cannot change his mind and select a different skill
+    if (this.fightStep != FightStep.SELECT_SKILL) {
+      return;
     }
+
+    // Check the skill cost
+    if (skill.cost > (this.activeCharacter?.energy ?? 0)) {
+      return;
+    }
+
+    this.selectedSkill = skill;
+
+    // The next step depends on the target type of the skill
+    this.fightStep = skill.target == SkillTarget.ENEMY ? FightStep.SELECT_ENEMY : FightStep.SELECT_CHARACTER;
   }
 
   /**
@@ -208,48 +214,87 @@ export class FightService {
    * Select an enemy target for a skill.
    */
   selectEnemy(enemy: Enemy) {
-    // This "if" is a poor man turn workflow
-    if (this.selectedSkill != null) {
-      this.targetEnemy = enemy;
-
-      // Execute the skill
-      const damage = this.selectedSkill.damage;
-      this.activeCharacter?.useSkill(this.selectedSkill);
-      enemy.inflictDamage(damage);
-
-      // Log the result
-      this.logs.push(new Log(LogType.CharacterHit, this.activeCharacter?.name, enemy.name, damage));
-
-      this.fightStep = FightStep.EXECUTING_SKILL;
-
-      // If there are dead enemies, remove them after a pause
-      if (this.opposition.hasDeadEnemies()) {
-        window.setTimeout(() => {
-          // Remove dead enemies from the opposition
-          const removedNames = this.opposition.removeDeadEnemies();
-
-          // Remove dead enemies from the turn order
-          this.turnOrder.removeDeadEnemies();
-
-          // Log the defeated enemies
-          for (const name of removedNames) {
-            this.logs.push(new Log(LogType.DefeatedEnemy, name));
-          }
-
-          // Check if the party won
-          if (this.opposition.isWiped()) {
-            window.setTimeout(() => {
-              this.logs.push(new Log(LogType.PartyVictory));
-              this.fightStep = FightStep.PARTY_VICTORY;
-            }, this.pause);
-          } else {
-            this.processNextTurn();
-          }
-        }, this.pause);
-      } else {
-        this.processNextTurn();
-      }
+    if (this.selectedSkill == null) {
+      return;
     }
+
+    this.targetEnemy = enemy;
+
+    // Execute the skill
+    const damage = this.selectedSkill.power;
+    this.activeCharacter?.useSkill(this.selectedSkill);
+    enemy.inflictDamage(damage);
+
+    // Log the result
+    this.logs.push(new Log(LogType.CharacterHit, this.activeCharacter?.name, enemy.name, damage));
+
+    this.fightStep = FightStep.EXECUTING_SKILL;
+
+    // If there are dead enemies, remove them after a pause
+    if (this.opposition.hasDeadEnemies()) {
+      window.setTimeout(() => {
+        // Remove dead enemies from the opposition
+        const removedNames = this.opposition.removeDeadEnemies();
+
+        // Remove dead enemies from the turn order
+        this.turnOrder.removeDeadEnemies();
+
+        // Log the defeated enemies
+        for (const name of removedNames) {
+          this.logs.push(new Log(LogType.DefeatedEnemy, name));
+        }
+
+        // Check if the party won
+        if (this.opposition.isWiped()) {
+          window.setTimeout(() => {
+            this.logs.push(new Log(LogType.PartyVictory));
+            this.fightStep = FightStep.PARTY_VICTORY;
+          }, this.pause);
+        } else {
+          this.processNextTurn();
+        }
+      }, this.pause);
+    } else {
+      this.processNextTurn();
+    }
+  }
+
+  /**
+   * The mouse pointer entered a character.
+   */
+  enterCharacter(character: Character) {
+    this.hoveredCharacter = character;
+  }
+
+  /**
+   * The mouse pointer left a character.
+   */
+  leaveCharacter() {
+    this.hoveredCharacter = null;
+  }
+
+
+  /**
+   * Select a character target for a skill.
+   */
+  selectCharacter(character: Character) {
+    if (this.selectedSkill == null) {
+      return;
+    }
+
+    this.targetCharacter = character;
+
+    // Execute the skill
+    const heal = this.selectedSkill.power;
+    this.activeCharacter?.useSkill(this.selectedSkill);
+    character.inflictDamage(-heal);
+
+    // Log the result
+    this.logs.push(new Log(LogType.CharacterHeal, this.activeCharacter?.name, character.name, heal));
+
+    this.fightStep = FightStep.EXECUTING_SKILL;
+
+    this.processNextTurn();
   }
 
   /**

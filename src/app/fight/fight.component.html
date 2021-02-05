@@ -25,11 +25,11 @@
           <app-enemy
             *ngFor="let enemy of fightService.opposition.rows[fightService.opposition.rows.length - i - 1].enemies"
             class="border p-2 flex flex-col items-center"
+            [enemy]="enemy"
             [ngClass]="[getEnemyBorderClass(enemy), usePointerForStep(4)]"
             (mouseenter)="fightService.enterEnemy(enemy)"
             (mouseleave)="fightService.leaveEnemy()"
-            (click)="fightService.selectEnemy(enemy)"
-            [enemy]="enemy">
+            (click)="fightService.selectEnemy(enemy)">
           </app-enemy>
         </div>
 
@@ -41,9 +41,13 @@
 
     <div *ngFor="let row of fightService.party.rows; index as r" class="flex justify-center space-x-4"
          [ngClass]="{ 'pb-4 mt-8': r == 0}">
-      <app-character *ngFor="let character of row.characters" [character]="character"
+      <app-character *ngFor="let character of row.characters"
                      class="border w-1/3 bg-gray-800 p-4 h-36"
-                     [ngClass]="[getCharacterBorderClass(character), usePointerForStep(5)]">
+                     [character]="character"
+                     [ngClass]="[getCharacterBorderClass(character), usePointerForStep(5)]"
+                     (mouseenter)="fightService.enterCharacter(character)"
+                     (mouseleave)="fightService.leaveCharacter()"
+                     (click)="fightService.selectCharacter(character)">
       </app-character>
     </div>
   </div>

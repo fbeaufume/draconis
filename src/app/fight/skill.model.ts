@@ -43,6 +43,18 @@ export const attack = new Skill(
   'Basic attack, does 10 damage.');
 
 /**
+ * The default single target attack.
+ */
+export const defend = new Skill(
+  'Defend',
+  SkillTarget.NONE,
+  0,
+  1,
+  0,
+  0,
+  'Defend against attacks.');
+
+/**
  * A bigger attack.
  */
 export const bigAttack = new Skill(

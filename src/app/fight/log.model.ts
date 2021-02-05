@@ -2,11 +2,13 @@
 
 /**
  * The various types of log messages.
+ * When any numeric value is changed, update log.component.html.
  */
 export enum LogType {
   EnterZone,
   StartRound,
   EnemyHit,
+  CharacterDefend,
   CharacterHit,
   CharacterHeal,
   DefeatedEnemy,

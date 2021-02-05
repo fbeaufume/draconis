@@ -10,17 +10,20 @@
     for <span class="text-red-500">{{ log.args[2] }}</span> HP.
   </div>
   <div *ngSwitchCase="3">
+    <span class="text-gray-200">{{ log.args[0] }}</span> defends.
+  </div>
+  <div *ngSwitchCase="4">
     <span class="text-gray-200">{{ log.args[0] }}</span> hits <span class="text-yellow-200">{{ log.args[1] }}</span>
     for <span class="text-red-500">{{ log.args[2] }}</span> HP.
   </div>
-  <div *ngSwitchCase="4">
+  <div *ngSwitchCase="5">
     <span class="text-gray-200">{{ log.args[0] }}</span> heals <span class="text-gray-200">{{ log.args[1] }}</span>
     for <span class="text-green-500">{{ log.args[2] }}</span> HP.
   </div>
-  <div *ngSwitchCase="5">
+  <div *ngSwitchCase="6">
     <span class="text-yellow-200">{{ log.args[0] }}</span> was defeated.
   </div>
-  <div *ngSwitchCase="6">
+  <div *ngSwitchCase="7">
     The party won the fight!
   </div>
 </div>

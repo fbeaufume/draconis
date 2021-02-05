@@ -1,6 +1,6 @@
 import {Injectable} from '@angular/core';
 import {Character, Creature, Enemy, FightStep, Opposition, Party, PartyLocation, TurnOrder} from './model';
-import {attack, bigAttack, heal, Skill, SkillTarget} from './skill.model';
+import {attack, bigAttack, defend, heal, Skill, SkillTarget} from './skill.model';
 import {Log, LogType} from './log.model';
 
 @Injectable({
@@ -20,6 +20,7 @@ export class FightService {
   // Currently using the same skills for all characters
   skills: Skill[] = [
     attack,
+    defend,
     bigAttack,
     heal,
   ];
@@ -193,7 +194,20 @@ export class FightService {
     this.selectedSkill = skill;
 
     // The next step depends on the target type of the skill
-    this.fightStep = skill.target == SkillTarget.ENEMY ? FightStep.SELECT_ENEMY : FightStep.SELECT_CHARACTER;
+    switch(skill.target) {
+      case SkillTarget.NONE:
+        // TODO FBE
+        this.logs.push(new Log(LogType.CharacterDefend, this.activeCharacter?.name));
+
+        this.processNextTurn();
+        break;
+      case SkillTarget.ENEMY:
+        this.fightStep = FightStep.SELECT_ENEMY;
+        break;
+      case SkillTarget.CHARACTER:
+        this.fightStep = FightStep.SELECT_CHARACTER;
+        break;
+    }
   }
 
   /**

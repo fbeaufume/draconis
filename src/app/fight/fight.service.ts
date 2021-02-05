@@ -9,7 +9,7 @@ import {Log, LogType} from './log.model';
 export class FightService {
 
   // Pause in msec in the UI between actions
-  pause: number = 1000;
+  pauseDuration: number = 1000;
 
   partyLocation: PartyLocation = new PartyLocation('Fang Forest', 1);
 
@@ -119,9 +119,9 @@ export class FightService {
       this.activeEnemy = activeCreature as Enemy;
       this.fightStep = FightStep.ENEMY_TURN;
 
-      window.setTimeout(() => {
+      this.pause(() => {
         this.processEnemyTurnStep1(activeCreature as Enemy);
-      }, this.pause);
+      });
     } else {
       this.processEndOfRound();
     }
@@ -141,9 +141,9 @@ export class FightService {
     this.targetCharacter = targetCharacter;
 
     // Process the next step
-    window.setTimeout(() => {
+    this.pause(() => {
       this.processEnemyTurnStep2(enemy, damage, targetCharacter);
-    }, this.pause);
+    });
   }
 
   /**
@@ -232,7 +232,7 @@ export class FightService {
 
     // If there are dead enemies, remove them after a pause
     if (this.opposition.hasDeadEnemies()) {
-      window.setTimeout(() => {
+      this.pause(() => {
         // Remove dead enemies from the opposition
         const removedNames = this.opposition.removeDeadEnemies();
 
@@ -246,14 +246,14 @@ export class FightService {
 
         // Check if the party won
         if (this.opposition.isWiped()) {
-          window.setTimeout(() => {
+          this.pause(() => {
             this.logs.push(new Log(LogType.PartyVictory));
             this.fightStep = FightStep.PARTY_VICTORY;
-          }, this.pause);
+          });
         } else {
           this.processNextTurn();
         }
-      }, this.pause);
+      });
     } else {
       this.processNextTurn();
     }
@@ -316,7 +316,7 @@ export class FightService {
    */
   processNextTurn() {
     // Give some time to the player to see the skill result
-    window.setTimeout(() => {
+    this.pause(() => {
       // Then deselect everything
       this.activeCharacter = null;
       this.targetCharacter = null;
@@ -325,11 +325,21 @@ export class FightService {
       this.activeEnemy = null;
       this.targetEnemy = null;
 
-      window.setTimeout(() => {
+      this.pause(() => {
         // Then start the new turn
         this.turnOrder.nextCreature();
         this.processTurn();
-      }, this.pause);
-    }, this.pause);
+      });
+    });
+  }
+
+
+  /**
+   * Execute a function after a pause.
+   */
+  pause(process: Function) {
+    window.setTimeout(() => {
+      process.call(this);
+    }, this.pauseDuration);
   }
 }

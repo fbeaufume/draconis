@@ -1,6 +1,6 @@
 import {Component} from '@angular/core';
+import {FightStep} from './fight/fight.model';
 import {FightService} from './fight/fight.service';
-import {FightStep} from './fight/model';
 
 @Component({
   selector: 'app-root',
@@ -13,10 +13,10 @@ export class AppComponent {
   }
 
   displayStartFightButton(): boolean {
-    return this.fightService.fightStep == FightStep.BEFORE_START;
+    return this.fightService.fight.step == FightStep.BEFORE_START;
   }
 
   displayResetFightButton(): boolean {
-    return this.fightService.fightStep == FightStep.PARTY_VICTORY;
+    return this.fightService.fight.step == FightStep.PARTY_VICTORY;
   }
 }

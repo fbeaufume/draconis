@@ -1,5 +1,5 @@
 import {Component, Input} from '@angular/core';
-import {Enemy} from '../model';
+import {Enemy} from '../misc.model';
 
 @Component({
   selector: 'app-enemy',

@@ -1,6 +1,7 @@
 import {Injectable} from '@angular/core';
-import {Character, Creature, Enemy, FightStep, Opposition, Party, PartyLocation, TurnOrder} from './model';
-import {attack, bigAttack, defend, heal, Skill, SkillTarget} from './skill.model';
+import {Character, Creature, Enemy, PartyLocation} from './misc.model';
+import {Skill, SkillTarget} from './skill.model';
+import {Fight, FightStep} from './fight.model';
 import {Log, LogType} from './log.model';
 
 @Injectable({
@@ -13,84 +14,12 @@ export class FightService {
 
   partyLocation: PartyLocation = new PartyLocation('Fang Forest', 1);
 
-  fightStep: FightStep = FightStep.BEFORE_START;
-
-  round: number = 0;
-
-  // Currently using the same skills for all characters
-  skills: Skill[] = [
-    attack,
-    defend,
-    bigAttack,
-    heal,
-  ];
-
-  party: Party = new Party([], []);
-
-  opposition: Opposition = new Opposition([], [], []);
-
-  turnOrder: TurnOrder;
-
-  activeCharacter: Character | null;
-
-  // The character under the mouse pointer during the selection of a character
-  hoveredCharacter: Character | null;
-
-  // The character targeted by a skill (from a character or an enemy)
-  targetCharacter: Character | null;
-
-  // The skill currently under the mouse pointer during the selection of a skill
-  hoveredSkill: Skill | null;
-
-  // The skill currently displayed in the focus skill panel
-  focusedSkill: Skill | null;
-
-  // Skill selected by the player
-  selectedSkill: Skill | null;
-
-  activeEnemy: Enemy | null;
-
-  // The enemy under the mouse pointer during the selection of an enemy
-  hoveredEnemy: Enemy | null;
-
-  // The enemy targeted by a skill (from a character or an enemy)
-  targetEnemy: Enemy | null;
+  fight: Fight = new Fight();
 
   logs: Log[] = [];
 
   constructor() {
-    this.initializeFight();
-  }
-
-  initializeFight() {
-    this.fightStep = FightStep.BEFORE_START;
-    this.round = 1;
-
-    this.party = new Party([
-        new Character('Cyl', 'Rogue', 1, 20, false, 50, this.skills),
-        new Character('Melkan', 'Warrior', 1, 20, false, 50, this.skills),
-        new Character('Arwin', 'Paladin', 1, 20, true, 50, this.skills)],
-      [
-        new Character('Faren', 'Archer', 1, 20, false, 50, this.skills),
-        new Character('Harika', 'Mage', 1, 20, true, 50, this.skills),
-        new Character('Nairo', 'Priest', 1, 20, true, 50, this.skills)
-      ]);
-
-    this.opposition = new Opposition([
-      new Enemy('Wolf A', 15, 4),
-      new Enemy('Wolf B', 15, 4)
-    ], [], []);
-
-    this.activeCharacter = null;
-    this.targetCharacter = null;
-    this.hoveredSkill = null;
-    this.focusedSkill = null;
-    this.selectedSkill = null;
-    this.activeEnemy = null;
-    this.hoveredEnemy = null;
-    this.targetEnemy = null;
-
-    this.turnOrder = new TurnOrder(this.party, this.opposition);
+    this.fight.initialize();
 
     this.logs = [];
     this.logs.push(new Log(LogType.EnterZone, this.partyLocation.region));
@@ -100,9 +29,9 @@ export class FightService {
    * Start the fight.
    */
   startFight() {
-    this.fightStep = FightStep.END_OF_TURN;
+    this.fight.step = FightStep.END_OF_TURN;
 
-    this.logs.push(new Log(LogType.StartRound, this.round));
+    this.logs.push(new Log(LogType.StartRound, this.fight.round));
 
     this.processTurn();
   }
@@ -111,14 +40,14 @@ export class FightService {
    * Process a character or enemy turn.
    */
   processTurn() {
-    const activeCreature: Creature = this.turnOrder.currentOrder[0];
+    const activeCreature: Creature = this.fight.turnOrder.currentOrder[0];
 
     if (activeCreature.isCharacter()) {
-      this.activeCharacter = activeCreature as Character;
-      this.fightStep = FightStep.SELECT_SKILL;
+      this.fight.activeCharacter = activeCreature as Character;
+      this.fight.step = FightStep.SELECT_SKILL;
     } else if (activeCreature.isEnemy()) {
-      this.activeEnemy = activeCreature as Enemy;
-      this.fightStep = FightStep.ENEMY_TURN;
+      this.fight.activeEnemy = activeCreature as Enemy;
+      this.fight.step = FightStep.ENEMY_TURN;
 
       this.pause(() => {
         this.processEnemyTurnStep1(activeCreature as Enemy);
@@ -138,8 +67,8 @@ export class FightService {
     const damage = enemy.damage;
 
     // Choose the skill target
-    const targetCharacter = this.party.rows[0].characters[0];
-    this.targetCharacter = targetCharacter;
+    const targetCharacter = this.fight.party.rows[0].characters[0];
+    this.fight.targetCharacter = targetCharacter;
 
     // Process the next step
     this.pause(() => {
@@ -166,15 +95,15 @@ export class FightService {
    * The mouse pointer entered a skill.
    */
   enterSkill(skill: Skill) {
-    this.hoveredSkill = skill;
-    this.focusedSkill = skill;
+    this.fight.hoveredSkill = skill;
+    this.fight.focusedSkill = skill;
   }
 
   /**
    * The mouse pointer left a skill.
    */
   leaveSkill() {
-    this.hoveredSkill = null;
+    this.fight.hoveredSkill = null;
   }
 
   /**
@@ -182,30 +111,29 @@ export class FightService {
    */
   selectSkill(skill: Skill) {
     // The player cannot change his mind and select a different skill
-    if (this.fightStep != FightStep.SELECT_SKILL) {
+    if (this.fight.step != FightStep.SELECT_SKILL) {
       return;
     }
 
     // Check the skill cost
-    if (skill.cost > (this.activeCharacter?.energy ?? 0)) {
+    if (skill.cost > (this.fight.activeCharacter?.energy ?? 0)) {
       return;
     }
 
-    this.selectedSkill = skill;
+    this.fight.selectedSkill = skill;
 
     // The next step depends on the target type of the skill
-    switch(skill.target) {
+    switch (skill.target) {
       case SkillTarget.NONE:
-        // TODO FBE
-        this.logs.push(new Log(LogType.Defend, this.activeCharacter?.name));
+        skill.execute(this.fight, this.logs);
 
         this.processNextTurn();
         break;
       case SkillTarget.ENEMY:
-        this.fightStep = FightStep.SELECT_ENEMY;
+        this.fight.step = FightStep.SELECT_ENEMY;
         break;
       case SkillTarget.CHARACTER:
-        this.fightStep = FightStep.SELECT_CHARACTER;
+        this.fight.step = FightStep.SELECT_CHARACTER;
         break;
     }
   }
@@ -214,44 +142,38 @@ export class FightService {
    * The mouse pointer entered an enemy.
    */
   enterEnemy(enemy: Enemy) {
-    this.hoveredEnemy = enemy;
+    this.fight.hoveredEnemy = enemy;
   }
 
   /**
    * The mouse pointer left an enemy.
    */
   leaveEnemy() {
-    this.hoveredEnemy = null;
+    this.fight.hoveredEnemy = null;
   }
 
   /**
    * Select an enemy target for a skill.
    */
   selectEnemy(enemy: Enemy) {
-    if (this.selectedSkill == null) {
+    if (this.fight.selectedSkill == null) {
       return;
     }
 
-    this.targetEnemy = enemy;
+    this.fight.targetEnemy = enemy;
 
-    // Execute the skill
-    const damage = this.selectedSkill.power;
-    this.activeCharacter?.useSkill(this.selectedSkill);
-    enemy.inflictDamage(damage);
+    this.fight.selectedSkill.execute(this.fight, this.logs);
 
-    // Log the result
-    this.logs.push(new Log(LogType.Damage, this.activeCharacter, enemy, damage));
-
-    this.fightStep = FightStep.EXECUTING_SKILL;
+    this.fight.step = FightStep.EXECUTING_SKILL;
 
     // If there are dead enemies, remove them after a pause
-    if (this.opposition.hasDeadEnemies()) {
+    if (this.fight.opposition.hasDeadEnemies()) {
       this.pause(() => {
         // Remove dead enemies from the opposition
-        const removedNames = this.opposition.removeDeadEnemies();
+        const removedNames = this.fight.opposition.removeDeadEnemies();
 
         // Remove dead enemies from the turn order
-        this.turnOrder.removeDeadEnemies();
+        this.fight.turnOrder.removeDeadEnemies();
 
         // Log the defeated enemies
         for (const name of removedNames) {
@@ -259,10 +181,10 @@ export class FightService {
         }
 
         // Check if the party won
-        if (this.opposition.isWiped()) {
+        if (this.fight.opposition.isWiped()) {
           this.pause(() => {
             this.logs.push(new Log(LogType.PartyVictory));
-            this.fightStep = FightStep.PARTY_VICTORY;
+            this.fight.step = FightStep.PARTY_VICTORY;
           });
         } else {
           this.processNextTurn();
@@ -277,14 +199,14 @@ export class FightService {
    * The mouse pointer entered a character.
    */
   enterCharacter(character: Character) {
-    this.hoveredCharacter = character;
+    this.fight.hoveredCharacter = character;
   }
 
   /**
    * The mouse pointer left a character.
    */
   leaveCharacter() {
-    this.hoveredCharacter = null;
+    this.fight.hoveredCharacter = null;
   }
 
 
@@ -292,21 +214,15 @@ export class FightService {
    * Select a character target for a skill.
    */
   selectCharacter(character: Character) {
-    if (this.selectedSkill == null) {
+    if (this.fight.selectedSkill == null) {
       return;
     }
 
-    this.targetCharacter = character;
+    this.fight.targetCharacter = character;
 
-    // Execute the skill
-    const heal = this.selectedSkill.power;
-    this.activeCharacter?.useSkill(this.selectedSkill);
-    character.inflictDamage(-heal);
+    this.fight.selectedSkill.execute(this.fight, this.logs);
 
-    // Log the result
-    this.logs.push(new Log(LogType.Heal, this.activeCharacter, character, heal));
-
-    this.fightStep = FightStep.EXECUTING_SKILL;
+    this.fight.step = FightStep.EXECUTING_SKILL;
 
     this.processNextTurn();
   }
@@ -319,8 +235,8 @@ export class FightService {
     // but where there is, wait a while before doing it
 
     // Start the next round
-    this.round++;
-    this.logs.push(new Log(LogType.StartRound, this.round));
+    this.fight.round++;
+    this.logs.push(new Log(LogType.StartRound, this.fight.round));
 
     this.processNextTurn();
   }
@@ -332,16 +248,16 @@ export class FightService {
     // Give some time to the player to see the skill result
     this.pause(() => {
       // Then deselect everything
-      this.activeCharacter = null;
-      this.targetCharacter = null;
-      this.focusedSkill = null;
-      this.selectedSkill = null;
-      this.activeEnemy = null;
-      this.targetEnemy = null;
+      this.fight.activeCharacter = null;
+      this.fight.targetCharacter = null;
+      this.fight.focusedSkill = null;
+      this.fight.selectedSkill = null;
+      this.fight.activeEnemy = null;
+      this.fight.targetEnemy = null;
 
       this.pause(() => {
         // Then start the new turn
-        this.turnOrder.nextCreature();
+        this.fight.turnOrder.nextCreature();
         this.processTurn();
       });
     });

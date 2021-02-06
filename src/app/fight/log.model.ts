@@ -1,4 +1,4 @@
-// Model classes for the log panel of the application
+// Log related classes
 
 /**
  * The various types of log messages.

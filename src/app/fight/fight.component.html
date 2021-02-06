@@ -9,7 +9,7 @@
 
     <hr class="border-gray-700 my-4">
 
-    <p *ngFor="let creature of fightService.turnOrder.currentOrder; index as i" class="p-1"
+    <p *ngFor="let creature of fightService.fight.turnOrder.currentOrder; index as i" class="p-1"
        [ngClass]="{ 'text-yellow-200': creature.isEnemy(), 'text-gray-500': creature.isEndOfRound() }">
       {{ creature.name }}</p>
   </div>
@@ -20,10 +20,10 @@
 
     <div class="border border-gray-700 bg-gray-800 p-4">
 
-      <ng-container *ngFor="let row of fightService.opposition.rows; index as i">
+      <ng-container *ngFor="let row of fightService.fight.opposition.rows; index as i">
         <div class="flex justify-center space-x-6 h-28">
           <app-enemy
-            *ngFor="let enemy of fightService.opposition.rows[fightService.opposition.rows.length - i - 1].enemies"
+            *ngFor="let enemy of fightService.fight.opposition.rows[fightService.fight.opposition.rows.length - i - 1].enemies"
             class="border p-2 flex flex-col items-center"
             [enemy]="enemy"
             [ngClass]="[getEnemyBorderClass(enemy), usePointerForStep(4)]"
@@ -39,7 +39,7 @@
 
     <!-- Party -->
 
-    <div *ngFor="let row of fightService.party.rows; index as r" class="flex justify-center space-x-4"
+    <div *ngFor="let row of fightService.fight.party.rows; index as r" class="flex justify-center space-x-4"
          [ngClass]="{ 'pb-4 mt-8': r == 0}">
       <app-character *ngFor="let character of row.characters"
                      class="border w-1/3 bg-gray-800 p-4 h-36"
@@ -63,7 +63,7 @@
 
       <hr class="border-gray-700 my-4">
 
-      <div *ngFor="let skill of fightService.activeCharacter?.skills" class="border p-1 flex justify-between"
+      <div *ngFor="let skill of fightService.fight.activeCharacter?.skills" class="border p-1 flex justify-between"
            [ngClass]="[getSkillBorderClass(skill), usePointerForStep(3)]"
            (mouseenter)="fightService.enterSkill(skill)"
            (mouseleave)="fightService.leaveSkill()"
@@ -76,29 +76,29 @@
     <!-- Focused skill -->
 
     <div class="flex-1 border border-gray-700 bg-gray-800 p-4">
-      <div *ngIf="fightService.focusedSkill != null">
+      <div *ngIf="fightService.fight.focusedSkill != null">
         <div class="flex justify-center">
-          <p>{{ fightService.focusedSkill.name }}</p>
+          <p>{{ fightService.fight.focusedSkill.name }}</p>
         </div>
 
         <hr class="border-gray-700 my-4">
 
         <div class="flex">
           <p class="flex-1 text-gray-500">Cost</p>
-          <p class="flex-1">{{ fightService.focusedSkill.cost }}</p>
+          <p class="flex-1">{{ fightService.fight.focusedSkill.cost }}</p>
         </div>
         <div class="flex">
           <p class="flex-1 text-gray-500">Range</p>
-          <p class="flex-1">{{ fightService.focusedSkill.range }}</p>
+          <p class="flex-1">{{ fightService.fight.focusedSkill.range }}</p>
         </div>
         <div class="flex">
           <p class="flex-1 text-gray-500">Cooldown</p>
-          <p class="flex-1">{{ fightService.focusedSkill.coolDown }}</p>
+          <p class="flex-1">{{ fightService.fight.focusedSkill.coolDown }}</p>
         </div>
 
         <hr class="border-gray-700 my-4">
 
-        <p>{{ fightService.focusedSkill.description }}</p>
+        <p>{{ fightService.fight.focusedSkill.description }}</p>
       </div>
     </div>
   </div>

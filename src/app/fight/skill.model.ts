@@ -1,4 +1,7 @@
-// Skill related classes of the application
+// Skill related classes
+
+import {Fight} from './fight.model';
+import {Log, LogType} from './log.model';
 
 /**
  * The type of target of a skill
@@ -9,11 +12,10 @@ export enum SkillTarget {
   ENEMY
 }
 
-
 /**
  * A character skill.
  */
-export class Skill {
+export abstract class Skill {
 
   constructor(
     public name: string,
@@ -28,24 +30,28 @@ export class Skill {
     public description: string
   ) {
   }
+
+  execute(fight: Fight, logs: Log[]): void {
+    fight.activeCharacter?.spendEnergy(this.cost);
+  }
 }
 
 /**
- * The default single target attack.
+ * A defend skill.
  */
-export const attack = new Skill(
-  'Attack',
-  SkillTarget.ENEMY,
-  0,
-  1,
-  0,
-  10,
-  'Basic attack, does 10 damage.');
+export class Defend extends Skill {
 
-/**
- * The default single target attack.
- */
-export const defend = new Skill(
+  execute(fight: Fight, logs: Log[]): void {
+    super.execute(fight, logs);
+
+    // Currently does noting
+    // TODO FBE boot the creature defense for a round
+
+    logs.push(new Log(LogType.Defend, fight.activeCharacter?.name));
+  }
+}
+
+export const defend = new Defend(
   'Defend',
   SkillTarget.NONE,
   0,
@@ -55,21 +61,48 @@ export const defend = new Skill(
   'Defend against attacks.');
 
 /**
+ * A damaging skill.
+ */
+export class Damage extends Skill {
+
+  execute(fight: Fight, logs: Log[]): void {
+    super.execute(fight, logs);
+
+    const damage = this.power;
+    fight.targetEnemy?.inflictDamage(damage);
+
+    logs.push(new Log(LogType.Damage, fight.activeCharacter, fight.targetEnemy, damage));
+  }
+}
+
+/**
+ * The default single target attack.
+ */
+export const attack = new Damage(
+  'Attack',
+  SkillTarget.ENEMY,
+  0,
+  1,
+  0,
+  10,
+  'Basic attack, does 10 damage.');
+
+/**
  * A bigger attack.
  */
-export const bigAttack = new Skill(
-  'Special Attack',
+export const bigAttack = new Damage(
+  'Big Attack',
   SkillTarget.ENEMY,
   10,
   1,
   0,
   15,
-  'Special attack, does 15 damage.');
+  'Big attack, does 15 damage.');
 
 /**
  * Even bigger attack, only used to ensure that too expensive skills cannot be used.
  */
-export const ultimateAttack = new Skill(
+export const ultimateAttack = new Damage(
   'Ultimate Attack',
   SkillTarget.ENEMY,
   60,
@@ -79,9 +112,24 @@ export const ultimateAttack = new Skill(
   'Ultimate attack, does 40 damage.');
 
 /**
+ * A healing skill.
+ */
+export class Heal extends Skill {
+
+  execute(fight: Fight, logs: Log[]): void {
+    super.execute(fight, logs);
+
+    const heal = this.power;
+    fight.targetCharacter?.inflictDamage(-heal);
+
+    logs.push(new Log(LogType.Heal, fight.activeCharacter, fight.targetCharacter, heal));
+  }
+}
+
+/**
  * A single target heal.
  */
-export const heal: Skill = new Skill(
+export const heal: Skill = new Heal(
   'Heal',
   SkillTarget.CHARACTER,
   5,

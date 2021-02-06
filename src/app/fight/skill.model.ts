@@ -90,6 +90,7 @@ export const heal: Skill = new Skill(
   10,
   'Heal a party member for 10 HP.');
 
+// TODO FBE add other skills
 // new Skill('Defend', 0, 1, 0, 'Reduce taken damage by 30% until next turn.'),
 // new Skill('Venom', 15, 1, 0, 'Hits the target for 100% damage and inflicts 60% poison damage over 3 turns.'),
 // new Skill('Vanish', 10, 0, 4, 'Disappear and become immune to attacks.'),

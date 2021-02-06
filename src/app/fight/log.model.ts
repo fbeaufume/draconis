@@ -7,11 +7,10 @@
 export enum LogType {
   EnterZone,
   StartRound,
-  EnemyHit,
-  CharacterDefend,
-  CharacterHit,
-  CharacterHeal,
-  DefeatedEnemy,
+  Damage,
+  Heal,
+  Defend,
+  EnemyDefeated,
   PartyVictory,
 }
 

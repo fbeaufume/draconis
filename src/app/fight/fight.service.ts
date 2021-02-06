@@ -157,7 +157,7 @@ export class FightService {
     targetCharacter.inflictDamage(damage);
 
     // Log the result
-    this.logs.push(new Log(LogType.EnemyHit, enemy.name, targetCharacter.name, damage));
+    this.logs.push(new Log(LogType.Damage, enemy, targetCharacter, damage));
 
     this.processNextTurn();
   }
@@ -197,7 +197,7 @@ export class FightService {
     switch(skill.target) {
       case SkillTarget.NONE:
         // TODO FBE
-        this.logs.push(new Log(LogType.CharacterDefend, this.activeCharacter?.name));
+        this.logs.push(new Log(LogType.Defend, this.activeCharacter?.name));
 
         this.processNextTurn();
         break;
@@ -240,7 +240,7 @@ export class FightService {
     enemy.inflictDamage(damage);
 
     // Log the result
-    this.logs.push(new Log(LogType.CharacterHit, this.activeCharacter?.name, enemy.name, damage));
+    this.logs.push(new Log(LogType.Damage, this.activeCharacter, enemy, damage));
 
     this.fightStep = FightStep.EXECUTING_SKILL;
 
@@ -255,7 +255,7 @@ export class FightService {
 
         // Log the defeated enemies
         for (const name of removedNames) {
-          this.logs.push(new Log(LogType.DefeatedEnemy, name));
+          this.logs.push(new Log(LogType.EnemyDefeated, name));
         }
 
         // Check if the party won
@@ -304,7 +304,7 @@ export class FightService {
     character.inflictDamage(-heal);
 
     // Log the result
-    this.logs.push(new Log(LogType.CharacterHeal, this.activeCharacter?.name, character.name, heal));
+    this.logs.push(new Log(LogType.Heal, this.activeCharacter, character, heal));
 
     this.fightStep = FightStep.EXECUTING_SKILL;
 

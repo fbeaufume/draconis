@@ -1,6 +1,6 @@
 // Fight related classes
 
-import {attack, bigAttack, defend, heal, Skill} from './skill.model';
+import {Damage, Defend, Heal, Skill, SkillTarget} from './skill.model';
 import {Character, Creature, EndOfRound, Enemy, Opposition, Party} from './misc.model';
 
 /**
@@ -86,6 +86,21 @@ export class TurnOrder {
   }
 }
 
+const defend = new Defend('Defend', SkillTarget.NONE, 0, 1, 0, 0,
+  'Defend against attacks.');
+const strike = new Damage('Strike', SkillTarget.ENEMY, 0, 1, 0, 10,
+  'Basic attack, does 10 damage.');
+const smash = new Damage('Smash', SkillTarget.ENEMY, 10, 1, 0, 15,
+  'Strong attack, does 15 damage.');
+const shot = new Damage('Shot', SkillTarget.ENEMY, 0, 1, 0, 10,
+  'Basic ranged attack, does 10 damage.');
+const heal: Skill = new Heal('Heal', SkillTarget.CHARACTER, 5, 0, 0, 10,
+  'Heal a party member for 10 HP.');
+const spark = new Damage('Spark', SkillTarget.ENEMY, 5, 1, 0, 10,
+  'Magical attack, does 10 damage.');
+const blast = new Damage('Blast', SkillTarget.ENEMY, 5, 1, 0, 15,
+  'Magical attack, does 15 damage.');
+
 /**
  * All things related to a fight: party, opposition, active character, target enemy, etc.
  */
@@ -94,14 +109,6 @@ export class Fight {
   step: FightStep = FightStep.BEFORE_START;
 
   round: number = 0;
-
-  // Currently using the same skills for all characters
-  skills: Skill[] = [
-    attack,
-    defend,
-    bigAttack,
-    heal,
-  ];
 
   party: Party = new Party([], []);
 
@@ -139,18 +146,30 @@ export class Fight {
     this.round = 1;
 
     this.party = new Party([
-        new Character('Cyl', 'Rogue', 1, 20, false, 50, this.skills),
-        new Character('Melkan', 'Warrior', 1, 20, false, 50, this.skills),
-        new Character('Arwin', 'Paladin', 1, 20, true, 50, this.skills)],
+        new Character('Cyl', 'Rogue', 1, 20, false, 50, [
+          strike, defend
+        ]),
+        new Character('Melkan', 'Warrior', 1, 20, false, 50, [
+          strike, defend, smash
+        ]),
+        new Character('Arwin', 'Paladin', 1, 20, true, 50, [
+          strike, defend, heal
+        ])],
       [
-        new Character('Faren', 'Archer', 1, 20, false, 50, this.skills),
-        new Character('Harika', 'Mage', 1, 20, true, 50, this.skills),
-        new Character('Nairo', 'Priest', 1, 20, true, 50, this.skills)
+        new Character('Faren', 'Archer', 1, 20, false, 50, [
+          shot, defend
+        ]),
+        new Character('Harika', 'Mage', 1, 20, true, 50, [
+          defend, blast
+        ]),
+        new Character('Nairo', 'Priest', 1, 20, true, 50, [
+          defend, spark, heal
+        ])
       ]);
 
     this.opposition = new Opposition([
-      new Enemy('Wolf A', 15, 4),
-      new Enemy('Wolf B', 15, 4)
+      new Enemy('Bear A', 40, 6),
+      new Enemy('Bear B', 40, 6)
     ], [], []);
 
     this.activeCharacter = null;

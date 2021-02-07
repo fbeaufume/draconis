@@ -70,8 +70,13 @@ export class TurnOrder {
 
     // Shuffle the enemies
     const enemies: Enemy[] = [];
-    for (let i = 0; i < OPPOSITION_ROWS; i++) {
-      enemies.push(...opposition.rows[i].enemies);
+    //
+    for (let i = 0; i < OPPOSITION_ROWS; i++) { // Iterate over rows
+      for (let j = 0; j < opposition.rows[i].enemies.length; j++) { // Iterate over creatures
+        for (let k = 0; k < opposition.rows[i].enemies[j].actions; k++) { // Iterate over actions
+          enemies.push(opposition.rows[i].enemies[j]);
+        }
+      }
     }
     TurnOrder.shuffle(enemies);
 
@@ -195,21 +200,27 @@ export class Fight {
       ]);
 
     // Sample oppositions
-    const oppositions: Opposition[] = [new Opposition([
-      new SimpleEnemy('Bear A', 40, 8),
-      new SimpleEnemy('Bear B', 40, 8),
-    ], [], []), new Opposition([
-      new SimpleEnemy('Wolf A', 20, 6),
-      new SimpleEnemy('Wolf B', 20, 6),
-    ], [
-      new SimpleEnemy('Wolf C', 20, 6),
-      new SimpleEnemy('Wolf D', 20, 6),
-      new SimpleEnemy('Wolf E', 20, 6),
-    ], [
-      new SimpleEnemy('Wolf F', 20, 6),
-    ])];
+    const oppositions: Opposition[] = [
+      new Opposition([
+        new SimpleEnemy('Bear A', 40, 8),
+        new SimpleEnemy('Bear B', 40, 8),
+      ], [], []),
+      new Opposition([
+        new SimpleEnemy('Wolf A', 20, 6),
+        new SimpleEnemy('Wolf B', 20, 6),
+      ], [
+        new SimpleEnemy('Wolf C', 20, 6),
+        new SimpleEnemy('Wolf D', 20, 6),
+        new SimpleEnemy('Wolf E', 20, 6),
+      ], [
+        new SimpleEnemy('Wolf F', 20, 6),
+      ]),
+      new Opposition([
+        new SimpleEnemy('Green Dragon', 80, 12, 2),
+      ], [], []),
+    ];
 
-    this.opposition = oppositions[1];
+    this.opposition = oppositions[2];
 
     this.activeCharacter = null;
     this.targetCharacter = null;

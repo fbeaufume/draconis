@@ -23,7 +23,9 @@ export abstract class Enemy extends Creature {
     name: string,
     lifeMax: number,
     // Generic power of the creature, i.e. damage amount for offensive skills, heal amount for heal skills, etc
-    public power: number) {
+    public power: number,
+    // Number of actions per turn
+    public actions: number = 1) {
     super(name, lifeMax);
   }
 

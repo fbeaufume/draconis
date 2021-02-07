@@ -3,6 +3,7 @@
 import {Fight} from './fight.model';
 import {Log, LogType} from './log.model';
 
+
 /**
  * The type of target of a skill
  */
@@ -25,7 +26,7 @@ export abstract class Skill {
     // Skill range in number of rows, 0 if not applicable
     public range: number,
     public coolDown: number,
-    // Generic power of the skill, i.e. damage amount for offensive skill, heal amount for heal skill, etc
+    // Generic power of the skill, i.e. damage amount for offensive skills, heal amount for heal skills, etc
     public power: number,
     public description: string
   ) {
@@ -65,8 +66,6 @@ export class Damage extends Skill {
     logs.push(new Log(LogType.Damage, fight.activeCharacter, fight.targetEnemy, damage));
   }
 }
-
-
 
 /**
  * A healing skill.

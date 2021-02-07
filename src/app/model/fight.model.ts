@@ -1,7 +1,8 @@
 // Fight related classes
 
+import {Character, Creature, EndOfRound, Party} from './misc.model';
 import {Damage, Defend, Heal, Skill, SkillTarget} from './skill.model';
-import {Character, Creature, EndOfRound, Enemy, Opposition, Party} from './misc.model';
+import {Enemy, Opposition, SimpleEnemy} from './enemy.model';
 
 /**
  * The current step in the fight workflow.
@@ -147,17 +148,17 @@ export class Fight {
 
     this.party = new Party([
         new Character('Cyl', 'Rogue', 1, 20, false, 50, [
-          strike, defend
+          defend, strike
         ]),
         new Character('Melkan', 'Warrior', 1, 20, false, 50, [
-          strike, defend, smash
+          defend, strike, smash
         ]),
         new Character('Arwin', 'Paladin', 1, 20, true, 50, [
-          strike, defend, heal
+          defend, strike, heal
         ])],
       [
         new Character('Faren', 'Archer', 1, 20, false, 50, [
-          shot, defend
+          defend, shot
         ]),
         new Character('Harika', 'Mage', 1, 20, true, 50, [
           defend, blast
@@ -168,8 +169,8 @@ export class Fight {
       ]);
 
     this.opposition = new Opposition([
-      new Enemy('Bear A', 40, 6),
-      new Enemy('Bear B', 40, 6)
+      new SimpleEnemy('Bear A', 40, 6),
+      new SimpleEnemy('Bear B', 40, 6)
     ], [], []);
 
     this.activeCharacter = null;

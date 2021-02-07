@@ -1,8 +1,9 @@
 import {Injectable} from '@angular/core';
-import {Character, Creature, Enemy, PartyLocation} from './misc.model';
-import {Skill, SkillTarget} from './skill.model';
-import {Fight, FightStep} from './fight.model';
-import {Log, LogType} from './log.model';
+import {Character, Creature, PartyLocation} from '../model/misc.model';
+import {Skill, SkillTarget} from '../model/skill.model';
+import {Enemy} from '../model/enemy.model';
+import {Fight, FightStep} from '../model/fight.model';
+import {Log, LogType} from '../model/log.model';
 
 @Injectable({
   providedIn: 'root'
@@ -58,28 +59,22 @@ export class FightService {
   }
 
   /**
-   * Process the first step of an enemy turn:
-   * - Choose the skill and the target
-   * - Display the selected target
+   * Process the first step of an enemy turn: highlight the selected targets.
    */
   processEnemyTurnStep1(enemy: Enemy) {
-    // Choose the enemy skill
-    const damage = enemy.damage;
-
-    // Choose the skill target
-    const targetCharacter = this.fight.party.rows[0].characters[0];
-    this.fight.targetCharacter = targetCharacter;
+    // Execute the enemy strategy
+    let action = enemy.chooseAction(this.fight);
+    this.fight.targetCharacter = action.targetCharacter;
+    const damage = enemy.power;
 
     // Process the next step
     this.pause(() => {
-      this.processEnemyTurnStep2(enemy, damage, targetCharacter);
+      this.processEnemyTurnStep2(enemy, damage, action.targetCharacter);
     });
   }
 
   /**
-   * Process the second step of an enemy turn:
-   * - Execute the skill
-   * - Log the skill result
+   * Process the second step of an enemy turn: execute the skill and log the result.
    */
   processEnemyTurnStep2(enemy: Enemy, damage: number, targetCharacter: Character) {
     // Execute the skill

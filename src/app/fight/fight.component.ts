@@ -1,7 +1,8 @@
 import {AfterViewInit, Component, ElementRef, QueryList, ViewChild, ViewChildren} from '@angular/core';
-import {Character, Enemy} from './misc.model';
-import {Skill} from './skill.model';
-import {FightStep} from './fight.model';
+import {Character} from '../model/misc.model';
+import {Skill} from '../model/skill.model';
+import {Enemy} from '../model/enemy.model';
+import {FightStep} from '../model/fight.model';
 import {FightService} from './fight.service';
 
 @Component({

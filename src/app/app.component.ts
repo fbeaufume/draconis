@@ -1,5 +1,5 @@
 import {Component} from '@angular/core';
-import {FightStep} from './fight/fight.model';
+import {FightStep} from './model/fight.model';
 import {FightService} from './fight/fight.service';
 
 @Component({

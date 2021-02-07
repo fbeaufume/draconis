@@ -1,5 +1,5 @@
 import {Component, Input} from '@angular/core';
-import {Character} from '../misc.model';
+import {Character} from '../../model/misc.model';
 
 @Component({
   selector: 'app-character',

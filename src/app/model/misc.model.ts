@@ -3,6 +3,26 @@
 import {Skill} from './skill.model';
 
 /**
+ * Number of character rows.
+ */
+export const PARTY_ROWS = 2;
+
+/**
+ * Number of characters per row.
+ */
+export const PARTY_ROW_SIZE = 3;
+
+/**
+ * Number of characters in the party.
+ */
+export const PARTY_SIZE = PARTY_ROWS * PARTY_ROW_SIZE;
+
+/**
+ * Number of enemy rows.
+ */
+export const OPPOSITION_ROWS = 3;
+
+/**
  * The party location in the "world".
  */
 export class PartyLocation {

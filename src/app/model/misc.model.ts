@@ -51,6 +51,8 @@ export abstract class Creature {
   // Maluses, a.k.a. "debuffs"
   // maluses: string[] = [];
 
+  row: number = 1;
+
   protected constructor(
     public name: string,
     public lifeMax: number

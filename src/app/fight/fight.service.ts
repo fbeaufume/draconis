@@ -59,34 +59,6 @@ export class FightService {
   }
 
   /**
-   * Process the first step of an enemy turn: highlight the selected targets.
-   */
-  processEnemyTurnStep1(enemy: Enemy) {
-    // Execute the enemy strategy
-    let action = enemy.chooseAction(this.fight);
-    this.fight.targetCharacter = action.targetCharacter;
-    const damage = enemy.power;
-
-    // Process the next step
-    this.pause(() => {
-      this.processEnemyTurnStep2(enemy, damage, action.targetCharacter);
-    });
-  }
-
-  /**
-   * Process the second step of an enemy turn: execute the skill and log the result.
-   */
-  processEnemyTurnStep2(enemy: Enemy, damage: number, targetCharacter: Character) {
-    // Execute the skill
-    targetCharacter.inflictDamage(damage);
-
-    // Log the result
-    this.logs.push(new Log(LogType.Damage, enemy, targetCharacter, damage));
-
-    this.processNextTurn();
-  }
-
-  /**
    * The mouse pointer entered a skill.
    */
   enterSkill(skill: Skill) {
@@ -151,7 +123,7 @@ export class FightService {
    * Select an enemy target for a skill.
    */
   selectEnemy(enemy: Enemy) {
-    if (this.fight.selectedSkill == null) {
+    if (this.fight.selectedSkill == null || !this.fight.selectedSkill.isUsableOn(enemy)) {
       return;
     }
 
@@ -223,6 +195,33 @@ export class FightService {
   }
 
   /**
+   * Process the first step of an enemy turn: highlight the selected targets.
+   */
+  processEnemyTurnStep1(enemy: Enemy) {
+    // Execute the enemy strategy
+    let action = enemy.chooseAction(this.fight);
+    this.fight.targetCharacter = action.targetCharacter;
+
+    // Process the next step
+    this.pause(() => {
+      this.processEnemyTurnStep2(enemy, action.power, action.targetCharacter);
+    });
+  }
+
+  /**
+   * Process the second step of an enemy turn: execute the skill and log the result.
+   */
+  processEnemyTurnStep2(enemy: Enemy, damage: number, targetCharacter: Character) {
+    // Execute the skill
+    targetCharacter.inflictDamage(damage);
+
+    // Log the result
+    this.logs.push(new Log(LogType.Damage, enemy, targetCharacter, damage));
+
+    this.processNextTurn();
+  }
+
+  /**
    * Process the end of round, e.g. apply DOTs or HOTs.
    */
   processEndOfRound() {
@@ -257,7 +256,6 @@ export class FightService {
       });
     });
   }
-
 
   /**
    * Execute a function after a pause.

@@ -2,7 +2,7 @@ import {AfterViewInit, Component, ElementRef, QueryList, ViewChild, ViewChildren
 import {Character} from '../model/misc.model';
 import {Skill} from '../model/skill.model';
 import {Enemy} from '../model/enemy.model';
-import {FightStep} from '../model/fight.model';
+import {Fight, FightStep} from '../model/fight.model';
 import {FightService} from './fight.service';
 
 @Component({
@@ -26,6 +26,10 @@ export class FightComponent implements AfterViewInit {
     this.logItemElements.changes.subscribe(_ => this.scrollLogFrameToBottom());
   }
 
+  get fight(): Fight {
+    return this.fightService.fight;
+  }
+
   private scrollLogFrameToBottom(): void {
     this.logFrameElement.scroll({
       top: this.logFrameElement.scrollHeight,
@@ -35,12 +39,22 @@ export class FightComponent implements AfterViewInit {
   }
 
   getCharacterBorderClass(character: Character): string {
-    if (this.fightService.fight.step == FightStep.SELECT_CHARACTER) {
-      return character.name == this.fightService.fight.hoveredCharacter?.name || character.name == this.fightService.fight.activeCharacter?.name ?
-        'border-gray-200' : 'border-gray-700';
+    if (this.fight.step == FightStep.SELECT_CHARACTER) {
+      // Choosing a character
+
+      if (character.name == this.fight.hoveredCharacter?.name
+        || character.name == this.fight.activeCharacter?.name) {
+        return 'border-gray-200';
+      } else {
+        return 'border-gray-700';
+      }
     } else {
-      return character.name == this.fightService.fight.activeCharacter?.name || character.name == this.fightService.fight.targetCharacter?.name ?
-        'border-gray-200' : 'border-gray-700';
+      if (character.name == this.fight.activeCharacter?.name
+        || character.name == this.fight.targetCharacter?.name) {
+        return 'border-gray-200';
+      } else {
+        return 'border-gray-700';
+      }
     }
   }
 
@@ -48,10 +62,10 @@ export class FightComponent implements AfterViewInit {
     if (this.fightService.fight.step == FightStep.SELECT_SKILL) {
       // Choosing a skill
 
-      if (skill.name == this.fightService.fight.hoveredSkill?.name) {
-        // The skill is hovered
+      if (skill.name == this.fight.hoveredSkill?.name) {
+        // Hovering the skill
 
-        if (skill.cost > (this.fightService.fight.activeCharacter?.energy ?? 0)) {
+        if (skill.cost > (this.fight.activeCharacter?.energy ?? 0)) {
           // The skill is too expensive
           return 'border-red-500';
         } else {
@@ -64,7 +78,7 @@ export class FightComponent implements AfterViewInit {
     } else {
       // Not choosing a skill
 
-      if (skill.name == this.fightService.fight.selectedSkill?.name) {
+      if (skill.name == this.fight.selectedSkill?.name) {
         // The skill is selected
         return 'border-gray-200';
       } else {
@@ -74,11 +88,28 @@ export class FightComponent implements AfterViewInit {
   }
 
   getEnemyBorderClass(enemy: Enemy): string {
-    if (this.fightService.fight.step == FightStep.SELECT_ENEMY) {
-      return enemy.name == this.fightService.fight.hoveredEnemy?.name ? 'border-yellow-200' : 'border-gray-800';
+    if (this.fight.step == FightStep.SELECT_ENEMY) {
+      // Choosing an enemy
+
+      if (enemy.name == this.fight.hoveredEnemy?.name) {
+        // Hovering the enemy
+
+        if (enemy.row > (this.fight.selectedSkill?.range ?? 0)) {
+          // The enemy is too far
+          return 'border-red-500';
+        } else {
+          return 'border-gray-200';
+        }
+      } else {
+        return 'border-gray-800';
+      }
     } else {
-      return enemy.name == this.fightService.fight.activeEnemy?.name || enemy.name == this.fightService.fight.targetEnemy?.name ?
-        'border-yellow-200' : 'border-gray-800';
+      if (enemy.name == this.fight.activeEnemy?.name
+        || enemy.name == this.fight.targetEnemy?.name) {
+        return 'border-gray-200';
+      } else {
+        return 'border-gray-800';
+      }
     }
   }
 
@@ -86,6 +117,6 @@ export class FightComponent implements AfterViewInit {
    * Use a pointer cursor when in a given fight step, or else the default cursor.
    */
   usePointerForStep(fightStep: FightStep) {
-    return this.fightService.fight.step == fightStep ? 'cursor-pointer' : 'cursor-default';
+    return this.fight.step == fightStep ? 'cursor-pointer' : 'cursor-default';
   }
 }

@@ -1,8 +1,8 @@
 // Skill related classes
 
+import {Creature} from './misc.model';
 import {Fight} from './fight.model';
 import {Log, LogType} from './log.model';
-
 
 /**
  * The type of target of a skill
@@ -30,6 +30,18 @@ export abstract class Skill {
     public power: number,
     public description: string
   ) {
+  }
+
+  /**
+   * Return true if the skill can be used on the target creature.
+   */
+  isUsableOn(creature: Creature): boolean {
+    // Check the range
+    if (this.range > 0 && creature.row > this.range) {
+      return false;
+    }
+
+    return true;
   }
 
   execute(fight: Fight, logs: Log[]): void {

@@ -162,19 +162,19 @@ export class Fight {
     this.step = FightStep.BEFORE_START;
     this.round = 1;
 
-    const defend = new Defend('Defend', SkillTarget.NONE, 0, 1, 0, 0,
+    const defend = new Defend('Defend', SkillTarget.NONE, 0, 0, 0, 0,
       'Defend against attacks.');
     const strike = new Damage('Strike', SkillTarget.ENEMY, 0, 1, 0, 10,
       'Basic attack, does 10 damage.');
     const smash = new Damage('Smash', SkillTarget.ENEMY, 10, 1, 0, 15,
       'Strong attack, does 15 damage.');
-    const shot = new Damage('Shot', SkillTarget.ENEMY, 0, 1, 0, 10,
+    const shot = new Damage('Shot', SkillTarget.ENEMY, 0, 2, 0, 10,
       'Basic ranged attack, does 10 damage.');
     const heal: Skill = new Heal('Heal', SkillTarget.CHARACTER, 5, 0, 0, 10,
       'Heal a party member for 10 HP.');
-    const spark = new Damage('Spark', SkillTarget.ENEMY, 5, 1, 0, 10,
+    const spark = new Damage('Spark', SkillTarget.ENEMY, 5, 2, 0, 10,
       'Magical attack, does 10 damage.');
-    const blast = new Damage('Blast', SkillTarget.ENEMY, 5, 1, 0, 15,
+    const blast = new Damage('Blast', SkillTarget.ENEMY, 5, 2, 0, 15,
       'Magical attack, does 15 damage.');
 
     this.party = new Party([
@@ -220,7 +220,8 @@ export class Fight {
       ], [], []),
     ];
 
-    this.opposition = oppositions[2];
+    this.opposition = oppositions[1];
+    this.updateEnemiesRow();
 
     this.activeCharacter = null;
     this.targetCharacter = null;
@@ -232,5 +233,14 @@ export class Fight {
     this.targetEnemy = null;
 
     this.turnOrder = new TurnOrder(this.party, this.opposition);
+  }
+
+  /**
+   * Give each enemy its row. Needed to check the characters skills range.
+   */
+  private updateEnemiesRow() {
+    for (let i = 0; i < this.opposition.rows.length; i++) {
+      this.opposition.rows[i].enemies.forEach(enemy => enemy.row = i + 1);
+    }
   }
 }

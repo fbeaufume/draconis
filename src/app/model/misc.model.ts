@@ -128,12 +128,18 @@ export class Character extends Creature {
     this.energyPercent = 100 * this.energy / this.energyMax;
   }
 
+  /**
+   * Can be used with a negative amount of energy, e.g. when the skill generates some energy.
+   */
   spendEnergy(cost: number) {
     this.energy -= cost;
 
     // Enforce min and max values
     if (this.energy < 0) {
       this.energy = 0;
+    }
+    if (this.energy > this.energyMax) {
+      this.energy = this.energyMax;
     }
 
     this.updateEnergyPercent();

@@ -85,7 +85,7 @@
 
         <div class="flex">
           <p class="flex-1 text-gray-500">Cost</p>
-          <p class="flex-1">{{ fight.focusedSkill.cost }}</p>
+          <p class="flex-1">{{ fight.focusedSkill.cost > 0 ? fight.focusedSkill.cost : 0 }}</p>
         </div>
         <div class="flex">
           <p class="flex-1 text-gray-500">Range</p>

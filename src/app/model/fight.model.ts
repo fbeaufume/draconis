@@ -162,14 +162,18 @@ export class Fight {
     this.step = FightStep.BEFORE_START;
     this.round = 1;
 
-    const defend = new Defend('Defend', SkillTarget.NONE, 0, 0, 0, 0,
+    const techDefend = new Defend('Defend', SkillTarget.NONE, -40, 0, 0, 0,
+      'Defend against attacks. Generates 40 TP.');
+    const magicDefend = new Defend('Defend', SkillTarget.NONE, 0, 0, 0, 0,
       'Defend against attacks.');
-    const strike = new Damage('Strike', SkillTarget.ENEMY, 0, 1, 0, 10,
+    const techStrike = new Damage('Strike', SkillTarget.ENEMY, -30, 1, 0, 10,
+      'Basic attack, does 10 damage. Generates 30 TP.');
+    const magicStrike = new Damage('Strike', SkillTarget.ENEMY, 0, 1, 0, 10,
       'Basic attack, does 10 damage.');
     const smash = new Damage('Smash', SkillTarget.ENEMY, 10, 1, 0, 15,
       'Strong attack, does 15 damage.');
-    const shot = new Damage('Shot', SkillTarget.ENEMY, 0, 2, 0, 10,
-      'Basic ranged attack, does 10 damage.');
+    const shot = new Damage('Shot', SkillTarget.ENEMY, -30, 2, 0, 10,
+      'Basic ranged attack, does 10 damage. Generates 30 TP.');
     const heal: Skill = new Heal('Heal', SkillTarget.CHARACTER, 5, 0, 0, 10,
       'Heal a party member for 10 HP.');
     const spark = new Damage('Spark', SkillTarget.ENEMY, 5, 2, 0, 10,
@@ -179,23 +183,23 @@ export class Fight {
 
     this.party = new Party([
         new Character('Cyl', 'Rogue', 1, 20, false, 50, [
-          defend, strike
+          techDefend, techStrike
         ]),
         new Character('Melkan', 'Warrior', 1, 20, false, 50, [
-          defend, strike, smash
+          techDefend, techStrike, smash
         ]),
         new Character('Arwin', 'Paladin', 1, 20, true, 50, [
-          defend, strike, heal
+          magicDefend, magicStrike, heal
         ])],
       [
         new Character('Faren', 'Archer', 1, 20, false, 50, [
-          defend, shot
+          techDefend, shot
         ]),
         new Character('Harika', 'Mage', 1, 20, true, 50, [
-          defend, blast
+          magicDefend, blast
         ]),
         new Character('Nairo', 'Priest', 1, 20, true, 50, [
-          defend, spark, heal
+          magicDefend, spark, heal
         ])
       ]);
 

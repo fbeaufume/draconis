@@ -247,8 +247,6 @@ export class Fight {
     for (let i = 0; i < this.opposition.rows.length; i++) {
       const row = this.opposition.rows[i];
       row.enemies.forEach(enemy => {
-        enemy.fight = this;
-        enemy.row = row;
         enemy.distance = i + 1;
       });
     }

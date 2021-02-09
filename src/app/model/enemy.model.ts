@@ -39,16 +39,6 @@ export class DamageAction extends EnemyAction {
 export abstract class Enemy extends Creature {
 
   /**
-   * The current fight.
-   */
-  fight: Fight = new Fight();
-
-  /**
-   * The current row of the enemy.
-   */
-  row: EnemyRow = new EnemyRow([]);
-
-  /**
    * The distance between the enemy and the party, i.e. 1 means the opposition front row, 2 means the middle row, 3 the back row.
    */
   distance: number = 1;
@@ -86,21 +76,21 @@ export class MeleeEnemy extends Enemy {
     if (this.distance > 1) {
       // Not in the front row, so try to advance
 
-      const targetRow = this.fight.opposition.rows[this.distance - 2];
+      const currentRow = fight.opposition.rows[this.distance - 1];
+      const targetRow = fight.opposition.rows[this.distance - 2];
       if (targetRow.isNotFull()) {
         // The target row has some room, so advance
 
         // Leave the current row
-        for (let i = 0; i < this.row.enemies.length; i++) {
-          const enemy = this.row.enemies[i];
+        for (let i = 0; i < currentRow.enemies.length; i++) {
+          const enemy = currentRow.enemies[i];
           if (enemy === this) {
-            this.row.enemies.splice(i, 1);
+            currentRow.enemies.splice(i, 1);
           }
         }
 
         // Move to the new row
         targetRow.enemies.push(this);
-        this.row = targetRow;
         this.distance--;
 
         return new AdvanceAction();

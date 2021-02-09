@@ -1,7 +1,7 @@
 import {Injectable} from '@angular/core';
 import {Character, Creature, PartyLocation} from '../model/misc.model';
 import {Skill, SkillTarget} from '../model/skill.model';
-import {Enemy} from '../model/enemy.model';
+import {AdvanceAction, DamageAction, DefendAction, Enemy} from '../model/enemy.model';
 import {Fight, FightStep} from '../model/fight.model';
 import {Log, LogType} from '../model/log.model';
 
@@ -195,17 +195,34 @@ export class FightService {
   }
 
   /**
-   * Process the first step of an enemy turn: highlight the selected targets.
+   * Process the first step of an enemy turn: highlight the selected targets if any.
    */
   processEnemyTurnStep1(enemy: Enemy) {
     // Execute the enemy strategy
-    let action = enemy.chooseAction(this.fight);
-    this.fight.targetCharacter = action.targetCharacter;
+    const action = enemy.chooseAction(this.fight);
 
-    // Process the next step
-    this.pause(() => {
-      this.processEnemyTurnStep2(enemy, action.power, action.targetCharacter);
-    });
+    if (action instanceof DamageAction) {
+      // Actions with a target are executed after a pause
+
+      this.fight.targetCharacter = action.targetCharacter;
+
+      // Process the next step
+      this.pause(() => {
+        this.processEnemyTurnStep2(enemy, action.power, action.targetCharacter);
+      });
+    }
+    else {
+      // Actions without target are executed immediately
+
+      if (action instanceof AdvanceAction) {
+        this.logs.push(new Log(LogType.Advance, enemy));
+      }
+      else if (action instanceof DefendAction) {
+        this.logs.push(new Log(LogType.Defend, enemy));
+      }
+
+      this.processNextTurn();
+    }
   }
 
   /**

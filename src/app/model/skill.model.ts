@@ -3,6 +3,7 @@
 import {Creature} from './misc.model';
 import {Fight} from './fight.model';
 import {Log, LogType} from './log.model';
+import {Enemy} from './enemy.model';
 
 /**
  * The type of target of a skill
@@ -33,11 +34,11 @@ export abstract class Skill {
   }
 
   /**
-   * Return true if the skill can be used on the target creature.
+   * Return true if the skill can be used on the target enemy.
    */
-  isUsableOn(creature: Creature): boolean {
+  isUsableOn(enemy: Enemy): boolean {
     // Check the range
-    if (this.range > 0 && creature.row > this.range) {
+    if (this.range > 0 && enemy.distance > this.range) {
       return false;
     }
 
@@ -57,10 +58,7 @@ export class Defend extends Skill {
   execute(fight: Fight, logs: Log[]): void {
     super.execute(fight, logs);
 
-    // Currently does noting
-    // TODO FBE boot the creature defense for a round
-
-    logs.push(new Log(LogType.Defend, fight.activeCharacter?.name));
+    logs.push(new Log(LogType.Defend, fight.activeCharacter));
   }
 }
 

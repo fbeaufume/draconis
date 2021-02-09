@@ -94,7 +94,7 @@ export class FightComponent implements AfterViewInit {
       if (enemy.name == this.fight.hoveredEnemy?.name) {
         // Hovering the enemy
 
-        if (enemy.row > (this.fight.selectedSkill?.range ?? 0)) {
+        if (enemy.distance > (this.fight.selectedSkill?.range ?? 0)) {
           // The enemy is too far
           return 'border-red-500';
         } else {

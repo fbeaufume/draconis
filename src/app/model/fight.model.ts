@@ -2,7 +2,7 @@
 
 import {Character, Creature, EndOfRound, OPPOSITION_ROWS, Party, PARTY_ROWS, PARTY_SIZE} from './misc.model';
 import {Damage, Defend, Heal, Skill, SkillTarget} from './skill.model';
-import {Enemy, Opposition, SimpleEnemy} from './enemy.model';
+import {Enemy, MeleeEnemy, Opposition} from './enemy.model';
 
 /**
  * The current step in the fight workflow.
@@ -206,26 +206,26 @@ export class Fight {
     // Sample oppositions
     const oppositions: Opposition[] = [
       new Opposition([
-        new SimpleEnemy('Bear A', 40, 8),
-        new SimpleEnemy('Bear B', 40, 8),
+        new MeleeEnemy('Bear A', 40, 8),
+        new MeleeEnemy('Bear B', 40, 8),
       ], [], []),
       new Opposition([
-        new SimpleEnemy('Wolf A', 20, 6),
-        new SimpleEnemy('Wolf B', 20, 6),
+        new MeleeEnemy('Wolf A', 20, 6),
+        new MeleeEnemy('Wolf B', 20, 6),
       ], [
-        new SimpleEnemy('Wolf C', 20, 6),
-        new SimpleEnemy('Wolf D', 20, 6),
-        new SimpleEnemy('Wolf E', 20, 6),
+        new MeleeEnemy('Wolf C', 20, 6),
+        new MeleeEnemy('Wolf D', 20, 6),
+        new MeleeEnemy('Wolf E', 20, 6),
       ], [
-        new SimpleEnemy('Wolf F', 20, 6),
+        new MeleeEnemy('Wolf F', 20, 6),
       ]),
       new Opposition([
-        new SimpleEnemy('Green Dragon', 80, 12, 2),
+        new MeleeEnemy('Green Dragon', 80, 12, 2),
       ], [], []),
     ];
 
     this.opposition = oppositions[1];
-    this.updateEnemiesRow();
+    this.updateEnemies();
 
     this.activeCharacter = null;
     this.targetCharacter = null;
@@ -240,11 +240,17 @@ export class Fight {
   }
 
   /**
-   * Give each enemy its row. Needed to check the characters skills range.
+   * Give each enemy some information about the fight.
+   * Used for example to: check skills range, advance toward characters, etc.
    */
-  private updateEnemiesRow() {
+  private updateEnemies() {
     for (let i = 0; i < this.opposition.rows.length; i++) {
-      this.opposition.rows[i].enemies.forEach(enemy => enemy.row = i + 1);
+      const row = this.opposition.rows[i];
+      row.enemies.forEach(enemy => {
+        enemy.fight = this;
+        enemy.row = row;
+        enemy.distance = i + 1;
+      });
     }
   }
 }

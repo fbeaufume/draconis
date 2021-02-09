@@ -1,6 +1,7 @@
 // The rest of the model classes
 
 import {Skill} from './skill.model';
+import {Fight} from './fight.model';
 
 /**
  * Number of character rows.
@@ -23,6 +24,11 @@ export const PARTY_SIZE = PARTY_ROWS * PARTY_ROW_SIZE;
 export const OPPOSITION_ROWS = 3;
 
 /**
+ * Maximum number of enemies per row.
+ */
+export const OPPOSITION_ROW_SIZE = 4;
+
+/**
  * The party location in the "world".
  */
 export class PartyLocation {
@@ -43,15 +49,11 @@ export abstract class Creature {
 
   lifePercent: number;
 
-  // TODO FBE support buffs
   // Bonuses, a.k.a. "buffs"
   // bonuses: string[] = [];
 
-  // TODO FBE support debuffs
   // Maluses, a.k.a. "debuffs"
   // maluses: string[] = [];
-
-  row: number = 1;
 
   protected constructor(
     public name: string,

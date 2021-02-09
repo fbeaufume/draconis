@@ -1,16 +1,35 @@
 // Enemy related classes
 
-import {Character, Creature} from './misc.model';
+import {Character, Creature, OPPOSITION_ROW_SIZE} from './misc.model';
 import {Fight} from './fight.model';
 
 /**
- * Describes the action executed by an enemy.
+ * Base class for enemy actions.
  */
-export class EnemyAction {
+export abstract class EnemyAction {
+}
+
+/**
+ * The enemy advances toward the party.
+ */
+export class AdvanceAction extends EnemyAction {
+}
+
+/**
+ * The enemy defends.
+ */
+export class DefendAction extends EnemyAction {
+}
+
+/**
+ * The enemy damages a character.
+ */
+export class DamageAction extends EnemyAction {
 
   constructor(
     public targetCharacter: Character,
     public power: number) {
+    super();
   }
 }
 
@@ -18,6 +37,21 @@ export class EnemyAction {
  * An enemy. Subclasses implement the enemy behavior and used skills (attacks, heals, etc).
  */
 export abstract class Enemy extends Creature {
+
+  /**
+   * The current fight.
+   */
+  fight: Fight = new Fight();
+
+  /**
+   * The current row of the enemy.
+   */
+  row: EnemyRow = new EnemyRow([]);
+
+  /**
+   * The distance between the enemy and the party, i.e. 1 means the opposition front row, 2 means the middle row, 3 the back row.
+   */
+  distance: number = 1;
 
   constructor(
     name: string,
@@ -44,15 +78,45 @@ export abstract class Enemy extends Creature {
 }
 
 /**
- * Enemy class with a basic fight strategy.
+ * Default melee enemy class. Hits when in front row, otherwise tries to advance.
  */
-export class SimpleEnemy extends Enemy {
+export class MeleeEnemy extends Enemy {
 
   chooseAction(fight: Fight): EnemyAction {
-    // Select a from row character
-    const targetCharacter : Character= fight.party.rows[0].characters[Math.floor(Math.random() * 3)];
+    if (this.distance > 1) {
+      // Not in the front row, so try to advance
 
-    return new EnemyAction(targetCharacter, this.power);
+      const targetRow = this.fight.opposition.rows[this.distance - 2];
+      if (targetRow.isNotFull()) {
+        // The target row has some room, so advance
+
+        // Leave the current row
+        for (let i = 0; i < this.row.enemies.length; i++) {
+          const enemy = this.row.enemies[i];
+          if (enemy === this) {
+            this.row.enemies.splice(i, 1);
+          }
+        }
+
+        // Move to the new row
+        targetRow.enemies.push(this);
+        this.row = targetRow;
+        this.distance--;
+
+        return new AdvanceAction();
+      } else {
+        // The target row is full, so defend
+
+        return new DefendAction();
+      }
+    } else {
+      // Hit a front row character
+
+      // Select a from row character
+      const targetCharacter: Character = fight.party.rows[0].characters[Math.floor(Math.random() * 3)];
+
+      return new DamageAction(targetCharacter, this.power);
+    }
   }
 }
 
@@ -62,6 +126,10 @@ export class SimpleEnemy extends Enemy {
 export class EnemyRow {
 
   constructor(public enemies: Enemy[]) {
+  }
+
+  isNotFull(): boolean {
+    return this.enemies.length < OPPOSITION_ROW_SIZE;
   }
 }
 

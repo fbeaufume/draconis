@@ -10,6 +10,7 @@ export enum LogType {
   Damage,
   Heal,
   Defend,
+  Advance,
   EnemyDefeated,
   PartyVictory,
 }

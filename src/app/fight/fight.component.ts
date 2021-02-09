@@ -65,12 +65,12 @@ export class FightComponent implements AfterViewInit {
       if (skill.name == this.fight.hoveredSkill?.name) {
         // Hovering the skill
 
-        if (skill.cost > (this.fight.activeCharacter?.energy ?? 0)) {
-          // The skill is too expensive
-          return 'border-red-500';
-        } else {
+        if (skill.isSelectableBy(this.fight.activeCharacter)) {
           // The skill cost is ok
           return 'border-gray-200';
+        } else {
+          // The skill is too expensive
+          return 'border-red-500';
         }
       } else {
         return 'border-gray-800';

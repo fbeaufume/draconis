@@ -82,8 +82,8 @@ export class FightService {
       return;
     }
 
-    // Check the skill cost
-    if (skill.cost > (this.fight.activeCharacter?.energy ?? 0)) {
+    // Check that the skill can be used
+    if (!skill.isSelectableBy(this.fight.activeCharacter)) {
       return;
     }
 
@@ -210,14 +210,12 @@ export class FightService {
       this.pause(() => {
         this.processEnemyTurnStep2(enemy, action.power, action.targetCharacter);
       });
-    }
-    else {
+    } else {
       // Actions without target are executed immediately
 
       if (action instanceof AdvanceAction) {
         this.logs.push(new Log(LogType.Advance, enemy));
-      }
-      else if (action instanceof DefendAction) {
+      } else if (action instanceof DefendAction) {
         this.logs.push(new Log(LogType.Defend, enemy));
       }
 

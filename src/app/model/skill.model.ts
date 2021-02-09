@@ -1,6 +1,6 @@
 // Skill related classes
 
-import {Creature} from './misc.model';
+import {Character} from './misc.model';
 import {Fight} from './fight.model';
 import {Log, LogType} from './log.model';
 import {Enemy} from './enemy.model';
@@ -34,10 +34,29 @@ export abstract class Skill {
   }
 
   /**
-   * Return true if the skill can be used on the target enemy.
+   * Return true if the skill can be selected by a character.
+   * @param character
+   */
+  isSelectableBy(character: Character | null): boolean {
+    if (character == null) {
+      return false;
+    }
+
+    // Check the skill cost
+    // noinspection RedundantIfStatementJS
+    if (this.cost > character.energy) {
+      return false;
+    }
+
+    return true;
+  }
+
+  /**
+   * Return true if the skill can be used on an enemy.
    */
   isUsableOn(enemy: Enemy): boolean {
-    // Check the range
+    // Check the skill range
+    // noinspection RedundantIfStatementJS
     if (this.range > 0 && enemy.distance > this.range) {
       return false;
     }

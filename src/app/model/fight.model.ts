@@ -1,7 +1,7 @@
 // Fight related classes
 
 import {Character, Creature, EndOfRound, OPPOSITION_ROWS, Party, PARTY_ROWS, PARTY_SIZE} from './misc.model';
-import {Damage, Defend, Heal, Skill, SkillTarget} from './skill.model';
+import {blast, heal, magicDefend, magicStrike, shot, Skill, smash, spark, techDefend, techStrike} from './skill.model';
 import {Enemy, MeleeEnemy, Opposition} from './enemy.model';
 
 /**
@@ -133,13 +133,11 @@ export class Fight {
 
   turnOrder: TurnOrder;
 
-  activeCharacter: Character | null;
+  // The currently active character or enemy
+  activeCreature: Creature | null;
 
   // The character under the mouse pointer during the selection of a character
   hoveredCharacter: Character | null;
-
-  // The character targeted by a skill (from a character or an enemy)
-  targetCharacter: Character | null;
 
   // The skill currently under the mouse pointer during the selection of a skill
   hoveredSkill: Skill | null;
@@ -150,55 +148,34 @@ export class Fight {
   // Skill selected by the player
   selectedSkill: Skill | null;
 
-  activeEnemy: Enemy | null;
-
   // The enemy under the mouse pointer during the selection of an enemy
   hoveredEnemy: Enemy | null;
 
-  // The enemy targeted by a skill (from a character or an enemy)
-  targetEnemy: Enemy | null;
+  // The creatures targeted by the chosen skill of the active character or enemy
+  targetCreatures: Creature[] = [];
 
   initialize() {
     this.step = FightStep.BEFORE_START;
     this.round = 1;
 
-    const techDefend = new Defend('Defend', SkillTarget.NONE, -40, 0, 0, 0,
-      'Defend against attacks. Generates 40 TP.');
-    const magicDefend = new Defend('Defend', SkillTarget.NONE, 0, 0, 0, 0,
-      'Defend against attacks.');
-    const techStrike = new Damage('Strike', SkillTarget.ENEMY, -30, 1, 0, 10,
-      'Basic attack, does 10 damage. Generates 30 TP.');
-    const magicStrike = new Damage('Strike', SkillTarget.ENEMY, 0, 1, 0, 10,
-      'Basic attack, does 10 damage.');
-    const smash = new Damage('Smash', SkillTarget.ENEMY, 10, 1, 0, 15,
-      'Strong attack, does 15 damage.');
-    const shot = new Damage('Shot', SkillTarget.ENEMY, -30, 2, 0, 10,
-      'Basic ranged attack, does 10 damage. Generates 30 TP.');
-    const heal: Skill = new Heal('Heal', SkillTarget.CHARACTER, 5, 0, 0, 10,
-      'Heal a party member for 10 HP.');
-    const spark = new Damage('Spark', SkillTarget.ENEMY, 5, 2, 0, 10,
-      'Magical attack, does 10 damage.');
-    const blast = new Damage('Blast', SkillTarget.ENEMY, 5, 2, 0, 15,
-      'Magical attack, does 15 damage.');
-
     this.party = new Party([
-        new Character('Cyl', 'Rogue', 1, 20, false, 50, [
+        new Character('Cyl', 'Rogue', 1, 20, false, 50, 10, [
           techDefend, techStrike
         ]),
-        new Character('Melkan', 'Warrior', 1, 20, false, 50, [
+        new Character('Melkan', 'Warrior', 1, 20, false, 50, 10, [
           techDefend, techStrike, smash
         ]),
-        new Character('Arwin', 'Paladin', 1, 20, true, 50, [
+        new Character('Arwin', 'Paladin', 1, 20, true, 50, 10, [
           magicDefend, magicStrike, heal
         ])],
       [
-        new Character('Faren', 'Archer', 1, 20, false, 50, [
+        new Character('Faren', 'Archer', 1, 20, false, 50, 10, [
           techDefend, shot
         ]),
-        new Character('Harika', 'Mage', 1, 20, true, 50, [
+        new Character('Harika', 'Mage', 1, 20, true, 50, 10, [
           magicDefend, blast
         ]),
-        new Character('Nairo', 'Priest', 1, 20, true, 50, [
+        new Character('Nairo', 'Priest', 1, 20, true, 50, 10, [
           magicDefend, spark, heal
         ])
       ]);
@@ -206,18 +183,18 @@ export class Fight {
     // Sample oppositions
     const oppositions: Opposition[] = [
       new Opposition([
-        new MeleeEnemy('Bear A', 40, 8),
-        new MeleeEnemy('Bear B', 40, 8),
+        new MeleeEnemy('Bear A', 38, 8),
+        new MeleeEnemy('Bear B', 38, 8),
       ], [], []),
       new Opposition([
-        new MeleeEnemy('Wolf A', 20, 6),
-        new MeleeEnemy('Wolf B', 20, 6),
+        new MeleeEnemy('Wolf A', 24, 6),
+        new MeleeEnemy('Wolf B', 24, 6),
       ], [
-        new MeleeEnemy('Wolf C', 20, 6),
-        new MeleeEnemy('Wolf D', 20, 6),
-        new MeleeEnemy('Wolf E', 20, 6),
+        new MeleeEnemy('Wolf C', 24, 6),
+        new MeleeEnemy('Wolf D', 24, 6),
+        new MeleeEnemy('Wolf E', 24, 6),
       ], [
-        new MeleeEnemy('Wolf F', 20, 6),
+        new MeleeEnemy('Wolf F', 24, 6),
       ]),
       new Opposition([
         new MeleeEnemy('Green Dragon', 80, 12, 2),
@@ -227,14 +204,12 @@ export class Fight {
     this.opposition = oppositions[1];
     this.updateEnemies();
 
-    this.activeCharacter = null;
-    this.targetCharacter = null;
+    this.activeCreature = null;
     this.hoveredSkill = null;
     this.focusedSkill = null;
     this.selectedSkill = null;
-    this.activeEnemy = null;
     this.hoveredEnemy = null;
-    this.targetEnemy = null;
+    this.targetCreatures = [];
 
     this.turnOrder = new TurnOrder(this.party, this.opposition);
   }
@@ -250,5 +225,24 @@ export class Fight {
         enemy.distance = i + 1;
       });
     }
+  }
+
+  /**
+   * Is the creature active.
+   */
+  isActive(creature: Creature): boolean {
+    return creature === this.activeCreature;
+  }
+
+  /**
+   * Is the creature in the target list.
+   */
+  isTargeted(creature: Creature): boolean {
+    for (const tempCreature of this.targetCreatures) {
+      if (creature === tempCreature) {
+        return true;
+      }
+    }
+    return false;
   }
 }

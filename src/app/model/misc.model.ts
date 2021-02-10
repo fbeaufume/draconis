@@ -1,7 +1,6 @@
 // The rest of the model classes
 
 import {Skill} from './skill.model';
-import {Fight} from './fight.model';
 
 /**
  * Number of character rows.
@@ -49,6 +48,12 @@ export abstract class Creature {
 
   lifePercent: number;
 
+  // Current mana or tech points (depends on the character class) (currently only used by characters)
+  energy: number;
+
+  // Max mana or tech points (depends on the character class) (currently only used by characters)
+  energyPercent: number;
+
   // Bonuses, a.k.a. "buffs"
   // bonuses: string[] = [];
 
@@ -57,9 +62,15 @@ export abstract class Creature {
 
   protected constructor(
     public name: string,
-    public lifeMax: number
+    public lifeMax: number,
+    public energyMax: number,
+    // Generic power of the creature, used to compute damage or heal amounts
+    public power: number,
+    // Creature skills (currently only used by characters)
+    public skills: Skill[]
   ) {
     this.life = lifeMax;
+    this.energy = energyMax;
     this.updateLifePercent();
   }
 
@@ -71,11 +82,7 @@ export abstract class Creature {
     return this instanceof EndOfRound;
   }
 
-  updateLifePercent() {
-    this.lifePercent = 100 * this.life / this.lifeMax;
-  }
-
-  inflictDamage(amount: number) {
+  damage(amount: number) {
     this.life -= amount;
 
     // Enforce min and max values
@@ -88,46 +95,13 @@ export abstract class Creature {
 
     this.updateLifePercent();
   }
-}
 
-/**
- * A party character.
- */
-export class Character extends Creature {
-
-  // Current mana or tech points (depends on the character class)
-  energy: number;
-
-  energyPercent: number;
-
-  constructor(
-    name: string,
-    // Character class, could be an enum
-    public clazz: string,
-    public level: number,
-    lifeMax: number,
-    // True for mana based character class, false for tech based
-    public useMana: boolean,
-    // Max mana or tech points (depends on the character class)
-    public energyMax: number,
-    public skills: Skill[],
-  ) {
-    super(name, lifeMax);
-
-    this.energy = energyMax;
-    this.updateEnergyPercent();
+  heal(amount: number) {
+    this.damage(-amount);
   }
 
-  isCharacter(): boolean {
-    return true;
-  }
-
-  isEnemy(): boolean {
-    return false;
-  }
-
-  updateEnergyPercent() {
-    this.energyPercent = 100 * this.energy / this.energyMax;
+  updateLifePercent() {
+    this.lifePercent = 100 * this.life / this.lifeMax;
   }
 
   /**
@@ -145,6 +119,42 @@ export class Character extends Creature {
     }
 
     this.updateEnergyPercent();
+  }
+
+  updateEnergyPercent() {
+    this.energyPercent = 100 * this.energy / this.energyMax;
+  }
+}
+
+/**
+ * A party character.
+ */
+export class Character extends Creature {
+
+  constructor(
+    name: string,
+    // Character class, could be an enum
+    public clazz: string,
+    public level: number,
+    lifeMax: number,
+    // True for mana based character class, false for tech based
+    public useMana: boolean,
+    energyMax: number,
+    power: number,
+    skills: Skill[],
+  ) {
+    super(name, lifeMax, energyMax, power, skills);
+
+    this.energy = energyMax;
+    this.updateEnergyPercent();
+  }
+
+  isCharacter(): boolean {
+    return true;
+  }
+
+  isEnemy(): boolean {
+    return false;
   }
 }
 
@@ -180,7 +190,7 @@ export class Party {
 export class EndOfRound extends Creature {
 
   constructor() {
-    super('- End of round -', 0);
+    super('- End of round -', 1, 1, 0,[]);
   }
 
   isCharacter(): boolean {

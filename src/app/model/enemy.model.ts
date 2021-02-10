@@ -2,34 +2,18 @@
 
 import {Character, Creature, OPPOSITION_ROW_SIZE} from './misc.model';
 import {Fight} from './fight.model';
+import {advance, Skill, techDefend, techStrike} from './skill.model';
 
 /**
- * Base class for enemy actions.
+ * An enemy actions.
  */
-export abstract class EnemyAction {
-}
-
-/**
- * The enemy advances toward the party.
- */
-export class AdvanceAction extends EnemyAction {
-}
-
-/**
- * The enemy defends.
- */
-export class DefendAction extends EnemyAction {
-}
-
-/**
- * The enemy damages a character.
- */
-export class DamageAction extends EnemyAction {
+export class EnemyAction {
 
   constructor(
-    public targetCharacter: Character,
-    public power: number) {
-    super();
+    // The executed skill
+    public skill: Skill,
+    // The target characters, if any
+    public targetCreatures: Creature[]) {
   }
 }
 
@@ -46,11 +30,10 @@ export abstract class Enemy extends Creature {
   constructor(
     name: string,
     lifeMax: number,
-    // Generic power of the creature, i.e. damage amount for offensive skills, heal amount for heal skills, etc
-    public power: number,
+    power: number,
     // Number of actions per turn
     public actions: number = 1) {
-    super(name, lifeMax);
+    super(name, lifeMax, 100, power, []);
   }
 
   isCharacter(): boolean {
@@ -93,11 +76,11 @@ export class MeleeEnemy extends Enemy {
         targetRow.enemies.push(this);
         this.distance--;
 
-        return new AdvanceAction();
+        return new EnemyAction(advance, []);
       } else {
         // The target row is full, so defend
 
-        return new DefendAction();
+        return new EnemyAction(techDefend, []);
       }
     } else {
       // Hit a front row character
@@ -105,7 +88,7 @@ export class MeleeEnemy extends Enemy {
       // Select a from row character
       const targetCharacter: Character = fight.party.rows[0].characters[Math.floor(Math.random() * 3)];
 
-      return new DamageAction(targetCharacter, this.power);
+      return new EnemyAction(techStrike, [targetCharacter]);
     }
   }
 }

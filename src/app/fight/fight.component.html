@@ -63,7 +63,7 @@
 
       <hr class="border-gray-700 my-4">
 
-      <div *ngFor="let skill of fight.activeCharacter?.skills" class="border p-1 flex justify-between"
+      <div *ngFor="let skill of fight.activeCreature?.skills" class="border p-1 flex justify-between"
            [ngClass]="[getSkillBorderClass(skill), usePointerForStep(3)]"
            (mouseenter)="fightService.enterSkill(skill)"
            (mouseleave)="fightService.leaveSkill()"

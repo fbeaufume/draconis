@@ -1,7 +1,7 @@
 import {Injectable} from '@angular/core';
-import {Character, Creature, PartyLocation} from '../model/misc.model';
+import {Character, PartyLocation} from '../model/misc.model';
 import {Skill, SkillTarget} from '../model/skill.model';
-import {AdvanceAction, DamageAction, DefendAction, Enemy} from '../model/enemy.model';
+import {Enemy, EnemyAction} from '../model/enemy.model';
 import {Fight, FightStep} from '../model/fight.model';
 import {Log, LogType} from '../model/log.model';
 
@@ -41,20 +41,21 @@ export class FightService {
    * Process a character or enemy turn.
    */
   processTurn() {
-    const activeCreature: Creature = this.fight.turnOrder.currentOrder[0];
+    const creature = this.fight.turnOrder.currentOrder[0];
+    this.fight.activeCreature = creature;
 
-    if (activeCreature.isCharacter()) {
-      this.fight.activeCharacter = activeCreature as Character;
+    if (creature.isCharacter()) {
       this.fight.step = FightStep.SELECT_SKILL;
-    } else if (activeCreature.isEnemy()) {
-      this.fight.activeEnemy = activeCreature as Enemy;
+    } else if (creature.isEnemy()) {
       this.fight.step = FightStep.ENEMY_TURN;
 
       this.pause(() => {
-        this.processEnemyTurnStep1(activeCreature as Enemy);
+        this.processEnemyTurnStep1(creature as Enemy);
       });
-    } else {
+    } else if (creature.isEndOfRound()) {
       this.processEndOfRound();
+    } else {
+      console.log('Invalid creature type', creature);
     }
   }
 
@@ -83,7 +84,7 @@ export class FightService {
     }
 
     // Check that the skill can be used
-    if (!skill.isSelectableBy(this.fight.activeCharacter)) {
+    if (!skill.isSelectableBy(this.fight.activeCreature)) {
       return;
     }
 
@@ -127,7 +128,7 @@ export class FightService {
       return;
     }
 
-    this.fight.targetEnemy = enemy;
+    this.fight.targetCreatures.push(enemy);
 
     this.fight.selectedSkill.execute(this.fight, this.logs);
 
@@ -185,7 +186,7 @@ export class FightService {
       return;
     }
 
-    this.fight.targetCharacter = character;
+    this.fight.targetCreatures.push(character);
 
     this.fight.selectedSkill.execute(this.fight, this.logs);
 
@@ -201,37 +202,29 @@ export class FightService {
     // Execute the enemy strategy
     const action = enemy.chooseAction(this.fight);
 
-    if (action instanceof DamageAction) {
+    if (action.skill.target == SkillTarget.NONE) {
+      // Actions without target are executed immediately
+
+      this.processEnemyTurnStep2(action);
+    } else {
       // Actions with a target are executed after a pause
 
-      this.fight.targetCharacter = action.targetCharacter;
+      // Select the targets
+      this.fight.targetCreatures = action.targetCreatures;
 
       // Process the next step
       this.pause(() => {
-        this.processEnemyTurnStep2(enemy, action.power, action.targetCharacter);
+        this.processEnemyTurnStep2(action);
       });
-    } else {
-      // Actions without target are executed immediately
-
-      if (action instanceof AdvanceAction) {
-        this.logs.push(new Log(LogType.Advance, enemy));
-      } else if (action instanceof DefendAction) {
-        this.logs.push(new Log(LogType.Defend, enemy));
-      }
-
-      this.processNextTurn();
     }
   }
 
   /**
    * Process the second step of an enemy turn: execute the skill and log the result.
    */
-  processEnemyTurnStep2(enemy: Enemy, damage: number, targetCharacter: Character) {
+  processEnemyTurnStep2(action: EnemyAction) {
     // Execute the skill
-    targetCharacter.inflictDamage(damage);
-
-    // Log the result
-    this.logs.push(new Log(LogType.Damage, enemy, targetCharacter, damage));
+    action.skill.execute(this.fight, this.logs);
 
     this.processNextTurn();
   }
@@ -257,12 +250,10 @@ export class FightService {
     // Give some time to the player to see the skill result
     this.pause(() => {
       // Then deselect everything
-      this.fight.activeCharacter = null;
-      this.fight.targetCharacter = null;
+      this.fight.activeCreature = null;
       this.fight.focusedSkill = null;
       this.fight.selectedSkill = null;
-      this.fight.activeEnemy = null;
-      this.fight.targetEnemy = null;
+      this.fight.targetCreatures = [];
 
       this.pause(() => {
         // Then start the new turn

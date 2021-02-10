@@ -42,15 +42,13 @@ export class FightComponent implements AfterViewInit {
     if (this.fight.step == FightStep.SELECT_CHARACTER) {
       // Choosing a character
 
-      if (character.name == this.fight.hoveredCharacter?.name
-        || character.name == this.fight.activeCharacter?.name) {
+      if (character.name == this.fight.hoveredCharacter?.name || this.fight.isActive(character)) {
         return 'border-gray-200';
       } else {
         return 'border-gray-700';
       }
     } else {
-      if (character.name == this.fight.activeCharacter?.name
-        || character.name == this.fight.targetCharacter?.name) {
+      if (this.fight.isActive(character) || this.fight.isTargeted(character)) {
         return 'border-gray-200';
       } else {
         return 'border-gray-700';
@@ -65,7 +63,7 @@ export class FightComponent implements AfterViewInit {
       if (skill.name == this.fight.hoveredSkill?.name) {
         // Hovering the skill
 
-        if (skill.isSelectableBy(this.fight.activeCharacter)) {
+        if (skill.isSelectableBy(this.fight.activeCreature)) {
           // The skill cost is ok
           return 'border-gray-200';
         } else {
@@ -104,8 +102,7 @@ export class FightComponent implements AfterViewInit {
         return 'border-gray-800';
       }
     } else {
-      if (enemy.name == this.fight.activeEnemy?.name
-        || enemy.name == this.fight.targetEnemy?.name) {
+      if (this.fight.isActive(enemy) || this.fight.isTargeted(enemy)) {
         return 'border-gray-200';
       } else {
         return 'border-gray-800';

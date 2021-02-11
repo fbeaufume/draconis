@@ -96,6 +96,8 @@ export class FightService {
             case SkillTarget.NONE:
                 skill.execute(this.fight, this.logs);
 
+                this.fight.step = FightStep.EXECUTING_SKILL;
+
                 this.processNextTurn();
                 break;
             case SkillTarget.ENEMY:

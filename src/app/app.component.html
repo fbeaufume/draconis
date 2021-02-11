@@ -1,30 +1,32 @@
 <div class="container mx-auto">
-  <div class="flex items-center pt-4 pb-4">
-    <div class="flex-1 flex justify-start">
-      <div class="text-4xl font-bold">Draconis</div>
+    <div class="flex items-center pt-4 pb-4">
+        <div class="flex-1 flex justify-start">
+            <div class="text-4xl font-bold">Draconis</div>
+        </div>
+        <div class="flex-1 flex justify-center">
+            <div *ngIf="displayStartFightButton()">
+                <button class="text-white bg-gray-500 font-bold px-4 py-2 rounded"
+                        (click)="fightService.startFight()">
+                    Start fight
+                </button>
+            </div>
+            <div *ngIf="displayResetFightButton()">
+                <button class="text-white bg-gray-500 font-bold px-4 py-2 rounded"
+                        (click)="fightService.fight.initialize()">
+                    Reset fight
+                </button>
+            </div>
+        </div>
+        <div class="flex-1 flex justify-end">
+            <div class="text-xl">
+                {{ fightService.partyLocation.region }}
+                <span class="text-gray-500">/ Fight </span>
+                {{ fightService.partyLocation.fight }}
+            </div>
+        </div>
     </div>
-    <div class="flex-1 flex justify-center">
-      <div *ngIf="displayStartFightButton()">
-        <button class="text-white bg-gray-500 font-bold px-4 py-2 rounded" (click)="fightService.startFight()">
-          Start fight
-        </button>
-      </div>
-      <div *ngIf="displayResetFightButton()">
-        <button class="text-white bg-gray-500 font-bold px-4 py-2 rounded" (click)="fightService.fight.initialize()">
-          Reset fight
-        </button>
-      </div>
-    </div>
-    <div class="flex-1 flex justify-end">
-      <div class="text-xl">
-        {{ fightService.partyLocation.region }}
-        <span class="text-gray-500">/ Fight </span>
-        {{ fightService.partyLocation.fight }}
-      </div>
-    </div>
-  </div>
 
-  <app-fight></app-fight>
+    <app-fight></app-fight>
 
-  <router-outlet></router-outlet>
+    <router-outlet></router-outlet>
 </div>

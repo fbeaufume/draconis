@@ -1,38 +1,42 @@
 <div [ngSwitch]="log.type">
-  <div *ngSwitchCase="0">
-    <!-- Enter zone -->
-    Entering <span class="text-gray-200">{{ log.args[0] }}</span>.
-  </div>
-  <div *ngSwitchCase="1">
-    <!-- Start round -->
-    Round <span class="text-gray-200">{{ log.args[0] }}</span> started.
-  </div>
-  <div *ngSwitchCase="2">
-    <!-- Damage -->
-    <span [ngClass]="getClassForCreature(log.args[0])">{{ $any(log.args[0]).name }}</span>
-    damages <span [ngClass]="getClassForCreature(log.args[1])">{{ $any(log.args[1]).name }}</span>
-    for <span class="text-red-500">{{ log.args[2] }}</span> HP.
-  </div>
-  <div *ngSwitchCase="3">
-    <!-- Heal -->
-    <span [ngClass]="getClassForCreature(log.args[0])">{{ $any(log.args[0]).name }}</span>
-    heals <span [ngClass]="getClassForCreature(log.args[1])">{{ $any(log.args[1]).name }}</span>
-    for <span class="text-green-500">{{ log.args[2] }}</span> HP.
-  </div>
-  <div *ngSwitchCase="4">
-    <!-- Defend -->
-    <span [ngClass]="getClassForCreature(log.args[0])">{{ $any(log.args[0]).name }}</span> defends.
-  </div>
-  <div *ngSwitchCase="5">
-    <!-- Advance -->
-    <span [ngClass]="getClassForCreature(log.args[0])">{{ $any(log.args[0]).name }}</span> advances.
-  </div>
-  <div *ngSwitchCase="6">
-    <!-- Enemy death -->
-    <span class="text-yellow-200">{{ log.args[0] }}</span> was defeated.
-  </div>
-  <div *ngSwitchCase="7">
-    <!-- Party victory -->
-    The party won!
-  </div>
+    <div *ngSwitchCase="0">
+        <!-- Enter zone -->
+        Entering <span class="text-gray-200">{{ log.args[0] }}</span>.
+    </div>
+    <div *ngSwitchCase="1">
+        <!-- Start round -->
+        Round <span class="text-gray-200">{{ log.args[0] }}</span> started.
+    </div>
+    <div *ngSwitchCase="2">
+        <!-- Damage -->
+        <span [ngClass]="getClassForCreature(log.args[0])">{{ $any(log.args[0]).name }}</span>
+        damages <span [ngClass]="getClassForCreature(log.args[1])">{{ $any(log.args[1]).name }}</span>
+        for <span class="text-red-500">{{ log.args[2] }}</span> HP.
+    </div>
+    <div *ngSwitchCase="3">
+        <!-- Heal -->
+        <span [ngClass]="getClassForCreature(log.args[0])">{{ $any(log.args[0]).name }}</span>
+        heals <span [ngClass]="getClassForCreature(log.args[1])">{{ $any(log.args[1]).name }}</span>
+        for <span class="text-green-500">{{ log.args[2] }}</span> HP.
+    </div>
+    <div *ngSwitchCase="4">
+        <!-- Defend -->
+        <span [ngClass]="getClassForCreature(log.args[0])">{{ $any(log.args[0]).name }}</span> defends.
+    </div>
+    <div *ngSwitchCase="5">
+        <!-- Advance -->
+        <span [ngClass]="getClassForCreature(log.args[0])">{{ $any(log.args[0]).name }}</span> advances.
+    </div>
+    <div *ngSwitchCase="6">
+        <!-- Enemy death -->
+        <span class="text-yellow-200">{{ log.args[0] }}</span> was defeated.
+    </div>
+    <div *ngSwitchCase="7">
+        <!-- Party victory -->
+        The party won!
+    </div>
+    <div *ngSwitchCase="8">
+        <!-- Pause duration changed -->
+        Using pause of <span class="text-gray-200">{{ log.args[0] }}</span> msec.
+    </div>
 </div>

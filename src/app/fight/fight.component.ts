@@ -1,4 +1,4 @@
-import {AfterViewInit, Component, ElementRef, QueryList, ViewChild, ViewChildren} from '@angular/core';
+import {AfterViewInit, Component, ElementRef, HostListener, QueryList, ViewChild, ViewChildren} from '@angular/core';
 import {Character} from '../model/misc.model';
 import {Skill} from '../model/skill.model';
 import {Enemy} from '../model/enemy.model';
@@ -6,114 +6,129 @@ import {Fight, FightStep} from '../model/fight.model';
 import {FightService} from './fight.service';
 
 @Component({
-  selector: 'app-fight',
-  templateUrl: './fight.component.html',
-  styleUrls: ['./fight.component.css']
+    selector: 'app-fight',
+    templateUrl: './fight.component.html',
+    styleUrls: ['./fight.component.css']
 })
 export class FightComponent implements AfterViewInit {
 
-  // These are used to scroll the log panels to the bottom when a log is added,
-  // inspired by https://pumpingco.de/blog/automatic-scrolling-only-if-a-user-already-scrolled-the-bottom-of-a-page-in-angular/
-  @ViewChild('logFrame', {static: false}) logFrameElementRef: ElementRef;
-  @ViewChildren('log') logItemElements: QueryList<any>;
-  private logFrameElement: any;
+    // These are used to scroll the log panels to the bottom when a log is added,
+    // inspired by https://pumpingco.de/blog/automatic-scrolling-only-if-a-user-already-scrolled-the-bottom-of-a-page-in-angular/
+    @ViewChild('logFrame', {static: false}) logFrameElementRef: ElementRef;
+    @ViewChildren('log') logItemElements: QueryList<any>;
+    private logFrameElement: any;
 
-  constructor(public fightService: FightService) {
-  }
-
-  ngAfterViewInit(): void {
-    this.logFrameElement = this.logFrameElementRef.nativeElement;
-    this.logItemElements.changes.subscribe(_ => this.scrollLogFrameToBottom());
-  }
-
-  get fight(): Fight {
-    return this.fightService.fight;
-  }
-
-  private scrollLogFrameToBottom(): void {
-    this.logFrameElement.scroll({
-      top: this.logFrameElement.scrollHeight,
-      left: 0,
-      behavior: 'smooth'
-    });
-  }
-
-  getCharacterBorderClass(character: Character): string {
-    if (this.fight.step == FightStep.SELECT_CHARACTER) {
-      // Choosing a character
-
-      if (character.name == this.fight.hoveredCharacter?.name || this.fight.isActive(character)) {
-        return 'border-gray-200';
-      } else {
-        return 'border-gray-700';
-      }
-    } else {
-      if (this.fight.isActive(character) || this.fight.isTargeted(character)) {
-        return 'border-gray-200';
-      } else {
-        return 'border-gray-700';
-      }
+    constructor(public fightService: FightService) {
     }
-  }
 
-  getSkillBorderClass(skill: Skill): string {
-    if (this.fightService.fight.step == FightStep.SELECT_SKILL) {
-      // Choosing a skill
+    ngAfterViewInit(): void {
+        this.logFrameElement = this.logFrameElementRef.nativeElement;
+        this.logItemElements.changes.subscribe(_ => this.scrollLogFrameToBottom());
+    }
 
-      if (skill.name == this.fight.hoveredSkill?.name) {
-        // Hovering the skill
+    get fight(): Fight {
+        return this.fightService.fight;
+    }
 
-        if (skill.isSelectableBy(this.fight.activeCreature)) {
-          // The skill cost is ok
-          return 'border-gray-200';
+    private scrollLogFrameToBottom(): void {
+        this.logFrameElement.scroll({
+            top: this.logFrameElement.scrollHeight,
+            left: 0,
+            behavior: 'smooth'
+        });
+    }
+
+    getCharacterBorderClass(character: Character): string {
+        if (this.fight.step == FightStep.SELECT_CHARACTER) {
+            // Choosing a character
+
+            if (character.name == this.fight.hoveredCharacter?.name || this.fight.isActive(character)) {
+                return 'border-gray-200';
+            } else {
+                return 'border-gray-700';
+            }
         } else {
-          // The skill is too expensive
-          return 'border-red-500';
+            if (this.fight.isActive(character) || this.fight.isTargeted(character)) {
+                return 'border-gray-200';
+            } else {
+                return 'border-gray-700';
+            }
         }
-      } else {
-        return 'border-gray-800';
-      }
-    } else {
-      // Not choosing a skill
-
-      if (skill.name == this.fight.selectedSkill?.name) {
-        // The skill is selected
-        return 'border-gray-200';
-      } else {
-        return 'border-gray-800';
-      }
     }
-  }
 
-  getEnemyBorderClass(enemy: Enemy): string {
-    if (this.fight.step == FightStep.SELECT_ENEMY) {
-      // Choosing an enemy
+    getSkillBorderClass(skill: Skill): string {
+        if (this.fightService.fight.step == FightStep.SELECT_SKILL) {
+            // Choosing a skill
 
-      if (enemy.name == this.fight.hoveredEnemy?.name) {
-        // Hovering the enemy
+            if (skill.name == this.fight.hoveredSkill?.name) {
+                // Hovering the skill
 
-        if (enemy.distance > (this.fight.selectedSkill?.range ?? 0)) {
-          // The enemy is too far
-          return 'border-red-500';
+                if (skill.isSelectableBy(this.fight.activeCreature)) {
+                    // The skill cost is ok
+                    return 'border-gray-200';
+                } else {
+                    // The skill is too expensive
+                    return 'border-red-500';
+                }
+            } else {
+                return 'border-gray-800';
+            }
         } else {
-          return 'border-gray-200';
-        }
-      } else {
-        return 'border-gray-800';
-      }
-    } else {
-      if (this.fight.isActive(enemy) || this.fight.isTargeted(enemy)) {
-        return 'border-gray-200';
-      } else {
-        return 'border-gray-800';
-      }
-    }
-  }
+            // Not choosing a skill
 
-  /**
-   * Use a pointer cursor when in a given fight step, or else the default cursor.
-   */
-  usePointerForStep(fightStep: FightStep) {
-    return this.fight.step == fightStep ? 'cursor-pointer' : 'cursor-default';
-  }
+            if (skill.name == this.fight.selectedSkill?.name) {
+                // The skill is selected
+                return 'border-gray-200';
+            } else {
+                return 'border-gray-800';
+            }
+        }
+    }
+
+    getEnemyBorderClass(enemy: Enemy): string {
+        if (this.fight.step == FightStep.SELECT_ENEMY) {
+            // Choosing an enemy
+
+            if (enemy.name == this.fight.hoveredEnemy?.name) {
+                // Hovering the enemy
+
+                if (enemy.distance > (this.fight.selectedSkill?.range ?? 0)) {
+                    // The enemy is too far
+                    return 'border-red-500';
+                } else {
+                    return 'border-gray-200';
+                }
+            } else {
+                return 'border-gray-800';
+            }
+        } else {
+            if (this.fight.isActive(enemy) || this.fight.isTargeted(enemy)) {
+                return 'border-gray-200';
+            } else {
+                return 'border-gray-800';
+            }
+        }
+    }
+
+    /**
+     * Use a pointer cursor when in a given fight step, or else the default cursor.
+     */
+    usePointerForStep(fightStep: FightStep) {
+        return this.fight.step == fightStep ? 'cursor-pointer' : 'cursor-default';
+    }
+
+    @HostListener('window:keydown', ['$event'])
+    processKeyboardShortcut(event: KeyboardEvent) {
+        // Check if numeric keypad 1 to 9 (could have been easier with event.keyCode, but it's deprecated)
+        const index = ['1', '2', '3', '4', '5', '6', '7', '8', '9'].indexOf(event.key);
+
+        // Process numeric keypad
+        if (index >= 0) {
+            this.fightService.selectFromKey(index);
+            event.preventDefault();
+        } else if (event.key == 'p') {
+            this.fightService.togglePauseDuration();
+            event.preventDefault();
+        }
+    }
 }

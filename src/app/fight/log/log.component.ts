@@ -3,22 +3,22 @@ import {Enemy} from '../../model/enemy.model';
 import {Log} from '../../model/log.model';
 
 @Component({
-  selector: 'app-log',
-  templateUrl: './log.component.html',
-  styleUrls: ['./log.component.css']
+    selector: 'app-log',
+    templateUrl: './log.component.html',
+    styleUrls: ['./log.component.css']
 })
 export class LogComponent {
 
-  @Input()
-  log: Log;
+    @Input()
+    log: Log;
 
-  constructor() {
-  }
+    constructor() {
+    }
 
-  /**
-   * Return the class used to display a creature name.
-   */
-  getClassForCreature(object: any): string {
-    return object instanceof Enemy ? 'text-yellow-200' : 'text-gray-200';
-  }
+    /**
+     * Return the class used to display a creature name.
+     */
+    getClassForCreature(object: any): string {
+        return object instanceof Enemy ? 'text-yellow-200' : 'text-gray-200';
+    }
 }

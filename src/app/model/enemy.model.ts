@@ -48,6 +48,22 @@ export abstract class Enemy extends Creature {
      * Called when it that creature's turn, this method decides what the creature does.
      */
     abstract chooseAction(fight: Fight): EnemyAction;
+
+    /**
+     * Target one random character from the first row.
+     */
+    targetOneFrontRowCharacter(fight: Fight): Character[] {
+        return [fight.party.rows[0].characters[Math.floor(Math.random() * 3)]];
+    }
+
+    /**
+     * Target all party characters.
+     */
+    targetAllCharacters(fight: Fight): Character[] {
+        const characters: Character[] = [];
+        fight.party.rows.forEach(row => characters.push(...row.characters));
+        return characters;
+    }
 }
 
 /**
@@ -85,10 +101,23 @@ export class MeleeEnemy extends Enemy {
         } else {
             // Hit a front row character
 
-            // Select a from row character
-            const targetCharacter: Character = fight.party.rows[0].characters[Math.floor(Math.random() * 3)];
+            return new EnemyAction(techStrike, this.targetOneFrontRowCharacter(fight));
+        }
+    }
+}
 
-            return new EnemyAction(techStrike, [targetCharacter]);
+/**
+ * Perform a claws attack on a character or a breath attack on all characters.
+ */
+export class DragonEnemy extends Enemy {
+
+    step: number = 0;
+
+    chooseAction(fight: Fight): EnemyAction {
+        if (this.step++ % 2 == 0) {
+            return new EnemyAction(techStrike, this.targetOneFrontRowCharacter(fight));
+        } else {
+            return new EnemyAction(techStrike, this.targetAllCharacters(fight));
         }
     }
 }

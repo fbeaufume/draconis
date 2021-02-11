@@ -2,7 +2,7 @@
 
 import {Character, Creature, EndOfRound, OPPOSITION_ROWS, Party, PARTY_ROWS, PARTY_SIZE} from './misc.model';
 import {blast, heal, magicDefend, magicStrike, shot, Skill, smash, spark, techDefend, techStrike} from './skill.model';
-import {Enemy, MeleeEnemy, Opposition} from './enemy.model';
+import {DragonEnemy, Enemy, MeleeEnemy, Opposition} from './enemy.model';
 
 /**
  * The current step in the fight workflow.
@@ -197,11 +197,11 @@ export class Fight {
                 new MeleeEnemy('Wolf F', 24, 6),
             ]),
             new Opposition([
-                new MeleeEnemy('Green Dragon', 80, 12, 2),
+                new DragonEnemy('Green Dragon', 80, 12, 2),
             ], [], []),
         ];
 
-        this.opposition = oppositions[1];
+        this.opposition = oppositions[2];
         this.updateEnemies();
 
         this.activeCreature = null;

@@ -2,7 +2,7 @@
 
 import {Character, Creature, OPPOSITION_ROW_SIZE} from './misc.model';
 import {Fight} from './fight.model';
-import {advance, Skill, techDefend, techStrike} from './skill.model';
+import {advance, inhale, Skill, techStrike, wait} from './skill.model';
 
 /**
  * An enemy actions.
@@ -94,9 +94,9 @@ export class MeleeEnemy extends Enemy {
 
         return new EnemyAction(advance, []);
       } else {
-        // The target row is full, so defend
+        // The target row is full, so wait
 
-        return new EnemyAction(techDefend, []);
+        return new EnemyAction(wait, []);
       }
     } else {
       // Hit a front row character
@@ -111,13 +111,21 @@ export class MeleeEnemy extends Enemy {
  */
 export class DragonEnemy extends Enemy {
 
-  step: number = 0;
+  step: number = -1;
 
   chooseAction(fight: Fight): EnemyAction {
-    if (this.step++ % 2 == 0) {
-      return new EnemyAction(techStrike, this.targetOneFrontRowCharacter(fight));
-    } else {
-      return new EnemyAction(techStrike, this.targetAllCharacters(fight));
+    this.step++;
+    switch (this.step % 4) {
+      case 0:
+      case 1:
+        // Claw attack on a character
+        return new EnemyAction(techStrike, this.targetOneFrontRowCharacter(fight));
+      case 2:
+        // Prepare the AOE
+        return new EnemyAction(inhale, []);
+      default:
+        // AOE on all characters
+        return new EnemyAction(techStrike, this.targetAllCharacters(fight));
     }
   }
 }

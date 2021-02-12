@@ -30,7 +30,7 @@ export const OPPOSITION_ROW_SIZE = 4;
 /**
  * A pause duration preset, in msec.
  */
-export const PAUSE_SHORT = 200;
+export const PAUSE_SHORT = 100;
 
 /**
  * A pause duration preset, in msec.

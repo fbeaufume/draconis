@@ -83,7 +83,7 @@ export abstract class Skill {
 }
 
 /**
- * Move on row forward. ONly used by enemies.
+ * Move on row forward. Only used by enemies.
  */
 export class Advance extends Skill {
 
@@ -91,6 +91,30 @@ export class Advance extends Skill {
     super.execute(fight, logs);
 
     logs.push(new Log(LogType.Advance, fight.activeCreature));
+  }
+}
+
+/**
+ * No action.
+ */
+export class Wait extends Skill {
+
+  execute(fight: Fight, logs: Log[]): void {
+    super.execute(fight, logs);
+
+    logs.push(new Log(LogType.Wait, fight.activeCreature));
+  }
+}
+
+/**
+ * Inhale before a breath attack.
+ */
+export class Inhale extends Skill {
+
+  execute(fight: Fight, logs: Log[]): void {
+    super.execute(fight, logs);
+
+    logs.push(new Log(LogType.Inhale, fight.activeCreature));
   }
 }
 
@@ -143,7 +167,12 @@ export class Heal extends Skill {
   }
 }
 
-export const advance = new Advance('', SkillTarget.NONE, -40, 0, 0, 0, '');
+// Skills used by enemies
+export const advance = new Advance('', SkillTarget.NONE, 0, 0, 0, 0, '');
+export const wait = new Wait('', SkillTarget.NONE, 0, 0, 0, 0, '');
+export const inhale = new Inhale('', SkillTarget.NONE, 0, 0, 0, 0, '');
+
+// Skills used by players
 export const techDefend = new Defend('Defend', SkillTarget.NONE, -40, 0, 0, 0,
   'Defend against attacks. Generates 40 TP.');
 export const magicDefend = new Defend('Defend', SkillTarget.NONE, 0, 0, 0, 0,

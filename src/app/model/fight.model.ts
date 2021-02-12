@@ -1,7 +1,21 @@
 // Fight related classes
 
 import {Character, Creature, EndOfRound, OPPOSITION_ROWS, Party, PARTY_ROWS, PARTY_SIZE} from './misc.model';
-import {blast, heal, magicDefend, magicStrike, shot, Skill, smash, spark, techDefend, techStrike} from './skill.model';
+import {
+  blast,
+  deepStrike,
+  heal,
+  holyStrike,
+  magicDefend,
+  magicStrike,
+  preciseShot,
+  shot,
+  Skill,
+  smash,
+  spark,
+  techDefend,
+  techStrike
+} from './skill.model';
 import {DragonEnemy, Enemy, MeleeEnemy, Opposition} from './enemy.model';
 
 /**
@@ -160,17 +174,17 @@ export class Fight {
 
     this.party = new Party([
         new Character('Cyl', 'Rogue', 1, 20, false, 50, 10, [
-          techDefend, techStrike
+          techDefend, techStrike, deepStrike
         ]),
         new Character('Melkan', 'Warrior', 1, 20, false, 50, 10, [
           techDefend, techStrike, smash
         ]),
         new Character('Arwin', 'Paladin', 1, 20, true, 50, 10, [
-          magicDefend, magicStrike, heal
+          magicDefend, magicStrike, holyStrike, heal
         ])],
       [
         new Character('Faren', 'Archer', 1, 20, false, 50, 10, [
-          techDefend, shot
+          techDefend, shot, preciseShot
         ]),
         new Character('Harika', 'Mage', 1, 20, true, 50, 10, [
           magicDefend, blast
@@ -197,7 +211,7 @@ export class Fight {
         new MeleeEnemy('Wolf F', 24, 6),
       ]),
       new Opposition([
-        new DragonEnemy('Green Dragon', 80, 12, 2),
+        new DragonEnemy('Green Dragon', 80, 10, 2),
       ], [], []),
     ];
 

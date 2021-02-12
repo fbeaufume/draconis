@@ -167,27 +167,45 @@ export class Heal extends Skill {
   }
 }
 
-// Skills used by enemies
+// Enemies skills
 export const advance = new Advance('', SkillTarget.NONE, 0, 0, 0, 0, '');
 export const wait = new Wait('', SkillTarget.NONE, 0, 0, 0, 0, '');
 export const inhale = new Inhale('', SkillTarget.NONE, 0, 0, 0, 0, '');
 
-// Skills used by players
+// Common characters skills
 export const techDefend = new Defend('Defend', SkillTarget.NONE, -40, 0, 0, 0,
   'Defend against attacks. Generates 40 TP.');
 export const magicDefend = new Defend('Defend', SkillTarget.NONE, 0, 0, 0, 0,
   'Defend against attacks.');
 export const techStrike = new Damage('Strike', SkillTarget.ENEMY, -30, 1, 0, 1,
   'Basic attack, does 10 damage. Generates 30 TP.');
-export const magicStrike = new Damage('Strike', SkillTarget.ENEMY, 0, 1, 0, 1,
-  'Basic attack, does 10 damage.');
-export const smash = new Damage('Smash', SkillTarget.ENEMY, 10, 1, 0, 1.5,
-  'Strong attack, does 15 damage.');
-export const shot = new Damage('Shot', SkillTarget.ENEMY, -30, 2, 0, 1,
-  'Basic ranged attack, does 10 damage. Generates 30 TP.');
 export const heal: Skill = new Heal('Heal', SkillTarget.CHARACTER, 5, 0, 0, 1,
   'Heal a party member for 10 HP.');
-export const spark = new Damage('Spark', SkillTarget.ENEMY, 5, 2, 0, 1,
-  'Magical attack, does 10 damage.');
+
+// Rogue skills
+export const deepStrike = new Damage('Deep Strike', SkillTarget.ENEMY, 10, 1, 0, 1.5,
+  'Strong attack, does 15 damage.');
+
+// Warrior skills
+export const smash = new Damage('Smash', SkillTarget.ENEMY, 10, 1, 0, 1.5,
+  'Strong attack, does 15 damage.');
+
+// Paladin skills
+export const magicStrike = new Damage('Strike', SkillTarget.ENEMY, 0, 1, 0, 1,
+  'Basic attack, does 10 damage.');
+export const holyStrike = new Damage('Holy Strike', SkillTarget.ENEMY, 5, 1, 0, 1.5,
+  'Holy attack, does 15 damage.');
+
+// Hunter skills
+export const shot = new Damage('Shot', SkillTarget.ENEMY, -30, 2, 0, 1,
+  'Basic ranged attack, does 10 damage. Generates 30 TP.');
+export const preciseShot = new Damage('Precise Shot', SkillTarget.ENEMY, 10, 2, 0, 1.5,
+  'Precise ranged attack, does 15 damage.');
+
+// Mage skills
 export const blast = new Damage('Blast', SkillTarget.ENEMY, 5, 2, 0, 1.5,
   'Magical attack, does 15 damage.');
+
+// Priest skills
+export const spark = new Damage('Spark', SkillTarget.ENEMY, 5, 2, 0, 1,
+  'Magical attack, does 10 damage.');

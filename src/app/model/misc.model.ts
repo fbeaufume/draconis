@@ -42,11 +42,11 @@ export const PAUSE_LONG = 1000;
  */
 export class PartyLocation {
 
-    constructor(
-        public region: string,
-        public fight: number
-    ) {
-    }
+  constructor(
+    public region: string,
+    public fight: number
+  ) {
+  }
 }
 
 /**
@@ -54,86 +54,86 @@ export class PartyLocation {
  */
 export abstract class Creature {
 
-    life: number;
+  life: number;
 
-    lifePercent: number;
+  lifePercent: number;
 
-    // Current mana or tech points (depends on the character class) (currently only used by characters)
-    energy: number;
+  // Current mana or tech points (depends on the character class) (currently only used by characters)
+  energy: number;
 
-    // Max mana or tech points (depends on the character class) (currently only used by characters)
-    energyPercent: number;
+  // Max mana or tech points (depends on the character class) (currently only used by characters)
+  energyPercent: number;
 
-    // Bonuses, a.k.a. "buffs"
-    // bonuses: string[] = [];
+  // Bonuses, a.k.a. "buffs"
+  // bonuses: string[] = [];
 
-    // Maluses, a.k.a. "debuffs"
-    // maluses: string[] = [];
+  // Maluses, a.k.a. "debuffs"
+  // maluses: string[] = [];
 
-    protected constructor(
-        public name: string,
-        public lifeMax: number,
-        public energyMax: number,
-        // Generic power of the creature, used to compute damage or heal amounts
-        public power: number,
-        // Creature skills (currently only used by characters)
-        public skills: Skill[]
-    ) {
-        this.life = lifeMax;
-        this.energy = energyMax;
-        this.updateLifePercent();
+  protected constructor(
+    public name: string,
+    public lifeMax: number,
+    public energyMax: number,
+    // Generic power of the creature, used to compute damage or heal amounts
+    public power: number,
+    // Creature skills (currently only used by characters)
+    public skills: Skill[]
+  ) {
+    this.life = lifeMax;
+    this.energy = energyMax;
+    this.updateLifePercent();
+  }
+
+  abstract isCharacter(): boolean;
+
+  abstract isEnemy(): boolean;
+
+  isEndOfRound(): boolean {
+    return this instanceof EndOfRound;
+  }
+
+  damage(amount: number) {
+    this.life -= amount;
+
+    // Enforce min and max values
+    if (this.life < 0) {
+      this.life = 0;
+    }
+    if (this.life > this.lifeMax) {
+      this.life = this.lifeMax;
     }
 
-    abstract isCharacter(): boolean;
+    this.updateLifePercent();
+  }
 
-    abstract isEnemy(): boolean;
+  heal(amount: number) {
+    this.damage(-amount);
+  }
 
-    isEndOfRound(): boolean {
-        return this instanceof EndOfRound;
+  updateLifePercent() {
+    this.lifePercent = 100 * this.life / this.lifeMax;
+  }
+
+  /**
+   * Can be used with a negative amount of energy, e.g. when the skill generates some energy.
+   */
+  spendEnergy(cost: number) {
+    this.energy -= cost;
+
+    // Enforce min and max values
+    if (this.energy < 0) {
+      this.energy = 0;
+    }
+    if (this.energy > this.energyMax) {
+      this.energy = this.energyMax;
     }
 
-    damage(amount: number) {
-        this.life -= amount;
+    this.updateEnergyPercent();
+  }
 
-        // Enforce min and max values
-        if (this.life < 0) {
-            this.life = 0;
-        }
-        if (this.life > this.lifeMax) {
-            this.life = this.lifeMax;
-        }
-
-        this.updateLifePercent();
-    }
-
-    heal(amount: number) {
-        this.damage(-amount);
-    }
-
-    updateLifePercent() {
-        this.lifePercent = 100 * this.life / this.lifeMax;
-    }
-
-    /**
-     * Can be used with a negative amount of energy, e.g. when the skill generates some energy.
-     */
-    spendEnergy(cost: number) {
-        this.energy -= cost;
-
-        // Enforce min and max values
-        if (this.energy < 0) {
-            this.energy = 0;
-        }
-        if (this.energy > this.energyMax) {
-            this.energy = this.energyMax;
-        }
-
-        this.updateEnergyPercent();
-    }
-
-    updateEnergyPercent() {
-        this.energyPercent = 100 * this.energy / this.energyMax;
-    }
+  updateEnergyPercent() {
+    this.energyPercent = 100 * this.energy / this.energyMax;
+  }
 }
 
 /**
@@ -141,31 +141,31 @@ export abstract class Creature {
  */
 export class Character extends Creature {
 
-    constructor(
-        name: string,
-        // Character class, could be an enum
-        public clazz: string,
-        public level: number,
-        lifeMax: number,
-        // True for mana based character class, false for tech based
-        public useMana: boolean,
-        energyMax: number,
-        power: number,
-        skills: Skill[],
-    ) {
-        super(name, lifeMax, energyMax, power, skills);
+  constructor(
+    name: string,
+    // Character class, could be an enum
+    public clazz: string,
+    public level: number,
+    lifeMax: number,
+    // True for mana based character class, false for tech based
+    public useMana: boolean,
+    energyMax: number,
+    power: number,
+    skills: Skill[],
+  ) {
+    super(name, lifeMax, energyMax, power, skills);
 
-        this.energy = energyMax;
-        this.updateEnergyPercent();
-    }
+    this.energy = energyMax;
+    this.updateEnergyPercent();
+  }
 
-    isCharacter(): boolean {
-        return true;
-    }
+  isCharacter(): boolean {
+    return true;
+  }
 
-    isEnemy(): boolean {
-        return false;
-    }
+  isEnemy(): boolean {
+    return false;
+  }
 }
 
 /**
@@ -173,8 +173,8 @@ export class Character extends Creature {
  */
 export class CharacterRow {
 
-    constructor(public characters: Character[]) {
-    }
+  constructor(public characters: Character[]) {
+  }
 }
 
 /**
@@ -182,16 +182,16 @@ export class CharacterRow {
  */
 export class Party {
 
-    rows: CharacterRow[] = [];
+  rows: CharacterRow[] = [];
 
-    constructor(
-        // Front row characters
-        row1Characters: Character[],
-        // Back row characters
-        row2Characters: Character[]) {
-        this.rows.push(new CharacterRow(row1Characters));
-        this.rows.push(new CharacterRow(row2Characters));
-    }
+  constructor(
+    // Front row characters
+    row1Characters: Character[],
+    // Back row characters
+    row2Characters: Character[]) {
+    this.rows.push(new CharacterRow(row1Characters));
+    this.rows.push(new CharacterRow(row2Characters));
+  }
 }
 
 /**
@@ -199,15 +199,15 @@ export class Party {
  */
 export class EndOfRound extends Creature {
 
-    constructor() {
-        super('- End of round -', 1, 1, 0, []);
-    }
+  constructor() {
+    super('- End of round -', 1, 1, 0, []);
+  }
 
-    isCharacter(): boolean {
-        return false;
-    }
+  isCharacter(): boolean {
+    return false;
+  }
 
-    isEnemy(): boolean {
-        return false;
-    }
+  isEnemy(): boolean {
+    return false;
+  }
 }

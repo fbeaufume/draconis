@@ -5,15 +5,15 @@
  * When any numeric value is changed, update log.component.html.
  */
 export enum LogType {
-    EnterZone,
-    StartRound,
-    Damage,
-    Heal,
-    Defend,
-    Advance,
-    EnemyDefeated,
-    PartyVictory,
-    PauseDurationChanged,
+  EnterZone,
+  StartRound,
+  Damage,
+  Heal,
+  Defend,
+  Advance,
+  EnemyDefeated,
+  PartyVictory,
+  PauseDurationChanged,
 }
 
 /**
@@ -21,9 +21,9 @@ export enum LogType {
  */
 export class Log {
 
-    public args: any[];
+  public args: any[];
 
-    constructor(public type: LogType, ...args: any[]) {
-        this.args = args;
-    }
+  constructor(public type: LogType, ...args: any[]) {
+    this.args = args;
+  }
 }

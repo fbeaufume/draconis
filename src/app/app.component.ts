@@ -1,6 +1,6 @@
 import {Component} from '@angular/core';
-import {FightStep} from './model/fight.model';
 import {FightService} from './fight/fight.service';
+import {GameState} from './model/game.model';
 
 @Component({
   selector: 'app-root',
@@ -12,11 +12,11 @@ export class AppComponent {
   constructor(public fightService: FightService) {
   }
 
-  displayStartFightButton(): boolean {
-    return this.fightService.fight.step == FightStep.BEFORE_START;
+  displayStartEncounterButton(): boolean {
+    return this.fightService.game.state == GameState.DUNGEON_START;
   }
 
-  displayResetFightButton(): boolean {
-    return this.fightService.fight.step == FightStep.PARTY_VICTORY;
+  displayStartFightButton(): boolean {
+    return this.fightService.game.state == GameState.FIGHT_START;
   }
 }

@@ -4,46 +4,50 @@
     Entering <span class="text-gray-200">{{ log.args[0] }}</span>.
   </div>
   <div *ngSwitchCase="1">
+    <!-- Start encounter -->
+    A group of enemies appears.
+  </div>
+  <div *ngSwitchCase="2">
     <!-- Start round -->
     Round <span class="text-gray-200">{{ log.args[0] }}</span> started.
   </div>
-  <div *ngSwitchCase="2">
+  <div *ngSwitchCase="3">
     <!-- Advance -->
     <span [ngClass]="getClassForCreature(log.args[0])">{{ $any(log.args[0]).name }}</span> advances.
   </div>
-  <div *ngSwitchCase="3">
+  <div *ngSwitchCase="4">
     <!-- Wait -->
     <span [ngClass]="getClassForCreature(log.args[0])">{{ $any(log.args[0]).name }}</span> waits.
   </div>
-  <div *ngSwitchCase="4">
+  <div *ngSwitchCase="5">
     <!-- Inhale -->
     <span [ngClass]="getClassForCreature(log.args[0])">{{ $any(log.args[0]).name }}</span> takes a deep breath.
   </div>
-  <div *ngSwitchCase="5">
+  <div *ngSwitchCase="6">
     <!-- Defend -->
     <span [ngClass]="getClassForCreature(log.args[0])">{{ $any(log.args[0]).name }}</span> defends.
   </div>
-  <div *ngSwitchCase="6">
+  <div *ngSwitchCase="7">
     <!-- Damage -->
     <span [ngClass]="getClassForCreature(log.args[0])">{{ $any(log.args[0]).name }}</span>
     damages <span [ngClass]="getClassForCreature(log.args[1])">{{ $any(log.args[1]).name }}</span>
     for <span class="text-red-500">{{ log.args[2] }}</span> HP.
   </div>
-  <div *ngSwitchCase="7">
+  <div *ngSwitchCase="8">
     <!-- Heal -->
     <span [ngClass]="getClassForCreature(log.args[0])">{{ $any(log.args[0]).name }}</span>
     heals <span [ngClass]="getClassForCreature(log.args[1])">{{ $any(log.args[1]).name }}</span>
     for <span class="text-green-500">{{ log.args[2] }}</span> HP.
   </div>
-  <div *ngSwitchCase="8">
+  <div *ngSwitchCase="9">
     <!-- Enemy death -->
     <span class="text-yellow-200">{{ log.args[0] }}</span> was defeated.
   </div>
-  <div *ngSwitchCase="9">
+  <div *ngSwitchCase="10">
     <!-- Party victory -->
     The party won!
   </div>
-  <div *ngSwitchCase="10">
+  <div *ngSwitchCase="11">
     <!-- Pause duration changed -->
     Using pause of <span class="text-gray-200">{{ log.args[0] }}</span> msec.
   </div>

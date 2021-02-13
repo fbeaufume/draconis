@@ -1,8 +1,7 @@
 import {AfterViewInit, Component, ElementRef, HostListener, QueryList, ViewChild, ViewChildren} from '@angular/core';
-import {Character} from '../model/misc.model';
+import {Fight, Game, GameState} from '../model/game.model';
+import {Character, Enemy} from '../model/creature.model';
 import {Skill} from '../model/skill.model';
-import {Enemy} from '../model/enemy.model';
-import {Fight, FightStep} from '../model/fight.model';
 import {FightService} from './fight.service';
 
 @Component({
@@ -30,6 +29,10 @@ export class FightComponent implements AfterViewInit {
     return this.fightService.fight;
   }
 
+  get game(): Game {
+    return this.fightService.game;
+  }
+
   private scrollLogFrameToBottom(): void {
     this.logFrameElement.scroll({
       top: this.logFrameElement.scrollHeight,
@@ -39,7 +42,7 @@ export class FightComponent implements AfterViewInit {
   }
 
   getCharacterBorderClass(character: Character): string {
-    if (this.fight.step == FightStep.SELECT_CHARACTER) {
+    if (this.game.state == GameState.SELECT_CHARACTER) {
       // Choosing a character
 
       if (character.name == this.fight.hoveredCharacter?.name || this.fight.isActive(character)) {
@@ -57,7 +60,7 @@ export class FightComponent implements AfterViewInit {
   }
 
   getSkillBorderClass(skill: Skill): string {
-    if (this.fightService.fight.step == FightStep.SELECT_SKILL) {
+    if (this.game.state == GameState.SELECT_SKILL) {
       // Choosing a skill
 
       if (skill.name == this.fight.hoveredSkill?.name) {
@@ -86,7 +89,7 @@ export class FightComponent implements AfterViewInit {
   }
 
   getEnemyBorderClass(enemy: Enemy): string {
-    if (this.fight.step == FightStep.SELECT_ENEMY) {
+    if (this.game.state == GameState.SELECT_ENEMY) {
       // Choosing an enemy
 
       if (enemy.name == this.fight.hoveredEnemy?.name) {
@@ -111,10 +114,10 @@ export class FightComponent implements AfterViewInit {
   }
 
   /**
-   * Use a pointer cursor when in a given fight step, or else the default cursor.
+   * Use a pointer cursor when in a given game state, or else the default cursor.
    */
-  usePointerForStep(fightStep: FightStep) {
-    return this.fight.step == fightStep ? 'cursor-pointer' : 'cursor-default';
+  usePointerForState(state: GameState) {
+    return this.game.state == state ? 'cursor-pointer' : 'cursor-default';
   }
 
   @HostListener('window:keydown', ['$event'])

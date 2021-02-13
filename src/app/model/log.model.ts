@@ -6,6 +6,7 @@
  */
 export enum LogType {
   EnterZone,
+  StartEncounter,
   StartRound,
   Advance,
   Wait,

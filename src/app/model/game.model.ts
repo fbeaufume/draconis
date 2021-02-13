@@ -1,6 +1,6 @@
-// Fight related classes
+// Classes for the whole game and fights
 
-import {Character, Creature, EndOfRound, OPPOSITION_ROWS, Party, PARTY_ROWS, PARTY_SIZE} from './misc.model';
+import {Character, Creature, DragonEnemy, EndOfRound, Enemy, MeleeEnemy, Opposition, Party} from './creature.model';
 import {
   blast,
   deepStrike,
@@ -16,30 +16,41 @@ import {
   techDefend,
   techStrike
 } from './skill.model';
-import {DragonEnemy, Enemy, MeleeEnemy, Opposition} from './enemy.model';
 
 /**
- * The current step in the fight workflow.
- * Used to enable of disable the selection of a target skill, enemy or character.
- * When some numeric values are changed, update accordingly the call to 'usePointerForStep' in fight.component.html.
+ * Number of character rows.
  */
-export enum FightStep {
-  // Before the fight starts (displays the "Start fight" button)
-  BEFORE_START,
-  // Between creature turns
-  END_OF_TURN,
-  // Enemy turn
-  ENEMY_TURN,
-  // Character turn, the player must select a skill
-  SELECT_SKILL,
-  // Character turn, the player must select an enemy (for example as the target of an attack or debuff)
-  SELECT_ENEMY,
-  // Character turn, the player must select a character (for example as the target of a heal or buff)
-  SELECT_CHARACTER,
-  // Executing the player skill
-  EXECUTING_SKILL,
-  PARTY_VICTORY,
-}
+export const PARTY_ROWS = 2;
+
+/**
+ * Number of characters per row.
+ */
+export const PARTY_ROW_SIZE = 3;
+
+/**
+ * Number of characters in the party.
+ */
+export const PARTY_SIZE = PARTY_ROWS * PARTY_ROW_SIZE;
+
+/**
+ * Number of enemy rows.
+ */
+export const OPPOSITION_ROWS = 3;
+
+/**
+ * Maximum number of enemies per row.
+ */
+export const OPPOSITION_ROW_SIZE = 4;
+
+/**
+ * A pause duration preset, in msec.
+ */
+export const PAUSE_SHORT = 100;
+
+/**
+ * A pause duration preset, in msec.
+ */
+export const PAUSE_LONG = 1000;
 
 /**
  * The action order of characters and enemies during a turn.
@@ -137,13 +148,7 @@ export class TurnOrder {
  */
 export class Fight {
 
-  step: FightStep = FightStep.BEFORE_START;
-
-  round: number = 0;
-
-  party: Party = new Party([], []);
-
-  opposition: Opposition = new Opposition([], [], []);
+  round: number = 1;
 
   turnOrder: TurnOrder;
 
@@ -168,56 +173,10 @@ export class Fight {
   // The creatures targeted by the chosen skill of the active character or enemy
   targetCreatures: Creature[] = [];
 
-  initialize() {
-    this.step = FightStep.BEFORE_START;
-    this.round = 1;
-
-    this.party = new Party([
-        new Character('Cyl', 'Rogue', 1, 20, false, 50, 10, [
-          techDefend, techStrike, deepStrike
-        ]),
-        new Character('Melkan', 'Warrior', 1, 20, false, 50, 10, [
-          techDefend, techStrike, smash
-        ]),
-        new Character('Arwin', 'Paladin', 1, 20, true, 50, 10, [
-          magicDefend, magicStrike, holyStrike, heal
-        ])],
-      [
-        new Character('Faren', 'Archer', 1, 20, false, 50, 10, [
-          techDefend, shot, preciseShot
-        ]),
-        new Character('Harika', 'Mage', 1, 20, true, 50, 10, [
-          magicDefend, blast
-        ]),
-        new Character('Nairo', 'Priest', 1, 20, true, 50, 10, [
-          magicDefend, spark, heal
-        ])
-      ]);
-
-    // Sample oppositions
-    const oppositions: Opposition[] = [
-      new Opposition([
-        new MeleeEnemy('Bear A', 38, 8),
-        new MeleeEnemy('Bear B', 38, 8),
-      ], [], []),
-      new Opposition([
-        new MeleeEnemy('Wolf A', 24, 6),
-        new MeleeEnemy('Wolf B', 24, 6),
-      ], [
-        new MeleeEnemy('Wolf C', 24, 6),
-        new MeleeEnemy('Wolf D', 24, 6),
-        new MeleeEnemy('Wolf E', 24, 6),
-      ], [
-        new MeleeEnemy('Wolf F', 24, 6),
-      ]),
-      new Opposition([
-        new DragonEnemy('Green Dragon', 80, 10, 2),
-      ], [], []),
-    ];
-
-    this.opposition = oppositions[2];
-    this.updateEnemies();
-
+  constructor(
+    party: Party,
+    public opposition: Opposition,
+  ) {
     this.activeCreature = null;
     this.hoveredSkill = null;
     this.focusedSkill = null;
@@ -225,7 +184,9 @@ export class Fight {
     this.hoveredEnemy = null;
     this.targetCreatures = [];
 
-    this.turnOrder = new TurnOrder(this.party, this.opposition);
+    this.turnOrder = new TurnOrder(party, this.opposition);
+
+    this.updateEnemies();
   }
 
   /**
@@ -258,5 +219,113 @@ export class Fight {
       }
     }
     return false;
+  }
+}
+
+/**
+ * A dungeon is where the fights happen. It is a succession of encounters.
+ */
+export class Dungeon {
+
+  constructor(
+    public name: string,
+    public oppositions: Opposition[]
+  ) {
+  }
+}
+
+/**
+ * The current state in the game workflow.
+ * Used to enable or disable action buttons, the selection of a target skill, enemy or character, etc
+ * When some numeric values are changed, update accordingly the calls to 'usePointerForState' in fight.component.html.
+ */
+export enum GameState {
+  // Entered a dungeon, display a welcome message, and a "Continue" button
+  DUNGEON_START,
+  // Before the fight starts, display a enemy encounter message, the opposition, and the "Start fight" button
+  FIGHT_START,
+  // Between creature turns
+  END_OF_TURN,
+  // Enemy turn
+  ENEMY_TURN,
+  // Character turn, the player must select a skill
+  SELECT_SKILL,
+  // Character turn, the player must select an enemy (for example as the target of an attack or debuff)
+  SELECT_ENEMY,
+  // Character turn, the player must select a character (for example as the target of a heal or buff)
+  SELECT_CHARACTER,
+  // Executing the player skill
+  EXECUTING_SKILL,
+  FIGHT_VICTORY,
+}
+
+/**
+ * The party location in the "world".
+ */
+export class Game {
+
+  state: GameState = GameState.DUNGEON_START;
+
+  region: string = '';
+
+  // Zero when not fighting, otherwise one-based identifier of the fight
+  fightIndex: number = 0;
+
+  party: Party = new Party([
+      new Character('Cyl', 'Rogue', 1, 20, false, 50, 10, [
+        techDefend, techStrike, deepStrike
+      ]),
+      new Character('Melkan', 'Warrior', 1, 20, false, 50, 10, [
+        techDefend, techStrike, smash
+      ]),
+      new Character('Arwin', 'Paladin', 1, 20, true, 50, 10, [
+        magicDefend, magicStrike, holyStrike, heal
+      ])],
+    [
+      new Character('Faren', 'Archer', 1, 20, false, 50, 10, [
+        techDefend, shot, preciseShot
+      ]),
+      new Character('Harika', 'Mage', 1, 20, true, 50, 10, [
+        magicDefend, blast
+      ]),
+      new Character('Nairo', 'Priest', 1, 20, true, 50, 10, [
+        magicDefend, spark, heal
+      ])
+    ]);
+
+  dungeon: Dungeon = new Dungeon('Fang Forest', [
+    new Opposition([
+      new MeleeEnemy('Bear A', 38, 8),
+      new MeleeEnemy('Bear B', 38, 8),
+    ], [], []),
+    new Opposition([
+      new MeleeEnemy('Wolf A', 24, 6),
+      new MeleeEnemy('Wolf B', 24, 6),
+    ], [
+      new MeleeEnemy('Wolf C', 24, 6),
+      new MeleeEnemy('Wolf D', 24, 6),
+      new MeleeEnemy('Wolf E', 24, 6),
+    ], [
+      new MeleeEnemy('Wolf F', 24, 6),
+    ]),
+    new Opposition([
+      new DragonEnemy('Green Dragon', 80, 10, 2),
+    ], [], []),
+  ]);
+
+  fight: Fight = new Fight(this.party, new Opposition([], [], []));
+
+  constructor() {
+    this.region = this.dungeon.name;
+  }
+
+  startNextEncounter() {
+    this.state = GameState.FIGHT_START;
+
+    this.fightIndex++;
+
+    // TODO FBE proceed to the next opposition
+    // TODO FBE handle the end of the dungeon
+    this.fight = new Fight(this.party, this.dungeon.oppositions[this.fightIndex - 1]);
   }
 }

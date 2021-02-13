@@ -1,9 +1,8 @@
 // Skill related classes
 
-import {Creature} from './misc.model';
-import {Fight} from './fight.model';
+import {Fight} from './game.model';
+import {Creature, Enemy} from './creature.model';
 import {Log, LogType} from './log.model';
-import {Enemy} from './enemy.model';
 
 /**
  * The type of target of a skill

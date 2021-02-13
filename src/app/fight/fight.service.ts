@@ -1,8 +1,7 @@
 import {Injectable} from '@angular/core';
-import {Character, PARTY_ROW_SIZE, PARTY_SIZE, PartyLocation, PAUSE_LONG, PAUSE_SHORT} from '../model/misc.model';
+import {Fight, Game, GameState, PARTY_ROW_SIZE, PARTY_SIZE, PAUSE_LONG, PAUSE_SHORT} from '../model/game.model';
+import {Character, Enemy, EnemyAction, Party} from '../model/creature.model';
 import {Skill, SkillTarget} from '../model/skill.model';
-import {Enemy, EnemyAction} from '../model/enemy.model';
-import {Fight, FightStep} from '../model/fight.model';
 import {Log, LogType} from '../model/log.model';
 
 @Injectable({
@@ -13,24 +12,45 @@ export class FightService {
   // Pause in msec in the UI between actions
   pauseDuration: number = PAUSE_LONG;
 
-  partyLocation: PartyLocation = new PartyLocation('Fang Forest', 1);
-
-  fight: Fight = new Fight();
+  game: Game = new Game();
 
   logs: Log[] = [];
 
   constructor() {
-    this.fight.initialize();
-
     this.logs = [];
-    this.logs.push(new Log(LogType.EnterZone, this.partyLocation.region));
+    this.logs.push(new Log(LogType.EnterZone, this.game.region));
+  }
+
+  get state(): GameState {
+    return this.game.state;
+  }
+
+  set state(state: GameState) {
+    this.game.state = state;
+  }
+
+  get party(): Party {
+    return this.game.party;
+  }
+
+  get fight(): Fight {
+    return this.game.fight;
   }
 
   /**
-   * Start the fight.
+   * Start the encounter, i.e. display the opposition.
+   */
+  startEncounter() {
+    this.game.startNextEncounter();
+
+    this.logs.push(new Log(LogType.StartEncounter, this.fight.round));
+  }
+
+  /**
+   * Start the fight, i.e. execute the first turn.
    */
   startFight() {
-    this.fight.step = FightStep.END_OF_TURN;
+    this.game.state = GameState.END_OF_TURN;
 
     this.logs.push(new Log(LogType.StartRound, this.fight.round));
 
@@ -45,9 +65,9 @@ export class FightService {
     this.fight.activeCreature = creature;
 
     if (creature.isCharacter()) {
-      this.fight.step = FightStep.SELECT_SKILL;
+      this.state = GameState.SELECT_SKILL;
     } else if (creature.isEnemy()) {
-      this.fight.step = FightStep.ENEMY_TURN;
+      this.state = GameState.ENEMY_TURN;
 
       this.pause(() => {
         this.processEnemyTurnStep1(creature as Enemy);
@@ -80,7 +100,7 @@ export class FightService {
    */
   selectSkill(skill: Skill) {
     // The player cannot change his mind and select a different skill
-    if (this.fight.step != FightStep.SELECT_SKILL) {
+    if (this.state != GameState.SELECT_SKILL) {
       return;
     }
 
@@ -96,15 +116,15 @@ export class FightService {
       case SkillTarget.NONE:
         skill.execute(this.fight, this.logs);
 
-        this.fight.step = FightStep.EXECUTING_SKILL;
+        this.state = GameState.EXECUTING_SKILL;
 
         this.processNextTurn();
         break;
       case SkillTarget.ENEMY:
-        this.fight.step = FightStep.SELECT_ENEMY;
+        this.state = GameState.SELECT_ENEMY;
         break;
       case SkillTarget.CHARACTER:
-        this.fight.step = FightStep.SELECT_CHARACTER;
+        this.state = GameState.SELECT_CHARACTER;
         break;
     }
   }
@@ -135,7 +155,7 @@ export class FightService {
 
     this.fight.selectedSkill.execute(this.fight, this.logs);
 
-    this.fight.step = FightStep.EXECUTING_SKILL;
+    this.state = GameState.EXECUTING_SKILL;
 
     // If there are dead enemies, remove them after a pause
     if (this.fight.opposition.hasDeadEnemies()) {
@@ -155,7 +175,7 @@ export class FightService {
         if (this.fight.opposition.isWiped()) {
           this.pause(() => {
             this.logs.push(new Log(LogType.PartyVictory));
-            this.fight.step = FightStep.PARTY_VICTORY;
+            this.state = GameState.FIGHT_START;
           });
         } else {
           this.processNextTurn();
@@ -193,7 +213,7 @@ export class FightService {
 
     this.fight.selectedSkill.execute(this.fight, this.logs);
 
-    this.fight.step = FightStep.EXECUTING_SKILL;
+    this.state = GameState.EXECUTING_SKILL;
 
     this.processNextTurn();
   }
@@ -202,20 +222,20 @@ export class FightService {
    * Select a skill or enemy or character from a zero based index.
    */
   selectFromKey(index: number) {
-    switch (this.fight.step) {
-      case FightStep.SELECT_SKILL:
+    switch (this.state) {
+      case GameState.SELECT_SKILL:
         if (this.fight.activeCreature != null && this.fight.activeCreature.skills.length > index) {
           this.selectSkill(this.fight.activeCreature.skills[index]);
         }
         break;
-      case FightStep.SELECT_CHARACTER:
+      case GameState.SELECT_CHARACTER:
         if (index < PARTY_ROW_SIZE) {
-          this.selectCharacter(this.fight.party.rows[1].characters[index]);
+          this.selectCharacter(this.party.rows[1].characters[index]);
         } else if (index < PARTY_SIZE) {
-          this.selectCharacter(this.fight.party.rows[0].characters[index - PARTY_ROW_SIZE]);
+          this.selectCharacter(this.party.rows[0].characters[index - PARTY_ROW_SIZE]);
         }
         break;
-      case FightStep.SELECT_ENEMY:
+      case GameState.SELECT_ENEMY:
         this.fight.opposition.rows.forEach(row => {
           if (index < row.enemies.length) {
             this.selectEnemy(row.enemies[index]);
@@ -232,7 +252,7 @@ export class FightService {
    */
   processEnemyTurnStep1(enemy: Enemy) {
     // Execute the enemy strategy
-    const action = enemy.chooseAction(this.fight);
+    const action = enemy.chooseAction(this.game);
 
     if (action.skill.target == SkillTarget.NONE) {
       // Actions without target are executed immediately

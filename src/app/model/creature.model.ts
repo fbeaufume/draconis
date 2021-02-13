@@ -1,8 +1,170 @@
-// Enemy related classes
+// Creature related classes
 
-import {Character, Creature, OPPOSITION_ROW_SIZE} from './misc.model';
-import {Fight} from './fight.model';
+import {Game, OPPOSITION_ROW_SIZE} from './game.model';
 import {advance, inhale, Skill, techStrike, wait} from './skill.model';
+
+/**
+ * Base class for enemies and characters.
+ */
+export abstract class Creature {
+
+  life: number;
+
+  lifePercent: number;
+
+  // Current mana or tech points (depends on the character class) (currently only used by characters)
+  energy: number;
+
+  // Max mana or tech points (depends on the character class) (currently only used by characters)
+  energyPercent: number;
+
+  // Bonuses, a.k.a. "buffs"
+  // bonuses: string[] = [];
+
+  // Maluses, a.k.a. "debuffs"
+  // maluses: string[] = [];
+
+  protected constructor(
+    public name: string,
+    public lifeMax: number,
+    public energyMax: number,
+    // Generic power of the creature, used to compute damage or heal amounts
+    public power: number,
+    // Creature skills (currently only used by characters)
+    public skills: Skill[]
+  ) {
+    this.life = lifeMax;
+    this.energy = energyMax;
+    this.updateLifePercent();
+  }
+
+  abstract isCharacter(): boolean;
+
+  abstract isEnemy(): boolean;
+
+  isEndOfRound(): boolean {
+    return this instanceof EndOfRound;
+  }
+
+  damage(amount: number) {
+    this.life -= amount;
+
+    // Enforce min and max values
+    if (this.life < 0) {
+      this.life = 0;
+    }
+    if (this.life > this.lifeMax) {
+      this.life = this.lifeMax;
+    }
+
+    this.updateLifePercent();
+  }
+
+  heal(amount: number) {
+    this.damage(-amount);
+  }
+
+  updateLifePercent() {
+    this.lifePercent = 100 * this.life / this.lifeMax;
+  }
+
+  /**
+   * Can be used with a negative amount of energy, e.g. when the skill generates some energy.
+   */
+  spendEnergy(cost: number) {
+    this.energy -= cost;
+
+    // Enforce min and max values
+    if (this.energy < 0) {
+      this.energy = 0;
+    }
+    if (this.energy > this.energyMax) {
+      this.energy = this.energyMax;
+    }
+
+    this.updateEnergyPercent();
+  }
+
+  updateEnergyPercent() {
+    this.energyPercent = 100 * this.energy / this.energyMax;
+  }
+}
+
+/**
+ * A party character.
+ */
+export class Character extends Creature {
+
+  constructor(
+    name: string,
+    // Character class, could be an enum
+    public clazz: string,
+    public level: number,
+    lifeMax: number,
+    // True for mana based character class, false for tech based
+    public useMana: boolean,
+    energyMax: number,
+    power: number,
+    skills: Skill[],
+  ) {
+    super(name, lifeMax, energyMax, power, skills);
+
+    this.energy = energyMax;
+    this.updateEnergyPercent();
+  }
+
+  isCharacter(): boolean {
+    return true;
+  }
+
+  isEnemy(): boolean {
+    return false;
+  }
+}
+
+/**
+ * A row of characters.
+ */
+export class CharacterRow {
+
+  constructor(public characters: Character[]) {
+  }
+}
+
+/**
+ * The player party.
+ */
+export class Party {
+
+  rows: CharacterRow[] = [];
+
+  constructor(
+    // Front row characters
+    row1Characters: Character[],
+    // Back row characters
+    row2Characters: Character[]) {
+    this.rows.push(new CharacterRow(row1Characters));
+    this.rows.push(new CharacterRow(row2Characters));
+  }
+}
+
+/**
+ * A special creature only used to mark the end of a round in thr turn order panel.
+ */
+export class EndOfRound extends Creature {
+
+  constructor() {
+    super('- End of round -', 1, 1, 0, []);
+  }
+
+  isCharacter(): boolean {
+    return false;
+  }
+
+  isEnemy(): boolean {
+    return false;
+  }
+}
 
 /**
  * An enemy actions.
@@ -47,21 +209,21 @@ export abstract class Enemy extends Creature {
   /**
    * Called when it that creature's turn, this method decides what the creature does.
    */
-  abstract chooseAction(fight: Fight): EnemyAction;
+  abstract chooseAction(game: Game): EnemyAction;
 
   /**
    * Target one random character from the first row.
    */
-  targetOneFrontRowCharacter(fight: Fight): Character[] {
-    return [fight.party.rows[0].characters[Math.floor(Math.random() * 3)]];
+  targetOneFrontRowCharacter(game: Game): Character[] {
+    return [game.party.rows[0].characters[Math.floor(Math.random() * 3)]];
   }
 
   /**
    * Target all party characters.
    */
-  targetAllCharacters(fight: Fight): Character[] {
+  targetAllCharacters(game: Game): Character[] {
     const characters: Character[] = [];
-    fight.party.rows.forEach(row => characters.push(...row.characters));
+    game.party.rows.forEach(row => characters.push(...row.characters));
     return characters;
   }
 }
@@ -71,12 +233,12 @@ export abstract class Enemy extends Creature {
  */
 export class MeleeEnemy extends Enemy {
 
-  chooseAction(fight: Fight): EnemyAction {
+  chooseAction(game: Game): EnemyAction {
     if (this.distance > 1) {
       // Not in the front row, so try to advance
 
-      const currentRow = fight.opposition.rows[this.distance - 1];
-      const targetRow = fight.opposition.rows[this.distance - 2];
+      const currentRow = game.fight.opposition.rows[this.distance - 1];
+      const targetRow = game.fight.opposition.rows[this.distance - 2];
       if (targetRow.isNotFull()) {
         // The target row has some room, so advance
 
@@ -101,7 +263,7 @@ export class MeleeEnemy extends Enemy {
     } else {
       // Hit a front row character
 
-      return new EnemyAction(techStrike, this.targetOneFrontRowCharacter(fight));
+      return new EnemyAction(techStrike, this.targetOneFrontRowCharacter(game));
     }
   }
 }
@@ -113,19 +275,19 @@ export class DragonEnemy extends Enemy {
 
   step: number = -1;
 
-  chooseAction(fight: Fight): EnemyAction {
+  chooseAction(game: Game): EnemyAction {
     this.step++;
     switch (this.step % 4) {
       case 0:
       case 1:
         // Claw attack on a character
-        return new EnemyAction(techStrike, this.targetOneFrontRowCharacter(fight));
+        return new EnemyAction(techStrike, this.targetOneFrontRowCharacter(game));
       case 2:
         // Prepare the AOE
         return new EnemyAction(inhale, []);
       default:
         // AOE on all characters
-        return new EnemyAction(techStrike, this.targetAllCharacters(fight));
+        return new EnemyAction(techStrike, this.targetAllCharacters(game));
     }
   }
 }

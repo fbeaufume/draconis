@@ -13,10 +13,14 @@ export class AppComponent {
   }
 
   displayStartEncounterButton(): boolean {
-    return this.fightService.game.state == GameState.DUNGEON_START;
+    return this.fightService.game.state == GameState.START_NEXT_ENCOUNTER;
   }
 
   displayStartFightButton(): boolean {
-    return this.fightService.game.state == GameState.FIGHT_START;
+    return this.fightService.game.state == GameState.START_FIGHT;
+  }
+
+  displayRestartButton(): boolean {
+    return this.fightService.game.state == GameState.DUNGEON_END;
   }
 }

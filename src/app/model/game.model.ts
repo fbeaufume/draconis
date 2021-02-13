@@ -62,6 +62,12 @@ export class TurnOrder {
   constructor(
     party: Party,
     opposition: Opposition) {
+    if (opposition.countAliveCreatures() <= 0) {
+      // At the beginning of a dungeon, there is no opposition,
+      // so we do not display any turn order
+      return;
+    }
+
     this.initialize(party, opposition);
 
     // Add a special creature to mark the end of round
@@ -234,29 +240,59 @@ export class Dungeon {
   }
 }
 
+const devDungeon: Dungeon = new Dungeon('Dev Dungeon', [
+  new Opposition([
+    new MeleeEnemy('Enemy 1', 10, 6),
+  ], [], []),
+  new Opposition([
+    new MeleeEnemy('Enemy 2', 10, 6),
+  ], [], []),
+]);
+
+const fangForestDungeon: Dungeon = new Dungeon('Fang Forest', [
+  new Opposition([
+    new MeleeEnemy('Bear A', 38, 8),
+    new MeleeEnemy('Bear B', 38, 8),
+  ], [], []),
+  new Opposition([
+    new MeleeEnemy('Wolf A', 24, 6),
+    new MeleeEnemy('Wolf B', 24, 6),
+  ], [
+    new MeleeEnemy('Wolf C', 24, 6),
+    new MeleeEnemy('Wolf D', 24, 6),
+    new MeleeEnemy('Wolf E', 24, 6),
+  ], [
+    new MeleeEnemy('Wolf F', 24, 6),
+  ]),
+  new Opposition([
+    new DragonEnemy('Green Dragon', 80, 10, 2),
+  ], [], []),
+]);
+
 /**
  * The current state in the game workflow.
  * Used to enable or disable action buttons, the selection of a target skill, enemy or character, etc
  * When some numeric values are changed, update accordingly the calls to 'usePointerForState' in fight.component.html.
  */
 export enum GameState {
-  // Entered a dungeon, display a welcome message, and a "Continue" button
-  DUNGEON_START,
-  // Before the fight starts, display a enemy encounter message, the opposition, and the "Start fight" button
-  FIGHT_START,
+  // Waiting for the player to start the next encounter: display no opposition but a "Continue" button
+  START_NEXT_ENCOUNTER,
+  // Waiting for the player to start the fight
+  START_FIGHT,
   // Between creature turns
   END_OF_TURN,
   // Enemy turn
   ENEMY_TURN,
   // Character turn, the player must select a skill
   SELECT_SKILL,
-  // Character turn, the player must select an enemy (for example as the target of an attack or debuff)
+  // Character turn, the player must select an enemy
   SELECT_ENEMY,
-  // Character turn, the player must select a character (for example as the target of a heal or buff)
+  // Character turn, the player must select a character
   SELECT_CHARACTER,
   // Executing the player skill
   EXECUTING_SKILL,
-  FIGHT_VICTORY,
+  // Cleared the dungeon
+  DUNGEON_END,
 }
 
 /**
@@ -264,12 +300,12 @@ export enum GameState {
  */
 export class Game {
 
-  state: GameState = GameState.DUNGEON_START;
+  state: GameState = GameState.START_NEXT_ENCOUNTER;
 
   region: string = '';
 
-  // Zero when not fighting, otherwise one-based identifier of the fight
-  fightIndex: number = 0;
+  // Zero when not fighting, otherwise one-based identifier of the opposition in the dungeon
+  oppositionId: number = 0;
 
   party: Party = new Party([
       new Character('Cyl', 'Rogue', 1, 20, false, 50, 10, [
@@ -293,25 +329,8 @@ export class Game {
       ])
     ]);
 
-  dungeon: Dungeon = new Dungeon('Fang Forest', [
-    new Opposition([
-      new MeleeEnemy('Bear A', 38, 8),
-      new MeleeEnemy('Bear B', 38, 8),
-    ], [], []),
-    new Opposition([
-      new MeleeEnemy('Wolf A', 24, 6),
-      new MeleeEnemy('Wolf B', 24, 6),
-    ], [
-      new MeleeEnemy('Wolf C', 24, 6),
-      new MeleeEnemy('Wolf D', 24, 6),
-      new MeleeEnemy('Wolf E', 24, 6),
-    ], [
-      new MeleeEnemy('Wolf F', 24, 6),
-    ]),
-    new Opposition([
-      new DragonEnemy('Green Dragon', 80, 10, 2),
-    ], [], []),
-  ]);
+  dungeon: Dungeon = devDungeon;
+  // dungeon: Dungeon = fangForestDungeon;
 
   fight: Fight = new Fight(this.party, new Opposition([], [], []));
 
@@ -319,13 +338,15 @@ export class Game {
     this.region = this.dungeon.name;
   }
 
+  hasNextEncounter(): boolean {
+    return this.oppositionId < this.dungeon.oppositions.length;
+  }
+
   startNextEncounter() {
-    this.state = GameState.FIGHT_START;
+    this.state = GameState.START_FIGHT;
 
-    this.fightIndex++;
+    this.oppositionId++;
 
-    // TODO FBE proceed to the next opposition
-    // TODO FBE handle the end of the dungeon
-    this.fight = new Fight(this.party, this.dungeon.oppositions[this.fightIndex - 1]);
+    this.fight = new Fight(this.party, this.dungeon.oppositions[this.oppositionId - 1]);
   }
 }

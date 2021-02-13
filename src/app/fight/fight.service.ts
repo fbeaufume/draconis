@@ -12,13 +12,12 @@ export class FightService {
   // Pause in msec in the UI between actions
   pauseDuration: number = PAUSE_LONG;
 
-  game: Game = new Game();
+  game: Game;
 
   logs: Log[] = [];
 
   constructor() {
-    this.logs = [];
-    this.logs.push(new Log(LogType.EnterZone, this.game.region));
+    this.restart();
   }
 
   get state(): GameState {
@@ -43,7 +42,7 @@ export class FightService {
   startEncounter() {
     this.game.startNextEncounter();
 
-    this.logs.push(new Log(LogType.StartEncounter, this.fight.round));
+    this.logs.push(new Log(LogType.OppositionAppear, this.fight.round));
   }
 
   /**
@@ -55,6 +54,16 @@ export class FightService {
     this.logs.push(new Log(LogType.StartRound, this.fight.round));
 
     this.processTurn();
+  }
+
+  /**
+   * Restart the dungeon.
+   */
+  restart() {
+    this.game = new Game();
+
+    this.logs = [];
+    this.logs.push(new Log(LogType.EnterZone, this.game.region));
   }
 
   /**
@@ -175,7 +184,14 @@ export class FightService {
         if (this.fight.opposition.isWiped()) {
           this.pause(() => {
             this.logs.push(new Log(LogType.PartyVictory));
-            this.state = GameState.FIGHT_START;
+
+            if (this.game.hasNextEncounter()) {
+              // Moving on to the next encounter
+              this.state = GameState.START_NEXT_ENCOUNTER;
+            } else {
+              // The dungeon is cleared
+              this.state = GameState.DUNGEON_END;
+            }
           });
         } else {
           this.processNextTurn();

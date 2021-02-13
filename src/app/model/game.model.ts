@@ -229,7 +229,7 @@ export class Fight {
 }
 
 /**
- * A dungeon is where the fights happen. It is a succession of encounters.
+ * Dungeon base class. A dungeon is where the fights happen. It is a succession of encounters.
  */
 export class Dungeon {
 
@@ -240,34 +240,50 @@ export class Dungeon {
   }
 }
 
-const devDungeon: Dungeon = new Dungeon('Dev Dungeon', [
-  new Opposition([
-    new MeleeEnemy('Enemy 1', 10, 6),
-  ], [], []),
-  new Opposition([
-    new MeleeEnemy('Enemy 2', 10, 6),
-  ], [], []),
-]);
+/**
+ * Basic dungeon used during application development.
+ */
+class DevDungeon extends Dungeon {
 
-const fangForestDungeon: Dungeon = new Dungeon('Fang Forest', [
-  new Opposition([
-    new MeleeEnemy('Bear A', 38, 8),
-    new MeleeEnemy('Bear B', 38, 8),
-  ], [], []),
-  new Opposition([
-    new MeleeEnemy('Wolf A', 24, 6),
-    new MeleeEnemy('Wolf B', 24, 6),
-  ], [
-    new MeleeEnemy('Wolf C', 24, 6),
-    new MeleeEnemy('Wolf D', 24, 6),
-    new MeleeEnemy('Wolf E', 24, 6),
-  ], [
-    new MeleeEnemy('Wolf F', 24, 6),
-  ]),
-  new Opposition([
-    new DragonEnemy('Green Dragon', 80, 10, 2),
-  ], [], []),
-]);
+  constructor() {
+    super('Dev Dungeon', [
+      new Opposition([
+        new MeleeEnemy('Enemy 1', 10, 6),
+      ], [], []),
+      new Opposition([
+        new MeleeEnemy('Enemy 2', 10, 6),
+      ], [], []),
+    ]);
+  }
+}
+
+/**
+ * A simple forest themed dungeon.
+ */
+class FangForestDungeon extends Dungeon {
+
+  constructor() {
+    super('Fang Forest', [
+      new Opposition([
+        new MeleeEnemy('Bear A', 38, 8),
+        new MeleeEnemy('Bear B', 38, 8),
+      ], [], []),
+      new Opposition([
+        new MeleeEnemy('Wolf A', 24, 6),
+        new MeleeEnemy('Wolf B', 24, 6),
+      ], [
+        new MeleeEnemy('Wolf C', 24, 6),
+        new MeleeEnemy('Wolf D', 24, 6),
+        new MeleeEnemy('Wolf E', 24, 6),
+      ], [
+        new MeleeEnemy('Wolf F', 24, 6),
+      ]),
+      new Opposition([
+        new DragonEnemy('Green Dragon', 80, 10, 2),
+      ], [], []),
+    ]);
+  }
+}
 
 /**
  * The current state in the game workflow.
@@ -329,8 +345,8 @@ export class Game {
       ])
     ]);
 
-  dungeon: Dungeon = devDungeon;
-  // dungeon: Dungeon = fangForestDungeon;
+  dungeon: Dungeon = new DevDungeon();
+  // dungeon: Dungeon = new FangForestDungeon();
 
   fight: Fight = new Fight(this.party, new Opposition([], [], []));
 

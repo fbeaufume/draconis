@@ -266,13 +266,14 @@ export class FightService {
         }
         break;
       case GameState.SELECT_ENEMY:
-        this.fight.opposition.rows.forEach(row => {
+        for (let i = 0; i < this.fight.opposition.rows.length; i++) {
+          const row = this.fight.opposition.rows[i];
           if (index < row.enemies.length) {
             this.selectEnemy(row.enemies[index]);
             return;
           }
           index -= row.enemies.length;
-        });
+        }
         break;
     }
   }

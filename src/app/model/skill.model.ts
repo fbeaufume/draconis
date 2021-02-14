@@ -170,6 +170,7 @@ export class Heal extends Skill {
 export const advance = new Advance('', SkillTarget.NONE, 0, 0, 0, 0, '');
 export const wait = new Wait('', SkillTarget.NONE, 0, 0, 0, 0, '');
 export const inhale = new Inhale('', SkillTarget.NONE, 0, 0, 0, 0, '');
+export const strikeSmall = new Damage('', SkillTarget.ENEMY, 0, 0, 0, 0.7, '');
 
 // Common characters skills
 export const techDefend = new Defend('Defend', SkillTarget.NONE, -40, 0, 0, 0,

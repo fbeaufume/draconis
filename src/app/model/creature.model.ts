@@ -1,7 +1,7 @@
 // Creature related classes
 
 import {Game, OPPOSITION_ROW_SIZE} from './game.model';
-import {advance, inhale, Skill, strike, wait} from './skill.model';
+import {advance, inhale, Skill, strike, strikeSmall, wait} from './skill.model';
 
 /**
  * Base class for enemies and characters.
@@ -298,7 +298,7 @@ export class DragonEnemy extends Enemy {
         return new EnemyAction(inhale, []);
       default:
         // AOE on all characters
-        return new EnemyAction(strike, this.targetAllCharacters(game));
+        return new EnemyAction(strikeSmall, this.targetAllCharacters(game));
     }
   }
 }

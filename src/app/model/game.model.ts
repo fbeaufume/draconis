@@ -36,7 +36,7 @@ export const PAUSE_SHORT = 100;
 /**
  * A pause duration preset, in msec.
  */
-export const PAUSE_LONG = 1000;
+export const PAUSE_LONG = 800;
 
 /**
  * The action order of characters and enemies during a turn.

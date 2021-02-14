@@ -1,7 +1,7 @@
 // Creature related classes
 
 import {Game, OPPOSITION_ROW_SIZE} from './game.model';
-import {advance, inhale, Skill, techStrike, wait} from './skill.model';
+import {advance, inhale, Skill, strike, wait} from './skill.model';
 
 /**
  * Base class for enemies and characters.
@@ -109,8 +109,7 @@ export class Character extends Creature {
   ) {
     super(name, lifeMax, energyMax, power, skills);
 
-    this.energy = energyMax;
-    this.updateEnergyPercent();
+    this.restoreEnergy();
   }
 
   isCharacter(): boolean {
@@ -119,6 +118,11 @@ export class Character extends Creature {
 
   isEnemy(): boolean {
     return false;
+  }
+
+  restoreEnergy() {
+    this.energy = this.energyMax;
+    this.updateEnergyPercent();
   }
 }
 
@@ -145,6 +149,13 @@ export class Party {
     row2Characters: Character[]) {
     this.rows.push(new CharacterRow(row1Characters));
     this.rows.push(new CharacterRow(row2Characters));
+  }
+
+  restoreTechPoints() {
+    this.rows.forEach(row => {
+      row.characters.filter(character => !character.useMana)
+        .forEach(character => character.restoreEnergy());
+    });
   }
 }
 
@@ -263,7 +274,7 @@ export class MeleeEnemy extends Enemy {
     } else {
       // Hit a front row character
 
-      return new EnemyAction(techStrike, this.targetOneFrontRowCharacter(game));
+      return new EnemyAction(strike, this.targetOneFrontRowCharacter(game));
     }
   }
 }
@@ -281,13 +292,13 @@ export class DragonEnemy extends Enemy {
       case 0:
       case 1:
         // Claw attack on a character
-        return new EnemyAction(techStrike, this.targetOneFrontRowCharacter(game));
+        return new EnemyAction(strike, this.targetOneFrontRowCharacter(game));
       case 2:
         // Prepare the AOE
         return new EnemyAction(inhale, []);
       default:
         // AOE on all characters
-        return new EnemyAction(techStrike, this.targetAllCharacters(game));
+        return new EnemyAction(strike, this.targetAllCharacters(game));
     }
   }
 }

@@ -1,21 +1,7 @@
 // Classes for the whole game and fights
 
 import {Character, Creature, DragonEnemy, EndOfRound, Enemy, MeleeEnemy, Opposition, Party} from './creature.model';
-import {
-  blast,
-  deepStrike,
-  heal,
-  holyStrike,
-  magicDefend,
-  magicStrike,
-  preciseShot,
-  shot,
-  Skill,
-  smash,
-  spark,
-  techDefend,
-  techStrike
-} from './skill.model';
+import {blast, heal, holyStrike, magicDefend, paladinStrike, shot, Skill, spark, strike, techDefend,} from './skill.model';
 
 /**
  * Number of character rows.
@@ -265,21 +251,21 @@ class FangForestDungeon extends Dungeon {
   constructor() {
     super('Fang Forest', [
       new Opposition([
-        new MeleeEnemy('Bear A', 38, 8),
-        new MeleeEnemy('Bear B', 38, 8),
+        new MeleeEnemy('Bear A', 38, 7),
+        new MeleeEnemy('Bear B', 38, 7),
       ], [], []),
       new Opposition([
-        new MeleeEnemy('Wolf A', 24, 6),
-        new MeleeEnemy('Wolf B', 24, 6),
+        new MeleeEnemy('Wolf A', 24, 5),
+        new MeleeEnemy('Wolf B', 24, 5),
       ], [
-        new MeleeEnemy('Wolf C', 24, 6),
-        new MeleeEnemy('Wolf D', 24, 6),
-        new MeleeEnemy('Wolf E', 24, 6),
+        new MeleeEnemy('Wolf C', 24, 5),
+        new MeleeEnemy('Wolf D', 24, 5),
+        new MeleeEnemy('Wolf E', 24, 5),
       ], [
-        new MeleeEnemy('Wolf F', 24, 6),
+        new MeleeEnemy('Wolf F', 24, 5),
       ]),
       new Opposition([
-        new DragonEnemy('Green Dragon', 80, 10, 2),
+        new DragonEnemy('Green Dragon', 80, 8, 2),
       ], [], []),
     ]);
   }
@@ -324,29 +310,29 @@ export class Game {
   oppositionId: number = 0;
 
   party: Party = new Party([
-      new Character('Cyl', 'Rogue', 1, 20, false, 50, 10, [
-        techDefend, techStrike, deepStrike
+      new Character('Cyl', 'Rogue', 4, 20, false, 50, 10, [
+        techDefend, strike
       ]),
-      new Character('Melkan', 'Warrior', 1, 20, false, 50, 10, [
-        techDefend, techStrike, smash
+      new Character('Melkan', 'Warrior', 4, 20, false, 50, 10, [
+        techDefend, strike
       ]),
-      new Character('Arwin', 'Paladin', 1, 20, true, 50, 10, [
-        magicDefend, magicStrike, holyStrike, heal
+      new Character('Arwin', 'Paladin', 4, 20, true, 50, 10, [
+        magicDefend, paladinStrike, holyStrike, heal
       ])],
     [
-      new Character('Faren', 'Archer', 1, 20, false, 50, 10, [
-        techDefend, shot, preciseShot
+      new Character('Faren', 'Archer', 4, 20, false, 50, 10, [
+        techDefend, shot
       ]),
-      new Character('Harika', 'Mage', 1, 20, true, 50, 10, [
+      new Character('Harika', 'Mage', 4, 20, true, 50, 10, [
         magicDefend, blast
       ]),
-      new Character('Nairo', 'Priest', 1, 20, true, 50, 10, [
+      new Character('Nairo', 'Priest', 4, 20, true, 50, 10, [
         magicDefend, spark, heal
       ])
     ]);
 
-  dungeon: Dungeon = new DevDungeon();
-  // dungeon: Dungeon = new FangForestDungeon();
+  // dungeon: Dungeon = new DevDungeon();
+  dungeon: Dungeon = new FangForestDungeon();
 
   fight: Fight = new Fight(this.party, new Opposition([], [], []));
 
@@ -362,6 +348,8 @@ export class Game {
     this.state = GameState.START_FIGHT;
 
     this.oppositionId++;
+
+    this.party.restoreTechPoints();
 
     this.fight = new Fight(this.party, this.dungeon.oppositions[this.oppositionId - 1]);
   }

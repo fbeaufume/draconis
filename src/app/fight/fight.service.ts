@@ -37,9 +37,9 @@ export class FightService {
   }
 
   /**
-   * Start the encounter, i.e. display the opposition.
+   * Start the next encounter, i.e. display the opposition.
    */
-  startEncounter() {
+  startNextEncounter() {
     this.game.startNextEncounter();
 
     this.logs.push(new Log(LogType.OppositionAppear, this.fight.round));
@@ -71,7 +71,7 @@ export class FightService {
    */
   proceed() {
     if (this.game.state == GameState.START_NEXT_ENCOUNTER) {
-      this.startEncounter();
+      this.startNextEncounter();
     }
     else if (this.game.state == GameState.START_FIGHT) {
       this.startFight();

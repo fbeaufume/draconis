@@ -67,6 +67,20 @@ export class FightService {
   }
 
   /**
+   * Called after a click on the main action button to proceed to the next state.
+   */
+  proceed() {
+    if (this.game.state == GameState.START_NEXT_ENCOUNTER) {
+      this.startEncounter();
+    }
+    else if (this.game.state == GameState.START_FIGHT) {
+      this.startFight();
+    }
+    else if (this.game.state == GameState.DUNGEON_END)
+      this.restart();
+  }
+
+  /**
    * Process a character or enemy turn.
    */
   processTurn() {

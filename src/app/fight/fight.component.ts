@@ -129,6 +129,9 @@ export class FightComponent implements AfterViewInit {
     if (index >= 0) {
       this.fightService.selectFromKey(index);
       event.preventDefault();
+    } else if (event.key == ' ') {
+      this.fightService.proceed();
+      event.preventDefault();
     } else if (event.key == 'p') {
       this.fightService.togglePauseDuration();
       event.preventDefault();

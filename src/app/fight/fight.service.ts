@@ -245,6 +245,8 @@ export class FightService {
       return;
     }
 
+    // TODO FBE check if the character can be targeted
+
     this.fight.targetCreatures.push(character);
 
     this.fight.selectedSkill.execute(this.fight, this.logs);

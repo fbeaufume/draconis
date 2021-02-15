@@ -45,10 +45,19 @@ export class FightComponent implements AfterViewInit {
     if (this.game.state == GameState.SELECT_CHARACTER) {
       // Choosing a character
 
-      if (character.name == this.fight.hoveredCharacter?.name || this.fight.isActive(character)) {
-        return 'border-gray-200';
-      } else {
-        return 'border-gray-700';
+      if (character.name == this.fight.hoveredCharacter?.name) {
+        if (this.fight.selectedSkill?.isUsableOn(character)) {
+          return 'border-gray-200';
+        } else {
+          return 'border-red-500';
+        }
+      }
+      else {
+        if (this.fight.isActive(character)) {
+          return 'border-gray-200';
+        } else {
+          return 'border-gray-700';
+        }
       }
     } else {
       if (this.fight.isActive(character) || this.fight.isTargeted(character)) {

@@ -1,7 +1,7 @@
 // Skill related classes
 
 import {Fight} from './game.model';
-import {Creature, Enemy} from './creature.model';
+import {Character, Creature, Enemy} from './creature.model';
 import {Log, LogType} from './log.model';
 
 /**
@@ -51,13 +51,16 @@ export abstract class Skill {
   }
 
   /**
-   * Return true if the skill can be used on an enemy.
+   * Return true if the skill can be used on a creature.
    */
-  isUsableOn(enemy: Enemy): boolean {
-    // Check the skill range
-    // noinspection RedundantIfStatementJS
-    if (this.range > 0 && enemy.distance > this.range) {
-      return false;
+  isUsableOn(creature: Character | Enemy): boolean {
+    if (creature instanceof Enemy)
+      // Check the skill range
+      // noinspection RedundantIfStatementJS
+    {
+      if (this.range > 0 && creature.distance > this.range) {
+        return false;
+      }
     }
 
     return true;
@@ -153,6 +156,14 @@ export class Damage extends Skill {
  * A healing skill.
  */
 export class Heal extends Skill {
+
+  isUsableOn(creature: Character | Enemy): boolean {
+    if (creature instanceof Character) {
+      return creature.isAlive();
+    }
+
+    return false;
+  }
 
   execute(fight: Fight, logs: Log[]): void {
     super.execute(fight, logs);

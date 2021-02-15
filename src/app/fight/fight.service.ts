@@ -87,6 +87,11 @@ export class FightService {
     const creature = this.fight.turnOrder.currentOrder[0];
     this.fight.activeCreature = creature;
 
+    // Skip dead creatures
+    if (creature.isDead()) {
+      this.processNextTurn(false);
+    }
+
     if (creature.isCharacter()) {
       this.state = GameState.SELECT_SKILL;
     } else if (creature.isEnemy()) {
@@ -141,12 +146,13 @@ export class FightService {
 
         this.state = GameState.EXECUTING_SKILL;
 
-        this.processNextTurn();
+        this.processNextTurn(true);
         break;
       case SkillTarget.ENEMY:
         this.state = GameState.SELECT_ENEMY;
         break;
-      case SkillTarget.CHARACTER:
+      case SkillTarget.CHARACTER_ALIVE:
+        // TODO FBE select an alive character only
         this.state = GameState.SELECT_CHARACTER;
         break;
     }
@@ -208,11 +214,11 @@ export class FightService {
             }
           });
         } else {
-          this.processNextTurn();
+          this.processNextTurn(true);
         }
       });
     } else {
-      this.processNextTurn();
+      this.processNextTurn(true);
     }
   }
 
@@ -245,7 +251,7 @@ export class FightService {
 
     this.state = GameState.EXECUTING_SKILL;
 
-    this.processNextTurn();
+    this.processNextTurn(true);
   }
 
   /**
@@ -309,7 +315,7 @@ export class FightService {
     // Execute the skill
     action.skill.execute(this.fight, this.logs);
 
-    this.processNextTurn();
+    this.processNextTurn(true);
   }
 
   /**
@@ -323,27 +329,37 @@ export class FightService {
     this.fight.round++;
     this.logs.push(new Log(LogType.StartRound, this.fight.round));
 
-    this.processNextTurn();
+    this.processNextTurn(true);
   }
 
   /**
-   * Process the next turn after some pauses.
+   * Process the next turn immediatly or after some pauses.
    */
-  processNextTurn() {
-    // Give some time to the player to see the skill result
-    this.pause(() => {
-      // Then deselect everything
-      this.fight.activeCreature = null;
-      this.fight.focusedSkill = null;
-      this.fight.selectedSkill = null;
-      this.fight.targetCreatures = [];
+  processNextTurn(pause: boolean) {
+    if (pause) {
 
+      // Give some time to the player to see the skill result
       this.pause(() => {
-        // Then start the new turn
-        this.fight.turnOrder.nextCreature();
-        this.processTurn();
+        this.deselectEverything();
+
+        this.pause(() => {
+          this.fight.turnOrder.nextCreature();
+          this.processTurn();
+        });
       });
-    });
+    }
+    else {
+      this.deselectEverything();
+      this.fight.turnOrder.nextCreature();
+      this.processTurn();
+    }
+  }
+
+  deselectEverything() {
+    this.fight.activeCreature = null;
+    this.fight.focusedSkill = null;
+    this.fight.selectedSkill = null;
+    this.fight.targetCreatures = [];
   }
 
   /**

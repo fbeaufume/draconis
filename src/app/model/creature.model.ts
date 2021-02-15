@@ -46,6 +46,14 @@ export abstract class Creature {
     return this instanceof EndOfRound;
   }
 
+  isAlive(): boolean {
+    return this.life > 0;
+  }
+
+  isDead(): boolean {
+    return !this.isAlive();
+  }
+
   damage(amount: number) {
     this.life -= amount;
 
@@ -133,6 +141,18 @@ export class CharacterRow {
 
   constructor(public characters: Character[]) {
   }
+
+  /**
+   * Return true if there is at least one alive character in this row.
+   */
+  hasAliveCharacter(): boolean {
+    for (let i = 0; i < this.characters.length; i++) {
+      if (this.characters[i].isAlive()) {
+        return true;
+      }
+    }
+    return false;
+  }
 }
 
 /**
@@ -151,11 +171,39 @@ export class Party {
     this.rows.push(new CharacterRow(row2Characters));
   }
 
+  /**
+   * Restore all tech points. Called at the beginning of a new encounter for example.
+   */
   restoreTechPoints() {
     this.rows.forEach(row => {
       row.characters.filter(character => !character.useMana)
         .forEach(character => character.restoreEnergy());
     });
+  }
+
+  /**
+   * Target one random alive character from the first accessible row (i.e. the first row unless all characters from first row are dead).
+   */
+  targetOneFrontRowAliveCharacter(): Character[] {
+    let rowIndex = 0;
+
+    if (!this.rows[0].hasAliveCharacter()) {
+      // No alive character on the front row, use the back row
+      rowIndex = 1;
+    }
+
+    const aliveCharacters: Character[] = this.rows[rowIndex].characters.filter(character => character.isAlive());
+
+    return [aliveCharacters[Math.floor(Math.random() * aliveCharacters.length)]];
+  }
+
+  /**
+   * Target all alive party characters.
+   */
+  targetAllAliveCharacters(): Character[] {
+    const characters: Character[] = [];
+    this.rows.forEach(row => row.characters.filter(c => c.isAlive()).forEach(c => characters.push(c)));
+    return characters;
   }
 }
 
@@ -221,22 +269,6 @@ export abstract class Enemy extends Creature {
    * Called when it that creature's turn, this method decides what the creature does.
    */
   abstract chooseAction(game: Game): EnemyAction;
-
-  /**
-   * Target one random character from the first row.
-   */
-  targetOneFrontRowCharacter(game: Game): Character[] {
-    return [game.party.rows[0].characters[Math.floor(Math.random() * 3)]];
-  }
-
-  /**
-   * Target all party characters.
-   */
-  targetAllCharacters(game: Game): Character[] {
-    const characters: Character[] = [];
-    game.party.rows.forEach(row => characters.push(...row.characters));
-    return characters;
-  }
 }
 
 /**
@@ -274,7 +306,7 @@ export class MeleeEnemy extends Enemy {
     } else {
       // Hit a front row character
 
-      return new EnemyAction(strike, this.targetOneFrontRowCharacter(game));
+      return new EnemyAction(strike, game.party.targetOneFrontRowAliveCharacter());
     }
   }
 }
@@ -292,13 +324,13 @@ export class DragonEnemy extends Enemy {
       case 0:
       case 1:
         // Claw attack on a character
-        return new EnemyAction(strike, this.targetOneFrontRowCharacter(game));
+        return new EnemyAction(strike, game.party.targetOneFrontRowAliveCharacter());
       case 2:
         // Prepare the AOE
         return new EnemyAction(inhale, []);
       default:
         // AOE on all characters
-        return new EnemyAction(strikeSmall, this.targetAllCharacters(game));
+        return new EnemyAction(strikeSmall, game.party.targetAllAliveCharacters());
     }
   }
 }

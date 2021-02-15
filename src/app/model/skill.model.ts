@@ -9,7 +9,8 @@ import {Log, LogType} from './log.model';
  */
 export enum SkillTarget {
   NONE,
-  CHARACTER,
+  CHARACTER_ALIVE,
+  CHARACTER_DEAD,
   ENEMY
 }
 
@@ -179,7 +180,7 @@ export const magicDefend = new Defend('Defend', SkillTarget.NONE, 0, 0, 0, 0,
   'Defend against attacks.');
 export const strike = new Damage('Strike', SkillTarget.ENEMY, 10, 1, 0, 1,
   'Basic attack, does 100% weapon damage.');
-export const heal: Skill = new Heal('Heal', SkillTarget.CHARACTER, 5, 0, 0, 1,
+export const heal: Skill = new Heal('Heal', SkillTarget.CHARACTER_ALIVE, 5, 0, 0, 1,
   'Heal a party member for 100% weapon damage.');
 
 // Rogue skills

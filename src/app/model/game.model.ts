@@ -351,6 +351,12 @@ export class Game {
 
     this.party.restoreTechPoints();
 
+    // TODO FBE remove this debug
+    this.party.rows[0].characters[0].damage(100);
+    this.party.rows[0].characters[1].damage(100);
+    this.party.rows[1].characters[0].damage(100);
+    this.party.rows[1].characters[1].damage(100);
+
     this.fight = new Fight(this.party, this.dungeon.oppositions[this.oppositionId - 1]);
   }
 }

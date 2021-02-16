@@ -40,14 +40,19 @@
     for <span class="text-green-500">{{ log.args[2] }}</span> HP.
   </div>
   <div *ngSwitchCase="9">
+    <!-- Revive -->
+    <span [ngClass]="getClassForCreature(log.args[0])">{{ $any(log.args[0]).name }}</span>
+    revives <span [ngClass]="getClassForCreature(log.args[1])">{{ $any(log.args[1]).name }}</span>.
+  </div>
+  <div *ngSwitchCase="10">
     <!-- Enemy death -->
     <span class="text-yellow-200">{{ log.args[0] }}</span> was defeated.
   </div>
-  <div *ngSwitchCase="10">
+  <div *ngSwitchCase="11">
     <!-- Party victory -->
     The party won!
   </div>
-  <div *ngSwitchCase="11">
+  <div *ngSwitchCase="12">
     <!-- Pause duration changed -->
     Using pause of <span class="text-gray-200">{{ log.args[0] }}</span> msec.
   </div>

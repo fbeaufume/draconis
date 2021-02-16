@@ -1,7 +1,7 @@
 // Classes for the whole game and fights
 
 import {Character, Creature, DragonEnemy, EndOfRound, Enemy, MeleeEnemy, Opposition, Party} from './creature.model';
-import {blast, heal, holyStrike, magicDefend, paladinStrike, shot, Skill, spark, strike, techDefend,} from './skill.model';
+import {blast, heal, holyStrike, magicDefend, paladinStrike, revive, shot, Skill, spark, strike, techDefend,} from './skill.model';
 
 /**
  * Number of character rows.
@@ -317,7 +317,7 @@ export class Game {
         techDefend, strike
       ]),
       new Character('Arwin', 'Paladin', 4, 20, true, 50, 10, [
-        magicDefend, paladinStrike, holyStrike, heal
+        magicDefend, paladinStrike, holyStrike, heal, revive
       ])],
     [
       new Character('Faren', 'Archer', 4, 20, false, 50, 10, [
@@ -327,7 +327,7 @@ export class Game {
         magicDefend, blast
       ]),
       new Character('Nairo', 'Priest', 4, 20, true, 50, 10, [
-        magicDefend, spark, heal
+        magicDefend, spark, heal, revive
       ])
     ]);
 

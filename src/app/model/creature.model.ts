@@ -54,7 +54,12 @@ export abstract class Creature {
     return !this.isAlive();
   }
 
-  damage(amount: number) {
+  /**
+   * Inflict some damage to the creature.
+   * The amount is rounded and returned.
+   */
+  damage(amount: number): number {
+    amount = Math.round(amount);
     this.life -= amount;
 
     // Enforce min and max values
@@ -66,10 +71,16 @@ export abstract class Creature {
     }
 
     this.updateLifePercent();
+
+    return amount;
   }
 
-  heal(amount: number) {
-    this.damage(-amount);
+  /**
+   * Heals the creature.
+   * The amount is rounded and returned.
+   */
+  heal(amount: number): number {
+    return this.damage(-amount);
   }
 
   updateLifePercent() {

@@ -70,7 +70,7 @@ export abstract class Skill {
    * Compute an effective damage from a base damage by applying a small random modification.
    */
   computeEffectiveDamage(base: number): number {
-    return Math.round((0.85 + Math.random() * 0.3) * base);
+    return (0.85 + Math.random() * 0.3) * base;
   }
 
   /**
@@ -144,10 +144,8 @@ export class Damage extends Skill {
     const baseDamage = this.power * (fight.activeCreature?.power ?? 0);
 
     fight.targetCreatures.forEach(creature => {
-      const effectiveDamage = this.computeEffectiveDamage(baseDamage);
-
-      creature.damage(effectiveDamage);
-      logs.push(new Log(LogType.Damage, fight.activeCreature, creature, effectiveDamage));
+      logs.push(new Log(LogType.Damage, fight.activeCreature, creature,
+        creature.damage(this.computeEffectiveDamage(baseDamage))));
     });
   }
 }
@@ -163,9 +161,23 @@ export class Heal extends Skill {
     const baseHeal = this.power * (fight.activeCreature?.power ?? 0);
 
     fight.targetCreatures.forEach(creature => {
-      const effectiveHeal = this.computeEffectiveHeal(baseHeal);
-      creature.heal(effectiveHeal);
-      logs.push(new Log(LogType.Heal, fight.activeCreature, creature, effectiveHeal));
+      logs.push(new Log(LogType.Heal, fight.activeCreature, creature,
+        creature.heal(this.computeEffectiveHeal(baseHeal))));
+    });
+  }
+}
+
+/**
+ * A revive skill.
+ */
+export class Revive extends Skill {
+
+  execute(fight: Fight, logs: Log[]): void {
+    super.execute(fight, logs);
+
+    fight.targetCreatures.forEach(creature => {
+      creature.heal(creature.lifeMax / 2);
+      logs.push(new Log(LogType.Revive, fight.activeCreature, creature));
     });
   }
 }
@@ -185,6 +197,8 @@ export const strike = new Damage('Strike', SkillTarget.ENEMY, 10, 1, 0, 1,
   'Basic attack, does 100% weapon damage.');
 export const heal: Skill = new Heal('Heal', SkillTarget.CHARACTER_ALIVE, 5, 0, 0, 1,
   'Heal a party member for 100% weapon damage.');
+export const revive: Skill = new Revive('Revive', SkillTarget.CHARACTER_DEAD, 20, 0, 0, 1,
+  'Revive a party member with half his life.');
 
 // Rogue skills
 

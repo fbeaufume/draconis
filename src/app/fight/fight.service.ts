@@ -152,7 +152,7 @@ export class FightService {
         this.state = GameState.SELECT_ENEMY;
         break;
       case SkillTarget.CHARACTER_ALIVE:
-        // TODO FBE select an alive character only
+      case SkillTarget.CHARACTER_DEAD:
         this.state = GameState.SELECT_CHARACTER;
         break;
     }
@@ -241,11 +241,9 @@ export class FightService {
    * Select a character target for a skill.
    */
   selectCharacter(character: Character) {
-    if (this.fight.selectedSkill == null) {
+    if (this.fight.selectedSkill == null || !this.fight.selectedSkill.isUsableOn(character)) {
       return;
     }
-
-    // TODO FBE check if the character can be targeted
 
     this.fight.targetCreatures.push(character);
 

@@ -34,7 +34,7 @@ export abstract class Skill {
   }
 
   /**
-   * Return true if the skill can be selected by a character.
+   * Return true if the player can select this skill for a given character.
    */
   isSelectableBy(creature: Creature | null): boolean {
     if (creature == null) {
@@ -51,19 +51,19 @@ export abstract class Skill {
   }
 
   /**
-   * Return true if the skill can be used on a creature.
+   * Return true if the player to use this skill on the target creature.
    */
   isUsableOn(creature: Character | Enemy): boolean {
-    if (creature instanceof Enemy)
-      // Check the skill range
-      // noinspection RedundantIfStatementJS
-    {
-      if (this.range > 0 && creature.distance > this.range) {
-        return false;
-      }
+    switch (this.target) {
+      case SkillTarget.CHARACTER_ALIVE:
+        return (creature instanceof Character) && creature.isAlive();
+      case SkillTarget.CHARACTER_DEAD:
+        return (creature instanceof Character) && creature.isDead();
+      case SkillTarget.ENEMY:
+        return (creature instanceof Enemy) && creature.isAlive() && (this.range >= creature.distance);
     }
 
-    return true;
+    return false;
   }
 
   /**
@@ -156,14 +156,6 @@ export class Damage extends Skill {
  * A healing skill.
  */
 export class Heal extends Skill {
-
-  isUsableOn(creature: Character | Enemy): boolean {
-    if (creature instanceof Character) {
-      return creature.isAlive();
-    }
-
-    return false;
-  }
 
   execute(fight: Fight, logs: Log[]): void {
     super.execute(fight, logs);

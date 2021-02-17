@@ -189,10 +189,10 @@ export const inhale = new Inhale('', SkillTarget.NONE, 0, 0, 0, 0, '');
 export const strikeSmall = new Damage('', SkillTarget.ENEMY, 0, 0, 0, 0.7, '');
 
 // Common characters skills
-export const techDefend = new Defend('Defend', SkillTarget.NONE, -40, 0, 0, 0,
-  'Defend against attacks. Generates 40 TP.');
-export const magicDefend = new Defend('Defend', SkillTarget.NONE, 0, 0, 0, 0,
-  'Defend against attacks.');
+export const techDefend = new Defend('Defend', SkillTarget.NONE, -30, 0, 0, 0,
+  'Defend against attacks. Gain 30 TP.');
+export const magicDefend = new Defend('Defend', SkillTarget.NONE, -5, 0, 0, 0,
+  'Defend against attacks. Gain 5 MP.');
 export const strike = new Damage('Strike', SkillTarget.ENEMY, 10, 1, 0, 1,
   'Basic attack, does 100% weapon damage.');
 export const heal: Skill = new Heal('Heal', SkillTarget.CHARACTER_ALIVE, 5, 0, 0, 1,

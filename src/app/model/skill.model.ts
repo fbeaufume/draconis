@@ -200,23 +200,31 @@ export const heal: Skill = new Heal('Heal', SkillTarget.CHARACTER_ALIVE, 5, 0, 0
 export const revive: Skill = new Revive('Revive', SkillTarget.CHARACTER_DEAD, 20, 0, 0, 1,
   'Revive a party member with half his life.');
 
-// Rogue skills
-
 // Warrior skills
+export const smash = new Damage('Smash', SkillTarget.ENEMY, 20, 1, 0, 1.5,
+  'Strong attack, does 150% weapon damage.');
+
+// Monk skills
+export const monkHeal: Skill = new Heal('Heal', SkillTarget.CHARACTER_ALIVE, 10, 0, 0, 1,
+  'Heal a party member for 100% weapon damage.');
+export const monkRevive: Skill = new Heal('Revive', SkillTarget.CHARACTER_DEAD, 40, 0, 0, 1,
+  'Revive a party member with half his life.');
 
 // Paladin skills
-export const paladinStrike = new Damage('Strike', SkillTarget.ENEMY, 0, 1, 0, 0.7,
-  'Basic attack, does 70% weapon damage.');
 export const holyStrike = new Damage('Holy Strike', SkillTarget.ENEMY, 5, 1, 0, 1,
   'Holy attack, does 100% weapon damage.');
 
 // Hunter skills
 export const shot = new Damage('Shot', SkillTarget.ENEMY, 10, 2, 0, 1,
   'Basic ranged attack, does 100% weapon damage.');
+export const preciseShot = new Damage('Precise Shot', SkillTarget.ENEMY, 20, 2, 0, 1.5,
+  'String ranged attack, does 150% weapon damage.');
 
 // Mage skills
-export const blast = new Damage('Blast', SkillTarget.ENEMY, 5, 2, 0, 1,
-  'Magical attack, does 100% weapon damage.');
+export const burn = new Damage('Burn', SkillTarget.ENEMY, 5, 2, 0, 1,
+  'Magic attack, does 100% weapon damage.');
+export const blast = new Damage('Blast', SkillTarget.ENEMY, 10, 2, 0, 1.5,
+  'Strong magic attack, does 150% weapon damage.');
 
 // Priest skills
 export const spark = new Damage('Spark', SkillTarget.ENEMY, 5, 2, 0, 0.8,

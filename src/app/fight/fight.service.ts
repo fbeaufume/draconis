@@ -192,6 +192,8 @@ export class FightService {
         // Remove dead enemies from the opposition
         const removedNames = this.fight.opposition.removeDeadEnemies();
 
+        // TODO FBE remove empty rows, if any
+
         // Remove dead enemies from the turn order
         this.fight.turnOrder.removeDeadEnemies();
 

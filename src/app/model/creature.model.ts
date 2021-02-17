@@ -308,6 +308,8 @@ export class MeleeEnemy extends Enemy {
         targetRow.enemies.push(this);
         this.distance--;
 
+        // TODO FBE remove empty rows, if any
+
         return new EnemyAction(advance, []);
       } else {
         // The target row is full, so wait

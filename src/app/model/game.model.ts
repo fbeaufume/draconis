@@ -1,7 +1,23 @@
 // Classes for the whole game and fights
 
 import {Character, Creature, DragonEnemy, EndOfRound, Enemy, MeleeEnemy, Opposition, Party} from './creature.model';
-import {blast, heal, holyStrike, magicDefend, paladinStrike, revive, shot, Skill, spark, strike, techDefend,} from './skill.model';
+import {
+  blast,
+  burn,
+  heal,
+  holyStrike,
+  magicDefend,
+  monkHeal,
+  monkRevive,
+  preciseShot,
+  revive,
+  shot,
+  Skill,
+  smash,
+  spark,
+  strike,
+  techDefend,
+} from './skill.model';
 
 /**
  * Number of character rows.
@@ -67,23 +83,15 @@ export class TurnOrder {
    */
   initialize(party: Party, opposition: Opposition) {
     // Shuffle the party damage dealers
-    const partyDealers: Character[] = [];
-    for (let i = 0; i < PARTY_ROWS; i++) {
-      for (let j = 0; j < 2; j++) {
-        partyDealers.push(party.rows[i].characters[j]);
-      }
-    }
+    const partyDealers: Character[] = [party.rows[0].characters[0], party.rows[1].characters[0], party.rows[1].characters[1]];
     TurnOrder.shuffle(partyDealers);
 
     // Shuffle the party healers
-    const partyHealers: Character[] = [];
-    for (let i = 0; i < PARTY_ROWS; i++) {
-      partyHealers.push(party.rows[i].characters[2]);
-    }
+    const partyHealers: Character[] = [party.rows[0].characters[1], party.rows[0].characters[2], party.rows[1].characters[2]];
     TurnOrder.shuffle(partyHealers);
 
     // Aggregate all party characters
-    const characters: Character[] = [partyDealers[0], partyDealers[1], partyHealers[0], partyDealers[2], partyDealers[3], partyHealers[1]];
+    const characters: Character[] = [partyDealers[0], partyHealers[0], partyDealers[1], partyHealers[1], partyDealers[2], partyHealers[2]];
 
     // Shuffle the enemies
     const enemies: Enemy[] = [];
@@ -310,21 +318,21 @@ export class Game {
   oppositionId: number = 0;
 
   party: Party = new Party([
-      new Character('Cyl', 'Rogue', 4, 20, false, 50, 10, [
-        techDefend, strike
-      ]),
       new Character('Melkan', 'Warrior', 4, 20, false, 50, 10, [
-        techDefend, strike
+        techDefend, strike, smash
+      ]),
+      new Character('Cyl', 'Monk', 4, 20, false, 50, 10, [
+        techDefend, strike, monkHeal, monkRevive
       ]),
       new Character('Arwin', 'Paladin', 4, 20, true, 50, 10, [
-        magicDefend, paladinStrike, holyStrike, heal, revive
+        magicDefend, holyStrike, heal, revive
       ])],
     [
       new Character('Faren', 'Archer', 4, 20, false, 50, 10, [
-        techDefend, shot
+        techDefend, shot, preciseShot
       ]),
       new Character('Harika', 'Mage', 4, 20, true, 50, 10, [
-        magicDefend, blast
+        magicDefend, burn, blast
       ]),
       new Character('Nairo', 'Priest', 4, 20, true, 50, 10, [
         magicDefend, spark, heal, revive
@@ -350,12 +358,6 @@ export class Game {
     this.oppositionId++;
 
     this.party.restoreTechPoints();
-
-    // TODO FBE remove this debug
-    this.party.rows[0].characters[0].damage(100);
-    this.party.rows[0].characters[1].damage(100);
-    this.party.rows[1].characters[0].damage(100);
-    this.party.rows[1].characters[1].damage(100);
 
     this.fight = new Fight(this.party, this.dungeon.oppositions[this.oppositionId - 1]);
   }

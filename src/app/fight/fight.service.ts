@@ -212,7 +212,7 @@ export class FightService {
               // Moving on to the next encounter
               this.state = GameState.START_NEXT_ENCOUNTER;
             } else {
-              // The dungeon is cleared
+              // The dungeon is over
               this.state = GameState.DUNGEON_END;
             }
           });
@@ -318,7 +318,17 @@ export class FightService {
     // Execute the skill
     action.skill.execute(this.fight, this.logs);
 
-    this.processNextTurn(true);
+    // Check if the party lost
+    if (this.party.isWiped()) {
+      this.pause(() => {
+        this.logs.push(new Log(LogType.PartyDefeat));
+
+          // The dungeon is over
+          this.state = GameState.DUNGEON_END;
+      });
+    } else {
+      this.processNextTurn(true);
+    }
   }
 
   /**

@@ -187,6 +187,24 @@ export class Party {
   }
 
   /**
+   * Return the number of alive creatures
+   */
+  countAliveCreatures(): number {
+    let count = 0;
+
+    this.rows.forEach(row => row.characters.filter(character => character.isAlive()).forEach(_ => count++));
+
+    return count;
+  }
+
+  /**
+   * Return true is there is no alive character.
+   */
+  isWiped() {
+    return this.countAliveCreatures() <= 0;
+  }
+
+  /**
    * Restore all tech points. Called at the beginning of a new encounter for example.
    */
   restoreTechPoints() {
@@ -479,15 +497,16 @@ export class Opposition {
   countAliveCreatures(): number {
     let count = 0;
 
-    for (const row of this.rows) {
-      for (let i = 0; i < row.enemies.length; i++) {
-        if (row.enemies[i].life > 0) {
-          count++;
-        }
-      }
-    }
+    this.rows.forEach(row => row.enemies.filter(enemy => enemy.isAlive()).forEach(_ => count++));
 
     return count;
+  }
+
+  /**
+   * Return true is there is no alive creature.
+   */
+  isWiped(): boolean {
+    return this.countAliveCreatures() <= 0;
   }
 
   /**
@@ -503,12 +522,5 @@ export class Opposition {
     } else {
       return null;
     }
-  }
-
-  /**
-   * Return true is there is no alive creature.
-   */
-  isWiped(): boolean {
-    return this.countAliveCreatures() <= 0;
   }
 }

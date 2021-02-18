@@ -17,6 +17,7 @@ export enum LogType {
   Revive,
   EnemyDefeated,
   PartyVictory,
+  PartyDefeat,
   PauseDurationChanged,
 }
 

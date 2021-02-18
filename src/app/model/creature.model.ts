@@ -191,7 +191,7 @@ export class Party {
    */
   restoreTechPoints() {
     this.rows.forEach(row => {
-      row.characters.filter(character => !character.useMana)
+      row.characters.filter(character => character.isAlive() && !character.useMana)
         .forEach(character => character.restoreEnergy());
     });
   }

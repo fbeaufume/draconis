@@ -1,6 +1,17 @@
 // Classes for the whole game and fights
 
-import {Character, Creature, DragonEnemy, EndOfRound, Enemy, MeleeEnemy, Opposition, Party} from './creature.model';
+import {
+  Character,
+  Creature,
+  DistanceEnemy,
+  DragonEnemy,
+  EndOfRound,
+  Enemy,
+  HealerEnemy,
+  MeleeEnemy,
+  Opposition,
+  Party
+} from './creature.model';
 import {
   blast,
   burn,
@@ -273,7 +284,14 @@ class FangForestDungeon extends Dungeon {
         new MeleeEnemy('Wolf F', 24, 5),
       ]),
       new Opposition([
-        new DragonEnemy('Green Dragon', 80, 8, 2),
+        new MeleeEnemy('Goblin Solder A', 32, 7),
+        new MeleeEnemy('Goblin Solder B', 32, 7),
+      ], [
+        new DistanceEnemy('Goblin Hunter', 28, 8),
+        new HealerEnemy('Goblin Shaman', 24, 8),
+      ], []),
+      new Opposition([
+        new DragonEnemy('Green Dragon', 120, 8, 2),
       ], [], []),
     ]);
   }
@@ -346,6 +364,10 @@ export class Game {
 
   constructor() {
     this.region = this.dungeon.name;
+  }
+
+  get opposition(): Opposition {
+    return this.fight.opposition;
   }
 
   hasNextEncounter(): boolean {

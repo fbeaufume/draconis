@@ -1,7 +1,7 @@
 // Creature related classes
 
 import {Game, OPPOSITION_ROW_SIZE} from './game.model';
-import {advance, inhale, Skill, strike, strikeSmall, wait} from './skill.model';
+import {advance, heal, inhale, Skill, strike, strikeSmall, wait} from './skill.model';
 
 /**
  * Base class for enemies and characters.
@@ -54,6 +54,10 @@ export abstract class Creature {
     return !this.isAlive();
   }
 
+  isDamaged(): boolean {
+    return this.life < this.lifeMax;
+  }
+
   /**
    * Inflict some damage to the creature.
    * The amount is rounded and returned.
@@ -80,7 +84,7 @@ export abstract class Creature {
    * The amount is rounded and returned.
    */
   heal(amount: number): number {
-    return this.damage(-amount);
+    return -this.damage(-amount);
   }
 
   updateLifePercent() {
@@ -209,6 +213,16 @@ export class Party {
   }
 
   /**
+   * Target one random alive character.
+   */
+  targetOneAliveCharacter(): Character[] {
+    const aliveCharacters: Character[] = [];
+    this.rows.forEach(row => row.characters.filter(character => character.isAlive()).forEach(character => aliveCharacters.push(character)));
+
+    return [aliveCharacters[Math.floor(Math.random() * aliveCharacters.length)]];
+  }
+
+  /**
    * Target all alive party characters.
    */
   targetAllAliveCharacters(): Character[] {
@@ -291,8 +305,8 @@ export class MeleeEnemy extends Enemy {
     if (this.distance > 1) {
       // Not in the front row, so try to advance
 
-      const currentRow = game.fight.opposition.rows[this.distance - 1];
-      const targetRow = game.fight.opposition.rows[this.distance - 2];
+      const currentRow = game.opposition.rows[this.distance - 1];
+      const targetRow = game.opposition.rows[this.distance - 2];
       if (targetRow.isNotFull()) {
         // The target row has some room, so advance
 
@@ -308,7 +322,7 @@ export class MeleeEnemy extends Enemy {
         targetRow.enemies.push(this);
         this.distance--;
 
-        // TODO FBE remove empty rows, if any
+        game.opposition.removeEmptyRows();
 
         return new EnemyAction(advance, []);
       } else {
@@ -320,6 +334,32 @@ export class MeleeEnemy extends Enemy {
       // Hit a front row character
 
       return new EnemyAction(strike, game.party.targetOneFrontRowAliveCharacter());
+    }
+  }
+}
+
+/**
+ * Default distance enemy class.
+ */
+export class DistanceEnemy extends Enemy {
+
+  chooseAction(game: Game): EnemyAction {
+    return new EnemyAction(strike, game.party.targetOneAliveCharacter());
+  }
+}
+
+/**
+ * Default healer enemy class. Heal a damaged enemy, if any, otherwise hit a character.
+ */
+export class HealerEnemy extends Enemy {
+
+  chooseAction(game: Game): EnemyAction {
+    const enemy: Enemy | null = game.opposition.targetOneDamagedEnemy();
+
+    if (enemy != null) {
+      return new EnemyAction(heal, [enemy]);
+    } else {
+      return new EnemyAction(strike, game.party.targetOneAliveCharacter());
     }
   }
 }
@@ -413,6 +453,27 @@ export class Opposition {
   }
 
   /**
+   * Remove empty rows, and shift the other ones.
+   */
+  removeEmptyRows() {
+    let removeRows = 0;
+
+    // Remove empty rows
+    for (let i = 0; i < this.rows.length - 1; i++) {
+      const row: EnemyRow = this.rows[i];
+      if (row.enemies.length <= 0) {
+        this.rows.splice(i, 1);
+        removeRows++;
+      }
+    }
+
+    // Add empty rows in the back
+    for (let i = 0; i < removeRows; i++) {
+      this.rows.push(new EnemyRow([]));
+    }
+  }
+
+  /**
    * Return the number of alive creatures
    */
   countAliveCreatures(): number {
@@ -427,6 +488,21 @@ export class Opposition {
     }
 
     return count;
+  }
+
+  /**
+   * Target one damaged enemy, used for example by healer enemies.
+   */
+  targetOneDamagedEnemy(): Enemy | null {
+    const damagedEnemies: Enemy[] = [];
+
+    this.rows.forEach(row => row.enemies.filter(enemy => enemy.isDamaged()).forEach(enemy => damagedEnemies.push(enemy)));
+
+    if (damagedEnemies.length > 0) {
+      return damagedEnemies[Math.floor(Math.random() * damagedEnemies.length)];
+    } else {
+      return null;
+    }
   }
 
   /**

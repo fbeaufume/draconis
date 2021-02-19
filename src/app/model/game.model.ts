@@ -253,14 +253,14 @@ class DevDungeon extends Dungeon {
   constructor() {
     super('Dev Dungeon', [
       new Opposition([
-        new MeleeEnemy('Enemy 1', 5, 30),
-        new MeleeEnemy('Enemy 2', 5, 30),
-        new MeleeEnemy('Enemy 3', 5, 30),
+        new MeleeEnemy('Enemy 1', 5, 8),
+        new MeleeEnemy('Enemy 2', 5, 8),
+        new MeleeEnemy('Enemy 3', 5, 8),
       ], [], []),
       new Opposition([
-        new MeleeEnemy('Enemy 4', 5, 30),
-        new MeleeEnemy('Enemy 5', 5, 30),
-        new MeleeEnemy('Enemy 6', 5, 30),
+        new MeleeEnemy('Enemy 4', 5, 8),
+        new MeleeEnemy('Enemy 5', 5, 8),
+        new MeleeEnemy('Enemy 6', 5, 8),
       ], [], []),
     ]);
   }

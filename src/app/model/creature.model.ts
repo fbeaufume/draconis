@@ -67,12 +67,7 @@ export abstract class Creature {
     this.life -= amount;
 
     // Enforce min and max values
-    if (this.life < 0) {
-      this.life = 0;
-    }
-    if (this.life > this.lifeMax) {
-      this.life = this.lifeMax;
-    }
+    this.life = this.checkMinAndMax(this.life, this.lifeMax);
 
     this.updateLifePercent();
 
@@ -94,22 +89,31 @@ export abstract class Creature {
   /**
    * Can be used with a negative amount of energy, e.g. when the skill generates some energy.
    */
-  spendEnergy(cost: number) {
-    this.energy -= cost;
+  spendEnergy(amount: number) {
+    amount = Math.round(amount);
+    this.energy -= amount;
 
     // Enforce min and max values
-    if (this.energy < 0) {
-      this.energy = 0;
-    }
-    if (this.energy > this.energyMax) {
-      this.energy = this.energyMax;
-    }
+    this.energy = this.checkMinAndMax(this.energy, this.energyMax);
 
     this.updateEnergyPercent();
   }
 
   updateEnergyPercent() {
     this.energyPercent = 100 * this.energy / this.energyMax;
+  }
+
+  /**
+   * Ensure that a given amount is between 0 and a max amount.
+   */
+  checkMinAndMax(amount: number, maxAmount: number): number {
+    if (amount < 0) {
+      return 0;
+    }
+    if (amount > maxAmount) {
+      return maxAmount;
+    }
+    return amount;
   }
 }
 
@@ -211,6 +215,16 @@ export class Party {
     this.rows.forEach(row => {
       row.characters.filter(character => character.isAlive() && !character.useMana)
         .forEach(character => character.restoreEnergy());
+    });
+  }
+
+  /**
+   * Restore some mana to mana users, for example after an enemy died.
+   */
+  restoreManaPoints(amount: number) {
+    this.rows.forEach(row => {
+      row.characters.filter(character => character.useMana)
+        .forEach(character => character.spendEnergy(-amount));
     });
   }
 
@@ -453,21 +467,22 @@ export class Opposition {
   }
 
   /**
-   * Remove dead enemies and return the names of the removed enemies.
+   * Remove dead enemies and return them.
    */
-  removeDeadEnemies(): string[] {
-    let removedNames = [];
+  removeDeadEnemies(): Enemy[] {
+    let removedEnemies: Enemy[] = [];
 
     for (const row of this.rows) {
       for (let i = 0; i < row.enemies.length; i++) {
-        if (row.enemies[i].life <= 0) {
-          removedNames.push(row.enemies[i].name);
+        const enemy: Enemy = row.enemies[i];
+        if (enemy.life <= 0) {
+          removedEnemies.push(enemy);
           row.enemies.splice(i, 1);
         }
       }
     }
 
-    return removedNames;
+    return removedEnemies;
   }
 
   /**

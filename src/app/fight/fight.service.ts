@@ -72,12 +72,11 @@ export class FightService {
   proceed() {
     if (this.game.state == GameState.START_NEXT_ENCOUNTER) {
       this.startNextEncounter();
-    }
-    else if (this.game.state == GameState.START_FIGHT) {
+    } else if (this.game.state == GameState.START_FIGHT) {
       this.startFight();
-    }
-    else if (this.game.state == GameState.DUNGEON_END)
+    } else if (this.game.state == GameState.DUNGEON_END) {
       this.restart();
+    }
   }
 
   /**
@@ -190,7 +189,13 @@ export class FightService {
     if (this.fight.opposition.hasDeadEnemies()) {
       this.pause(() => {
         // Remove dead enemies from the opposition
-        const removedNames = this.fight.opposition.removeDeadEnemies();
+        const removedEnemies: Enemy[] = this.fight.opposition.removeDeadEnemies();
+
+        // Restore some mana points to the characters when enemies died
+        const totalRemovedEnemiesLife: number = removedEnemies.reduce((sum, enemy) => sum + enemy.lifeMax, 0);
+        if (totalRemovedEnemiesLife > 0) {
+          this.party.restoreManaPoints(totalRemovedEnemiesLife * 0.1);
+        }
 
         // Remove the empty enemy rows
         this.fight.opposition.removeEmptyRows();
@@ -199,9 +204,7 @@ export class FightService {
         this.fight.turnOrder.removeDeadEnemies();
 
         // Log the defeated enemies
-        for (const name of removedNames) {
-          this.logs.push(new Log(LogType.EnemyDefeated, name));
-        }
+        removedEnemies.forEach(enemy => this.logs.push(new Log(LogType.EnemyDefeated, enemy.name)));
 
         // Check if the party won
         if (this.fight.opposition.isWiped()) {
@@ -323,8 +326,8 @@ export class FightService {
       this.pause(() => {
         this.logs.push(new Log(LogType.PartyDefeat));
 
-          // The dungeon is over
-          this.state = GameState.DUNGEON_END;
+        // The dungeon is over
+        this.state = GameState.DUNGEON_END;
       });
     } else {
       this.processNextTurn(true);
@@ -360,8 +363,7 @@ export class FightService {
           this.processTurn();
         });
       });
-    }
-    else {
+    } else {
       this.deselectEverything();
       this.fight.turnOrder.nextCreature();
       this.processTurn();

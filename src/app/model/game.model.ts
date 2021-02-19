@@ -197,20 +197,7 @@ export class Fight {
 
     this.turnOrder = new TurnOrder(party, this.opposition);
 
-    this.updateEnemies();
-  }
-
-  /**
-   * Give each enemy some information about the fight.
-   * Used for example to: check skills range, advance toward characters, etc.
-   */
-  private updateEnemies() {
-    for (let i = 0; i < this.opposition.rows.length; i++) {
-      const row = this.opposition.rows[i];
-      row.enemies.forEach(enemy => {
-        enemy.distance = i + 1;
-      });
-    }
+    this.opposition.updateDistances();
   }
 
   /**
@@ -252,17 +239,18 @@ class DevDungeon extends Dungeon {
 
   constructor() {
     super('Dev Dungeon', [
-      new Opposition([
-        new MeleeEnemy('Enemy 1', 5, 8),
-        new MeleeEnemy('Enemy 2', 5, 8),
-        new MeleeEnemy('Enemy 3', 5, 8),
+      new Opposition('some monsters', [
+        new MeleeEnemy('Monster 1', 5, 8),
+        new MeleeEnemy('Monster 2', 5, 8),
+        new MeleeEnemy('Monster 3', 5, 8),
       ], [], []),
-      new Opposition([
-        new MeleeEnemy('Enemy 4', 5, 8),
-        new MeleeEnemy('Enemy 5', 5, 8),
-        new MeleeEnemy('Enemy 6', 5, 8),
+      new Opposition('some monsters', [
+        new MeleeEnemy('Monster 4', 5, 8),
+        new MeleeEnemy('Monster 5', 5, 8),
+        new MeleeEnemy('Monster 6', 5, 8),
       ], [], []),
-    ]);
+    ])
+    ;
   }
 }
 
@@ -273,11 +261,11 @@ class FangForestDungeon extends Dungeon {
 
   constructor() {
     super('Fang Forest', [
-      new Opposition([
+      new Opposition('wild bears', [
         new MeleeEnemy('Bear A', 38, 7),
         new MeleeEnemy('Bear B', 38, 7),
       ], [], []),
-      new Opposition([
+      new Opposition('a pack of wolves', [
         new MeleeEnemy('Wolf A', 24, 5),
         new MeleeEnemy('Wolf B', 24, 5),
       ], [
@@ -287,14 +275,14 @@ class FangForestDungeon extends Dungeon {
       ], [
         new MeleeEnemy('Wolf F', 24, 5),
       ]),
-      new Opposition([
+      new Opposition('a band of goblins', [
         new MeleeEnemy('Goblin Solder A', 32, 7),
         new MeleeEnemy('Goblin Solder B', 32, 7),
       ], [
         new DistanceEnemy('Goblin Hunter', 28, 8),
         new HealerEnemy('Goblin Shaman', 24, 8),
       ], []),
-      new Opposition([
+      new Opposition('a young but fierce green dragon', [
         new DragonEnemy('Green Dragon', 120, 8, 2),
       ], [], []),
     ]);
@@ -369,7 +357,7 @@ export class Game {
   dungeons: Dungeon[] = [new DevDungeon(), new FangForestDungeon()];
   dungeon: Dungeon = this.dungeons[1];
 
-  fight: Fight = new Fight(this.party, new Opposition([], [], []));
+  fight: Fight = new Fight(this.party, new Opposition('', [], [], []));
 
   constructor() {
     this.region = this.dungeon.name;

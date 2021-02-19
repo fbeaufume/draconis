@@ -42,7 +42,7 @@ export class FightService {
   startNextEncounter() {
     this.game.startNextEncounter();
 
-    this.logs.push(new Log(LogType.OppositionAppear, this.fight.round));
+    this.logs.push(new Log(LogType.OppositionAppear, this.fight.opposition.description));
   }
 
   /**

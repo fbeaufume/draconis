@@ -441,6 +441,7 @@ export class Opposition {
   rows: EnemyRow[] = [];
 
   constructor(
+    public description: string,
     // Front row enemies
     row1Enemies: Enemy[],
     // Middle row enemies
@@ -500,9 +501,24 @@ export class Opposition {
       }
     }
 
+    this.updateDistances();
+
     // Add empty rows in the back
     for (let i = 0; i < removeRows; i++) {
       this.rows.push(new EnemyRow([]));
+    }
+  }
+
+  /**
+   * Give each enemy his distance to the party.
+   * Used to check skills range, advance toward characters, etc.
+   */
+  updateDistances() {
+    for (let i = 0; i < this.rows.length; i++) {
+      const row = this.rows[i];
+      row.enemies.forEach(enemy => {
+        enemy.distance = i + 1;
+      });
     }
   }
 

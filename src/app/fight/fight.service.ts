@@ -1,5 +1,5 @@
 import {Injectable} from '@angular/core';
-import {Fight, Game, GameState, PARTY_ROW_SIZE, PARTY_SIZE, PAUSE_LONG, PAUSE_SHORT} from '../model/game.model';
+import {canSelectSkillStates, Fight, Game, GameState, PARTY_ROW_SIZE, PARTY_SIZE, PAUSE_LONG, PAUSE_SHORT} from '../model/game.model';
 import {Character, Enemy, EnemyAction, Party} from '../model/creature.model';
 import {Skill, SkillTarget} from '../model/skill.model';
 import {Log, LogType} from '../model/log.model';
@@ -128,7 +128,7 @@ export class FightService {
    */
   selectSkill(skill: Skill) {
     // The player cannot change his mind and select a different skill
-    if (this.state != GameState.SELECT_SKILL) {
+    if (!canSelectSkillStates.includes(this.state)) {
       return;
     }
 

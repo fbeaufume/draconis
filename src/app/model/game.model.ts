@@ -253,10 +253,14 @@ class DevDungeon extends Dungeon {
   constructor() {
     super('Dev Dungeon', [
       new Opposition([
-        new MeleeEnemy('Enemy 1', 10, 6),
+        new MeleeEnemy('Enemy 1', 5, 30),
+        new MeleeEnemy('Enemy 2', 5, 30),
+        new MeleeEnemy('Enemy 3', 5, 30),
       ], [], []),
       new Opposition([
-        new MeleeEnemy('Enemy 2', 10, 6),
+        new MeleeEnemy('Enemy 4', 5, 30),
+        new MeleeEnemy('Enemy 5', 5, 30),
+        new MeleeEnemy('Enemy 6', 5, 30),
       ], [], []),
     ]);
   }
@@ -324,6 +328,11 @@ export enum GameState {
 }
 
 /**
+ * All states when it is ok for the player to choose a character skill, possibly to change his mind.
+ */
+export const canSelectSkillStates = [GameState.SELECT_SKILL, GameState.SELECT_ENEMY, GameState.SELECT_CHARACTER];
+
+/**
  * The party location in the "world".
  */
 export class Game {
@@ -357,8 +366,8 @@ export class Game {
       ])
     ]);
 
-  // dungeon: Dungeon = new DevDungeon();
-  dungeon: Dungeon = new FangForestDungeon();
+  dungeons: Dungeon[] = [new DevDungeon(), new FangForestDungeon()];
+  dungeon: Dungeon = this.dungeons[1];
 
   fight: Fight = new Fight(this.party, new Opposition([], [], []));
 

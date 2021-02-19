@@ -1,5 +1,5 @@
 import {AfterViewInit, Component, ElementRef, HostListener, QueryList, ViewChild, ViewChildren} from '@angular/core';
-import {Fight, Game, GameState} from '../model/game.model';
+import {canSelectSkillStates, Fight, Game, GameState} from '../model/game.model';
 import {Character, Enemy} from '../model/creature.model';
 import {Skill} from '../model/skill.model';
 import {FightService} from './fight.service';
@@ -51,8 +51,7 @@ export class FightComponent implements AfterViewInit {
         } else {
           return 'border-red-500';
         }
-      }
-      else {
+      } else {
         if (this.fight.isActive(character)) {
           return 'border-gray-200';
         } else {
@@ -69,7 +68,7 @@ export class FightComponent implements AfterViewInit {
   }
 
   getSkillBorderClass(skill: Skill): string {
-    if (this.game.state == GameState.SELECT_SKILL) {
+    if (canSelectSkillStates.includes(this.game.state)) {
       // Choosing a skill
 
       if (skill.name == this.fight.hoveredSkill?.name) {
@@ -83,7 +82,12 @@ export class FightComponent implements AfterViewInit {
           return 'border-red-500';
         }
       } else {
-        return 'border-gray-800';
+        if (skill.name == this.fight.selectedSkill?.name) {
+          // Highlight the previously selected skill
+          return 'border-gray-200';
+        } else {
+          return 'border-gray-800';
+        }
       }
     } else {
       // Not choosing a skill
@@ -125,8 +129,8 @@ export class FightComponent implements AfterViewInit {
   /**
    * Use a pointer cursor when in a given game state, or else the default cursor.
    */
-  usePointerForState(state: GameState) {
-    return this.game.state == state ? 'cursor-pointer' : 'cursor-default';
+  usePointerForStates(states: GameState[]) {
+    return states.includes(this.game.state) ? 'cursor-pointer' : 'cursor-default';
   }
 
   @HostListener('window:keydown', ['$event'])

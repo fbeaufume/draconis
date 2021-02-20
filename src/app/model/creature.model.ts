@@ -1,7 +1,7 @@
 // Creature related classes
 
 import {Game, OPPOSITION_ROW_SIZE} from './game.model';
-import {advance, heal, inhale, Skill, strike, strikeSmall, wait} from './skill.model';
+import {advance, heal, leave, Skill, strike, strikeSmall, wait} from './skill.model';
 
 /**
  * Base class for enemies and characters.
@@ -301,6 +301,16 @@ export class EnemyAction {
 export abstract class Enemy extends Creature {
 
   /**
+   * The enemy action (zero-based) step, 0 the for the first action, 1 for the second, etc.
+   */
+  step: number = -1;
+
+  /**
+   * Some enemies have phases with different abilities.
+   */
+  phase: number = 1;
+
+  /**
    * The distance between the enemy and the party, i.e. 1 means the opposition front row, 2 means the middle row, 3 the back row.
    */
   distance: number = 1;
@@ -320,6 +330,15 @@ export abstract class Enemy extends Creature {
 
   isEnemy(): boolean {
     return true;
+  }
+
+  /**
+   * Handle the creation turn, mostly delegates to the choose action method.
+   * @param game
+   */
+  handleTurn(game: Game): EnemyAction {
+    this.step++;
+    return this.chooseAction(game);
   }
 
   /**
@@ -371,6 +390,37 @@ export class MeleeEnemy extends Enemy {
 }
 
 /**
+ * A peaceful old man (in phase 1) than turns into a strong druid (in phase 2) when attacked.
+ */
+export class OldManEnemy extends Enemy {
+
+  damage(amount: number): number {
+    if (this.phase == 1) {
+      // Turn into a druid
+      this.phase = 2;
+      this.name = 'Elder Druid';
+      this.lifeMax = this.lifeMax * 3;
+      this.heal(this.lifeMax);
+    }
+
+    return super.damage(amount);
+  }
+
+  chooseAction(game: Game): EnemyAction {
+    if (this.phase == 1) {
+      if (this.step >= 1) {
+        // Leave the fight
+        return new EnemyAction(leave, []);
+      } else {
+        return new EnemyAction(wait, []);
+      }
+    } else {
+      return new EnemyAction(strike, game.party.targetOneFrontRowAliveCharacter());
+    }
+  }
+}
+
+/**
  * Default distance enemy class.
  */
 export class DistanceEnemy extends Enemy {
@@ -401,18 +451,11 @@ export class HealerEnemy extends Enemy {
  */
 export class DragonEnemy extends Enemy {
 
-  step: number = -1;
-
   chooseAction(game: Game): EnemyAction {
-    this.step++;
-    switch (this.step % 4) {
+    switch (this.step % 2) {
       case 0:
-      case 1:
         // Claw attack on a character
         return new EnemyAction(strike, game.party.targetOneFrontRowAliveCharacter());
-      case 2:
-        // Prepare the AOE
-        return new EnemyAction(inhale, []);
       default:
         // AOE on all characters
         return new EnemyAction(strikeSmall, game.party.targetAllAliveCharacters());

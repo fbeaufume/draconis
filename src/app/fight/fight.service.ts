@@ -208,17 +208,7 @@ export class FightService {
 
         // Check if the party won
         if (this.fight.opposition.isWiped()) {
-          this.pause(() => {
-            this.logs.push(new Log(LogType.PartyVictory));
-
-            if (this.game.hasNextEncounter()) {
-              // Moving on to the next encounter
-              this.state = GameState.START_NEXT_ENCOUNTER;
-            } else {
-              // The dungeon is over
-              this.state = GameState.DUNGEON_END;
-            }
-          });
+          this.winTheEncounter();
         } else {
           this.processNextTurn(true);
         }
@@ -226,6 +216,23 @@ export class FightService {
     } else {
       this.processNextTurn(true);
     }
+  }
+
+  /**
+   * The party won the encounter.
+   */
+  winTheEncounter() {
+    this.pause(() => {
+      this.logs.push(new Log(LogType.PartyVictory));
+
+      if (this.game.hasNextEncounter()) {
+        // Moving on to the next encounter
+        this.state = GameState.START_NEXT_ENCOUNTER;
+      } else {
+        // The dungeon is over
+        this.state = GameState.DUNGEON_END;
+      }
+    });
   }
 
   /**
@@ -295,7 +302,7 @@ export class FightService {
    */
   processEnemyTurnStep1(enemy: Enemy) {
     // Execute the enemy strategy
-    const action = enemy.chooseAction(this.game);
+    const action = enemy.handleTurn(this.game);
 
     if (action.skill.target == SkillTarget.NONE) {
       // Actions without target are executed immediately
@@ -321,14 +328,18 @@ export class FightService {
     // Execute the skill
     action.skill.execute(this.fight, this.logs);
 
-    // Check if the party lost
+    // Check if the encounter is over
     if (this.party.isWiped()) {
+      // The party lost
       this.pause(() => {
         this.logs.push(new Log(LogType.PartyDefeat));
 
         // The dungeon is over
         this.state = GameState.DUNGEON_END;
       });
+    } else if (this.fight.opposition.isWiped()) {
+      // The party won
+      this.winTheEncounter();
     } else {
       this.processNextTurn(true);
     }
@@ -349,7 +360,7 @@ export class FightService {
   }
 
   /**
-   * Process the next turn immediatly or after some pauses.
+   * Process the next turn immediately or after some pauses.
    */
   processNextTurn(pause: boolean) {
     if (pause) {

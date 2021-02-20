@@ -10,7 +10,7 @@ export enum LogType {
   StartRound,
   Advance,
   Wait,
-  Inhale,
+  Leave,
   Defend,
   Damage,
   Heal,

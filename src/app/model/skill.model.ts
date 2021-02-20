@@ -110,14 +110,21 @@ export class Wait extends Skill {
 }
 
 /**
- * Inhale before a breath attack.
+ * Leave the fight.
  */
-export class Inhale extends Skill {
+export class Leave extends Skill {
 
   execute(fight: Fight, logs: Log[]): void {
     super.execute(fight, logs);
 
-    logs.push(new Log(LogType.Inhale, fight.activeCreature));
+    // Remove the creature from the fight
+    if (fight.activeCreature != null) {
+      fight.activeCreature.life = 0;
+      fight.opposition.removeDeadEnemies();
+      fight.opposition.removeEmptyRows();
+    }
+
+    logs.push(new Log(LogType.Leave, fight.activeCreature));
   }
 }
 
@@ -185,7 +192,7 @@ export class Revive extends Skill {
 // Enemies skills
 export const advance = new Advance('', SkillTarget.NONE, 0, 0, 0, 0, '');
 export const wait = new Wait('', SkillTarget.NONE, 0, 0, 0, 0, '');
-export const inhale = new Inhale('', SkillTarget.NONE, 0, 0, 0, 0, '');
+export const leave = new Leave('', SkillTarget.NONE, 0, 0, 0, 0, '');
 export const strikeSmall = new Damage('', SkillTarget.ENEMY, 0, 0, 0, 0.7, '');
 
 // Common characters skills

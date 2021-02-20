@@ -20,8 +20,8 @@
     <span [ngClass]="getClassForCreature(log.args[0])">{{ $any(log.args[0]).name }}</span> waits.
   </div>
   <div *ngSwitchCase="5">
-    <!-- Inhale -->
-    <span [ngClass]="getClassForCreature(log.args[0])">{{ $any(log.args[0]).name }}</span> takes a deep breath.
+    <!-- Leave -->
+    <span [ngClass]="getClassForCreature(log.args[0])">{{ $any(log.args[0]).name }}</span> leaves the fight.
   </div>
   <div *ngSwitchCase="6">
     <!-- Defend -->

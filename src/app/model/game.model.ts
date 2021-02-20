@@ -8,7 +8,7 @@ import {
   EndOfRound,
   Enemy,
   HealerEnemy,
-  MeleeEnemy,
+  MeleeEnemy, OldManEnemy,
   Opposition,
   Party
 } from './creature.model';
@@ -232,15 +232,17 @@ export class Dungeon {
 }
 
 /**
- * Basic dungeon used during application development.
+ * Test dungeon used during application development.
  */
-class DevDungeon extends Dungeon {
+class TestDungeon extends Dungeon {
 
   constructor() {
-    super('Dev Dungeon', [
+    super('Test Dungeon', [
       new Opposition('some monsters', [
-        new MeleeEnemy('Monster 1', 5, 8),
-        new MeleeEnemy('Monster 2', 5, 8),
+        // new OldManEnemy('Old Man', 24, 14),
+        new DragonEnemy('Green Dragon', 120, 10, 2),
+        // new MeleeEnemy('Monster 1', 5, 8),
+        // new MeleeEnemy('Monster 2', 5, 8),
         // new MeleeEnemy('Monster 3', 5, 8),
         // new MeleeEnemy('Monster 4', 5, 8),
       ], [
@@ -285,6 +287,9 @@ class FangForestDungeon extends Dungeon {
       ], [
         new MeleeEnemy('Wolf F', 24, 5),
       ]),
+      new Opposition('a mysterious old man', [
+        new OldManEnemy('Old Man', 24, 14)
+      ],[],[]),
       new Opposition('a band of goblins', [
         new MeleeEnemy('Goblin Solder A', 32, 7),
         new MeleeEnemy('Goblin Solder B', 32, 7),
@@ -293,7 +298,7 @@ class FangForestDungeon extends Dungeon {
         new HealerEnemy('Goblin Shaman', 24, 8),
       ], []),
       new Opposition('a young but fierce green dragon', [
-        new DragonEnemy('Green Dragon', 120, 8, 2),
+        new DragonEnemy('Green Dragon', 120, 10, 2),
       ], [], []),
     ]);
   }
@@ -364,7 +369,7 @@ export class Game {
       ])
     ]);
 
-  dungeons: Dungeon[] = [new DevDungeon(), new FangForestDungeon()];
+  dungeons: Dungeon[] = [new TestDungeon(), new FangForestDungeon()];
   dungeon: Dungeon = this.dungeons[1];
 
   fight: Fight = new Fight(this.party, new Opposition('', [], [], []));

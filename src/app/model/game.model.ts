@@ -106,7 +106,6 @@ export class TurnOrder {
 
     // Shuffle the enemies
     const enemies: Enemy[] = [];
-    //
     for (let i = 0; i < OPPOSITION_ROWS; i++) { // Iterate over rows
       for (let j = 0; j < opposition.rows[i].enemies.length; j++) { // Iterate over creatures
         for (let k = 0; k < opposition.rows[i].enemies[j].actions; k++) { // Iterate over actions
@@ -124,7 +123,7 @@ export class TurnOrder {
       this.currentOrder.push(bigFaction[i]);
 
       // From time to time we add a member of the small faction to the turn order
-      if (((smallFactionPos + 1) / smallFaction.length) <= ((i + 1) / bigFaction.length)) {
+      if (((smallFactionPos + 1) / smallFaction.length - 1 / (2 * smallFaction.length)) <= ((i + 1) / bigFaction.length)) {
         this.currentOrder.push(smallFaction[smallFactionPos++]);
       }
     }
@@ -242,12 +241,23 @@ class DevDungeon extends Dungeon {
       new Opposition('some monsters', [
         new MeleeEnemy('Monster 1', 5, 8),
         new MeleeEnemy('Monster 2', 5, 8),
-        new MeleeEnemy('Monster 3', 5, 8),
-      ], [], []),
+        // new MeleeEnemy('Monster 3', 5, 8),
+        // new MeleeEnemy('Monster 4', 5, 8),
+      ], [
+        // new MeleeEnemy('Monster 5', 5, 8),
+        // new MeleeEnemy('Monster 6', 5, 8),
+        // new MeleeEnemy('Monster 7', 5, 8),
+        // new MeleeEnemy('Monster 8', 5, 8),
+      ], [
+        // new MeleeEnemy('Monster 9', 5, 8),
+        // new MeleeEnemy('Monster 10', 5, 8),
+        // new MeleeEnemy('Monster 11', 5, 8),
+        // new MeleeEnemy('Monster 12', 5, 8),
+      ]),
       new Opposition('some monsters', [
-        new MeleeEnemy('Monster 4', 5, 8),
-        new MeleeEnemy('Monster 5', 5, 8),
-        new MeleeEnemy('Monster 6', 5, 8),
+        new MeleeEnemy('Monster 1', 5, 8),
+        new MeleeEnemy('Monster 2', 5, 8),
+        new MeleeEnemy('Monster 3', 5, 8),
       ], [], []),
     ])
     ;

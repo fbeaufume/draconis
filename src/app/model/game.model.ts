@@ -8,13 +8,14 @@ import {
   EndOfRound,
   Enemy,
   HealerEnemy,
-  MeleeEnemy, OldManEnemy,
+  MeleeEnemy,
+  OldManEnemy,
   Opposition,
   Party
 } from './creature.model';
 import {
   blast,
-  burn,
+  fireball,
   heal,
   holyStrike,
   magicDefend,
@@ -22,8 +23,10 @@ import {
   monkRevive,
   preciseShot,
   revive,
+  shock,
   shot,
   Skill,
+  slash,
   smash,
   spark,
   strike,
@@ -240,16 +243,16 @@ class TestDungeon extends Dungeon {
     super('Test Dungeon', [
       new Opposition('some monsters', [
         // new OldManEnemy('Old Man', 24, 14),
-        new DragonEnemy('Green Dragon', 120, 10, 2),
-        // new MeleeEnemy('Monster 1', 5, 8),
-        // new MeleeEnemy('Monster 2', 5, 8),
-        // new MeleeEnemy('Monster 3', 5, 8),
-        // new MeleeEnemy('Monster 4', 5, 8),
+        // new DragonEnemy('Green Dragon', 120, 10, 2),
+        new MeleeEnemy('Monster 1', 50, 5),
+        new MeleeEnemy('Monster 2', 50, 5),
+        new MeleeEnemy('Monster 3', 50, 5),
+        new MeleeEnemy('Monster 4', 50, 5),
       ], [
-        // new MeleeEnemy('Monster 5', 5, 8),
-        // new MeleeEnemy('Monster 6', 5, 8),
-        // new MeleeEnemy('Monster 7', 5, 8),
-        // new MeleeEnemy('Monster 8', 5, 8),
+        new MeleeEnemy('Monster 5', 50, 8),
+        new MeleeEnemy('Monster 6', 50, 8),
+        new MeleeEnemy('Monster 7', 50, 8),
+        new MeleeEnemy('Monster 8', 50, 8),
       ], [
         // new MeleeEnemy('Monster 9', 5, 8),
         // new MeleeEnemy('Monster 10', 5, 8),
@@ -289,7 +292,7 @@ class FangForestDungeon extends Dungeon {
       ]),
       new Opposition('a mysterious old man', [
         new OldManEnemy('Old Man', 24, 14)
-      ],[],[]),
+      ], [], []),
       new Opposition('a band of goblins', [
         new MeleeEnemy('Goblin Solder A', 32, 7),
         new MeleeEnemy('Goblin Solder B', 32, 7),
@@ -349,7 +352,7 @@ export class Game {
 
   party: Party = new Party([
       new Character('Melkan', 'Warrior', 4, 20, false, 50, 10, [
-        techDefend, strike, smash
+        techDefend, strike, smash, slash
       ]),
       new Character('Cyl', 'Monk', 4, 20, false, 50, 10, [
         techDefend, strike, monkHeal, monkRevive
@@ -362,7 +365,7 @@ export class Game {
         techDefend, shot, preciseShot
       ]),
       new Character('Harika', 'Mage', 4, 20, true, 50, 10, [
-        magicDefend, burn, blast
+        magicDefend, shock, blast, fireball
       ]),
       new Character('Nairo', 'Priest', 4, 20, true, 50, 10, [
         magicDefend, spark, heal, revive

@@ -105,16 +105,29 @@ export class FightComponent implements AfterViewInit {
     if (this.game.state == GameState.SELECT_ENEMY) {
       // Choosing an enemy
 
-      if (enemy.name == this.fight.hoveredEnemy?.name) {
-        // Hovering the enemy
+      if (this.fight.hoveredEnemy != null) {
+        // Hovering an enemy
 
-        if (enemy.distance > (this.fight.selectedSkill?.range ?? 0)) {
-          // The enemy is too far
-          return 'border-red-500';
-        } else {
-          return 'border-gray-200';
+        const targetEnemies: Enemy[] = this.fight.selectedSkill?.getTargetEnemies(this.fight.hoveredEnemy, this.fight) ?? [];
+
+        if (targetEnemies.includes(enemy)) {
+          // The current enemy is in the targets
+
+          if (this.fight.selectedSkill?.isUsableOn(enemy) ?? false) {
+            // The current enemy is a valid target
+            return 'border-gray-200';
+          } else {
+            // The current enemy is not a valid target
+            return 'border-red-500';
+          }
         }
-      } else {
+        else {
+          // The current enemy is not in the targets
+          return 'border-gray-800';
+        }
+      }
+      else {
+        // Not hovering an enemy, so no enemy highlight
         return 'border-gray-800';
       }
     } else {

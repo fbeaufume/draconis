@@ -11,7 +11,12 @@ export enum SkillTarget {
   NONE,
   CHARACTER_ALIVE,
   CHARACTER_DEAD,
-  ENEMY
+  // The skill targets a single enemy
+  ENEMY_SINGLE,
+  // The skill targets two adjacent enemies, the hovered one + its right one
+  ENEMY_DOUBLE,
+  // The skill targets three adjacent enemies, the hovered one + its left and right ones
+  ENEMY_TRIPLE,
 }
 
 /**
@@ -59,11 +64,56 @@ export abstract class Skill {
         return (creature instanceof Character) && creature.isAlive();
       case SkillTarget.CHARACTER_DEAD:
         return (creature instanceof Character) && creature.isDead();
-      case SkillTarget.ENEMY:
+      case SkillTarget.ENEMY_SINGLE:
+      case SkillTarget.ENEMY_DOUBLE:
+      case SkillTarget.ENEMY_TRIPLE:
         return (creature instanceof Enemy) && creature.isAlive() && (this.range >= creature.distance);
+      default:
+        return false;
+    }
+  }
+
+  /**
+   * Some skills have an area of effect. This method returns the effective target enemies for the skill based
+   * on the currently aimed (i.e. hovered or selected) enemy.
+   */
+  getTargetEnemies(enemy: Enemy, fight: Fight): Enemy[] {
+    const targets = [];
+
+    switch (this.target) {
+      case SkillTarget.ENEMY_SINGLE:
+        targets.push(enemy);
+
+        break;
+      case SkillTarget.ENEMY_DOUBLE:
+        targets.push(enemy);
+
+        // Add the enemy at the right, if any
+        const enemy1 = fight.opposition.getRightEnemy(enemy);
+        if (enemy1 != null) {
+          targets.push(enemy1);
+        }
+
+        break;
+      case SkillTarget.ENEMY_TRIPLE:
+        // Add the enemy at the left, if any
+        const enemy2 = fight.opposition.getLeftEnemy(enemy);
+        if (enemy2 != null) {
+          targets.push(enemy2);
+        }
+
+        targets.push(enemy);
+
+        // Add the enemy at the right, if any
+        const enemy3 = fight.opposition.getRightEnemy(enemy);
+        if (enemy3 != null) {
+          targets.push(enemy3);
+        }
+
+        break;
     }
 
-    return false;
+    return targets;
   }
 
   /**
@@ -193,14 +243,14 @@ export class Revive extends Skill {
 export const advance = new Advance('', SkillTarget.NONE, 0, 0, 0, 0, '');
 export const wait = new Wait('', SkillTarget.NONE, 0, 0, 0, 0, '');
 export const leave = new Leave('', SkillTarget.NONE, 0, 0, 0, 0, '');
-export const strikeSmall = new Damage('', SkillTarget.ENEMY, 0, 0, 0, 0.7, '');
+export const strikeSmall = new Damage('', SkillTarget.ENEMY_SINGLE, 0, 0, 0, 0.7, '');
 
 // Common characters skills
 export const techDefend = new Defend('Defend', SkillTarget.NONE, -30, 0, 0, 0,
   'Defend against attacks. Gain 30 TP.');
 export const magicDefend = new Defend('Defend', SkillTarget.NONE, -5, 0, 0, 0,
   'Defend against attacks. Gain 5 MP.');
-export const strike = new Damage('Strike', SkillTarget.ENEMY, 10, 1, 0, 1,
+export const strike = new Damage('Strike', SkillTarget.ENEMY_SINGLE, 10, 1, 0, 1,
   'Basic attack, does 100% weapon damage.');
 export const heal: Skill = new Heal('Heal', SkillTarget.CHARACTER_ALIVE, 5, 0, 0, 1,
   'Heal a party member for 100% weapon damage.');
@@ -208,8 +258,10 @@ export const revive: Skill = new Revive('Revive', SkillTarget.CHARACTER_DEAD, 20
   'Revive a party member with half his life.');
 
 // Warrior skills
-export const smash = new Damage('Smash', SkillTarget.ENEMY, 20, 1, 0, 1.5,
+export const smash = new Damage('Smash', SkillTarget.ENEMY_SINGLE, 20, 1, 0, 1.5,
   'Strong attack, does 150% weapon damage.');
+export const slash = new Damage('Slash', SkillTarget.ENEMY_DOUBLE, 20, 1, 0, 0.8,
+  'Area attack, does 80% weapon damage to two targets.');
 
 // Monk skills
 export const monkHeal: Skill = new Heal('Heal', SkillTarget.CHARACTER_ALIVE, 10, 0, 0, 1,
@@ -218,21 +270,23 @@ export const monkRevive: Skill = new Heal('Revive', SkillTarget.CHARACTER_DEAD, 
   'Revive a party member with half his life.');
 
 // Paladin skills
-export const holyStrike = new Damage('Holy Strike', SkillTarget.ENEMY, 5, 1, 0, 1,
+export const holyStrike = new Damage('Holy Strike', SkillTarget.ENEMY_SINGLE, 5, 1, 0, 1,
   'Holy attack, does 100% weapon damage.');
 
 // Hunter skills
-export const shot = new Damage('Shot', SkillTarget.ENEMY, 10, 2, 0, 1,
+export const shot = new Damage('Shot', SkillTarget.ENEMY_SINGLE, 10, 2, 0, 1,
   'Basic ranged attack, does 100% weapon damage.');
-export const preciseShot = new Damage('Precise Shot', SkillTarget.ENEMY, 20, 2, 0, 1.5,
+export const preciseShot = new Damage('Precise Shot', SkillTarget.ENEMY_SINGLE, 20, 2, 0, 1.5,
   'String ranged attack, does 150% weapon damage.');
 
 // Mage skills
-export const burn = new Damage('Burn', SkillTarget.ENEMY, 5, 2, 0, 1,
+export const shock = new Damage('Shock', SkillTarget.ENEMY_SINGLE, 5, 2, 0, 1,
   'Magic attack, does 100% weapon damage.');
-export const blast = new Damage('Blast', SkillTarget.ENEMY, 10, 2, 0, 1.5,
+export const blast = new Damage('Blast', SkillTarget.ENEMY_SINGLE, 10, 2, 0, 1.5,
   'Strong magic attack, does 150% weapon damage.');
+export const fireball = new Damage('Fireball', SkillTarget.ENEMY_TRIPLE, 12, 2, 0, 0.6,
+  'Area magic attack, does 60% weapon damage to three targets.');
 
 // Priest skills
-export const spark = new Damage('Spark', SkillTarget.ENEMY, 5, 2, 0, 0.8,
+export const spark = new Damage('Spark', SkillTarget.ENEMY_SINGLE, 5, 2, 0, 0.8,
   'Magical attack, does 80% weapon damage.');

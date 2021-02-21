@@ -597,4 +597,38 @@ export class Opposition {
       return null;
     }
   }
+
+  /**
+   * Get the enemy at the left of a given enemy.
+   */
+  getLeftEnemy(enemy: Enemy): Enemy | null {
+    // Row of the enemy
+    const row = this.rows[enemy.distance - 1];
+
+    // Position of the enemy in its row
+    const position: number = row.enemies.indexOf(enemy);
+
+    if (position > 0) {
+      return row.enemies[position - 1];
+    } else {
+      return null;
+    }
+  }
+
+  /**
+   * Get the enemy at the right of a given enemy.
+   */
+  getRightEnemy(enemy: Enemy): Enemy | null {
+    // Row of the enemy
+    const row = this.rows[enemy.distance - 1];
+
+    // Position of the enemy in its row
+    const position: number = row.enemies.indexOf(enemy);
+
+    if (position >= 0 && row.enemies.length > position + 1) {
+      return row.enemies[position + 1];
+    } else {
+      return null;
+    }
+  }
 }

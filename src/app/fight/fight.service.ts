@@ -147,7 +147,9 @@ export class FightService {
 
         this.processNextTurn(true);
         break;
-      case SkillTarget.ENEMY:
+      case SkillTarget.ENEMY_SINGLE:
+      case SkillTarget.ENEMY_DOUBLE:
+      case SkillTarget.ENEMY_TRIPLE:
         this.state = GameState.SELECT_ENEMY;
         break;
       case SkillTarget.CHARACTER_ALIVE:
@@ -179,7 +181,7 @@ export class FightService {
       return;
     }
 
-    this.fight.targetCreatures.push(enemy);
+    this.fight.targetCreatures.push(...this.fight.selectedSkill.getTargetEnemies(enemy, this.fight));
 
     this.fight.selectedSkill.execute(this.fight, this.logs);
 
@@ -189,7 +191,7 @@ export class FightService {
     if (this.fight.opposition.hasDeadEnemies()) {
       this.pause(() => {
         // Remove dead enemies from the opposition
-        const removedEnemies: Enemy[] = this.fight.opposition.removeDeadEnemies();
+        const removedEnemies: Enemy[] = this.fight.opposition.removeDeadEnemies(); // TODO FBE wolves killed by fireball are not all removed
 
         // Restore some mana points to the characters when enemies died
         const totalRemovedEnemiesLife: number = removedEnemies.reduce((sum, enemy) => sum + enemy.lifeMax, 0);

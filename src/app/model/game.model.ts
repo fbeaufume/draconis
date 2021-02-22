@@ -359,7 +359,7 @@ export class Game {
         techDefend, strike, recoveryStrike, monkHeal, monkRevive
       ]),
       new Character('Arwin', 'Paladin', 4, 20, true, 50, 10, [
-        magicDefend, holyStrike, heal, revive
+        magicDefend, holyStrike, heal
       ])],
     [
       new Character('Faren', 'Archer', 4, 20, false, 50, 10, [

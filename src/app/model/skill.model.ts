@@ -32,9 +32,11 @@ export abstract class Skill {
     // Skill range in number of rows, 0 if not applicable
     public range: number,
     public coolDown: number,
-    // Generic power of the skill, currently multiplied by the power of the creature to get the effective amount of damage or heal
-    public power: number,
-    public description: string
+    public description: string,
+    // Main power of the skill, for example to damage the target creature
+    public power1: number = 1,
+    // Second power of the skill, for example to damage an extra creature
+    public power2: number = 1,
   ) {
   }
 
@@ -198,11 +200,31 @@ export class Damage extends Skill {
   execute(fight: Fight, logs: Log[]): void {
     super.execute(fight, logs);
 
-    const baseDamage = this.power * (fight.activeCreature?.power ?? 0);
+    const baseDamage = this.power1 * (fight.activeCreature?.power ?? 0);
 
     fight.targetCreatures.forEach(creature => {
       logs.push(new Log(LogType.Damage, fight.activeCreature, creature,
         creature.damage(this.computeEffectiveDamage(baseDamage))));
+    });
+  }
+}
+
+/**
+ * A skill that damages the target creatures and heals the origin creature.
+ */
+export class DamageAndHeal extends Skill {
+
+  execute(fight: Fight, logs: Log[]): void {
+    super.execute(fight, logs);
+
+    const baseDamage = this.power1 * (fight.activeCreature?.power ?? 0);
+    const baseHeal = this.power2 * (fight.activeCreature?.power ?? 0);
+    console.log('damage and heal', baseDamage, baseHeal); // TODO FBE
+
+    fight.targetCreatures.forEach(creature => {
+      logs.push(new Log(LogType.DamageAndHeal, fight.activeCreature, creature,
+        creature.damage(this.computeEffectiveDamage(baseDamage)),
+        fight.activeCreature?.heal(this.computeEffectiveHeal(baseHeal))));
     });
   }
 }
@@ -215,7 +237,7 @@ export class Heal extends Skill {
   execute(fight: Fight, logs: Log[]): void {
     super.execute(fight, logs);
 
-    const baseHeal = this.power * (fight.activeCreature?.power ?? 0);
+    const baseHeal = this.power1 * (fight.activeCreature?.power ?? 0);
 
     fight.targetCreatures.forEach(creature => {
       logs.push(new Log(LogType.Heal, fight.activeCreature, creature,
@@ -240,53 +262,55 @@ export class Revive extends Skill {
 }
 
 // Enemies skills
-export const advance = new Advance('', SkillTarget.NONE, 0, 0, 0, 0, '');
-export const wait = new Wait('', SkillTarget.NONE, 0, 0, 0, 0, '');
-export const leave = new Leave('', SkillTarget.NONE, 0, 0, 0, 0, '');
-export const strikeSmall = new Damage('', SkillTarget.ENEMY_SINGLE, 0, 0, 0, 0.7, '');
+export const advance = new Advance('', SkillTarget.NONE, 0, 0, 0, '');
+export const wait = new Wait('', SkillTarget.NONE, 0, 0, 0, '');
+export const leave = new Leave('', SkillTarget.NONE, 0, 0, 0, '');
+export const strikeSmall = new Damage('', SkillTarget.ENEMY_SINGLE, 0, 0, 0, '', 0.7);
 
 // Common characters skills
-export const techDefend = new Defend('Defend', SkillTarget.NONE, -30, 0, 0, 0,
+export const techDefend = new Defend('Defend', SkillTarget.NONE, -30, 0, 0,
   'Defend against attacks. Gain 30 TP.');
-export const magicDefend = new Defend('Defend', SkillTarget.NONE, -5, 0, 0, 0,
+export const magicDefend = new Defend('Defend', SkillTarget.NONE, -5, 0, 0,
   'Defend against attacks. Gain 5 MP.');
-export const strike = new Damage('Strike', SkillTarget.ENEMY_SINGLE, 10, 1, 0, 1,
+export const strike = new Damage('Strike', SkillTarget.ENEMY_SINGLE, 10, 1, 0,
   'Basic attack, does 100% weapon damage.');
-export const heal: Skill = new Heal('Heal', SkillTarget.CHARACTER_ALIVE, 5, 0, 0, 1,
+export const heal: Skill = new Heal('Heal', SkillTarget.CHARACTER_ALIVE, 5, 0, 0,
   'Heal a party member for 100% weapon damage.');
-export const revive: Skill = new Revive('Revive', SkillTarget.CHARACTER_DEAD, 20, 0, 0, 1,
+export const revive: Skill = new Revive('Revive', SkillTarget.CHARACTER_DEAD, 20, 0, 0,
   'Revive a party member with half his life.');
 
 // Warrior skills
-export const smash = new Damage('Smash', SkillTarget.ENEMY_SINGLE, 20, 1, 0, 1.5,
-  'Strong attack, does 150% weapon damage.');
-export const slash = new Damage('Slash', SkillTarget.ENEMY_DOUBLE, 20, 1, 0, 0.8,
-  'Area attack, does 80% weapon damage to two targets.');
+export const smash = new Damage('Smash', SkillTarget.ENEMY_SINGLE, 20, 1, 0,
+  'Strong attack, does 150% weapon damage.', 1.5);
+export const slash = new Damage('Slash', SkillTarget.ENEMY_DOUBLE, 20, 1, 0,
+  'Area attack, does 80% weapon damage to two targets.', 0.8);
 
 // Monk skills
-export const monkHeal: Skill = new Heal('Heal', SkillTarget.CHARACTER_ALIVE, 10, 0, 0, 1,
+export const recoveryStrike: Skill = new DamageAndHeal('Recovery Strike', SkillTarget.ENEMY_SINGLE, 10, 1, 0,
+  'Does 70% weapon damage to the target and heal for 40% weapon damage.', 0.7, 0.4);
+export const monkHeal: Skill = new Heal('Heal', SkillTarget.CHARACTER_ALIVE, 10, 0, 0,
   'Heal a party member for 100% weapon damage.');
-export const monkRevive: Skill = new Heal('Revive', SkillTarget.CHARACTER_DEAD, 40, 0, 0, 1,
+export const monkRevive: Skill = new Revive('Revive', SkillTarget.CHARACTER_DEAD, 40, 0, 0,
   'Revive a party member with half his life.');
 
 // Paladin skills
-export const holyStrike = new Damage('Holy Strike', SkillTarget.ENEMY_SINGLE, 5, 1, 0, 1,
+export const holyStrike = new Damage('Holy Strike', SkillTarget.ENEMY_SINGLE, 5, 1, 0,
   'Holy attack, does 100% weapon damage.');
 
 // Hunter skills
-export const shot = new Damage('Shot', SkillTarget.ENEMY_SINGLE, 10, 2, 0, 1,
+export const shot = new Damage('Shot', SkillTarget.ENEMY_SINGLE, 10, 2, 0,
   'Basic ranged attack, does 100% weapon damage.');
-export const preciseShot = new Damage('Precise Shot', SkillTarget.ENEMY_SINGLE, 20, 2, 0, 1.5,
-  'String ranged attack, does 150% weapon damage.');
+export const preciseShot = new Damage('Precise Shot', SkillTarget.ENEMY_SINGLE, 20, 2, 0,
+  'String ranged attack, does 150% weapon damage.', 1.5);
 
 // Mage skills
-export const shock = new Damage('Shock', SkillTarget.ENEMY_SINGLE, 5, 2, 0, 1,
+export const shock = new Damage('Shock', SkillTarget.ENEMY_SINGLE, 5, 2, 0,
   'Magic attack, does 100% weapon damage.');
-export const blast = new Damage('Blast', SkillTarget.ENEMY_SINGLE, 10, 2, 0, 1.5,
-  'Strong magic attack, does 150% weapon damage.');
-export const fireball = new Damage('Fireball', SkillTarget.ENEMY_TRIPLE, 12, 2, 0, 0.6,
-  'Area magic attack, does 60% weapon damage to three targets.');
+export const blast = new Damage('Blast', SkillTarget.ENEMY_SINGLE, 10, 2, 0,
+  'Strong magic attack, does 150% weapon damage.', 1.5);
+export const fireball = new Damage('Fireball', SkillTarget.ENEMY_TRIPLE, 12, 2, 0,
+  'Area magic attack, does 60% weapon damage to three targets.', 0.6);
 
 // Priest skills
-export const spark = new Damage('Spark', SkillTarget.ENEMY_SINGLE, 5, 2, 0, 0.8,
-  'Magical attack, does 80% weapon damage.');
+export const spark = new Damage('Spark', SkillTarget.ENEMY_SINGLE, 5, 2, 0,
+  'Magical attack, does 100% weapon damage.');

@@ -191,7 +191,7 @@ export class FightService {
     if (this.fight.opposition.hasDeadEnemies()) {
       this.pause(() => {
         // Remove dead enemies from the opposition
-        const removedEnemies: Enemy[] = this.fight.opposition.removeDeadEnemies(); // TODO FBE wolves killed by fireball are not all removed
+        const removedEnemies: Enemy[] = this.fight.opposition.removeDeadEnemies();
 
         // Restore some mana points to the characters when enemies died
         const totalRemovedEnemiesLife: number = removedEnemies.reduce((sum, enemy) => sum + enemy.lifeMax, 0);

@@ -365,7 +365,7 @@ export class MeleeEnemy extends Enemy {
         for (let i = 0; i < currentRow.enemies.length; i++) {
           const enemy = currentRow.enemies[i];
           if (enemy === this) {
-            currentRow.enemies.splice(i, 1);
+            currentRow.enemies.splice(i--, 1);
           }
         }
 
@@ -486,11 +486,11 @@ export class Opposition {
   constructor(
     public description: string,
     // Front row enemies
-    row1Enemies: Enemy[],
+    row1Enemies: Enemy[] = [],
     // Middle row enemies
-    row2Enemies: Enemy[],
+    row2Enemies: Enemy[] = [],
     // Back row enemies
-    row3Enemies: Enemy[]) {
+    row3Enemies: Enemy[] = []) {
     this.rows.push(new EnemyRow(row1Enemies));
     this.rows.push(new EnemyRow(row2Enemies));
     this.rows.push(new EnemyRow(row3Enemies));
@@ -521,7 +521,7 @@ export class Opposition {
         const enemy: Enemy = row.enemies[i];
         if (enemy.life <= 0) {
           removedEnemies.push(enemy);
-          row.enemies.splice(i, 1);
+          row.enemies.splice(i--, 1);
         }
       }
     }
@@ -539,7 +539,7 @@ export class Opposition {
     for (let i = 0; i < this.rows.length - 1; i++) {
       const row: EnemyRow = this.rows[i];
       if (row.enemies.length <= 0) {
-        this.rows.splice(i, 1);
+        this.rows.splice(i--, 1);
         removeRows++;
       }
     }

@@ -22,6 +22,7 @@ import {
   monkHeal,
   monkRevive,
   preciseShot,
+  recoveryStrike,
   revive,
   shock,
   shot,
@@ -150,7 +151,7 @@ export class TurnOrder {
       const creature = this.currentOrder[i];
 
       if (creature.life <= 0 && creature instanceof Enemy) {
-        this.currentOrder.splice(i, 1);
+        this.currentOrder.splice(i--, 1);
       }
     }
   }
@@ -244,10 +245,10 @@ class TestDungeon extends Dungeon {
       new Opposition('some monsters', [
         // new OldManEnemy('Old Man', 24, 14),
         // new DragonEnemy('Green Dragon', 120, 10, 2),
-        new MeleeEnemy('Monster 1', 50, 5),
-        new MeleeEnemy('Monster 2', 50, 5),
-        new MeleeEnemy('Monster 3', 50, 5),
-        new MeleeEnemy('Monster 4', 50, 5),
+        new MeleeEnemy('Monster 1', 2, 5),
+        new MeleeEnemy('Monster 2', 2, 5),
+        new MeleeEnemy('Monster 3', 2, 5),
+        new MeleeEnemy('Monster 4', 2, 5),
       ], [
         new MeleeEnemy('Monster 5', 50, 8),
         new MeleeEnemy('Monster 6', 50, 8),
@@ -279,7 +280,7 @@ class FangForestDungeon extends Dungeon {
       new Opposition('wild bears', [
         new MeleeEnemy('Bear A', 38, 7),
         new MeleeEnemy('Bear B', 38, 7),
-      ], [], []),
+      ]),
       new Opposition('a pack of wolves', [
         new MeleeEnemy('Wolf A', 24, 5),
         new MeleeEnemy('Wolf B', 24, 5),
@@ -292,17 +293,17 @@ class FangForestDungeon extends Dungeon {
       ]),
       new Opposition('a mysterious old man', [
         new OldManEnemy('Old Man', 24, 14)
-      ], [], []),
+      ]),
       new Opposition('a band of goblins', [
         new MeleeEnemy('Goblin Solder A', 32, 7),
         new MeleeEnemy('Goblin Solder B', 32, 7),
       ], [
         new DistanceEnemy('Goblin Hunter', 28, 8),
         new HealerEnemy('Goblin Shaman', 24, 8),
-      ], []),
+      ]),
       new Opposition('a young but fierce green dragon', [
         new DragonEnemy('Green Dragon', 120, 10, 2),
-      ], [], []),
+      ]),
     ]);
   }
 }
@@ -355,7 +356,7 @@ export class Game {
         techDefend, strike, smash, slash
       ]),
       new Character('Cyl', 'Monk', 4, 20, false, 50, 10, [
-        techDefend, strike, monkHeal, monkRevive
+        techDefend, strike, recoveryStrike, monkHeal, monkRevive
       ]),
       new Character('Arwin', 'Paladin', 4, 20, true, 50, 10, [
         magicDefend, holyStrike, heal, revive
@@ -375,7 +376,7 @@ export class Game {
   dungeons: Dungeon[] = [new TestDungeon(), new FangForestDungeon()];
   dungeon: Dungeon = this.dungeons[1];
 
-  fight: Fight = new Fight(this.party, new Opposition('', [], [], []));
+  fight: Fight = new Fight(this.party, new Opposition(''));
 
   constructor() {
     this.region = this.dungeon.name;

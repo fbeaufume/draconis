@@ -34,29 +34,36 @@
     for <span class="text-red-500">{{ log.args[2] }}</span> HP.
   </div>
   <div *ngSwitchCase="8">
+    <!-- Damage and heal -->
+    <span [ngClass]="getClassForCreature(log.args[0])">{{ $any(log.args[0]).name }}</span>
+    damages <span [ngClass]="getClassForCreature(log.args[1])">{{ $any(log.args[1]).name }}</span>
+    for <span class="text-red-500">{{ log.args[2] }}</span> HP
+    and heals for <span class="text-green-500">{{ log.args[3] }}</span> HP.
+  </div>
+  <div *ngSwitchCase="9">
     <!-- Heal -->
     <span [ngClass]="getClassForCreature(log.args[0])">{{ $any(log.args[0]).name }}</span>
     heals <span [ngClass]="getClassForCreature(log.args[1])">{{ $any(log.args[1]).name }}</span>
     for <span class="text-green-500">{{ log.args[2] }}</span> HP.
   </div>
-  <div *ngSwitchCase="9">
+  <div *ngSwitchCase="10">
     <!-- Revive -->
     <span [ngClass]="getClassForCreature(log.args[0])">{{ $any(log.args[0]).name }}</span>
     revives <span [ngClass]="getClassForCreature(log.args[1])">{{ $any(log.args[1]).name }}</span>.
   </div>
-  <div *ngSwitchCase="10">
+  <div *ngSwitchCase="11">
     <!-- Enemy death -->
     <span class="text-yellow-200">{{ log.args[0] }}</span> was defeated.
   </div>
-  <div *ngSwitchCase="11">
+  <div *ngSwitchCase="12">
     <!-- Party victory -->
     The party won!
   </div>
-  <div *ngSwitchCase="12">
+  <div *ngSwitchCase="13">
     <!-- Party defeat -->
     The party lost!
   </div>
-  <div *ngSwitchCase="13">
+  <div *ngSwitchCase="14">
     <!-- Pause duration changed -->
     Using pause of <span class="text-gray-200">{{ log.args[0] }}</span> msec.
   </div>

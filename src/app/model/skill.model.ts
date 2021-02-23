@@ -219,12 +219,30 @@ export class DamageAndHeal extends Skill {
 
     const baseDamage = this.power1 * (fight.activeCreature?.power ?? 0);
     const baseHeal = this.power2 * (fight.activeCreature?.power ?? 0);
-    console.log('damage and heal', baseDamage, baseHeal); // TODO FBE
 
     fight.targetCreatures.forEach(creature => {
       logs.push(new Log(LogType.DamageAndHeal, fight.activeCreature, creature,
         creature.damage(this.computeEffectiveDamage(baseDamage)),
         fight.activeCreature?.heal(this.computeEffectiveHeal(baseHeal))));
+    });
+  }
+}
+
+/**
+ * A skill that damages the target creatures and the origin creature.
+ */
+export class DamageAndDamage extends Skill {
+
+  execute(fight: Fight, logs: Log[]): void {
+    super.execute(fight, logs);
+
+    const baseDamage1 = this.power1 * (fight.activeCreature?.power ?? 0);
+    const baseDamage2 = this.power2 * (fight.activeCreature?.power ?? 0);
+
+    fight.targetCreatures.forEach(creature => {
+      logs.push(new Log(LogType.DamageAndDamage, fight.activeCreature, creature,
+        creature.damage(this.computeEffectiveDamage(baseDamage1)),
+        fight.activeCreature?.damage(this.computeEffectiveDamage(baseDamage2))));
     });
   }
 }
@@ -282,6 +300,8 @@ export const revive: Skill = new Revive('Revive', SkillTarget.CHARACTER_DEAD, 20
 // Warrior skills
 export const smash = new Damage('Smash', SkillTarget.ENEMY_SINGLE, 20, 1, 0,
   'Strong attack, does 150% weapon damage.', 1.5);
+export const furyStrike = new DamageAndDamage('Fury Strike', SkillTarget.ENEMY_SINGLE, 20, 1, 0,
+  'Does 200% weapon damage to a target but loose 20% weapon damage as life.', 2.0, 0.2);
 export const slash = new Damage('Slash', SkillTarget.ENEMY_DOUBLE, 20, 1, 0,
   'Area attack, does 80% weapon damage to two targets.', 0.8);
 

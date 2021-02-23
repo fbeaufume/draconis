@@ -15,7 +15,7 @@ import {
 } from './creature.model';
 import {
   blast,
-  fireball,
+  fireball, furyStrike,
   heal,
   holyStrike,
   magicDefend,
@@ -353,7 +353,7 @@ export class Game {
 
   party: Party = new Party([
       new Character('Melkan', 'Warrior', 4, 20, false, 50, 10, [
-        techDefend, strike, smash, slash
+        techDefend, strike, smash, furyStrike, slash
       ]),
       new Character('Cyl', 'Monk', 4, 20, false, 50, 10, [
         techDefend, strike, recoveryStrike, monkHeal, monkRevive

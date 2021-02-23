@@ -14,6 +14,7 @@ export enum LogType {
   Defend,
   Damage,
   DamageAndHeal,
+  DamageAndDamage,
   Heal,
   Revive,
   EnemyDefeated,

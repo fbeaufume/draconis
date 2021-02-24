@@ -7,6 +7,7 @@ import {FightComponent} from './fight/fight.component';
 import {CharacterComponent} from './fight/character/character.component';
 import {EnemyComponent} from './fight/enemy/enemy.component';
 import {LogComponent} from './fight/log/log.component';
+import { SkillIconComponent } from './fight/skill-icon/skill-icon.component';
 
 @NgModule({
   declarations: [
@@ -14,7 +15,8 @@ import {LogComponent} from './fight/log/log.component';
     FightComponent,
     CharacterComponent,
     EnemyComponent,
-    LogComponent
+    LogComponent,
+    SkillIconComponent
   ],
   imports: [
     BrowserModule,

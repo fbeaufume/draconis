@@ -141,6 +141,11 @@ export class FightService {
     // The next step depends on the target type of the skill
     switch (skill.target) {
       case SkillTarget.NONE:
+      case SkillTarget.CHARACTER_ALL_ALIVE:
+        if (skill.target == SkillTarget.CHARACTER_ALL_ALIVE) {
+          this.fight.targetCreatures.push(...this.party.targetAllAliveCharacters());
+        }
+
         skill.execute(this.fight, this.logs);
 
         this.state = GameState.EXECUTING_SKILL;

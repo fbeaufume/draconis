@@ -22,6 +22,7 @@ export enum SkillType {
 export enum SkillTarget {
   NONE,
   CHARACTER_ALIVE,
+  CHARACTER_ALL_ALIVE,
   CHARACTER_DEAD,
   // The skill targets a single enemy
   ENEMY_SINGLE,
@@ -307,6 +308,8 @@ export const strike = new Damage(SkillType.ATTACK,'Strike', SkillTarget.ENEMY_SI
   'Basic attack, does 100% weapon damage.');
 export const heal: Skill = new Heal(SkillType.HEAL, 'Heal', SkillTarget.CHARACTER_ALIVE, 5, 0, 0,
   'Heal a party member for 100% weapon damage.');
+export const healAll: Skill = new Heal(SkillType.HEAL, 'Heal All', SkillTarget.CHARACTER_ALL_ALIVE, 20, 0, 0,
+  'Heal all party members for 50% weapon damage.', 0.5);
 export const revive: Skill = new Revive(SkillType.HEAL, 'Revive', SkillTarget.CHARACTER_DEAD, 20, 0, 0,
   'Revive a party member with half his life.');
 

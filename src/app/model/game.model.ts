@@ -16,7 +16,7 @@ import {
 import {
   blast,
   fireball, furyStrike,
-  heal,
+  heal, healAll,
   holyStrike,
   magicDefend,
   monkHeal,
@@ -359,7 +359,7 @@ export class Game {
         techDefend, strike, recoveryStrike, monkHeal, monkRevive
       ]),
       new Character('Arwin', 'Paladin', 4, 20, true, 50, 10, [
-        magicDefend, holyStrike, heal
+        magicDefend, holyStrike, heal, healAll
       ])],
     [
       new Character('Faren', 'Archer', 4, 20, false, 50, 10, [
@@ -369,7 +369,7 @@ export class Game {
         magicDefend, shock, blast, fireball
       ]),
       new Character('Nairo', 'Priest', 4, 20, true, 50, 10, [
-        magicDefend, spark, heal, revive
+        magicDefend, spark, heal, healAll, revive
       ])
     ]);
 

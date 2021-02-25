@@ -18,11 +18,9 @@ export abstract class Creature {
   // Max mana or tech points (depends on the character class) (currently only used by characters)
   energyPercent: number;
 
-  // Bonuses, a.k.a. "buffs"
-  // bonuses: string[] = [];
+  buffs: string[] = ['Up1', 'Up2'];
 
-  // Maluses, a.k.a. "debuffs"
-  // maluses: string[] = [];
+  debuffs: string[] = ['Do1'];
 
   protected constructor(
     public name: string,

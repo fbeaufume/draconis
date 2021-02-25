@@ -158,6 +158,7 @@ export class FightService {
         this.state = GameState.SELECT_ENEMY;
         break;
       case SkillTarget.CHARACTER_ALIVE:
+      case SkillTarget.CHARACTER_OTHER:
       case SkillTarget.CHARACTER_DEAD:
         this.state = GameState.SELECT_CHARACTER;
         break;
@@ -182,10 +183,11 @@ export class FightService {
    * Select an enemy target for a skill.
    */
   selectEnemy(enemy: Enemy) {
-    if (this.fight.selectedSkill == null || !this.fight.selectedSkill.isUsableOn(enemy)) {
+    if (this.fight.selectedSkill == null || !this.fight.selectedSkill.isUsableOn(enemy, this.fight)) {
       return;
     }
 
+    // Get the effective target creatures
     this.fight.targetCreatures.push(...this.fight.selectedSkill.getTargetEnemies(enemy, this.fight));
 
     this.fight.selectedSkill.execute(this.fight, this.logs);
@@ -261,12 +263,14 @@ export class FightService {
    * Select a character target for a skill.
    */
   selectCharacter(character: Character) {
-    if (this.fight.selectedSkill == null || !this.fight.selectedSkill.isUsableOn(character)) {
+    if (this.fight.selectedSkill == null || !this.fight.selectedSkill.isUsableOn(character, this.fight)) {
       return;
     }
 
-    this.fight.targetCreatures.push(character);
+    // Get the effective target creatures
+    this.fight.targetCreatures.push(...this.fight.selectedSkill.getTargetCharacters(character, this.fight));
 
+    // Execute the skill and log the output
     this.fight.selectedSkill.execute(this.fight, this.logs);
 
     this.state = GameState.EXECUTING_SKILL;

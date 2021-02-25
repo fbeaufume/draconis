@@ -14,7 +14,7 @@ import {
   Party
 } from './creature.model';
 import {
-  blast,
+  blast, dualHeal,
   fireball, furyStrike,
   heal, healAll,
   holyStrike,
@@ -359,7 +359,7 @@ export class Game {
         techDefend, strike, recoveryStrike, monkHeal, monkRevive
       ]),
       new Character('Arwin', 'Paladin', 4, 20, true, 50, 10, [
-        magicDefend, holyStrike, heal, healAll
+        magicDefend, holyStrike, heal, dualHeal, healAll
       ])],
     [
       new Character('Faren', 'Archer', 4, 20, false, 50, 10, [

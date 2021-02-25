@@ -23,6 +23,8 @@ export enum SkillTarget {
   NONE,
   CHARACTER_ALIVE,
   CHARACTER_ALL_ALIVE,
+  // An alive character different than the current character
+  CHARACTER_OTHER,
   CHARACTER_DEAD,
   // The skill targets a single enemy
   ENEMY_SINGLE,
@@ -72,12 +74,14 @@ export abstract class Skill {
   }
 
   /**
-   * Return true if the player to use this skill on the target creature.
+   * Return true if the player is able to use this skill on the target creature.
    */
-  isUsableOn(creature: Character | Enemy): boolean {
+  isUsableOn(creature: Character | Enemy, fight: Fight): boolean {
     switch (this.target) {
       case SkillTarget.CHARACTER_ALIVE:
         return (creature instanceof Character) && creature.isAlive();
+      case SkillTarget.CHARACTER_OTHER:
+        return (creature instanceof Character) && creature != fight.activeCreature;
       case SkillTarget.CHARACTER_DEAD:
         return (creature instanceof Character) && creature.isDead();
       case SkillTarget.ENEMY_SINGLE:
@@ -124,6 +128,30 @@ export abstract class Skill {
         const enemy3 = fight.opposition.getRightEnemy(enemy);
         if (enemy3 != null) {
           targets.push(enemy3);
+        }
+
+        break;
+    }
+
+    return targets;
+  }
+
+  /**
+   * Some skills have an area of effect. This method returns the effective target characters for the skill based
+   * on the currently aimed (i.e. hovered or selected) character.
+   */
+  getTargetCharacters(character: Character, fight: Fight): Character[] {
+    const targets = [];
+
+    switch (this.target) {
+      case SkillTarget.CHARACTER_ALIVE:
+        targets.push(character);
+
+        break;
+      case SkillTarget.CHARACTER_OTHER:
+        targets.push(character);
+        if (fight.activeCreature instanceof Character) {
+          targets.push(fight.activeCreature);
         }
 
         break;
@@ -279,6 +307,24 @@ export class Heal extends Skill {
 }
 
 /**
+ * A healing skill that heals two targets.
+ */
+export class DualHeal extends Skill {
+
+  execute(fight: Fight, logs: Log[]): void {
+    super.execute(fight, logs);
+
+    const baseHeal1 = this.power1 * (fight.activeCreature?.power ?? 0);
+    const baseHeal2 = this.power2 * (fight.activeCreature?.power ?? 0);
+
+    const creature1: Creature = fight.targetCreatures[0];
+    logs.push(new Log(LogType.Heal, fight.activeCreature, creature1,  creature1.heal(this.computeEffectiveHeal(baseHeal1))));
+    const creature2: Creature = fight.targetCreatures[1];
+    logs.push(new Log(LogType.Heal, fight.activeCreature, creature2,  creature2.heal(this.computeEffectiveHeal(baseHeal2))));
+  }
+}
+
+/**
  * A revive skill.
  */
 export class Revive extends Skill {
@@ -307,11 +353,11 @@ export const magicDefend = new Defend(SkillType.DEFENSE, 'Defend', SkillTarget.N
 export const strike = new Damage(SkillType.ATTACK,'Strike', SkillTarget.ENEMY_SINGLE, 10, 1, 0,
   'Basic attack, does 100% weapon damage.');
 export const heal: Skill = new Heal(SkillType.HEAL, 'Heal', SkillTarget.CHARACTER_ALIVE, 5, 0, 0,
-  'Heal a party member for 100% weapon damage.');
+  'Heal a character for 100% weapon damage.');
 export const healAll: Skill = new Heal(SkillType.HEAL, 'Heal All', SkillTarget.CHARACTER_ALL_ALIVE, 20, 0, 0,
-  'Heal all party members for 50% weapon damage.', 0.5);
+  'Heal all characters for 50% weapon damage.', 0.5);
 export const revive: Skill = new Revive(SkillType.HEAL, 'Revive', SkillTarget.CHARACTER_DEAD, 20, 0, 0,
-  'Revive a party member with half his life.');
+  'Revive a character with half his life.');
 
 // Warrior skills
 export const smash = new Damage(SkillType.ATTACK,'Smash', SkillTarget.ENEMY_SINGLE, 20, 1, 0,
@@ -325,13 +371,15 @@ export const slash = new Damage(SkillType.ATTACK,'Slash', SkillTarget.ENEMY_DOUB
 export const recoveryStrike: Skill = new DamageAndHeal(SkillType.ATTACK,'Recovery Strike', SkillTarget.ENEMY_SINGLE, 10, 1, 0,
   'Does 70% weapon damage to the target and heal for 40% weapon damage.', 0.7, 0.4);
 export const monkHeal: Skill = new Heal(SkillType.HEAL, 'Heal', SkillTarget.CHARACTER_ALIVE, 10, 0, 0,
-  'Heal a party member for 100% weapon damage.');
+  'Heal a character for 100% weapon damage.');
 export const monkRevive: Skill = new Revive(SkillType.HEAL, 'Revive', SkillTarget.CHARACTER_DEAD, 40, 0, 0,
-  'Revive a party member with half his life.');
+  'Revive a character with half his life.');
 
 // Paladin skills
 export const holyStrike = new Damage(SkillType.ATTACK,'Holy Strike', SkillTarget.ENEMY_SINGLE, 5, 1, 0,
   'Holy attack, does 100% weapon damage.');
+export const dualHeal: Skill = new DualHeal(SkillType.HEAL, 'Dual Heal', SkillTarget.CHARACTER_OTHER, 10, 0, 0,
+  'Heal a character for 100% weapon damage and the caster for 80% weapon damage.', 1, 0.8);
 
 // Hunter skills
 export const shot = new Damage(SkillType.ATTACK,'Shot', SkillTarget.ENEMY_SINGLE, 10, 2, 0,

@@ -46,7 +46,7 @@ export class FightComponent implements AfterViewInit {
       // Choosing a character
 
       if (character.name == this.fight.hoveredCharacter?.name) {
-        if (this.fight.selectedSkill?.isUsableOn(character)) {
+        if (this.fight.selectedSkill?.isUsableOn(character, this.fight)) {
           return 'border-gray-200';
         } else {
           return 'border-red-500';
@@ -113,7 +113,7 @@ export class FightComponent implements AfterViewInit {
         if (targetEnemies.includes(enemy)) {
           // The current enemy is in the targets
 
-          if (this.fight.selectedSkill?.isUsableOn(enemy) ?? false) {
+          if (this.fight.selectedSkill?.isUsableOn(enemy, this.fight) ?? false) {
             // The current enemy is a valid target
             return 'border-gray-200';
           } else {

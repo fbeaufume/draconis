@@ -3,6 +3,15 @@
 import {Game, OPPOSITION_ROW_SIZE} from './game.model';
 import {advance, heal, leave, Skill, strike, strikeSmall, wait} from './skill.model';
 
+export class Status {
+  constructor(
+    public name:string,
+    // True for a buff, false for a debuff
+    public improvement: boolean
+  ) {
+  }
+}
+
 /**
  * Base class for enemies and characters.
  */
@@ -18,9 +27,8 @@ export abstract class Creature {
   // Max mana or tech points (depends on the character class) (currently only used by characters)
   energyPercent: number;
 
-  buffs: string[] = ['Up1', 'Up2'];
-
-  debuffs: string[] = ['Do1'];
+  // Buffs and debuffs
+  statuses: Status[] = [new Status('Up1', true), new Status('Up2', true), new Status('Do1', false)];
 
   protected constructor(
     public name: string,
@@ -112,6 +120,14 @@ export abstract class Creature {
       return maxAmount;
     }
     return amount;
+  }
+
+  getBuffs(): Status[] {
+    return this.statuses.filter(status => status.improvement);
+  }
+
+  getDebuffs(): Status[] {
+    return this.statuses.filter(status => !status.improvement);
   }
 }
 

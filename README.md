@@ -2,6 +2,9 @@
 
 Early stages of a simple, web based, old school RPG.
 
+This project is also a sandbox to keep working on frontend technologies such as:
+Angular, TypeScript, Tailwind, CSS animations, SVG, etc. 
+
 The current design choices and objectives for the first major version are:
 
 - No install, but playable with a web browser
@@ -16,12 +19,11 @@ The current design choices and objectives for the first major version are:
 - Some crafting
 - Misc (consumables such as potions, combat statuses, etc)
 
-Roadmap:
+Indicative roadmap:
 
-- Basic combat system (turns, actions, rows, etc)
+- Combat system (turns, actions, rows, area of effect, statuses, etc)
 - Progression system (classes, skills, attributes, levels, etc)
-- Combat system (attack, defense)
-- Equipment (slots, rarities, etc) and loot (affixes)
+- Equipment (slots, rarities, affixes, etc)
 - Dungeons and monsters
 - Cities
 - Quests

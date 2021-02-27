@@ -1,7 +1,7 @@
 // Skill related classes
 
 import {Fight} from './game.model';
-import {Character, Creature, Enemy} from './creature.model';
+import {Character, Creature, Enemy, Status} from './creature.model';
 import {Log, LogType} from './log.model';
 
 /**
@@ -230,7 +230,11 @@ export class Defend extends Skill {
   execute(fight: Fight, logs: Log[]): void {
     super.execute(fight, logs);
 
-    logs.push(new Log(LogType.Defend, fight.activeCreature));
+    if (fight.activeCreature != null) {
+      fight.activeCreature.addStatus(new Status('Def', true, 1));
+
+      logs.push(new Log(LogType.Defend, fight.activeCreature));
+    }
   }
 }
 

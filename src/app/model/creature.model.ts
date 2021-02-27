@@ -7,8 +7,14 @@ export class Status {
   constructor(
     public name:string,
     // True for a buff, false for a debuff
-    public improvement: boolean
+    public improvement: boolean,
+    // Duration in turns
+    public duration: number
   ) {
+  }
+
+  decreaseDuration() {
+    this.duration--;
   }
 }
 
@@ -28,7 +34,7 @@ export abstract class Creature {
   energyPercent: number;
 
   // Buffs and debuffs
-  statuses: Status[] = [new Status('Up1', true), new Status('Up2', true), new Status('Do1', false)];
+  statuses: Status[] = [];
 
   protected constructor(
     public name: string,
@@ -77,6 +83,11 @@ export abstract class Creature {
 
     this.updateLifePercent();
 
+    // Remove all statuses when dead
+    if (this.life <= 0) {
+      this.statuses = [];
+    }
+
     return amount;
   }
 
@@ -122,12 +133,31 @@ export abstract class Creature {
     return amount;
   }
 
+  addStatus(status: Status) {
+    this.statuses.push(status);
+  }
+
   getBuffs(): Status[] {
     return this.statuses.filter(status => status.improvement);
   }
 
   getDebuffs(): Status[] {
     return this.statuses.filter(status => !status.improvement);
+  }
+
+  /**
+   * Reduce the remaining duration of all statuses and remove the expired ones.
+   */
+  decreaseStatusesDuration() {
+    for (let i = 0; i < this.statuses.length; i++) {
+      const status = this.statuses[i];
+      status.decreaseDuration();
+
+      if (status.duration <= 0) {
+        // Remove the status
+        this.statuses.splice(i--, 1);
+      }
+    }
   }
 }
 

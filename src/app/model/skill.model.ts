@@ -1,7 +1,7 @@
 // Skill related classes
 
 import {Fight} from './game.model';
-import {Character, Creature, Enemy, Status} from './creature.model';
+import {Character, Creature, Enemy, Status, StatusName} from './creature.model';
 import {Log, LogType} from './log.model';
 
 /**
@@ -161,17 +161,34 @@ export abstract class Skill {
   }
 
   /**
-   * Compute an effective damage from a base damage by applying a small random modification.
+   * Compute the effective amount for a damaging attack using the attacker power, the creatures statuses, the skill power,
+   * and using a small random modification. Also return the computed amount.
    */
-  computeEffectiveDamage(base: number): number {
-    return (0.85 + Math.random() * 0.3) * base;
+  computeEffectiveDamage(attacker: Creature, defender: Creature, skillPower: number): number {
+    // Use the attacker power and skill power
+    const baseAmount = attacker.power * skillPower;
+
+    // Use the defend buff
+    const correctedAmount = defender.hasBuff(StatusName.DEFEND) ? baseAmount * 0.75 : baseAmount;
+
+    // Use a small random modification
+    return this.randomize(correctedAmount);
   }
 
   /**
-   * Compute an effective heal from a base damage by applying a small random modification.
+   * Compute the effective amount for a heal using the attacker power, the creatures statuses, the skill power,
+   * and using a small random modification. Also return the computed amount.
    */
-  computeEffectiveHeal(base: number): number {
-    return this.computeEffectiveDamage(base);
+  computeEffectiveHeal(attacker: Creature, defender: Creature, skillPower: number): number {
+    // Use the attacker power and skill power
+    const baseAmount = attacker.power * skillPower;
+
+    // Use a small random modification
+    return this.randomize(baseAmount);
+  }
+
+  randomize(amount: number): number {
+    return (0.85 + Math.random() * 0.3) * amount;
   }
 
   execute(fight: Fight, logs: Log[]): void {
@@ -231,7 +248,7 @@ export class Defend extends Skill {
     super.execute(fight, logs);
 
     if (fight.activeCreature != null) {
-      fight.activeCreature.addStatus(new Status('Def', true, 1));
+      fight.activeCreature.addStatus(new Status(StatusName.DEFEND, true, 1));
 
       logs.push(new Log(LogType.Defend, fight.activeCreature));
     }
@@ -244,13 +261,17 @@ export class Defend extends Skill {
 export class Damage extends Skill {
 
   execute(fight: Fight, logs: Log[]): void {
+    if (fight.activeCreature == null) {
+      return;
+    }
+
+    const activeCreature: Creature = fight.activeCreature;
+
     super.execute(fight, logs);
 
-    const baseDamage = this.power1 * (fight.activeCreature?.power ?? 0);
-
-    fight.targetCreatures.forEach(creature => {
-      logs.push(new Log(LogType.Damage, fight.activeCreature, creature,
-        creature.damage(this.computeEffectiveDamage(baseDamage))));
+    fight.targetCreatures.forEach(targetCreature => {
+      logs.push(new Log(LogType.Damage, activeCreature, targetCreature,
+        targetCreature.damage(this.computeEffectiveDamage(activeCreature, targetCreature, this.power1))));
     });
   }
 }
@@ -261,15 +282,18 @@ export class Damage extends Skill {
 export class DamageAndHeal extends Skill {
 
   execute(fight: Fight, logs: Log[]): void {
+    if (fight.activeCreature == null) {
+      return;
+    }
+
+    const activeCreature: Creature = fight.activeCreature;
+
     super.execute(fight, logs);
 
-    const baseDamage = this.power1 * (fight.activeCreature?.power ?? 0);
-    const baseHeal = this.power2 * (fight.activeCreature?.power ?? 0);
-
-    fight.targetCreatures.forEach(creature => {
-      logs.push(new Log(LogType.DamageAndHeal, fight.activeCreature, creature,
-        creature.damage(this.computeEffectiveDamage(baseDamage)),
-        fight.activeCreature?.heal(this.computeEffectiveHeal(baseHeal))));
+    fight.targetCreatures.forEach(targetCreature => {
+      logs.push(new Log(LogType.DamageAndHeal, activeCreature, targetCreature,
+        targetCreature.damage(this.computeEffectiveDamage(activeCreature, targetCreature, this.power1)),
+        activeCreature.heal(this.computeEffectiveHeal(activeCreature, activeCreature, this.power2))));
     });
   }
 }
@@ -280,15 +304,18 @@ export class DamageAndHeal extends Skill {
 export class DamageAndDamage extends Skill {
 
   execute(fight: Fight, logs: Log[]): void {
+    if (fight.activeCreature == null) {
+      return;
+    }
+
+    const activeCreature: Creature = fight.activeCreature;
+
     super.execute(fight, logs);
 
-    const baseDamage1 = this.power1 * (fight.activeCreature?.power ?? 0);
-    const baseDamage2 = this.power2 * (fight.activeCreature?.power ?? 0);
-
-    fight.targetCreatures.forEach(creature => {
-      logs.push(new Log(LogType.DamageAndDamage, fight.activeCreature, creature,
-        creature.damage(this.computeEffectiveDamage(baseDamage1)),
-        fight.activeCreature?.damage(this.computeEffectiveDamage(baseDamage2))));
+    fight.targetCreatures.forEach(targetCreature => {
+      logs.push(new Log(LogType.DamageAndDamage, activeCreature, targetCreature,
+        targetCreature.damage(this.computeEffectiveDamage(activeCreature, targetCreature, this.power1)),
+        activeCreature.damage(this.computeEffectiveDamage(activeCreature, activeCreature, this.power2))));
     });
   }
 }
@@ -299,13 +326,17 @@ export class DamageAndDamage extends Skill {
 export class Heal extends Skill {
 
   execute(fight: Fight, logs: Log[]): void {
+    if (fight.activeCreature == null) {
+      return;
+    }
+
+    const activeCreature: Creature = fight.activeCreature;
+
     super.execute(fight, logs);
 
-    const baseHeal = this.power1 * (fight.activeCreature?.power ?? 0);
-
-    fight.targetCreatures.forEach(creature => {
-      logs.push(new Log(LogType.Heal, fight.activeCreature, creature,
-        creature.heal(this.computeEffectiveHeal(baseHeal))));
+    fight.targetCreatures.forEach(targetCreature => {
+      logs.push(new Log(LogType.Heal, activeCreature, targetCreature,
+        targetCreature.heal(this.computeEffectiveHeal(activeCreature, targetCreature, this.power1))));
     });
   }
 }
@@ -316,15 +347,18 @@ export class Heal extends Skill {
 export class DualHeal extends Skill {
 
   execute(fight: Fight, logs: Log[]): void {
+    if (fight.activeCreature == null) {
+      return;
+    }
+
     super.execute(fight, logs);
 
-    const baseHeal1 = this.power1 * (fight.activeCreature?.power ?? 0);
-    const baseHeal2 = this.power2 * (fight.activeCreature?.power ?? 0);
-
-    const creature1: Creature = fight.targetCreatures[0];
-    logs.push(new Log(LogType.Heal, fight.activeCreature, creature1,  creature1.heal(this.computeEffectiveHeal(baseHeal1))));
-    const creature2: Creature = fight.targetCreatures[1];
-    logs.push(new Log(LogType.Heal, fight.activeCreature, creature2,  creature2.heal(this.computeEffectiveHeal(baseHeal2))));
+    const targetCreature1: Creature = fight.targetCreatures[0];
+    logs.push(new Log(LogType.Heal, fight.activeCreature, targetCreature1, targetCreature1.heal(this.computeEffectiveHeal(
+      fight.activeCreature, targetCreature1, this.power1))));
+    const targetCreature2: Creature = fight.targetCreatures[1];
+    logs.push(new Log(LogType.Heal, fight.activeCreature, targetCreature2, targetCreature2.heal(this.computeEffectiveHeal(
+      fight.activeCreature, targetCreature2, this.power2))));
   }
 }
 
@@ -336,9 +370,9 @@ export class Revive extends Skill {
   execute(fight: Fight, logs: Log[]): void {
     super.execute(fight, logs);
 
-    fight.targetCreatures.forEach(creature => {
-      creature.heal(creature.lifeMax / 2);
-      logs.push(new Log(LogType.Revive, fight.activeCreature, creature));
+    fight.targetCreatures.forEach(targetCreature => {
+      targetCreature.heal(targetCreature.lifeMax / 2);
+      logs.push(new Log(LogType.Revive, fight.activeCreature, targetCreature));
     });
   }
 }
@@ -354,7 +388,7 @@ export const techDefend = new Defend(SkillType.DEFENSE, 'Defend', SkillTarget.NO
   'Defend against attacks. Gain 30 TP.');
 export const magicDefend = new Defend(SkillType.DEFENSE, 'Defend', SkillTarget.NONE, -5, 0, 0,
   'Defend against attacks. Gain 5 MP.');
-export const strike = new Damage(SkillType.ATTACK,'Strike', SkillTarget.ENEMY_SINGLE, 10, 1, 0,
+export const strike = new Damage(SkillType.ATTACK, 'Strike', SkillTarget.ENEMY_SINGLE, 10, 1, 0,
   'Basic attack, does 100% weapon damage.');
 export const heal: Skill = new Heal(SkillType.HEAL, 'Heal', SkillTarget.CHARACTER_ALIVE, 5, 0, 0,
   'Heal a character for 100% weapon damage.');
@@ -364,15 +398,15 @@ export const revive: Skill = new Revive(SkillType.HEAL, 'Revive', SkillTarget.CH
   'Revive a character with half his life.');
 
 // Warrior skills
-export const smash = new Damage(SkillType.ATTACK,'Smash', SkillTarget.ENEMY_SINGLE, 20, 1, 0,
+export const smash = new Damage(SkillType.ATTACK, 'Smash', SkillTarget.ENEMY_SINGLE, 20, 1, 0,
   'Strong attack, does 150% weapon damage.', 1.5);
-export const furyStrike = new DamageAndDamage(SkillType.ATTACK,'Fury Strike', SkillTarget.ENEMY_SINGLE, 20, 1, 0,
+export const furyStrike = new DamageAndDamage(SkillType.ATTACK, 'Fury Strike', SkillTarget.ENEMY_SINGLE, 20, 1, 0,
   'Does 200% weapon damage to a target but loose 20% weapon damage as life.', 2.0, 0.2);
-export const slash = new Damage(SkillType.ATTACK,'Slash', SkillTarget.ENEMY_DOUBLE, 20, 1, 0,
+export const slash = new Damage(SkillType.ATTACK, 'Slash', SkillTarget.ENEMY_DOUBLE, 20, 1, 0,
   'Area attack, does 80% weapon damage to two targets.', 0.8);
 
 // Monk skills
-export const recoveryStrike: Skill = new DamageAndHeal(SkillType.ATTACK,'Recovery Strike', SkillTarget.ENEMY_SINGLE, 10, 1, 0,
+export const recoveryStrike: Skill = new DamageAndHeal(SkillType.ATTACK, 'Recovery Strike', SkillTarget.ENEMY_SINGLE, 10, 1, 0,
   'Does 70% weapon damage to the target and heal for 40% weapon damage.', 0.7, 0.4);
 export const monkHeal: Skill = new Heal(SkillType.HEAL, 'Heal', SkillTarget.CHARACTER_ALIVE, 10, 0, 0,
   'Heal a character for 100% weapon damage.');
@@ -380,25 +414,25 @@ export const monkRevive: Skill = new Revive(SkillType.HEAL, 'Revive', SkillTarge
   'Revive a character with half his life.');
 
 // Paladin skills
-export const holyStrike = new Damage(SkillType.ATTACK,'Holy Strike', SkillTarget.ENEMY_SINGLE, 5, 1, 0,
+export const holyStrike = new Damage(SkillType.ATTACK, 'Holy Strike', SkillTarget.ENEMY_SINGLE, 5, 1, 0,
   'Holy attack, does 100% weapon damage.');
 export const dualHeal: Skill = new DualHeal(SkillType.HEAL, 'Dual Heal', SkillTarget.CHARACTER_OTHER, 10, 0, 0,
   'Heal a character for 100% weapon damage and the caster for 80% weapon damage.', 1, 0.8);
 
 // Hunter skills
-export const shot = new Damage(SkillType.ATTACK,'Shot', SkillTarget.ENEMY_SINGLE, 10, 2, 0,
+export const shot = new Damage(SkillType.ATTACK, 'Shot', SkillTarget.ENEMY_SINGLE, 10, 2, 0,
   'Basic ranged attack, does 100% weapon damage.');
-export const preciseShot = new Damage(SkillType.ATTACK,'Precise Shot', SkillTarget.ENEMY_SINGLE, 20, 2, 0,
+export const preciseShot = new Damage(SkillType.ATTACK, 'Precise Shot', SkillTarget.ENEMY_SINGLE, 20, 2, 0,
   'String ranged attack, does 150% weapon damage.', 1.5);
 
 // Mage skills
-export const shock = new Damage(SkillType.ATTACK,'Shock', SkillTarget.ENEMY_SINGLE, 5, 2, 0,
+export const shock = new Damage(SkillType.ATTACK, 'Shock', SkillTarget.ENEMY_SINGLE, 5, 2, 0,
   'Magic attack, does 100% weapon damage.');
-export const blast = new Damage(SkillType.ATTACK,'Blast', SkillTarget.ENEMY_SINGLE, 10, 2, 0,
+export const blast = new Damage(SkillType.ATTACK, 'Blast', SkillTarget.ENEMY_SINGLE, 10, 2, 0,
   'Strong magic attack, does 150% weapon damage.', 1.5);
-export const fireball = new Damage(SkillType.ATTACK,'Fireball', SkillTarget.ENEMY_TRIPLE, 12, 2, 0,
+export const fireball = new Damage(SkillType.ATTACK, 'Fireball', SkillTarget.ENEMY_TRIPLE, 12, 2, 0,
   'Area magic attack, does 60% weapon damage to three targets.', 0.6);
 
 // Priest skills
-export const spark = new Damage(SkillType.ATTACK,'Spark', SkillTarget.ENEMY_SINGLE, 5, 2, 0,
+export const spark = new Damage(SkillType.ATTACK, 'Spark', SkillTarget.ENEMY_SINGLE, 5, 2, 0,
   'Magical attack, does 100% weapon damage.');

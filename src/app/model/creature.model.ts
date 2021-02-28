@@ -3,9 +3,13 @@
 import {Game, OPPOSITION_ROW_SIZE} from './game.model';
 import {advance, heal, leave, Skill, strike, strikeSmall, wait} from './skill.model';
 
+export enum StatusName {
+  DEFEND,
+}
+
 export class Status {
   constructor(
-    public name:string,
+    public name:StatusName,
     // True for a buff, false for a debuff
     public improvement: boolean,
     // Duration in turns
@@ -135,6 +139,10 @@ export abstract class Creature {
 
   addStatus(status: Status) {
     this.statuses.push(status);
+  }
+
+  hasBuff(name: StatusName): boolean {
+    return this.getBuffs().map(status => status.name).includes(name);
   }
 
   getBuffs(): Status[] {

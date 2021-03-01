@@ -26,8 +26,6 @@
   </div>
 </div>
 <div class="flex justify-center space-x-2 pt-4 text-sm">
-  <div *ngFor="let buff of character.getBuffs()"
-       class="border border-green-400 bg-green-900 rounded px-2 py-1 text-green-400">{{ buff.name }}</div>
-  <div *ngFor="let debuff of character.getDebuffs()"
-       class="border border-red-400 bg-red-900 rounded px-2 py-1 text-red-400">{{ debuff.name }}</div>
+  <app-status *ngFor="let buff of character.getBuffs()" [status]="buff"></app-status>
+  <app-status *ngFor="let debuff of character.getDebuffs()" [status]="debuff"></app-status>
 </div>

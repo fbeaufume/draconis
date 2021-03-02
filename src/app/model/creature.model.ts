@@ -5,6 +5,8 @@ import {advance, heal, leave, Skill, strike, strikeSmall, wait} from './skill.mo
 
 export enum StatusName {
   DEFEND,
+  BLEED,
+  POISON,
 }
 
 export class Status {
@@ -138,6 +140,8 @@ export abstract class Creature {
   }
 
   addStatus(status: Status) {
+    // TODO FBE if the same status is already present, update the duration
+    // TODO FBE if the opposite status is already present, cancel both or update the duration
     this.statuses.push(status);
   }
 

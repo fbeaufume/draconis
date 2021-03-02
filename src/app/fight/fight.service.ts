@@ -103,6 +103,9 @@ export class FightService {
         this.processEnemyTurnStep1(creature as Enemy);
       });
     } else if (creature.isEndOfRound()) {
+
+      // TODO FBE inflict the DOT damages
+
       this.processEndOfRound();
     } else {
       console.log('Invalid creature type', creature);

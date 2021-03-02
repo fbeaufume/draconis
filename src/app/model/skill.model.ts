@@ -321,6 +321,58 @@ export class DamageAndDamage extends Skill {
 }
 
 /**
+ * A damaging skill that also gives a bleed DOT.
+ */
+export class DamageAndBleed extends Skill {
+
+  execute(fight: Fight, logs: Log[]): void {
+    if (fight.activeCreature == null) {
+      return;
+    }
+
+    const activeCreature: Creature = fight.activeCreature;
+
+    super.execute(fight, logs);
+
+    fight.targetCreatures.forEach(targetCreature => {
+      // Direct damage
+      logs.push(new Log(LogType.Damage, activeCreature, targetCreature,
+        targetCreature.damage(this.computeEffectiveDamage(activeCreature, targetCreature, this.power1))));
+
+      // DOT
+      targetCreature.addStatus(new Status(StatusName.BLEED, true, 1))
+    });
+  }
+}
+
+// TODO FBE factorize this and DamageAndBleed
+
+/**
+ * A damaging skill that also gives a poison DOT.
+ */
+export class DamageAndPoison extends Skill {
+
+  execute(fight: Fight, logs: Log[]): void {
+    if (fight.activeCreature == null) {
+      return;
+    }
+
+    const activeCreature: Creature = fight.activeCreature;
+
+    super.execute(fight, logs);
+
+    fight.targetCreatures.forEach(targetCreature => {
+      // Direct damage
+      logs.push(new Log(LogType.Damage, activeCreature, targetCreature,
+        targetCreature.damage(this.computeEffectiveDamage(activeCreature, targetCreature, this.power1))));
+
+      // DOT
+      targetCreature.addStatus(new Status(StatusName.POISON, true, 1))
+    });
+  }
+}
+
+/**
  * A healing skill.
  */
 export class Heal extends Skill {
@@ -385,54 +437,54 @@ export const strikeSmall = new Damage(SkillType.ATTACK, '', SkillTarget.ENEMY_SI
 
 // Common characters skills
 export const techDefend = new Defend(SkillType.DEFENSE, 'Defend', SkillTarget.NONE, -30, 0, 0,
-  'Defend against attacks. Gain 30 TP.');
+  'Reduce received damage by 25%. Gain 30 TP.');
 export const magicDefend = new Defend(SkillType.DEFENSE, 'Defend', SkillTarget.NONE, -5, 0, 0,
-  'Defend against attacks. Gain 5 MP.');
+  'Reduce received damage by 25%. Gain 5 MP.');
 export const strike = new Damage(SkillType.ATTACK, 'Strike', SkillTarget.ENEMY_SINGLE, 10, 1, 0,
-  'Basic attack, does 100% weapon damage.');
+  'Inflict 100% damage.');
 export const heal: Skill = new Heal(SkillType.HEAL, 'Heal', SkillTarget.CHARACTER_ALIVE, 5, 0, 0,
-  'Heal a character for 100% weapon damage.');
+  'Heal a character for 100% damage.');
 export const healAll: Skill = new Heal(SkillType.HEAL, 'Heal All', SkillTarget.CHARACTER_ALL_ALIVE, 20, 0, 0,
-  'Heal all characters for 50% weapon damage.', 0.5);
+  'Heal all characters for 50% damage.', 0.5);
 export const revive: Skill = new Revive(SkillType.HEAL, 'Revive', SkillTarget.CHARACTER_DEAD, 20, 0, 0,
-  'Revive a character with half his life.');
+  'Revive a character with 50% life.');
 
 // Warrior skills
-export const smash = new Damage(SkillType.ATTACK, 'Smash', SkillTarget.ENEMY_SINGLE, 20, 1, 0,
-  'Strong attack, does 150% weapon damage.', 1.5);
 export const furyStrike = new DamageAndDamage(SkillType.ATTACK, 'Fury Strike', SkillTarget.ENEMY_SINGLE, 20, 1, 0,
-  'Does 200% weapon damage to a target but loose 20% weapon damage as life.', 2.0, 0.2);
+  'Inflict 200% damage to the target and 30% damage to self.', 2.0, 0.3);
+export const deepWound = new DamageAndBleed(SkillType.ATTACK, 'Deep Wound', SkillTarget.ENEMY_SINGLE, 20, 1, 0,
+  'Inflict 50% damage to the target and 120% damage over three rounds.', 0.5, 0.4);
 export const slash = new Damage(SkillType.ATTACK, 'Slash', SkillTarget.ENEMY_DOUBLE, 20, 1, 0,
-  'Area attack, does 80% weapon damage to two targets.', 0.8);
+  'Inflict 80% damage to two adjacent targets.', 0.8);
 
 // Monk skills
 export const recoveryStrike: Skill = new DamageAndHeal(SkillType.ATTACK, 'Recovery Strike', SkillTarget.ENEMY_SINGLE, 10, 1, 0,
-  'Does 70% weapon damage to the target and heal for 40% weapon damage.', 0.7, 0.4);
+  'Inflict 70% damage to the target and heal for 40% damage.', 0.7, 0.4);
 export const monkHeal: Skill = new Heal(SkillType.HEAL, 'Heal', SkillTarget.CHARACTER_ALIVE, 10, 0, 0,
-  'Heal a character for 100% weapon damage.');
+  'Heal a character for 100% damage.');
 export const monkRevive: Skill = new Revive(SkillType.HEAL, 'Revive', SkillTarget.CHARACTER_DEAD, 40, 0, 0,
-  'Revive a character with half his life.');
+  'Revive a character with 50% life.');
 
 // Paladin skills
 export const holyStrike = new Damage(SkillType.ATTACK, 'Holy Strike', SkillTarget.ENEMY_SINGLE, 5, 1, 0,
-  'Holy attack, does 100% weapon damage.');
+  'Inflict 100% damage.');
 export const dualHeal: Skill = new DualHeal(SkillType.HEAL, 'Dual Heal', SkillTarget.CHARACTER_OTHER, 10, 0, 0,
-  'Heal a character for 100% weapon damage and the caster for 80% weapon damage.', 1, 0.8);
+  'Heal a character for 100% damage and self for 80% damage.', 1, 0.8);
 
 // Hunter skills
 export const shot = new Damage(SkillType.ATTACK, 'Shot', SkillTarget.ENEMY_SINGLE, 10, 2, 0,
-  'Basic ranged attack, does 100% weapon damage.');
+  'Inflict 100% weapon damage.');
 export const preciseShot = new Damage(SkillType.ATTACK, 'Precise Shot', SkillTarget.ENEMY_SINGLE, 20, 2, 0,
-  'String ranged attack, does 150% weapon damage.', 1.5);
+  'Inflict 150% weapon damage.', 1.5);
+export const viperShot = new DamageAndPoison(SkillType.ATTACK, 'Viper Shot', SkillTarget.ENEMY_SINGLE, 20, 1, 0,
+  'Inflict 50% damage to the target and 120% damage over three rounds.', 0.5, 0.4);
 
 // Mage skills
-export const shock = new Damage(SkillType.ATTACK, 'Shock', SkillTarget.ENEMY_SINGLE, 5, 2, 0,
-  'Magic attack, does 100% weapon damage.');
-export const blast = new Damage(SkillType.ATTACK, 'Blast', SkillTarget.ENEMY_SINGLE, 10, 2, 0,
-  'Strong magic attack, does 150% weapon damage.', 1.5);
+export const lightning = new Damage(SkillType.ATTACK, 'Shock', SkillTarget.ENEMY_SINGLE, 5, 2, 0,
+  'Inflict 100% weapon damage.');
 export const fireball = new Damage(SkillType.ATTACK, 'Fireball', SkillTarget.ENEMY_TRIPLE, 12, 2, 0,
-  'Area magic attack, does 60% weapon damage to three targets.', 0.6);
+  'Inflict 60% damage to three adjacent targets.', 0.6);
 
 // Priest skills
-export const spark = new Damage(SkillType.ATTACK, 'Spark', SkillTarget.ENEMY_SINGLE, 5, 2, 0,
-  'Magical attack, does 100% weapon damage.');
+export const shock = new Damage(SkillType.ATTACK, 'Shock', SkillTarget.ENEMY_SINGLE, 5, 2, 0,
+  'Inflict 100% damage.');

@@ -14,10 +14,14 @@ import {
   Party
 } from './creature.model';
 import {
-  blast, dualHeal,
-  fireball, furyStrike,
-  heal, healAll,
+  deepWound,
+  dualHeal,
+  fireball,
+  furyStrike,
+  heal,
+  healAll,
   holyStrike,
+  lightning,
   magicDefend,
   monkHeal,
   monkRevive,
@@ -28,10 +32,8 @@ import {
   shot,
   Skill,
   slash,
-  smash,
-  spark,
   strike,
-  techDefend,
+  techDefend, viperShot,
 } from './skill.model';
 
 /**
@@ -353,7 +355,7 @@ export class Game {
 
   party: Party = new Party([
       new Character('Melkan', 'Warrior', 4, 20, false, 50, 10, [
-        techDefend, strike, smash, furyStrike, slash
+        techDefend, strike, furyStrike, deepWound, slash
       ]),
       new Character('Cyl', 'Monk', 4, 20, false, 50, 10, [
         techDefend, strike, recoveryStrike, monkHeal, monkRevive
@@ -363,13 +365,13 @@ export class Game {
       ])],
     [
       new Character('Faren', 'Archer', 4, 20, false, 50, 10, [
-        techDefend, shot, preciseShot
+        techDefend, shot, preciseShot, viperShot
       ]),
       new Character('Harika', 'Mage', 4, 20, true, 50, 10, [
-        magicDefend, shock, blast, fireball
+        magicDefend, lightning, fireball
       ]),
       new Character('Nairo', 'Priest', 4, 20, true, 50, 10, [
-        magicDefend, spark, heal, healAll, revive
+        magicDefend, shock, heal, healAll, revive
       ])
     ]);
 

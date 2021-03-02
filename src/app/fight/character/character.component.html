@@ -1,6 +1,9 @@
 <div class="flex justify-between items-center" [ngClass]="{ 'text-gray-500': character.isDead() }">
+  <p>
+    <app-class-icon [creature]="character"></app-class-icon>
+    {{ character.clazz }}
+  </p>
   <p class="text-xl font-bold">{{ character.name }}</p>
-  <p>{{ character.clazz }}</p>
   <p><span class="text-gray-500 font-bold">Lv.</span>{{ character.level }}</p>
 </div>
 <div class="flex justify-around pt-2">

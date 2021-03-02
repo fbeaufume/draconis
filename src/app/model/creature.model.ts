@@ -11,7 +11,7 @@ export enum StatusName {
 
 export class Status {
   constructor(
-    public name:StatusName,
+    public name: StatusName,
     // True for a buff, false for a debuff
     public improvement: boolean,
     // Duration in turns
@@ -22,6 +22,21 @@ export class Status {
   decreaseDuration() {
     this.duration--;
   }
+}
+
+/**
+ * The various classes of creatures.
+ * When any value is changed, update class-icon.component.html.
+ */
+export enum CreatureClass {
+  ENEMY = 'enemy',
+  END_OF_ROUND = 'end-of-round',
+  WARRIOR = 'Warrior',
+  MONK = 'Monk',
+  PALADIN = 'Paladin',
+  ARCHER = 'Archer',
+  MAGE = 'Mage',
+  PRIEST = 'Priest'
 }
 
 /**
@@ -44,6 +59,8 @@ export abstract class Creature {
 
   protected constructor(
     public name: string,
+    // Character class or 'enemy' for enemies or 'end-round' for the end of round special creature
+    public clazz: CreatureClass,
     public lifeMax: number,
     public energyMax: number,
     // Generic power of the creature, used to compute damage or heal amounts
@@ -157,6 +174,7 @@ export abstract class Creature {
     return this.statuses.filter(status => !status.improvement);
   }
 
+  // TODO FBE use different methods for the different moments of expiration of the statuses (beginning of action in turn, end of turn, etc)
   /**
    * Reduce the remaining duration of all statuses and remove the expired ones.
    */
@@ -181,7 +199,7 @@ export class Character extends Creature {
   constructor(
     name: string,
     // Character class, could be an enum
-    public clazz: string,
+    clazz: CreatureClass,
     public level: number,
     lifeMax: number,
     // True for mana based character class, false for tech based
@@ -190,7 +208,7 @@ export class Character extends Creature {
     power: number,
     skills: Skill[],
   ) {
-    super(name, lifeMax, energyMax, power, skills);
+    super(name, clazz, lifeMax, energyMax, power, skills);
 
     this.restoreEnergy();
   }
@@ -326,7 +344,7 @@ export class Party {
 export class EndOfRound extends Creature {
 
   constructor() {
-    super('- End of round -', 1, 1, 0, []);
+    super('End of round', CreatureClass.END_OF_ROUND, 1, 1, 0, []);
   }
 
   isCharacter(): boolean {
@@ -377,7 +395,7 @@ export abstract class Enemy extends Creature {
     power: number,
     // Number of actions per turn
     public actions: number = 1) {
-    super(name, lifeMax, 100, power, []);
+    super(name, CreatureClass.ENEMY, lifeMax, 100, power, []);
   }
 
   isCharacter(): boolean {

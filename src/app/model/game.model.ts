@@ -3,6 +3,7 @@
 import {
   Character,
   Creature,
+  CreatureClass,
   DistanceEnemy,
   DragonEnemy,
   EndOfRound,
@@ -33,7 +34,8 @@ import {
   Skill,
   slash,
   strike,
-  techDefend, viperShot,
+  techDefend,
+  viperShot,
 } from './skill.model';
 
 /**
@@ -354,23 +356,23 @@ export class Game {
   oppositionId: number = 0;
 
   party: Party = new Party([
-      new Character('Melkan', 'Warrior', 4, 20, false, 50, 10, [
+      new Character('Melkan', CreatureClass.WARRIOR, 4, 20, false, 50, 10, [
         techDefend, strike, furyStrike, deepWound, slash
       ]),
-      new Character('Cyl', 'Monk', 4, 20, false, 50, 10, [
+      new Character('Cyl', CreatureClass.MONK, 4, 20, false, 50, 10, [
         techDefend, strike, recoveryStrike, monkHeal, monkRevive
       ]),
-      new Character('Arwin', 'Paladin', 4, 20, true, 50, 10, [
+      new Character('Arwin', CreatureClass.PALADIN, 4, 20, true, 50, 10, [
         magicDefend, holyStrike, heal, dualHeal, healAll
       ])],
     [
-      new Character('Faren', 'Archer', 4, 20, false, 50, 10, [
+      new Character('Faren', CreatureClass.ARCHER, 4, 20, false, 50, 10, [
         techDefend, shot, preciseShot, viperShot
       ]),
-      new Character('Harika', 'Mage', 4, 20, true, 50, 10, [
+      new Character('Harika', CreatureClass.MAGE, 4, 20, true, 50, 10, [
         magicDefend, lightning, fireball
       ]),
-      new Character('Nairo', 'Priest', 4, 20, true, 50, 10, [
+      new Character('Nairo', CreatureClass.PRIEST, 4, 20, true, 50, 10, [
         magicDefend, shock, heal, healAll, revive
       ])
     ]);

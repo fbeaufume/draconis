@@ -1,0 +1,58 @@
+<ng-container [ngSwitch]="creature.clazz">
+  <svg *ngSwitchCase="'enemy'" class="inline-block" width="20" height="20" viewBox="0 0 100 100">
+    <!-- Enemy -->
+    <rect width="100" height="100" style="fill:#FEF08A;"/>
+    <circle cx="50" cy="55" r="35" fill="#262626"/>
+    <polygon points="15 55 15 10 50 45" style="fill: #262626;"/>
+    <polygon points="85 55 85 10 50 45" style="round; fill: #262626;"/>
+    <line x1="30" y1="45" x2="40" y2="50" stroke="#FEF08A" style="stroke-width: 10; stroke-linecap: round;"/>
+    <line x1="70" y1="45" x2="60" y2="50" stroke="#FEF08A" style="stroke-width: 10; stroke-linecap: round;"/>
+  </svg>
+  <svg *ngSwitchCase="'end-of-round'" class="inline-block" width="20" height="20" viewBox="0 0 100 100">
+    <!-- End of round -->
+    <rect width="100" height="100" style="fill:#3B82F6;"/>
+    <line x1="20" y1="50" x2="80" y2="50" stroke="#262626" style="stroke-width: 10; stroke-linecap: round;"/>
+  </svg>
+  <svg *ngSwitchCase="'Warrior'" class="inline-block" width="20" height="20" viewBox="0 0 100 100">
+    <!-- Warrior -->
+    <rect width="100" height="100" style="fill:#E5E7EB;"/>
+    <line x1="50" y1="80" x2="50" y2="20" stroke="#262626" style="stroke-width: 10; stroke-linecap: round;"/>
+    <polyline points="20 50 20 20 80 20 80 50" fill="none" stroke="#262626"
+              style="stroke-width: 10; stroke-linecap: round; stroke-linejoin: round"/>
+    <path d="M 20 50 A 20 10 0 1 1 80 50" fill="none" stroke="#262626"
+          style="stroke-width: 10; stroke-linecap: round;"/>
+  </svg>
+  <svg *ngSwitchCase="'Monk'" class="inline-block" width="20" height="20" viewBox="0 0 100 100">
+    <!-- Monk -->
+    <rect width="100" height="100" style="fill:#E5E7EB;"/>
+    <line x1="20" y1="50" x2="50" y2="20" stroke="#262626" style="stroke-width: 10; stroke-linecap: round;"/>
+    <line x1="25" y1="75" x2="75" y2="25" stroke="#262626" style="stroke-width: 10; stroke-linecap: round;"/>
+    <line x1="50" y1="80" x2="80" y2="50" stroke="#262626" style="stroke-width: 10; stroke-linecap: round;"/>
+  </svg>
+  <svg *ngSwitchCase="'Paladin'" class="inline-block" width="20" height="20" viewBox="0 0 100 100">
+    <!-- Paladin -->
+    <rect width="100" height="100" style="fill:#E5E7EB;"/>
+    <path d="M 20 20 A 20 40 0 1 0 80 20 Z" fill="none" stroke="#262626"
+          style="stroke-width: 10; stroke-linecap:round;"/>
+    <line x1="50" y1="40" x2="50" y2="60" stroke="#262626" style="stroke-width: 10; stroke-linecap: round;"/>
+  </svg>
+  <svg *ngSwitchCase="'Archer'" class="inline-block" width="20" height="20" viewBox="0 0 100 100">
+    <!-- Archer-->
+    <rect width="100" height="100" style="fill:#E5E7EB;"/>
+    <line x1="25" y1="75" x2="75" y2="25" stroke="#262626" style="stroke-width: 10; stroke-linecap: round;"/>
+    <path d="M 20 35 A 10 10 0 0 1 65 80 Z" fill="none" stroke="#262626"
+          style="stroke-width: 10; stroke-linecap:round;"/>
+  </svg>
+  <svg *ngSwitchCase="'Mage'" class="inline-block" width="20" height="20" viewBox="0 0 100 100">
+    <!-- Mage -->
+    <rect width="100" height="100" style="fill:#E5E7EB;"/>
+    <polyline points="50 20 30 50 70 50 50 80" fill="none" stroke="#262626"
+              style="stroke-width: 10; stroke-linecap: round; stroke-linejoin: round"/>
+  </svg>
+  <svg *ngSwitchCase="'Priest'" class="inline-block" width="20" height="20" viewBox="0 0 100 100">
+    <!-- Priest -->
+    <rect width="100" height="100" style="fill:#E5E7EB;"/>
+    <line x1="50" y1="20" x2="50" y2="80" stroke="#262626" style="stroke-width: 10; stroke-linecap: round;"/>
+    <line x1="20" y1="50" x2="80" y2="50" stroke="#262626" style="stroke-width: 10; stroke-linecap: round;"/>
+  </svg>
+</ng-container>

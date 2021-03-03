@@ -3,16 +3,30 @@
 import {Game, OPPOSITION_ROW_SIZE} from './game.model';
 import {advance, heal, leave, Skill, strike, strikeSmall, wait} from './skill.model';
 
+/**
+ * The various status names.
+ */
 export enum StatusName {
   DEFEND,
   BLEED,
   POISON,
 }
 
+/**
+ * The type of expiration of a status.
+ */
+export enum StatusExpiration {
+  // THe status expires at the beginning of the creature turn
+  CREATURE_TURN,
+  // The status expires at the end of the round
+  END_OF_ROUND,
+}
+
 export class Status {
   constructor(
     public name: StatusName,
-    // True for a buff, false for a debuff
+    public expiration: StatusExpiration,
+    // True for a buff, false for a debuff,
     public improvement: boolean,
     // Duration in turns
     public duration: number
@@ -176,11 +190,16 @@ export abstract class Creature {
 
   // TODO FBE use different methods for the different moments of expiration of the statuses (beginning of action in turn, end of turn, etc)
   /**
-   * Reduce the remaining duration of all statuses and remove the expired ones.
+   * Reduce the remaining duration of all statuses that use a given expiration type and remove the expired ones.
    */
-  decreaseStatusesDuration() {
+  decreaseStatusesDuration(expiration: StatusExpiration) {
     for (let i = 0; i < this.statuses.length; i++) {
       const status = this.statuses[i];
+
+      if (status.expiration != expiration) {
+        continue;
+      }
+
       status.decreaseDuration();
 
       if (status.duration <= 0) {

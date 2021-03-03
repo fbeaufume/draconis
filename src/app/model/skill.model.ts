@@ -1,7 +1,7 @@
 // Skill related classes
 
 import {Fight} from './game.model';
-import {Character, Creature, Enemy, Status, StatusName} from './creature.model';
+import {Character, Creature, Enemy, Status, StatusExpiration, StatusName} from './creature.model';
 import {Log, LogType} from './log.model';
 
 /**
@@ -248,7 +248,7 @@ export class Defend extends Skill {
     super.execute(fight, logs);
 
     if (fight.activeCreature != null) {
-      fight.activeCreature.addStatus(new Status(StatusName.DEFEND, true, 1));
+      fight.activeCreature.addStatus(new Status(StatusName.DEFEND, StatusExpiration.CREATURE_TURN, true, 1));
 
       logs.push(new Log(LogType.Defend, fight.activeCreature));
     }
@@ -340,7 +340,7 @@ export class DamageAndBleed extends Skill {
         targetCreature.damage(this.computeEffectiveDamage(activeCreature, targetCreature, this.power1))));
 
       // DOT
-      targetCreature.addStatus(new Status(StatusName.BLEED, true, 1))
+      targetCreature.addStatus(new Status(StatusName.BLEED, StatusExpiration.END_OF_ROUND, true, 1))
     });
   }
 }
@@ -367,7 +367,7 @@ export class DamageAndPoison extends Skill {
         targetCreature.damage(this.computeEffectiveDamage(activeCreature, targetCreature, this.power1))));
 
       // DOT
-      targetCreature.addStatus(new Status(StatusName.POISON, true, 1))
+      targetCreature.addStatus(new Status(StatusName.POISON, StatusExpiration.END_OF_ROUND, true, 1))
     });
   }
 }

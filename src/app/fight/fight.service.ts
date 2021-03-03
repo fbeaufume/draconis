@@ -1,6 +1,6 @@
 import {Injectable} from '@angular/core';
 import {canSelectSkillStates, Fight, Game, GameState, PARTY_ROW_SIZE, PARTY_SIZE, PAUSE_LONG, PAUSE_SHORT} from '../model/game.model';
-import {Character, Enemy, EnemyAction, Party} from '../model/creature.model';
+import {Character, Creature, Enemy, EnemyAction, Party, StatusExpiration} from '../model/creature.model';
 import {Skill, SkillTarget} from '../model/skill.model';
 import {Log, LogType} from '../model/log.model';
 
@@ -34,6 +34,12 @@ export class FightService {
 
   get fight(): Fight {
     return this.game.fight;
+  }
+
+  getAllCreatures(): Creature[] {
+    const creatures = this.fight.getAllEnemies();
+    this.party.rows.forEach(row => creatures.push(...row.characters))
+    return creatures;
   }
 
   /**
@@ -87,7 +93,7 @@ export class FightService {
     this.fight.activeCreature = creature;
 
     // Decrease the statuses duration and remove the expired ones
-    creature.decreaseStatusesDuration();
+    creature.decreaseStatusesDuration(StatusExpiration.CREATURE_TURN);
 
     // Skip dead characters
     if (creature.isDead()) {
@@ -104,7 +110,12 @@ export class FightService {
       });
     } else if (creature.isEndOfRound()) {
 
-      // TODO FBE inflict the DOT damages
+      this.getAllCreatures().forEach(creature => {
+        // TODO FBE
+        //creature.applyDotsAndHots(this.party);
+
+        creature.decreaseStatusesDuration(StatusExpiration.END_OF_ROUND);
+      });
 
       this.processEndOfRound();
     } else {

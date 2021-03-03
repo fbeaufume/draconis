@@ -207,6 +207,12 @@ export class Fight {
     this.opposition.updateDistances();
   }
 
+  getAllEnemies(): Creature[] {
+    const creatures: Creature[] = [];
+    this.opposition.rows.forEach(row => creatures.push(...row.enemies));
+    return creatures;
+  }
+
   /**
    * Is the creature active.
    */

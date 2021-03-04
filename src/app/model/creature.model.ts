@@ -1,7 +1,8 @@
 // Creature related classes
 
 import {Game, OPPOSITION_ROW_SIZE} from './game.model';
-import {advance, heal, leave, Skill, strike, strikeSmall, wait} from './skill.model';
+import {advance, computeEffectiveDamage, computeEffectiveHeal, heal, leave, Skill, strike, strikeSmall, wait} from './skill.model';
+import {Log, LogType} from './log.model';
 
 /**
  * The various status names.
@@ -29,8 +30,20 @@ export class Status {
     // True for a buff, false for a debuff,
     public improvement: boolean,
     // Duration in turns
-    public duration: number
+    public duration: number,
+    // For DOT and HOT, the power of the attack
+    public power: number,
+    // For DOT and HOT, the creature that inflicted the status
+    public originCreature: Creature | null
   ) {
+  }
+
+  isDot(): boolean {
+    return this.name == StatusName.BLEED || this.name == StatusName.POISON;
+  }
+
+  isHot(): boolean {
+    return false;
   }
 
   decreaseDuration() {
@@ -188,7 +201,6 @@ export abstract class Creature {
     return this.statuses.filter(status => !status.improvement);
   }
 
-  // TODO FBE use different methods for the different moments of expiration of the statuses (beginning of action in turn, end of turn, etc)
   /**
    * Reduce the remaining duration of all statuses that use a given expiration type and remove the expired ones.
    */
@@ -206,6 +218,29 @@ export abstract class Creature {
         // Remove the status
         this.statuses.splice(i--, 1);
       }
+    }
+  }
+
+  /**
+   * Apply all DOT and HOT to the creature and log a single message.
+   */
+  applyDotsAndHots(logs: Log[]) {
+    let damageAmount: number = 0;
+
+    this.statuses.forEach(status => {
+      if (status.originCreature != null) {
+        if (status.isDot()) {
+          damageAmount += this.damage(computeEffectiveDamage(status.originCreature, this, status.power));
+        } else if (status.isHot()) {
+          damageAmount -= this.heal(computeEffectiveHeal(status.originCreature, this, status.power));
+        }
+      }
+    });
+
+    if (damageAmount > 0) {
+      logs.push(new Log(LogType.Dot, this, damageAmount));
+    } else if (damageAmount < 0) {
+      logs.push(new Log(LogType.Hot, this, -damageAmount));
     }
   }
 }

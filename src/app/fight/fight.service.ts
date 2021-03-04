@@ -111,10 +111,13 @@ export class FightService {
     } else if (creature.isEndOfRound()) {
 
       this.getAllCreatures().forEach(creature => {
-        // TODO FBE
-        //creature.applyDotsAndHots(this.party);
+        // Apply the life changes from DOTs and HOTs
+        creature.applyDotsAndHots(this.logs);
 
+        // Decrease the statuses duration and remove the expired ones
         creature.decreaseStatusesDuration(StatusExpiration.END_OF_ROUND);
+
+        // TODO FBE handle creatures death, and party victory and party defeat
       });
 
       this.processEndOfRound();

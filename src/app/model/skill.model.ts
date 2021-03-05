@@ -477,15 +477,15 @@ export const dualHeal: Skill = new DualHeal(SkillType.HEAL, 'Dual Heal', SkillTa
 
 // Archer skills
 export const shot = new Damage(SkillType.ATTACK, 'Shot', SkillTarget.ENEMY_SINGLE, 10, 2, 0,
-  'Inflict 100% weapon damage.');
+  'Inflict 100% damage.');
 export const preciseShot = new Damage(SkillType.ATTACK, 'Precise Shot', SkillTarget.ENEMY_SINGLE, 20, 2, 0,
-  'Inflict 150% weapon damage.', 1.5);
-export const viperShot = new DamageAndPoison(SkillType.ATTACK, 'Viper Shot', SkillTarget.ENEMY_SINGLE, 20, 1, 0,
+  'Inflict 150% damage.', 1.5);
+export const viperShot = new DamageAndPoison(SkillType.ATTACK, 'Viper Shot', SkillTarget.ENEMY_SINGLE, 20, 2, 0,
   'Inflict 50% damage to the target and 120% damage over 3 rounds.', 0.5, 0.4);
 
 // Mage skills
-export const lightning = new Damage(SkillType.ATTACK, 'Shock', SkillTarget.ENEMY_SINGLE, 5, 2, 0,
-  'Inflict 100% weapon damage.');
+export const lightning = new Damage(SkillType.ATTACK, 'Lightning', SkillTarget.ENEMY_SINGLE, 5, 2, 0,
+  'Inflict 100% damage.');
 export const fireball = new Damage(SkillType.ATTACK, 'Fireball', SkillTarget.ENEMY_TRIPLE, 12, 2, 0,
   'Inflict 60% damage to three adjacent targets.', 0.6);
 

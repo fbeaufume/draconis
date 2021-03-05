@@ -38,7 +38,7 @@ export class FightService {
 
   getAllCreatures(): Creature[] {
     const creatures = this.fight.getAllEnemies();
-    this.party.rows.forEach(row => creatures.push(...row.characters))
+    this.party.rows.forEach(row => creatures.push(...row.characters));
     return creatures;
   }
 
@@ -109,17 +109,6 @@ export class FightService {
         this.processEnemyTurnStep1(creature as Enemy);
       });
     } else if (creature.isEndOfRound()) {
-
-      this.getAllCreatures().forEach(creature => {
-        // Apply the life changes from DOTs and HOTs
-        creature.applyDotsAndHots(this.logs);
-
-        // Decrease the statuses duration and remove the expired ones
-        creature.decreaseStatusesDuration(StatusExpiration.END_OF_ROUND);
-
-        // TODO FBE handle creatures death, and party victory and party defeat
-      });
-
       this.processEndOfRound();
     } else {
       console.log('Invalid creature type', creature);
@@ -217,51 +206,16 @@ export class FightService {
     // If there are dead enemies, remove them after a pause
     if (this.fight.opposition.hasDeadEnemies()) {
       this.pause(() => {
-        // Remove dead enemies from the opposition
-        const removedEnemies: Enemy[] = this.fight.opposition.removeDeadEnemies();
+        this.processDeadEnemies();
 
-        // Restore some mana points to the characters when enemies died
-        const totalRemovedEnemiesLife: number = removedEnemies.reduce((sum, enemy) => sum + enemy.lifeMax, 0);
-        if (totalRemovedEnemiesLife > 0) {
-          this.party.restoreManaPoints(totalRemovedEnemiesLife * 0.1);
-        }
-
-        // Remove the empty enemy rows
-        this.fight.opposition.removeEmptyRows();
-
-        // Remove dead enemies from the turn order
-        this.fight.turnOrder.removeDeadEnemies();
-
-        // Log the defeated enemies
-        removedEnemies.forEach(enemy => this.logs.push(new Log(LogType.EnemyDefeated, enemy.name)));
-
-        // Check if the party won
-        if (this.fight.opposition.isWiped()) {
-          this.winTheEncounter();
-        } else {
+        // Execute the next turn
+        if (!this.processEndOfFight()) {
           this.processNextTurn(true);
         }
       });
     } else {
       this.processNextTurn(true);
     }
-  }
-
-  /**
-   * The party won the encounter.
-   */
-  winTheEncounter() {
-    this.pause(() => {
-      this.logs.push(new Log(LogType.PartyVictory));
-
-      if (this.game.hasNextEncounter()) {
-        // Moving on to the next encounter
-        this.state = GameState.START_NEXT_ENCOUNTER;
-      } else {
-        // The dungeon is over
-        this.state = GameState.DUNGEON_END;
-      }
-    });
   }
 
   /**
@@ -359,19 +313,8 @@ export class FightService {
     // Execute the skill
     action.skill.execute(this.fight, this.logs);
 
-    // Check if the encounter is over
-    if (this.party.isWiped()) {
-      // The party lost
-      this.pause(() => {
-        this.logs.push(new Log(LogType.PartyDefeat));
-
-        // The dungeon is over
-        this.state = GameState.DUNGEON_END;
-      });
-    } else if (this.fight.opposition.isWiped()) {
-      // The party won
-      this.winTheEncounter();
-    } else {
+    // Execute the next turn
+    if (!this.processEndOfFight()) {
       this.processNextTurn(true);
     }
   }
@@ -380,14 +323,37 @@ export class FightService {
    * Process the end of round, e.g. apply DOTs or HOTs.
    */
   processEndOfRound() {
-    // Currently there is nothing to do,
-    // but where there is, wait a while before doing it
+    // Execute and update end of round statuses
+    this.getAllCreatures().forEach(creature => {
+      // Apply the life changes from DOTs and HOTs
+      creature.applyDotsAndHots(this.logs);
 
-    // Start the next round
-    this.fight.round++;
-    this.logs.push(new Log(LogType.StartRound, this.fight.round));
+      // Decrease the statuses duration and remove the expired ones
+      creature.decreaseStatusesDuration(StatusExpiration.END_OF_ROUND);
+    });
 
-    this.processNextTurn(true);
+    // If there are dead enemies, remove them after a pause
+    if (this.fight.opposition.hasDeadEnemies()) {
+      this.pause(() => {
+        this.processDeadEnemies();
+
+        // Start the next round
+        if (!this.processEndOfFight()) {
+          this.fight.round++;
+          this.logs.push(new Log(LogType.StartRound, this.fight.round));
+
+          this.processNextTurn(true);
+        }
+      });
+    } else {
+      // Start the next round
+      if (!this.processEndOfFight()) {
+        this.fight.round++;
+        this.logs.push(new Log(LogType.StartRound, this.fight.round));
+
+        this.processNextTurn(true);
+      }
+    }
   }
 
   /**
@@ -417,6 +383,66 @@ export class FightService {
     this.fight.focusedSkill = null;
     this.fight.selectedSkill = null;
     this.fight.targetCreatures = [];
+  }
+
+  /**
+   * Remove dead enemies.
+   */
+  processDeadEnemies() {
+    // Remove dead enemies from the opposition
+    const removedEnemies: Enemy[] = this.fight.opposition.removeDeadEnemies();
+
+    // Restore some mana points to the characters when enemies died
+    const totalRemovedEnemiesLife: number = removedEnemies.reduce((sum, enemy) => sum + enemy.lifeMax, 0);
+    if (totalRemovedEnemiesLife > 0) {
+      this.party.restoreManaPoints(totalRemovedEnemiesLife * 0.1);
+    }
+
+    // Remove the empty enemy rows
+    this.fight.opposition.removeEmptyRows();
+
+    // Remove dead enemies from the turn order
+    this.fight.turnOrder.removeDeadEnemies();
+
+    // Log the defeated enemies
+    removedEnemies.forEach(enemy => this.logs.push(new Log(LogType.EnemyDefeated, enemy.name)));
+  }
+
+  /**
+   * If the fight is over (party victory or party defeat), process it and return true.
+   * Return false otherwise.
+   */
+  processEndOfFight(): boolean {
+    // Handle party defeat
+    if (this.party.isWiped()) {
+      this.pause(() => {
+        this.logs.push(new Log(LogType.PartyDefeat));
+
+        // The dungeon is over
+        this.state = GameState.DUNGEON_END;
+      });
+
+      return true;
+    }
+
+    // Handle party victory
+    if (this.fight.opposition.isWiped()) {
+      this.pause(() => {
+        this.logs.push(new Log(LogType.PartyVictory));
+
+        if (this.game.hasNextEncounter()) {
+          // Moving on to the next encounter
+          this.state = GameState.START_NEXT_ENCOUNTER;
+        } else {
+          // The dungeon is over
+          this.state = GameState.DUNGEON_END;
+        }
+      });
+
+      return true;
+    }
+
+    return false;
   }
 
   /**

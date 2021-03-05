@@ -1,16 +1,8 @@
-<div class="flex items-center" [ngClass]="{ 'text-gray-500': character.isDead() }">
-  <div class="flex-1 flex justify-start">
-    <p>
-      <app-class-icon [creature]="character"></app-class-icon>
-<!--      {{ character.clazz }}-->
-    </p>
-  </div>
-  <div class="flex-1 flex justify-center">
-    <p class="text-xl font-bold">{{ character.name }}</p>
-  </div>
-  <div class="flex-1 flex justify-end">
-    <p><span class="text-gray-500 font-bold">Lv.</span>{{ character.level }}</p>
-  </div>
+<div class="flex justify-center text-xl font-bold" [ngClass]="{ 'text-gray-500': character.isDead() }">
+  <p>
+    <app-class-icon [creature]="character"></app-class-icon>
+    {{ character.name }}
+  </p>
 </div>
 <div class="flex justify-around pt-2">
   <div class="flex flex-col items-center">

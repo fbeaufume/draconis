@@ -2,7 +2,7 @@
 
 import {Game, OPPOSITION_ROW_SIZE} from './game.model';
 import {advance, computeEffectiveDamage, computeEffectiveHeal, heal, leave, Skill, strike, strikeSmall, wait} from './skill.model';
-import {Log, LogType} from './log.model';
+import {logs, LogType} from './log.model';
 
 /**
  * The various status names.
@@ -224,7 +224,7 @@ export abstract class Creature {
   /**
    * Apply all DOT and HOT to the creature and log a single message.
    */
-  applyDotsAndHots(logs: Log[]) {
+  applyDotsAndHots() {
     let damageAmount: number = 0;
 
     this.statuses.forEach(status => {
@@ -238,9 +238,9 @@ export abstract class Creature {
     });
 
     if (damageAmount > 0) {
-      logs.push(new Log(LogType.Dot, this, damageAmount));
+      logs.add(LogType.Dot, this, damageAmount);
     } else if (damageAmount < 0) {
-      logs.push(new Log(LogType.Hot, this, -damageAmount));
+      logs.add(LogType.Hot, this, -damageAmount);
     }
   }
 }
@@ -529,6 +529,7 @@ export class OldManEnemy extends Enemy {
       this.name = 'Elder Druid';
       this.lifeMax = this.lifeMax * 3;
       this.heal(this.lifeMax);
+      logs.add(LogType.OldManTransformation);
     }
 
     return super.damage(amount);

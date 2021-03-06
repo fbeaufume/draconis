@@ -23,6 +23,7 @@ export enum LogType {
   PartyVictory,
   PartyDefeat,
   PauseDurationChanged,
+  OldManTransformation,
 }
 
 /**
@@ -30,9 +31,24 @@ export enum LogType {
  */
 export class Log {
 
-  public args: any[];
-
-  constructor(public type: LogType, ...args: any[]) {
-    this.args = args;
+  constructor(public type: LogType, public args: any[]) {
   }
 }
+
+/**
+ * The log messages.
+ */
+export class Logs {
+
+  logs: Log[] = [];
+
+  add(type: LogType, ...args: any[]) {
+    this.logs.push(new Log(type, args));
+  }
+
+  clear() {
+    this.logs = [];
+  }
+}
+
+export const logs: Logs = new Logs();

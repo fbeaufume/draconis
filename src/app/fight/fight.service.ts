@@ -2,7 +2,7 @@ import {Injectable} from '@angular/core';
 import {canSelectSkillStates, Fight, Game, GameState, PARTY_ROW_SIZE, PARTY_SIZE, PAUSE_LONG, PAUSE_SHORT} from '../model/game.model';
 import {Character, Creature, Enemy, EnemyAction, Party, StatusExpiration} from '../model/creature.model';
 import {Skill, SkillTarget} from '../model/skill.model';
-import {Log, LogType} from '../model/log.model';
+import {Log, logs, LogType} from '../model/log.model';
 
 @Injectable({
   providedIn: 'root'
@@ -14,10 +14,12 @@ export class FightService {
 
   game: Game;
 
-  logs: Log[] = [];
-
   constructor() {
     this.restart();
+  }
+
+  get logs(): Log[] {
+    return logs.logs;
   }
 
   get state(): GameState {
@@ -48,7 +50,7 @@ export class FightService {
   startNextEncounter() {
     this.game.startNextEncounter();
 
-    this.logs.push(new Log(LogType.OppositionAppear, this.fight.opposition.description));
+    logs.add(LogType.OppositionAppear, this.fight.opposition.description);
   }
 
   /**
@@ -57,7 +59,7 @@ export class FightService {
   startFight() {
     this.game.state = GameState.END_OF_TURN;
 
-    this.logs.push(new Log(LogType.StartRound, this.fight.round));
+    logs.add(LogType.StartRound, this.fight.round);
 
     this.processTurn();
   }
@@ -68,8 +70,8 @@ export class FightService {
   restart() {
     this.game = new Game();
 
-    this.logs = [];
-    this.logs.push(new Log(LogType.EnterZone, this.game.region));
+    logs.clear();
+    logs.add(LogType.EnterZone, this.game.region);
   }
 
   /**
@@ -155,7 +157,7 @@ export class FightService {
           this.fight.targetCreatures.push(...this.party.targetAllAliveCharacters());
         }
 
-        skill.execute(this.fight, this.logs);
+        skill.execute(this.fight);
 
         this.state = GameState.EXECUTING_SKILL;
 
@@ -199,7 +201,7 @@ export class FightService {
     // Get the effective target creatures
     this.fight.targetCreatures.push(...this.fight.selectedSkill.getTargetEnemies(enemy, this.fight));
 
-    this.fight.selectedSkill.execute(this.fight, this.logs);
+    this.fight.selectedSkill.execute(this.fight);
 
     this.state = GameState.EXECUTING_SKILL;
 
@@ -245,7 +247,7 @@ export class FightService {
     this.fight.targetCreatures.push(...this.fight.selectedSkill.getTargetCharacters(character, this.fight));
 
     // Execute the skill and log the output
-    this.fight.selectedSkill.execute(this.fight, this.logs);
+    this.fight.selectedSkill.execute(this.fight);
 
     this.state = GameState.EXECUTING_SKILL;
 
@@ -311,7 +313,7 @@ export class FightService {
    */
   processEnemyTurnStep2(action: EnemyAction) {
     // Execute the skill
-    action.skill.execute(this.fight, this.logs);
+    action.skill.execute(this.fight);
 
     // Execute the next turn
     if (!this.processEndOfFight()) {
@@ -326,7 +328,7 @@ export class FightService {
     // Execute and update end of round statuses
     this.getAllCreatures().forEach(creature => {
       // Apply the life changes from DOTs and HOTs
-      creature.applyDotsAndHots(this.logs);
+      creature.applyDotsAndHots();
 
       // Decrease the statuses duration and remove the expired ones
       creature.decreaseStatusesDuration(StatusExpiration.END_OF_ROUND);
@@ -340,7 +342,7 @@ export class FightService {
         // Start the next round
         if (!this.processEndOfFight()) {
           this.fight.round++;
-          this.logs.push(new Log(LogType.StartRound, this.fight.round));
+          logs.add(LogType.StartRound, this.fight.round);
 
           this.processNextTurn(true);
         }
@@ -349,7 +351,7 @@ export class FightService {
       // Start the next round
       if (!this.processEndOfFight()) {
         this.fight.round++;
-        this.logs.push(new Log(LogType.StartRound, this.fight.round));
+        logs.add(LogType.StartRound, this.fight.round);
 
         this.processNextTurn(true);
       }
@@ -405,7 +407,7 @@ export class FightService {
     this.fight.turnOrder.removeDeadEnemies();
 
     // Log the defeated enemies
-    removedEnemies.forEach(enemy => this.logs.push(new Log(LogType.EnemyDefeated, enemy.name)));
+    removedEnemies.forEach(enemy => logs.add(LogType.EnemyDefeated, enemy.name));
   }
 
   /**
@@ -416,7 +418,7 @@ export class FightService {
     // Handle party defeat
     if (this.party.isWiped()) {
       this.pause(() => {
-        this.logs.push(new Log(LogType.PartyDefeat));
+        logs.add(LogType.PartyDefeat);
 
         // The dungeon is over
         this.state = GameState.DUNGEON_END;
@@ -428,7 +430,7 @@ export class FightService {
     // Handle party victory
     if (this.fight.opposition.isWiped()) {
       this.pause(() => {
-        this.logs.push(new Log(LogType.PartyVictory));
+        logs.add(LogType.PartyVictory);
 
         if (this.game.hasNextEncounter()) {
           // Moving on to the next encounter
@@ -460,6 +462,6 @@ export class FightService {
     } else {
       this.pauseDuration = PAUSE_LONG;
     }
-    this.logs.push(new Log(LogType.PauseDurationChanged, this.pauseDuration));
+    logs.add(LogType.PauseDurationChanged, this.pauseDuration);
   }
 }

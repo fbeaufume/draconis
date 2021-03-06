@@ -253,17 +253,17 @@ class TestDungeon extends Dungeon {
   constructor() {
     super('Test Dungeon', [
       new Opposition('some monsters', [
-        // new OldManEnemy('Old Man', 24, 14),
+        new OldManEnemy('Old Man', 24, 14),
         // new DragonEnemy('Green Dragon', 120, 10, 2),
         new MeleeEnemy('Monster 1', 2, 5),
         new MeleeEnemy('Monster 2', 2, 5),
-        new MeleeEnemy('Monster 3', 2, 5),
-        new MeleeEnemy('Monster 4', 2, 5),
+        // new MeleeEnemy('Monster 3', 2, 5),
+        // new MeleeEnemy('Monster 4', 2, 5),
       ], [
         new MeleeEnemy('Monster 5', 50, 8),
         new MeleeEnemy('Monster 6', 50, 8),
-        new MeleeEnemy('Monster 7', 50, 8),
-        new MeleeEnemy('Monster 8', 50, 8),
+        // new MeleeEnemy('Monster 7', 50, 8),
+        // new MeleeEnemy('Monster 8', 50, 8),
       ], [
         // new MeleeEnemy('Monster 9', 5, 8),
         // new MeleeEnemy('Monster 10', 5, 8),

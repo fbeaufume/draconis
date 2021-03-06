@@ -2,7 +2,7 @@
 
 import {Fight} from './game.model';
 import {Character, Creature, Enemy, Status, StatusExpiration, StatusName} from './creature.model';
-import {Log, LogType} from './log.model';
+import {logs, LogType} from './log.model';
 
 /**
  * The type of a skill, to use the right icon.
@@ -160,7 +160,7 @@ export abstract class Skill {
     return targets;
   }
 
-  execute(fight: Fight, logs: Log[]): void {
+  execute(fight: Fight): void {
     fight.activeCreature?.spendEnergy(this.cost);
   }
 }
@@ -205,10 +205,10 @@ function randomize(amount: number): number {
  */
 export class Advance extends Skill {
 
-  execute(fight: Fight, logs: Log[]): void {
-    super.execute(fight, logs);
+  execute(fight: Fight): void {
+    super.execute(fight);
 
-    logs.push(new Log(LogType.Advance, fight.activeCreature));
+    logs.add(LogType.Advance, fight.activeCreature);
   }
 }
 
@@ -217,10 +217,10 @@ export class Advance extends Skill {
  */
 export class Wait extends Skill {
 
-  execute(fight: Fight, logs: Log[]): void {
-    super.execute(fight, logs);
+  execute(fight: Fight): void {
+    super.execute(fight);
 
-    logs.push(new Log(LogType.Wait, fight.activeCreature));
+    logs.add(LogType.Wait, fight.activeCreature);
   }
 }
 
@@ -229,8 +229,8 @@ export class Wait extends Skill {
  */
 export class Leave extends Skill {
 
-  execute(fight: Fight, logs: Log[]): void {
-    super.execute(fight, logs);
+  execute(fight: Fight): void {
+    super.execute(fight);
 
     // Remove the creature from the fight
     if (fight.activeCreature != null) {
@@ -239,7 +239,7 @@ export class Leave extends Skill {
       fight.opposition.removeEmptyRows();
     }
 
-    logs.push(new Log(LogType.Leave, fight.activeCreature));
+    logs.add(LogType.Leave, fight.activeCreature);
   }
 }
 
@@ -248,13 +248,13 @@ export class Leave extends Skill {
  */
 export class Defend extends Skill {
 
-  execute(fight: Fight, logs: Log[]): void {
-    super.execute(fight, logs);
+  execute(fight: Fight): void {
+    super.execute(fight);
 
     if (fight.activeCreature != null) {
       fight.activeCreature.addStatus(new Status(StatusName.DEFEND, StatusExpiration.CREATURE_TURN, true, 1, 0, null));
 
-      logs.push(new Log(LogType.Defend, fight.activeCreature));
+      logs.add(LogType.Defend, fight.activeCreature);
     }
   }
 }
@@ -264,18 +264,18 @@ export class Defend extends Skill {
  */
 export class Damage extends Skill {
 
-  execute(fight: Fight, logs: Log[]): void {
+  execute(fight: Fight): void {
     if (fight.activeCreature == null) {
       return;
     }
 
     const activeCreature: Creature = fight.activeCreature;
 
-    super.execute(fight, logs);
+    super.execute(fight);
 
     fight.targetCreatures.forEach(targetCreature => {
-      logs.push(new Log(LogType.Damage, activeCreature, targetCreature,
-        targetCreature.damage(computeEffectiveDamage(activeCreature, targetCreature, this.power1))));
+      logs.add(LogType.Damage, activeCreature, targetCreature,
+        targetCreature.damage(computeEffectiveDamage(activeCreature, targetCreature, this.power1)));
     });
   }
 }
@@ -285,19 +285,19 @@ export class Damage extends Skill {
  */
 export class DamageAndHeal extends Skill {
 
-  execute(fight: Fight, logs: Log[]): void {
+  execute(fight: Fight): void {
     if (fight.activeCreature == null) {
       return;
     }
 
     const activeCreature: Creature = fight.activeCreature;
 
-    super.execute(fight, logs);
+    super.execute(fight);
 
     fight.targetCreatures.forEach(targetCreature => {
-      logs.push(new Log(LogType.DamageAndHeal, activeCreature, targetCreature,
+      logs.add(LogType.DamageAndHeal, activeCreature, targetCreature,
         targetCreature.damage(computeEffectiveDamage(activeCreature, targetCreature, this.power1)),
-        activeCreature.heal(computeEffectiveHeal(activeCreature, activeCreature, this.power2))));
+        activeCreature.heal(computeEffectiveHeal(activeCreature, activeCreature, this.power2)));
     });
   }
 }
@@ -307,19 +307,19 @@ export class DamageAndHeal extends Skill {
  */
 export class DamageAndDamage extends Skill {
 
-  execute(fight: Fight, logs: Log[]): void {
+  execute(fight: Fight): void {
     if (fight.activeCreature == null) {
       return;
     }
 
     const activeCreature: Creature = fight.activeCreature;
 
-    super.execute(fight, logs);
+    super.execute(fight);
 
     fight.targetCreatures.forEach(targetCreature => {
-      logs.push(new Log(LogType.DamageAndDamage, activeCreature, targetCreature,
+      logs.add(LogType.DamageAndDamage, activeCreature, targetCreature,
         targetCreature.damage(computeEffectiveDamage(activeCreature, targetCreature, this.power1)),
-        activeCreature.damage(computeEffectiveDamage(activeCreature, activeCreature, this.power2))));
+        activeCreature.damage(computeEffectiveDamage(activeCreature, activeCreature, this.power2)));
     });
   }
 }
@@ -329,19 +329,19 @@ export class DamageAndDamage extends Skill {
  */
 export class DamageAndBleed extends Skill {
 
-  execute(fight: Fight, logs: Log[]): void {
+  execute(fight: Fight): void {
     if (fight.activeCreature == null) {
       return;
     }
 
     const activeCreature: Creature = fight.activeCreature;
 
-    super.execute(fight, logs);
+    super.execute(fight);
 
     fight.targetCreatures.forEach(targetCreature => {
       // Direct damage
-      logs.push(new Log(LogType.Damage, activeCreature, targetCreature,
-        targetCreature.damage(computeEffectiveDamage(activeCreature, targetCreature, this.power1))));
+      logs.add(LogType.Damage, activeCreature, targetCreature,
+        targetCreature.damage(computeEffectiveDamage(activeCreature, targetCreature, this.power1)));
 
       // DOT
       targetCreature.addStatus(new Status(StatusName.BLEED, StatusExpiration.END_OF_ROUND, true, 3, this.power2, activeCreature));
@@ -356,19 +356,19 @@ export class DamageAndBleed extends Skill {
  */
 export class DamageAndPoison extends Skill {
 
-  execute(fight: Fight, logs: Log[]): void {
+  execute(fight: Fight): void {
     if (fight.activeCreature == null) {
       return;
     }
 
     const activeCreature: Creature = fight.activeCreature;
 
-    super.execute(fight, logs);
+    super.execute(fight);
 
     fight.targetCreatures.forEach(targetCreature => {
       // Direct damage
-      logs.push(new Log(LogType.Damage, activeCreature, targetCreature,
-        targetCreature.damage(computeEffectiveDamage(activeCreature, targetCreature, this.power1))));
+      logs.add(LogType.Damage, activeCreature, targetCreature,
+        targetCreature.damage(computeEffectiveDamage(activeCreature, targetCreature, this.power1)));
 
       // DOT
       targetCreature.addStatus(new Status(StatusName.POISON, StatusExpiration.END_OF_ROUND, true, 3, this.power2, activeCreature));
@@ -381,18 +381,18 @@ export class DamageAndPoison extends Skill {
  */
 export class Heal extends Skill {
 
-  execute(fight: Fight, logs: Log[]): void {
+  execute(fight: Fight): void {
     if (fight.activeCreature == null) {
       return;
     }
 
     const activeCreature: Creature = fight.activeCreature;
 
-    super.execute(fight, logs);
+    super.execute(fight);
 
     fight.targetCreatures.forEach(targetCreature => {
-      logs.push(new Log(LogType.Heal, activeCreature, targetCreature,
-        targetCreature.heal(computeEffectiveHeal(activeCreature, targetCreature, this.power1))));
+      logs.add(LogType.Heal, activeCreature, targetCreature,
+        targetCreature.heal(computeEffectiveHeal(activeCreature, targetCreature, this.power1)));
     });
   }
 }
@@ -402,19 +402,19 @@ export class Heal extends Skill {
  */
 export class DualHeal extends Skill {
 
-  execute(fight: Fight, logs: Log[]): void {
+  execute(fight: Fight): void {
     if (fight.activeCreature == null) {
       return;
     }
 
-    super.execute(fight, logs);
+    super.execute(fight);
 
     const targetCreature1: Creature = fight.targetCreatures[0];
-    logs.push(new Log(LogType.Heal, fight.activeCreature, targetCreature1, targetCreature1.heal(computeEffectiveHeal(
-      fight.activeCreature, targetCreature1, this.power1))));
+    logs.add(LogType.Heal, fight.activeCreature, targetCreature1, targetCreature1.heal(computeEffectiveHeal(
+      fight.activeCreature, targetCreature1, this.power1)));
     const targetCreature2: Creature = fight.targetCreatures[1];
-    logs.push(new Log(LogType.Heal, fight.activeCreature, targetCreature2, targetCreature2.heal(computeEffectiveHeal(
-      fight.activeCreature, targetCreature2, this.power2))));
+    logs.add(LogType.Heal, fight.activeCreature, targetCreature2, targetCreature2.heal(computeEffectiveHeal(
+      fight.activeCreature, targetCreature2, this.power2)));
   }
 }
 
@@ -423,12 +423,12 @@ export class DualHeal extends Skill {
  */
 export class Revive extends Skill {
 
-  execute(fight: Fight, logs: Log[]): void {
-    super.execute(fight, logs);
+  execute(fight: Fight): void {
+    super.execute(fight);
 
     fight.targetCreatures.forEach(targetCreature => {
       targetCreature.heal(targetCreature.lifeMax / 2);
-      logs.push(new Log(LogType.Revive, fight.activeCreature, targetCreature));
+      logs.add(LogType.Revive, fight.activeCreature, targetCreature);
     });
   }
 }

@@ -75,9 +75,27 @@ export const PAUSE_SHORT = 100;
 export const PAUSE_LONG = 800;
 
 /**
+ * Get the value of a query string parameter (empty string if the param is present without a value) or null.
+ */
+function getQueryStringParameterByName(name: string, url: string = window.location.href) {
+  name = name.replace(/[\[\]]/g, '\\$&');
+  const regex = new RegExp('[?&]' + name + '(=([^&#]*)|&|#|$)');
+  const results = regex.exec(url);
+  if (!results) {
+    return null;
+  }
+  if (!results[2]) {
+    return '';
+  }
+  return decodeURIComponent(results[2].replace(/\+/g, ' '));
+}
+
+/**
  * Global application settings.
  */
 export class Settings {
+
+  devMode: boolean = getQueryStringParameterByName('dev') != null;
 
   // Pause in msec in the UI between actions
   pauseDuration: number = PAUSE_LONG;
@@ -405,7 +423,7 @@ export class Game {
     ]);
 
   dungeons: Dungeon[] = [new TestDungeon(), new FangForestDungeon()];
-  dungeon: Dungeon = this.dungeons[1];
+  dungeon: Dungeon = this.dungeons[settings.devMode ? 0 : 1];
 
   fight: Fight = new Fight(this.party, new Opposition(''));
 

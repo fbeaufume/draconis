@@ -1,5 +1,5 @@
 import {AfterViewInit, Component, ElementRef, HostListener, QueryList, ViewChild, ViewChildren} from '@angular/core';
-import {canSelectSkillStates, Fight, Game, GameState} from '../model/game.model';
+import {canSelectSkillStates, Fight, Game, GameState, settings} from '../model/game.model';
 import {Character, Enemy} from '../model/creature.model';
 import {Skill} from '../model/skill.model';
 import {FightService} from './fight.service';
@@ -120,13 +120,11 @@ export class FightComponent implements AfterViewInit {
             // The current enemy is not a valid target
             return 'border-red-500';
           }
-        }
-        else {
+        } else {
           // The current enemy is not in the targets
           return 'border-gray-800';
         }
-      }
-      else {
+      } else {
         // Not hovering an enemy, so no enemy highlight
         return 'border-gray-800';
       }
@@ -159,7 +157,7 @@ export class FightComponent implements AfterViewInit {
       this.fightService.proceed();
       event.preventDefault();
     } else if (event.key == 'p') {
-      this.fightService.togglePauseDuration();
+      settings.togglePauseDuration();
       event.preventDefault();
     }
   }

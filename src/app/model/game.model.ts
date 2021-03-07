@@ -37,6 +37,7 @@ import {
   techDefend,
   viperShot,
 } from './skill.model';
+import {logs, LogType} from './log.model';
 
 /**
  * Number of character rows.
@@ -72,6 +73,26 @@ export const PAUSE_SHORT = 100;
  * A pause duration preset, in msec.
  */
 export const PAUSE_LONG = 800;
+
+/**
+ * Global application settings.
+ */
+export class Settings {
+
+  // Pause in msec in the UI between actions
+  pauseDuration: number = PAUSE_LONG;
+
+  togglePauseDuration() {
+    if (this.pauseDuration == PAUSE_LONG) {
+      this.pauseDuration = PAUSE_SHORT;
+    } else {
+      this.pauseDuration = PAUSE_LONG;
+    }
+    logs.add(LogType.PauseDurationChanged, this.pauseDuration);
+  }
+}
+
+export const settings: Settings = new Settings();
 
 /**
  * The action order of characters and enemies during a turn.

@@ -1,5 +1,5 @@
 import {Injectable} from '@angular/core';
-import {canSelectSkillStates, Fight, Game, GameState, PARTY_ROW_SIZE, PARTY_SIZE, PAUSE_LONG, PAUSE_SHORT} from '../model/game.model';
+import {canSelectSkillStates, Fight, Game, GameState, PARTY_ROW_SIZE, PARTY_SIZE, settings} from '../model/game.model';
 import {Character, Creature, Enemy, EnemyAction, Party, StatusExpiration} from '../model/creature.model';
 import {Skill, SkillTarget} from '../model/skill.model';
 import {Log, logs, LogType} from '../model/log.model';
@@ -8,9 +8,6 @@ import {Log, logs, LogType} from '../model/log.model';
   providedIn: 'root'
 })
 export class FightService {
-
-  // Pause in msec in the UI between actions
-  pauseDuration: number = PAUSE_LONG;
 
   game: Game;
 
@@ -453,15 +450,6 @@ export class FightService {
   pause(process: Function) {
     window.setTimeout(() => {
       process.call(this);
-    }, this.pauseDuration);
-  }
-
-  togglePauseDuration() {
-    if (this.pauseDuration == PAUSE_LONG) {
-      this.pauseDuration = PAUSE_SHORT;
-    } else {
-      this.pauseDuration = PAUSE_LONG;
-    }
-    logs.add(LogType.PauseDurationChanged, this.pauseDuration);
+    }, settings.pauseDuration);
   }
 }

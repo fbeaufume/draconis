@@ -21,16 +21,19 @@ export enum SkillType {
  */
 export enum SkillTarget {
   NONE,
+  // An alive character
   CHARACTER_ALIVE,
+  // All alive characters
   CHARACTER_ALL_ALIVE,
   // An alive character different than the current character
   CHARACTER_OTHER,
+  // A dead character
   CHARACTER_DEAD,
-  // The skill targets a single enemy
+  // A single enemy
   ENEMY_SINGLE,
-  // The skill targets two adjacent enemies, the hovered one + its right one
+  // Two adjacent enemies, the hovered one + its right one
   ENEMY_DOUBLE,
-  // The skill targets three adjacent enemies, the hovered one + its left and right ones
+  // Three adjacent enemies, the hovered one + its left and right ones
   ENEMY_TRIPLE,
 }
 
@@ -145,6 +148,7 @@ export abstract class Skill {
 
     switch (this.target) {
       case SkillTarget.CHARACTER_ALIVE:
+      case SkillTarget.CHARACTER_DEAD:
         targets.push(character);
 
         break;

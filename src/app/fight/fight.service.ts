@@ -378,9 +378,7 @@ export class FightService {
   }
 
   endOfTurnCleanup() {
-    // TODO move these methods in Opposition and Party
-    this.party.forEachCharacter(character => character.clearDamagesAndHeals())
-    this.fight.opposition.forEachEnemy(enemy => enemy.clearDamagesAndHeals());
+    this.getAllCreatures().forEach(creature => creature.clearDamagesAndHeals());
 
     this.fight.activeCreature = null;
     this.fight.focusedSkill = null;

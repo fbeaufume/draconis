@@ -136,8 +136,7 @@ export abstract class Creature {
 
     if (amount > 0) {
       this.damages += amount;
-    }
-    else if (amount < 0) {
+    } else if (amount < 0) {
       this.heals -= amount;
     }
 
@@ -336,11 +335,10 @@ export class Party {
   }
 
   /**
-   * Execute a callback on each character.
+   * Execute a callback on each character that validates an optional filter.
    */
-  // TODO FBE use this method whenever possible
-  forEachCharacter(callback: (character: Character) => void) {
-    this.rows.forEach(row => row.characters.forEach(character => callback(character)));
+  forEachCharacter(callback: (character: Character) => void, filter: (character: Character) => boolean = _ => true) {
+    this.rows.forEach(row => row.characters.filter(c => filter(c)).forEach(c => callback(c)));
   }
 
   /**
@@ -349,7 +347,7 @@ export class Party {
   countAliveCreatures(): number {
     let count = 0;
 
-    this.rows.forEach(row => row.characters.filter(character => character.isAlive()).forEach(_ => count++));
+    this.forEachCharacter(_ => count++, c => c.isAlive());
 
     return count;
   }
@@ -365,20 +363,14 @@ export class Party {
    * Restore all tech points. Called at the beginning of a new encounter for example.
    */
   restoreTechPoints() {
-    this.rows.forEach(row => {
-      row.characters.filter(character => character.isAlive() && !character.useMana)
-        .forEach(character => character.restoreEnergy());
-    });
+    this.forEachCharacter(c => c.restoreEnergy(), c => c.isAlive() && !c.useMana);
   }
 
   /**
    * Restore some mana to mana users, for example after an enemy died.
    */
   restoreManaPoints(amount: number) {
-    this.rows.forEach(row => {
-      row.characters.filter(character => character.useMana)
-        .forEach(character => character.spendEnergy(-amount));
-    });
+    this.forEachCharacter(c => c.spendEnergy(-amount), c => c.isAlive() && c.useMana);
   }
 
   /**
@@ -392,7 +384,7 @@ export class Party {
       rowIndex = 1;
     }
 
-    const aliveCharacters: Character[] = this.rows[rowIndex].characters.filter(character => character.isAlive());
+    const aliveCharacters: Character[] = this.rows[rowIndex].characters.filter(c => c.isAlive());
 
     return [aliveCharacters[Math.floor(Math.random() * aliveCharacters.length)]];
   }
@@ -401,8 +393,7 @@ export class Party {
    * Target one random alive character.
    */
   targetOneAliveCharacter(): Character[] {
-    const aliveCharacters: Character[] = [];
-    this.rows.forEach(row => row.characters.filter(character => character.isAlive()).forEach(character => aliveCharacters.push(character)));
+    const aliveCharacters: Character[] = this.targetAllAliveCharacters();
 
     return [aliveCharacters[Math.floor(Math.random() * aliveCharacters.length)]];
   }
@@ -412,9 +403,12 @@ export class Party {
    */
   targetAllAliveCharacters(): Character[] {
     const characters: Character[] = [];
-    this.rows.forEach(row => row.characters.filter(c => c.isAlive()).forEach(c => characters.push(c)));
+
+    this.forEachCharacter(c => characters.push(c), c => c.isAlive());
+
     return characters;
   }
+
 }
 
 /**
@@ -651,11 +645,10 @@ export class Opposition {
   }
 
   /**
-   * Execute a callback on each enemy.
+   * Execute a callback on each enemy that validates an optional filter.
    */
-  // TODO FBE use this method whenever possible
-  forEachEnemy(callback: (enemy: Enemy) => void) {
-    this.rows.forEach(row => row.enemies.forEach(enemy => callback(enemy)));
+  forEachEnemy(callback: (enemy: Enemy) => void, filter: (enemy: Enemy) => boolean = _ => true) {
+    this.rows.forEach(row => row.enemies.filter(e => filter(e)).forEach(enemy => callback(enemy)));
   }
 
   /**
@@ -733,7 +726,7 @@ export class Opposition {
   countAliveCreatures(): number {
     let count = 0;
 
-    this.rows.forEach(row => row.enemies.filter(enemy => enemy.isAlive()).forEach(_ => count++));
+    this.forEachEnemy(_ => count++, e => e.isAlive());
 
     return count;
   }
@@ -751,7 +744,7 @@ export class Opposition {
   targetOneDamagedEnemy(): Enemy | null {
     const damagedEnemies: Enemy[] = [];
 
-    this.rows.forEach(row => row.enemies.filter(enemy => enemy.isDamaged()).forEach(enemy => damagedEnemies.push(enemy)));
+    this.forEachEnemy(e => damagedEnemies.push(e), e => e.isDamaged());
 
     if (damagedEnemies.length > 0) {
       return damagedEnemies[Math.floor(Math.random() * damagedEnemies.length)];

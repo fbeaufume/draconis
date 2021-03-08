@@ -200,8 +200,13 @@ export abstract class Creature {
     return amount;
   }
 
+  /**
+   * Add a status to the creature. If already present, it is refreshed, i.e. replaced by a new one.
+   */
   addStatus(status: Status) {
-    // TODO FBE if the same status is already present, remove the current one, before adding the new one
+    // Remove the status if already present
+    this.statuses = this.statuses.filter(s => s.name != status.name);
+
     this.statuses.push(status);
   }
 

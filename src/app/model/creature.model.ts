@@ -75,6 +75,12 @@ export abstract class Creature {
 
   lifePercent: number;
 
+  // Damages received this turn
+  damages: number = 0;
+
+  // Heals received this turn
+  heals: number = 0;
+
   // Current mana or tech points (depends on the character class) (currently only used by characters)
   energy: number;
 
@@ -128,6 +134,13 @@ export abstract class Creature {
     amount = Math.round(amount);
     this.life -= amount;
 
+    if (amount > 0) {
+      this.damages += amount;
+    }
+    else if (amount < 0) {
+      this.heals -= amount;
+    }
+
     // Enforce min and max values
     this.life = this.checkMinAndMax(this.life, this.lifeMax);
 
@@ -151,6 +164,11 @@ export abstract class Creature {
 
   updateLifePercent() {
     this.lifePercent = 100 * this.life / this.lifeMax;
+  }
+
+  clearDamagesAndHeals() {
+    this.damages = 0;
+    this.heals = 0;
   }
 
   /**
@@ -184,8 +202,7 @@ export abstract class Creature {
   }
 
   addStatus(status: Status) {
-    // TODO FBE if the same status is already present, update the duration
-    // TODO FBE if the opposite status is already present, cancel both or update the duration
+    // TODO FBE if the same status is already present, remove the current one, before adding the new one
     this.statuses.push(status);
   }
 
@@ -316,6 +333,14 @@ export class Party {
     row2Characters: Character[]) {
     this.rows.push(new CharacterRow(row1Characters));
     this.rows.push(new CharacterRow(row2Characters));
+  }
+
+  /**
+   * Execute a callback on each character.
+   */
+  // TODO FBE use this method whenever possible
+  forEachCharacter(callback: (character: Character) => void) {
+    this.rows.forEach(row => row.characters.forEach(character => callback(character)));
   }
 
   /**
@@ -623,6 +648,14 @@ export class Opposition {
     this.rows.push(new EnemyRow(row1Enemies));
     this.rows.push(new EnemyRow(row2Enemies));
     this.rows.push(new EnemyRow(row3Enemies));
+  }
+
+  /**
+   * Execute a callback on each enemy.
+   */
+  // TODO FBE use this method whenever possible
+  forEachEnemy(callback: (enemy: Enemy) => void) {
+    this.rows.forEach(row => row.enemies.forEach(enemy => callback(enemy)));
   }
 
   /**

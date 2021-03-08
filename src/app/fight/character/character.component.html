@@ -12,13 +12,20 @@
     <div class="w-28 bg-green-900">
       <div class="h-1 bg-green-500" [style]="'width: ' + character.lifePercent + '%'"></div>
     </div>
+    <div *ngIf="character.damages > 0 || character.heals > 0" class="absolute z-10 flex justify-center space-x-2">
+      <div *ngIf="character.damages >0"
+           class="border border-red-400 bg-red-900 rounded-lg px-2 py-1 text-red-400 text-xl">{{ character.damages }}</div>
+      <div *ngIf="character.heals >0"
+           class="border border-green-400 bg-green-900 rounded-lg px-2 py-1 text-green-400 text-xl">{{ character.heals }}</div>
+    </div>
   </div>
   <div *ngIf="!character.useMana" class="flex flex-col items-center">
     <p class="pl-2" [ngClass]="character.isAlive() ? 'text-purple-400' : 'text-purple-900'">
       TP <span class="font-bold">{{ character.energy }}/{{ character.energyMax }}</span>
     </p>
     <div class="w-28 bg-purple-900">
-      <div class="h-1" [ngClass]="character.isAlive() ? 'bg-purple-500' : 'bg-purple-900'" [style]="'width: ' + character.energyPercent + '%'"></div>
+      <div class="h-1" [ngClass]="character.isAlive() ? 'bg-purple-500' : 'bg-purple-900'"
+           [style]="'width: ' + character.energyPercent + '%'"></div>
     </div>
   </div>
   <div *ngIf="character.useMana" class="flex flex-col items-center">
@@ -26,11 +33,12 @@
       MP <span class="font-bold">{{ character.energy }}/{{ character.energyMax }}</span>
     </p>
     <div class="w-28 bg-blue-900">
-      <div class="h-1" [ngClass]="character.isAlive() ? 'bg-blue-500' : 'bg-blue-900'" [style]="'width: ' + character.energyPercent + '%'"></div>
+      <div class="h-1" [ngClass]="character.isAlive() ? 'bg-blue-500' : 'bg-blue-900'"
+           [style]="'width: ' + character.energyPercent + '%'"></div>
     </div>
   </div>
 </div>
-<div class="flex justify-center space-x-2 pt-4 text-sm">
+<div class="flex justify-center space-x-2 pt-4">
   <app-status *ngFor="let buff of character.getBuffs()" [status]="buff"></app-status>
   <app-status *ngFor="let debuff of character.getDebuffs()" [status]="debuff"></app-status>
 </div>

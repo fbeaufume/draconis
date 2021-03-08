@@ -363,7 +363,7 @@ export class FightService {
 
       // Give some time to the player to see the skill result
       this.pause(() => {
-        this.deselectEverything();
+        this.endOfTurnCleanup();
 
         this.pause(() => {
           this.fight.turnOrder.nextCreature();
@@ -371,13 +371,17 @@ export class FightService {
         });
       });
     } else {
-      this.deselectEverything();
+      this.endOfTurnCleanup();
       this.fight.turnOrder.nextCreature();
       this.processTurn();
     }
   }
 
-  deselectEverything() {
+  endOfTurnCleanup() {
+    // TODO move these methods in Opposition and Party
+    this.party.forEachCharacter(character => character.clearDamagesAndHeals())
+    this.fight.opposition.forEachEnemy(enemy => enemy.clearDamagesAndHeals());
+
     this.fight.activeCreature = null;
     this.fight.focusedSkill = null;
     this.fight.selectedSkill = null;

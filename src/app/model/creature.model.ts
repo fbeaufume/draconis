@@ -11,6 +11,7 @@ export enum StatusName {
   DEFEND,
   BLEED,
   POISON,
+  REGEN,
 }
 
 /**
@@ -43,7 +44,7 @@ export class Status {
   }
 
   isHot(): boolean {
-    return false;
+    return this.name == StatusName.REGEN;
   }
 
   decreaseDuration() {

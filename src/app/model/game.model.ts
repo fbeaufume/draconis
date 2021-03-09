@@ -27,7 +27,7 @@ import {
   monkHeal,
   monkRevive,
   preciseShot,
-  recoveryStrike,
+  recoveryStrike, regenerate,
   revive,
   shock,
   shot,
@@ -408,7 +408,7 @@ export class Game {
         techDefend, strike, recoveryStrike, monkHeal, monkRevive
       ]),
       new Character('Arwin', CreatureClass.PALADIN, 4, 20, true, 50, 10, [
-        magicDefend, holyStrike, heal, dualHeal, healAll
+        magicDefend, holyStrike, heal, dualHeal, healAll, regenerate
       ])],
     [
       new Character('Faren', CreatureClass.ARCHER, 4, 20, false, 50, 10, [
@@ -418,7 +418,7 @@ export class Game {
         magicDefend, lightning, fireball
       ]),
       new Character('Nairo', CreatureClass.PRIEST, 4, 20, true, 50, 10, [
-        magicDefend, shock, heal, healAll, revive
+        magicDefend, shock, heal, healAll, regenerate, revive
       ])
     ]);
 

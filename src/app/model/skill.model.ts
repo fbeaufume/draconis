@@ -331,51 +331,27 @@ export class DamageAndDamage extends Skill {
 /**
  * A damaging skill that also gives a bleed DOT.
  */
-export class DamageAndBleed extends Skill {
+export class DamageAndBleed extends Damage {
 
   execute(fight: Fight): void {
-    if (fight.activeCreature == null) {
-      return;
-    }
-
-    const activeCreature: Creature = fight.activeCreature;
-
     super.execute(fight);
 
     fight.targetCreatures.forEach(targetCreature => {
-      // Direct damage
-      logs.add(LogType.Damage, activeCreature, targetCreature,
-        targetCreature.damage(computeEffectiveDamage(activeCreature, targetCreature, this.power1)));
-
-      // DOT
-      targetCreature.addStatus(new Status(StatusName.BLEED, StatusExpiration.END_OF_ROUND, true, 3, this.power2, activeCreature));
+      targetCreature.addStatus(new Status(StatusName.BLEED, StatusExpiration.END_OF_ROUND, false, 3, this.power2, fight.activeCreature));
     });
   }
 }
 
-// TODO FBE factorize this and DamageAndBleed
-
 /**
  * A damaging skill that also gives a poison DOT.
  */
-export class DamageAndPoison extends Skill {
+export class DamageAndPoison extends Damage {
 
   execute(fight: Fight): void {
-    if (fight.activeCreature == null) {
-      return;
-    }
-
-    const activeCreature: Creature = fight.activeCreature;
-
     super.execute(fight);
 
     fight.targetCreatures.forEach(targetCreature => {
-      // Direct damage
-      logs.add(LogType.Damage, activeCreature, targetCreature,
-        targetCreature.damage(computeEffectiveDamage(activeCreature, targetCreature, this.power1)));
-
-      // DOT
-      targetCreature.addStatus(new Status(StatusName.POISON, StatusExpiration.END_OF_ROUND, true, 3, this.power2, activeCreature));
+      targetCreature.addStatus(new Status(StatusName.POISON, StatusExpiration.END_OF_ROUND, false, 3, this.power2, fight.activeCreature));
     });
   }
 }
@@ -423,6 +399,20 @@ export class DualHeal extends Skill {
 }
 
 /**
+ * A heal over time skill.
+ */
+export class Regenerate extends Heal {
+
+  execute(fight: Fight): void {
+    super.execute(fight);
+
+    fight.targetCreatures.forEach(targetCreature => {
+      targetCreature.addStatus(new Status(StatusName.REGEN, StatusExpiration.END_OF_ROUND, true, 3, this.power2, fight.activeCreature));
+    });
+  }
+}
+
+/**
  * A revive skill.
  */
 export class Revive extends Skill {
@@ -454,12 +444,14 @@ export const heal: Skill = new Heal(SkillType.HEAL, 'Heal', SkillTarget.CHARACTE
   'Heal a character for 100% damage.');
 export const healAll: Skill = new Heal(SkillType.HEAL, 'Heal All', SkillTarget.CHARACTER_ALL_ALIVE, 20, 0, 0,
   'Heal all characters for 50% damage.', 0.5);
+export const regenerate: Skill = new Regenerate(SkillType.HEAL, 'Regenerate', SkillTarget.CHARACTER_ALIVE, 5, 0, 0,
+  'Heal a character for 50% damage and 120% damage over 3 rounds.', 0.5, 0.4);
 export const revive: Skill = new Revive(SkillType.HEAL, 'Revive', SkillTarget.CHARACTER_DEAD, 20, 0, 0,
   'Revive a character with 50% life.');
 
 // Warrior skills
-export const furyStrike = new DamageAndDamage(SkillType.ATTACK, 'Fury Strike', SkillTarget.ENEMY_SINGLE, 20, 1, 0,
-  'Inflict 200% damage to the target and 30% damage to self.', 2.0, 0.3);
+export const furyStrike = new DamageAndDamage(SkillType.ATTACK, 'Fury Strike', SkillTarget.ENEMY_SINGLE, 15, 1, 0,
+  'Inflict 200% damage to the target and 30% damage to self.', 1.5, 0.3);
 export const deepWound = new DamageAndBleed(SkillType.ATTACK, 'Deep Wound', SkillTarget.ENEMY_SINGLE, 20, 1, 0,
   'Inflict 50% damage to the target and 120% damage over 3 rounds.', 0.5, 0.4);
 export const slash = new Damage(SkillType.ATTACK, 'Slash', SkillTarget.ENEMY_DOUBLE, 20, 1, 0,

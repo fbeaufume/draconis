@@ -294,9 +294,9 @@ class TestDungeon extends Dungeon {
       new Opposition('some monsters', [
         // new OldManEnemy('Old Man', 24, 14),
         // new DragonEnemy('Green Dragon', 120, 10, 2),
-        new MeleeEnemy('Monster 1', 2, 50),
-        new MeleeEnemy('Monster 2', 2, 50),
-        new MeleeEnemy('Monster 3', 2, 50),
+        new MeleeEnemy('Monster 1', 5, 8),
+        new MeleeEnemy('Monster 2', 5, 8),
+        // new MeleeEnemy('Monster 3', 5, 8),
         // new MeleeEnemy('Monster 4', 2, 5),
       ], [
         // new MeleeEnemy('Monster 5', 50, 8),
@@ -444,6 +444,7 @@ export class Game {
 
     this.oppositionId++;
 
+    this.party.forEachCharacter(c => c.clearStatuses());
     this.party.restoreTechPoints();
 
     this.fight = new Fight(this.party, this.dungeon.oppositions[this.oppositionId - 1]);

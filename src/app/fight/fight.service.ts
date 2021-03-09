@@ -45,6 +45,8 @@ export class FightService {
    * Start the next encounter, i.e. display the opposition.
    */
   startNextEncounter() {
+    this.endOfTurnCleanup();
+
     this.game.startNextEncounter();
 
     logs.add(LogType.OppositionAppear, this.fight.opposition.description);
@@ -377,6 +379,9 @@ export class FightService {
     }
   }
 
+  /**
+   * Clear the selected creature and skill. Hide all displayed damages.
+   */
   endOfTurnCleanup() {
     this.getAllCreatures().forEach(creature => creature.clearDamagesAndHeals());
 

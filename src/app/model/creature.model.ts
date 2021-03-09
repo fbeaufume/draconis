@@ -148,7 +148,7 @@ export abstract class Creature {
 
     // Remove all statuses when dead
     if (this.life <= 0) {
-      this.statuses = [];
+      this.clearStatuses();
     }
 
     return amount;
@@ -199,6 +199,10 @@ export abstract class Creature {
       return maxAmount;
     }
     return amount;
+  }
+
+  clearStatuses() {
+    this.statuses = [];
   }
 
   /**

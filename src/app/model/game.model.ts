@@ -27,7 +27,8 @@ import {
   monkHeal,
   monkRevive,
   preciseShot,
-  recoveryStrike, regenerate,
+  recoveryStrike,
+  regenerate,
   revive,
   shock,
   shot,
@@ -98,7 +99,7 @@ export class Settings {
   devMode: boolean = getQueryStringParameterByName('dev') != null;
 
   // Pause in msec in the UI between actions
-  pauseDuration: number = PAUSE_LONG;
+  pauseDuration: number = this.devMode ? PAUSE_SHORT : PAUSE_LONG;
 
   togglePauseDuration() {
     if (this.pauseDuration == PAUSE_LONG) {

@@ -39,41 +39,7 @@ import {
   viperShot,
 } from './skill.model';
 import {logs, LogType} from './log.model';
-
-/**
- * Number of character rows.
- */
-export const PARTY_ROWS = 2;
-
-/**
- * Number of characters per row.
- */
-export const PARTY_ROW_SIZE = 3;
-
-/**
- * Number of characters in the party.
- */
-export const PARTY_SIZE = PARTY_ROWS * PARTY_ROW_SIZE;
-
-/**
- * Number of enemy rows.
- */
-export const OPPOSITION_ROWS = 3;
-
-/**
- * Maximum number of enemies per row.
- */
-export const OPPOSITION_ROW_SIZE = 4;
-
-/**
- * A pause duration preset, in msec.
- */
-export const PAUSE_SHORT = 100;
-
-/**
- * A pause duration preset, in msec.
- */
-export const PAUSE_LONG = 800;
+import {OPPOSITION_ROWS, PARTY_SIZE, PAUSE_LONG, PAUSE_SHORT} from './constants.model';
 
 /**
  * Get the value of a query string parameter (empty string if the param is present without a value) or null.

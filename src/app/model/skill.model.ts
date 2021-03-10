@@ -1,8 +1,9 @@
 // Skill related classes
 
 import {Fight} from './game.model';
-import {Character, Creature, Enemy, Status, StatusExpiration, StatusName} from './creature.model';
+import {Character, Creature, Enemy, LifeChange, LifeChangeType, Status, StatusExpiration, StatusName} from './creature.model';
 import {logs, LogType} from './log.model';
+import {DEFEND_BONUS, RANDOMIZE_BASE, RANDOMIZE_RANGE} from './constants.model';
 
 /**
  * The type of a skill, to use the right icon.
@@ -171,37 +172,51 @@ export abstract class Skill {
 
 /**
  * Compute the effective amount for a damaging attack from a creature to a creature using their characteristics
- * and a small random modification. Also return the computed amount.
+ * and a small random modification. The result is rounded.
  */
-export function computeEffectiveDamage(emitter: Creature, receiver: Creature, skillPower: number): number {
+export function computeEffectiveDamage(emitter: Creature, receiver: Creature, skillPower: number, canBeDodged: boolean = true): LifeChange {
+  // Check if dodge, critical or normal hit
+  const random = Math.random();
+  const isDodge = canBeDodged && random < receiver.dodgeChance;
+  if (isDodge) {
+    return new LifeChange(0, LifeChangeType.DODGE);
+  }
+
   // Use the attacker power and skill power
   const baseAmount = emitter.power * skillPower;
 
-  // Use the defend buff
-  const correctedAmount = receiver.hasBuff(StatusName.DEFEND) ? baseAmount * 0.75 : baseAmount;
+  // Apply the critical bonus
+  const isCritical = random >= receiver.dodgeChance && random < receiver.dodgeChance + emitter.criticalChance;
+  const afterCritical = isCritical ? baseAmount * emitter.criticalBonus : baseAmount;
 
-  // Use a small random modification
-  return randomize(correctedAmount);
+  // Apply the defend bonus
+  const afterDefend = receiver.hasBuff(StatusName.DEFEND) ? afterCritical * DEFEND_BONUS : afterCritical;
+
+  return new LifeChange(randomizeAndRound(afterDefend), isCritical ? LifeChangeType.CRITICAL : LifeChangeType.NORMAL);
 }
 
 /**
  * Compute the effective amount for a heal from a creature to a creature using their characteristics
- * and a small random modification. Also return the computed amount.
+ * and a small random modification. The result is rounded.
+ * Similar to computeEffectiveDamage but without dodge or some statuses such as defend.
  */
-export function computeEffectiveHeal(emitter: Creature, receiver: Creature, skillPower: number): number {
+export function computeEffectiveHeal(emitter: Creature, receiver: Creature, skillPower: number): LifeChange {
   // Use the attacker power and skill power
   const baseAmount = emitter.power * skillPower;
 
-  // Use a small random modification
-  return randomize(baseAmount);
+  // Apply the critical bonus
+  const random = Math.random();
+  const isCritical = random < emitter.criticalChance;
+  const afterCritical = isCritical ? baseAmount * emitter.criticalBonus : baseAmount;
+
+  return new LifeChange(randomizeAndRound(afterCritical), isCritical ? LifeChangeType.CRITICAL : LifeChangeType.NORMAL);
 }
 
 /**
- * Modify a number by adding or removing a small random value.
- * @param amount
+ * Modify a number by adding or removing a small random value, then round the result
  */
-function randomize(amount: number): number {
-  return (0.85 + Math.random() * 0.3) * amount;
+function randomizeAndRound(amount: number): number {
+  return Math.round((RANDOMIZE_BASE + Math.random() * RANDOMIZE_RANGE) * amount);
 }
 
 /**
@@ -279,7 +294,7 @@ export class Damage extends Skill {
 
     fight.targetCreatures.forEach(targetCreature => {
       logs.add(LogType.Damage, activeCreature, targetCreature,
-        targetCreature.damage(computeEffectiveDamage(activeCreature, targetCreature, this.power1)));
+        targetCreature.damage(computeEffectiveDamage(activeCreature, targetCreature, this.power1).amount));
     });
   }
 }
@@ -300,8 +315,8 @@ export class DamageAndHeal extends Skill {
 
     fight.targetCreatures.forEach(targetCreature => {
       logs.add(LogType.DamageAndHeal, activeCreature, targetCreature,
-        targetCreature.damage(computeEffectiveDamage(activeCreature, targetCreature, this.power1)),
-        activeCreature.heal(computeEffectiveHeal(activeCreature, activeCreature, this.power2)));
+        targetCreature.damage(computeEffectiveDamage(activeCreature, targetCreature, this.power1).amount),
+        activeCreature.heal(computeEffectiveHeal(activeCreature, activeCreature, this.power2).amount));
     });
   }
 }
@@ -322,8 +337,8 @@ export class DamageAndDamage extends Skill {
 
     fight.targetCreatures.forEach(targetCreature => {
       logs.add(LogType.DamageAndDamage, activeCreature, targetCreature,
-        targetCreature.damage(computeEffectiveDamage(activeCreature, targetCreature, this.power1)),
-        activeCreature.damage(computeEffectiveDamage(activeCreature, activeCreature, this.power2)));
+        targetCreature.damage(computeEffectiveDamage(activeCreature, targetCreature, this.power1).amount),
+        activeCreature.damage(computeEffectiveDamage(activeCreature, activeCreature, this.power2, false).amount));
     });
   }
 }
@@ -372,7 +387,7 @@ export class Heal extends Skill {
 
     fight.targetCreatures.forEach(targetCreature => {
       logs.add(LogType.Heal, activeCreature, targetCreature,
-        targetCreature.heal(computeEffectiveHeal(activeCreature, targetCreature, this.power1)));
+        targetCreature.heal(computeEffectiveHeal(activeCreature, targetCreature, this.power1).amount));
     });
   }
 }
@@ -391,10 +406,10 @@ export class DualHeal extends Skill {
 
     const targetCreature1: Creature = fight.targetCreatures[0];
     logs.add(LogType.Heal, fight.activeCreature, targetCreature1, targetCreature1.heal(computeEffectiveHeal(
-      fight.activeCreature, targetCreature1, this.power1)));
+      fight.activeCreature, targetCreature1, this.power1).amount));
     const targetCreature2: Creature = fight.targetCreatures[1];
     logs.add(LogType.Heal, fight.activeCreature, targetCreature2, targetCreature2.heal(computeEffectiveHeal(
-      fight.activeCreature, targetCreature2, this.power2)));
+      fight.activeCreature, targetCreature2, this.power2).amount));
   }
 }
 
@@ -435,9 +450,9 @@ export const strikeSmall = new Damage(SkillType.ATTACK, '', SkillTarget.ENEMY_SI
 
 // Common characters skills
 export const techDefend = new Defend(SkillType.DEFENSE, 'Defend', SkillTarget.NONE, -30, 0, 0,
-  'Reduce received damage by 25%. Gain 30 TP.');
+  'Reduce received damage by 20%. Gain 30 TP.');
 export const magicDefend = new Defend(SkillType.DEFENSE, 'Defend', SkillTarget.NONE, -5, 0, 0,
-  'Reduce received damage by 25%. Gain 5 MP.');
+  'Reduce received damage by 20%. Gain 5 MP.');
 export const strike = new Damage(SkillType.ATTACK, 'Strike', SkillTarget.ENEMY_SINGLE, 10, 1, 0,
   'Inflict 100% damage.');
 export const heal: Skill = new Heal(SkillType.HEAL, 'Heal', SkillTarget.CHARACTER_ALIVE, 5, 0, 0,

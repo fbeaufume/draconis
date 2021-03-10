@@ -1,8 +1,9 @@
 // Creature related classes
 
-import {Game, OPPOSITION_ROW_SIZE} from './game.model';
+import {Game} from './game.model';
 import {advance, computeEffectiveDamage, computeEffectiveHeal, heal, leave, Skill, strike, strikeSmall, wait} from './skill.model';
 import {logs, LogType} from './log.model';
+import {CRITICAL_BONUS, CRITICAL_CHANCE, DODGE_CHANCE, OPPOSITION_ROW_SIZE} from './constants.model';
 
 /**
  * The various status names.
@@ -24,7 +25,11 @@ export enum StatusExpiration {
   END_OF_ROUND,
 }
 
+/**
+ * A status applied to a creature, such as a DOT, HOT, buff or debuff.
+ */
 export class Status {
+
   constructor(
     public name: StatusName,
     public expiration: StatusExpiration,
@@ -49,6 +54,24 @@ export class Status {
 
   decreaseDuration() {
     this.duration--;
+  }
+}
+
+export enum LifeChangeType {
+  NORMAL,
+  CRITICAL,
+  DODGE
+}
+
+/**
+ * A life change due to a damage or heal.
+ */
+export class LifeChange {
+
+  constructor(
+    public amount: number,
+    public type: LifeChangeType
+  ) {
   }
 }
 
@@ -87,6 +110,15 @@ export abstract class Creature {
 
   // Max mana or tech points (depends on the character class) (currently only used by characters)
   energyPercent: number;
+
+  // Dodge chance, 0.1 means 10% dodge chance
+  dodgeChance: number = DODGE_CHANCE;
+
+  // Critical hit chance, 0.1 means 10% critical hit chance
+  criticalChance: number = CRITICAL_CHANCE;
+
+  // Critical hit bonus, 1.5 means 50% extra hit or heal
+  criticalBonus: number = CRITICAL_BONUS;
 
   // Buffs and debuffs
   statuses: Status[] = [];
@@ -129,10 +161,9 @@ export abstract class Creature {
 
   /**
    * Inflict some damage to the creature.
-   * The amount is rounded and returned.
    */
+  // TODO FBE do not return the amount any more ?
   damage(amount: number): number {
-    amount = Math.round(amount);
     this.life -= amount;
 
     if (amount > 0) {
@@ -156,8 +187,8 @@ export abstract class Creature {
 
   /**
    * Heals the creature.
-   * The amount is rounded and returned.
    */
+  // TODO FBE do not return the amount any more ?
   heal(amount: number): number {
     return -this.damage(-amount);
   }
@@ -256,13 +287,18 @@ export abstract class Creature {
     this.statuses.forEach(status => {
       if (status.originCreature != null) {
         if (status.isDot()) {
-          damageAmount += this.damage(computeEffectiveDamage(status.originCreature, this, status.power));
+          const lifeChange = computeEffectiveDamage(status.originCreature, this, status.power, false);
+          this.damage(lifeChange.amount);
+          damageAmount += lifeChange.amount;
         } else if (status.isHot()) {
-          damageAmount -= this.heal(computeEffectiveHeal(status.originCreature, this, status.power));
+          const lifeChange = computeEffectiveHeal(status.originCreature, this, status.power);
+          this.heal(lifeChange.amount);
+          damageAmount -= lifeChange.amount;
         }
       }
     });
 
+    // Log the total amount of life lost of gained, but note that the critical type is not displayed
     if (damageAmount > 0) {
       logs.add(LogType.Dot, this, damageAmount);
     } else if (damageAmount < 0) {

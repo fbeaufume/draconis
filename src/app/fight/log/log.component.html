@@ -31,27 +31,27 @@
     <!-- Damage -->
     <span [ngClass]="getClassForCreature(log.args[0])">{{ $any(log.args[0]).name }}</span>
     damages <span [ngClass]="getClassForCreature(log.args[1])">{{ $any(log.args[1]).name }}</span>
-    for <span class="text-red-500">{{ log.args[2] }}</span> HP.
+    for <span class="text-red-500">{{ $any(log.args[2]).amount }}</span> HP.
   </div>
   <div *ngSwitchCase="8">
     <!-- Damage and heal -->
     <span [ngClass]="getClassForCreature(log.args[0])">{{ $any(log.args[0]).name }}</span>
     damages <span [ngClass]="getClassForCreature(log.args[1])">{{ $any(log.args[1]).name }}</span>
-    for <span class="text-red-500">{{ log.args[2] }}</span> HP
-    and heals for <span class="text-green-500">{{ log.args[3] }}</span> HP.
+    for <span class="text-red-500">{{ $any(log.args[2]).amount }}</span> HP
+    and heals for <span class="text-green-500">{{ $any(log.args[3]).amount }}</span> HP.
   </div>
   <div *ngSwitchCase="9">
     <!-- Damage and damage -->
     <span [ngClass]="getClassForCreature(log.args[0])">{{ $any(log.args[0]).name }}</span>
     damages <span [ngClass]="getClassForCreature(log.args[1])">{{ $any(log.args[1]).name }}</span>
-    for <span class="text-red-500">{{ log.args[2] }}</span> HP
-    and looses <span class="text-red-500">{{ log.args[3] }}</span> HP.
+    for <span class="text-red-500">{{ $any(log.args[2]).amount }}</span> HP
+    and looses <span class="text-red-500">{{ $any(log.args[3]).amount }}</span> HP.
   </div>
   <div *ngSwitchCase="10">
     <!-- Heal -->
     <span [ngClass]="getClassForCreature(log.args[0])">{{ $any(log.args[0]).name }}</span>
     heals <span [ngClass]="getClassForCreature(log.args[1])">{{ $any(log.args[1]).name }}</span>
-    for <span class="text-green-500">{{ log.args[2] }}</span> HP.
+    for <span class="text-green-500">{{ $any(log.args[2]).amount }}</span> HP.
   </div>
   <div *ngSwitchCase="11">
     <!-- Revive -->
@@ -61,12 +61,12 @@
   <div *ngSwitchCase="12">
     <!-- DOT -->
     <span [ngClass]="getClassForCreature(log.args[0])">{{ $any(log.args[0]).name }}</span>
-    looses <span class="text-red-500">{{ log.args[1] }}</span> HP.
+    looses <span class="text-red-500">{{ $any(log.args[1]).amount }}</span> HP.
   </div>
   <div *ngSwitchCase="13">
     <!-- HOT -->
     <span [ngClass]="getClassForCreature(log.args[0])">{{ $any(log.args[0]).name }}</span>
-    gains <span class="text-green-500">{{ log.args[1] }}</span> HP.
+    gains <span class="text-green-500">{{ $any(log.args[1]).amount }}</span> HP.
   </div>
   <div *ngSwitchCase="14">
     <!-- Enemy death -->

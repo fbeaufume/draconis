@@ -1,7 +1,18 @@
 // Skill related classes
 
 import {Fight} from './game.model';
-import {Character, Creature, Enemy, LifeChange, LifeChangeType, Status, StatusExpiration, StatusName} from './creature.model';
+import {
+  Character,
+  Creature,
+  Enemy,
+  LifeChange,
+  LifeChangeEfficiency,
+  LifeGain,
+  LifeLoss,
+  Status,
+  StatusExpiration,
+  StatusName
+} from './creature.model';
 import {logs, LogType} from './log.model';
 import {DEFEND_BONUS, RANDOMIZE_BASE, RANDOMIZE_RANGE} from './constants.model';
 
@@ -179,7 +190,7 @@ export function computeEffectiveDamage(emitter: Creature, receiver: Creature, sk
   const random = Math.random();
   const isDodge = canBeDodged && random < receiver.dodgeChance;
   if (isDodge) {
-    return new LifeChange(0, LifeChangeType.DODGE);
+    return new LifeLoss(0, LifeChangeEfficiency.DODGE);
   }
 
   // Use the attacker power and skill power
@@ -192,7 +203,7 @@ export function computeEffectiveDamage(emitter: Creature, receiver: Creature, sk
   // Apply the defend bonus
   const afterDefend = receiver.hasBuff(StatusName.DEFEND) ? afterCritical * DEFEND_BONUS : afterCritical;
 
-  return new LifeChange(randomizeAndRound(afterDefend), isCritical ? LifeChangeType.CRITICAL : LifeChangeType.NORMAL);
+  return new LifeLoss(randomizeAndRound(afterDefend), isCritical ? LifeChangeEfficiency.CRITICAL : LifeChangeEfficiency.NORMAL);
 }
 
 /**
@@ -209,7 +220,7 @@ export function computeEffectiveHeal(emitter: Creature, receiver: Creature, skil
   const isCritical = random < emitter.criticalChance;
   const afterCritical = isCritical ? baseAmount * emitter.criticalBonus : baseAmount;
 
-  return new LifeChange(randomizeAndRound(afterCritical), isCritical ? LifeChangeType.CRITICAL : LifeChangeType.NORMAL);
+  return new LifeGain(randomizeAndRound(afterCritical), isCritical ? LifeChangeEfficiency.CRITICAL : LifeChangeEfficiency.NORMAL);
 }
 
 /**
@@ -294,7 +305,7 @@ export class Damage extends Skill {
 
     fight.targetCreatures.forEach(targetCreature => {
       logs.add(LogType.Damage, activeCreature, targetCreature,
-        targetCreature.damage(computeEffectiveDamage(activeCreature, targetCreature, this.power1).amount));
+        targetCreature.changeLife(computeEffectiveDamage(activeCreature, targetCreature, this.power1)));
     });
   }
 }
@@ -315,8 +326,8 @@ export class DamageAndHeal extends Skill {
 
     fight.targetCreatures.forEach(targetCreature => {
       logs.add(LogType.DamageAndHeal, activeCreature, targetCreature,
-        targetCreature.damage(computeEffectiveDamage(activeCreature, targetCreature, this.power1).amount),
-        activeCreature.heal(computeEffectiveHeal(activeCreature, activeCreature, this.power2).amount));
+        targetCreature.changeLife(computeEffectiveDamage(activeCreature, targetCreature, this.power1)),
+        activeCreature.changeLife(computeEffectiveHeal(activeCreature, activeCreature, this.power2)));
     });
   }
 }
@@ -337,8 +348,8 @@ export class DamageAndDamage extends Skill {
 
     fight.targetCreatures.forEach(targetCreature => {
       logs.add(LogType.DamageAndDamage, activeCreature, targetCreature,
-        targetCreature.damage(computeEffectiveDamage(activeCreature, targetCreature, this.power1).amount),
-        activeCreature.damage(computeEffectiveDamage(activeCreature, activeCreature, this.power2, false).amount));
+        targetCreature.changeLife(computeEffectiveDamage(activeCreature, targetCreature, this.power1)),
+        activeCreature.changeLife(computeEffectiveDamage(activeCreature, activeCreature, this.power2, false)));
     });
   }
 }
@@ -387,7 +398,7 @@ export class Heal extends Skill {
 
     fight.targetCreatures.forEach(targetCreature => {
       logs.add(LogType.Heal, activeCreature, targetCreature,
-        targetCreature.heal(computeEffectiveHeal(activeCreature, targetCreature, this.power1).amount));
+        targetCreature.changeLife(computeEffectiveHeal(activeCreature, targetCreature, this.power1)));
     });
   }
 }
@@ -405,11 +416,11 @@ export class DualHeal extends Skill {
     super.execute(fight);
 
     const targetCreature1: Creature = fight.targetCreatures[0];
-    logs.add(LogType.Heal, fight.activeCreature, targetCreature1, targetCreature1.heal(computeEffectiveHeal(
-      fight.activeCreature, targetCreature1, this.power1).amount));
+    logs.add(LogType.Heal, fight.activeCreature, targetCreature1,
+      targetCreature1.changeLife(computeEffectiveHeal(fight.activeCreature, targetCreature1, this.power1)));
     const targetCreature2: Creature = fight.targetCreatures[1];
-    logs.add(LogType.Heal, fight.activeCreature, targetCreature2, targetCreature2.heal(computeEffectiveHeal(
-      fight.activeCreature, targetCreature2, this.power2).amount));
+    logs.add(LogType.Heal, fight.activeCreature, targetCreature2,
+      targetCreature2.changeLife(computeEffectiveHeal(fight.activeCreature, targetCreature2, this.power2)));
   }
 }
 
@@ -436,7 +447,7 @@ export class Revive extends Skill {
     super.execute(fight);
 
     fight.targetCreatures.forEach(targetCreature => {
-      targetCreature.heal(targetCreature.lifeMax / 2);
+      targetCreature.changeLife(new LifeGain(targetCreature.lifeMax / 2));
       logs.add(LogType.Revive, fight.activeCreature, targetCreature);
     });
   }
@@ -466,15 +477,15 @@ export const revive: Skill = new Revive(SkillType.HEAL, 'Revive', SkillTarget.CH
 
 // Warrior skills
 export const furyStrike = new DamageAndDamage(SkillType.ATTACK, 'Fury Strike', SkillTarget.ENEMY_SINGLE, 15, 1, 0,
-  'Inflict 200% damage to the target and 30% damage to self.', 1.5, 0.3);
+  'Inflict 150% damage to the target and 30% damage to self.', 1.5, 0.3);
 export const deepWound = new DamageAndBleed(SkillType.ATTACK, 'Deep Wound', SkillTarget.ENEMY_SINGLE, 20, 1, 0,
   'Inflict 50% damage to the target and 120% damage over 3 rounds.', 0.5, 0.4);
 export const slash = new Damage(SkillType.ATTACK, 'Slash', SkillTarget.ENEMY_DOUBLE, 20, 1, 0,
   'Inflict 80% damage to two adjacent targets.', 0.8);
 
 // Monk skills
-export const recoveryStrike: Skill = new DamageAndHeal(SkillType.ATTACK, 'Recovery Strike', SkillTarget.ENEMY_SINGLE, 10, 1, 0,
-  'Inflict 70% damage to the target and heal for 40% damage.', 0.7, 0.4);
+export const recoveryStrike: Skill = new DamageAndHeal(SkillType.ATTACK, 'Recovery Strike', SkillTarget.ENEMY_SINGLE, 20, 1, 0,
+  'Inflict 100% damage to the target and heal for 50% damage.', 1.0, 0.5);
 export const monkHeal: Skill = new Heal(SkillType.HEAL, 'Heal', SkillTarget.CHARACTER_ALIVE, 10, 0, 0,
   'Heal a character for 100% damage.');
 export const monkRevive: Skill = new Revive(SkillType.HEAL, 'Revive', SkillTarget.CHARACTER_DEAD, 40, 0, 0,

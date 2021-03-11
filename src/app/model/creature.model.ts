@@ -58,6 +58,11 @@ export class Status {
 }
 
 export enum LifeChangeType {
+  GAIN,
+  LOSS
+}
+
+export enum LifeChangeEfficiency {
   NORMAL,
   CRITICAL,
   DODGE
@@ -69,9 +74,50 @@ export enum LifeChangeType {
 export class LifeChange {
 
   constructor(
+    // The amount of life change, always positive
     public amount: number,
+    public efficiency: LifeChangeEfficiency = LifeChangeEfficiency.NORMAL,
     public type: LifeChangeType
   ) {
+  }
+
+  isGain(): boolean {
+    return this.type == LifeChangeType.GAIN;
+  }
+
+  /**
+   * Return a signed amount, i.e. positive for a heal or negative for a damage
+   */
+  getSignedAmount(): number {
+    if (this.isGain()) {
+      return this.amount;
+    } else {
+      return -this.amount;
+    }
+  }
+}
+
+/**
+ * A life gain due to a heal.
+ */
+export class LifeGain extends LifeChange {
+  constructor(
+    amount: number,
+    efficiency: LifeChangeEfficiency = LifeChangeEfficiency.NORMAL
+  ) {
+    super(amount, efficiency, LifeChangeType.GAIN);
+  }
+}
+
+/**
+ * A life loss due to a damage.
+ */
+export class LifeLoss extends LifeChange {
+  constructor(
+    amount: number,
+    efficiency: LifeChangeEfficiency = LifeChangeEfficiency.NORMAL
+  ) {
+    super(amount, efficiency, LifeChangeType.LOSS);
   }
 }
 
@@ -99,11 +145,8 @@ export abstract class Creature {
 
   lifePercent: number;
 
-  // Damages received this turn
-  damages: number = 0;
-
-  // Heals received this turn
-  heals: number = 0;
+  // Damages or heals received this turn and displayed in a popup
+  lifeChange: LifeChange | null = null;
 
   // Current mana or tech points (depends on the character class) (currently only used by characters)
   energy: number;
@@ -162,15 +205,11 @@ export abstract class Creature {
   /**
    * Inflict some damage to the creature.
    */
-  // TODO FBE do not return the amount any more ?
-  damage(amount: number): number {
-    this.life -= amount;
+  // TODO FBE return nothing ?
+  changeLife(lifeChange: LifeChange): LifeChange {
+    this.life += lifeChange.getSignedAmount();
 
-    if (amount > 0) {
-      this.damages += amount;
-    } else if (amount < 0) {
-      this.heals -= amount;
-    }
+    this.lifeChange = lifeChange;
 
     // Enforce min and max values
     this.life = this.checkMinAndMax(this.life, this.lifeMax);
@@ -182,24 +221,15 @@ export abstract class Creature {
       this.clearStatuses();
     }
 
-    return amount;
-  }
-
-  /**
-   * Heals the creature.
-   */
-  // TODO FBE do not return the amount any more ?
-  heal(amount: number): number {
-    return -this.damage(-amount);
+    return lifeChange;
   }
 
   updateLifePercent() {
     this.lifePercent = 100 * this.life / this.lifeMax;
   }
 
-  clearDamagesAndHeals() {
-    this.damages = 0;
-    this.heals = 0;
+  clearLifeChange() {
+    this.lifeChange = null;
   }
 
   /**
@@ -282,27 +312,31 @@ export abstract class Creature {
    * Apply all DOT and HOT to the creature and log a single message.
    */
   applyDotsAndHots() {
-    let damageAmount: number = 0;
+    let hasAtLeastOneDotOrHot: boolean = false;
 
+    // Compute the total amount of damage and heal
+    let amount: number = 0;
     this.statuses.forEach(status => {
       if (status.originCreature != null) {
         if (status.isDot()) {
-          const lifeChange = computeEffectiveDamage(status.originCreature, this, status.power, false);
-          this.damage(lifeChange.amount);
-          damageAmount += lifeChange.amount;
+          hasAtLeastOneDotOrHot = true;
+          amount -= computeEffectiveDamage(status.originCreature, this, status.power, false).amount;
         } else if (status.isHot()) {
-          const lifeChange = computeEffectiveHeal(status.originCreature, this, status.power);
-          this.heal(lifeChange.amount);
-          damageAmount -= lifeChange.amount;
+          hasAtLeastOneDotOrHot = true;
+          amount += computeEffectiveHeal(status.originCreature, this, status.power).amount;
         }
       }
     });
 
-    // Log the total amount of life lost of gained, but note that the critical type is not displayed
-    if (damageAmount > 0) {
-      logs.add(LogType.Dot, this, damageAmount);
-    } else if (damageAmount < 0) {
-      logs.add(LogType.Hot, this, -damageAmount);
+    if (hasAtLeastOneDotOrHot) {
+      this.changeLife(new LifeChange(Math.abs(amount), LifeChangeEfficiency.NORMAL, amount >= 0 ? LifeChangeType.GAIN : LifeChangeType.LOSS));
+
+      // Log the total amount of life lost of gained, but do not display the critical type
+      if (amount >= 0) {
+        logs.add(LogType.Hot, this, amount);
+      } else if (amount >= 0) {
+        logs.add(LogType.Dot, this, -amount);
+      }
     }
   }
 }
@@ -587,17 +621,20 @@ export class MeleeEnemy extends Enemy {
  */
 export class OldManEnemy extends Enemy {
 
-  damage(amount: number): number {
+  changeLife(lifeChange: LifeChange): LifeChange {
     if (this.phase == 1) {
       // Turn into a druid
+      logs.add(LogType.OldManTransformation);
       this.phase = 2;
       this.name = 'Elder Druid';
-      this.lifeMax = this.lifeMax * 3;
-      this.heal(this.lifeMax);
-      logs.add(LogType.OldManTransformation);
-    }
 
-    return super.damage(amount);
+      // Increase the max life
+      const lifeMaxGain = this.lifeMax * 2;
+      this.lifeMax += lifeMaxGain;
+      return super.changeLife(new LifeGain(lifeMaxGain));
+    } else {
+      return super.changeLife(lifeChange);
+    }
   }
 
   chooseAction(game: Game): EnemyAction {

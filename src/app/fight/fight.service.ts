@@ -384,7 +384,7 @@ export class FightService {
    * Clear the selected creature and skill. Hide all displayed damages.
    */
   endOfTurnCleanup() {
-    this.getAllCreatures().forEach(creature => creature.clearDamagesAndHeals());
+    this.getAllCreatures().forEach(creature => creature.clearLifeChange());
 
     this.fight.activeCreature = null;
     this.fight.focusedSkill = null;

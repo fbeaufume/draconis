@@ -1,11 +1,11 @@
 <p class="text-yellow-200">{{ enemy.name }}</p>
 <div class="flex flex-col items-center">
   <p class="pr-2 text-red-500">HP <span class="font-bold">{{ enemy.life}}/{{ enemy.lifeMax }}</span></p>
-  <div *ngIf="enemy.damages > 0 || enemy.heals > 0" class="absolute z-10 flex justify-center space-x-2">
-    <div *ngIf="enemy.damages >0"
-         class="border border-red-400 bg-red-900 rounded-lg px-2 py-1 text-red-400 text-xl">{{ enemy.damages }}</div>
-    <div *ngIf="enemy.heals >0"
-         class="border border-green-400 bg-green-900 rounded-lg px-2 py-1 text-green-400 text-xl">{{ enemy.heals }}</div>
+  <div *ngIf="enemy.lifeChange != null" class="absolute z-10 flex justify-center space-x-2">
+    <div class="border rounded-lg px-2 py-1 text-xl"
+         [ngClass]="enemy.lifeChange.isGain() ? 'border-green-400 bg-green-900 text-green-400' : 'border-red-400 bg-red-900 text-red-400'">
+      {{ enemy.lifeChange.amount }}
+    </div>
   </div>
   <div class="w-32 bg-red-900">
     <div class="h-1 bg-red-500" [style]="'width: ' + enemy.lifePercent + '%'"></div>

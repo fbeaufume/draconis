@@ -50,6 +50,7 @@ export class FightService {
 
     this.game.startNextEncounter();
 
+    logs.clear();
     logs.add(LogType.OppositionAppear, this.fight.opposition.description);
   }
 

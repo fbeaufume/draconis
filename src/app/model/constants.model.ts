@@ -43,12 +43,12 @@ export const RANDOMIZE_BASE = 1 - RANDOMIZE_RANGE / 2;
 /**
  * Default dodge chance.
  */
-export const DODGE_CHANCE = 0.4;
+export const DODGE_CHANCE = 0.1;
 
 /**
  * Default critical hit chance for damages and heals.
  */
-export const CRITICAL_CHANCE = 0.4;
+export const CRITICAL_CHANCE = 0.1;
 
 /**
  * Default critical bonus for damages and heals.

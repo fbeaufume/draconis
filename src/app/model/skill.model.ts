@@ -355,29 +355,61 @@ export class DamageAndDamage extends Skill {
 }
 
 /**
- * A damaging skill that also gives a bleed DOT.
+ * A damaging skill that also adds a bleed damage over time.
+ * This and DamageAndPoison should be a single class, but it's really painful to do so in TypeScript.
  */
-export class DamageAndBleed extends Damage {
+export class DamageAndBleed extends Skill {
 
   execute(fight: Fight): void {
+    if (fight.activeCreature == null) {
+      return;
+    }
+
+    const activeCreature: Creature = fight.activeCreature;
+
     super.execute(fight);
 
     fight.targetCreatures.forEach(targetCreature => {
-      targetCreature.addStatus(new Status(StatusName.BLEED, StatusExpiration.END_OF_ROUND, false, 3, this.power2, fight.activeCreature));
+      const lifeChange: LifeChange = computeEffectiveDamage(activeCreature, targetCreature, this.power1);
+
+      // Direct damage part
+      logs.add(LogType.Damage, activeCreature, targetCreature,
+        targetCreature.changeLife(lifeChange));
+
+      // Damage over time part
+      if (!lifeChange.isDodge()) {
+        targetCreature.addStatus(new Status(StatusName.BLEED, StatusExpiration.END_OF_ROUND, false, 3, this.power2, fight.activeCreature));
+      }
     });
   }
 }
 
 /**
- * A damaging skill that also gives a poison DOT.
+ * A damaging skill that also adds a poison damage over time.
+ * This and DamageAndBleed should be a single class, but it's really painful to do so in TypeScript.
  */
-export class DamageAndPoison extends Damage {
+export class DamageAndPoison extends Skill {
 
   execute(fight: Fight): void {
+    if (fight.activeCreature == null) {
+      return;
+    }
+
+    const activeCreature: Creature = fight.activeCreature;
+
     super.execute(fight);
 
     fight.targetCreatures.forEach(targetCreature => {
-      targetCreature.addStatus(new Status(StatusName.POISON, StatusExpiration.END_OF_ROUND, false, 3, this.power2, fight.activeCreature));
+      const lifeChange: LifeChange = computeEffectiveDamage(activeCreature, targetCreature, this.power1);
+
+      // Direct damage part
+      logs.add(LogType.Damage, activeCreature, targetCreature,
+        targetCreature.changeLife(lifeChange));
+
+      // Damage over time part
+      if (!lifeChange.isDodge()) {
+        targetCreature.addStatus(new Status(StatusName.POISON, StatusExpiration.END_OF_ROUND, false, 3, this.power2, fight.activeCreature));
+      }
     });
   }
 }
@@ -466,13 +498,13 @@ export const magicDefend = new Defend(SkillType.DEFENSE, 'Defend', SkillTarget.N
   'Reduce received damage by 20%. Gain 5 MP.');
 export const strike = new Damage(SkillType.ATTACK, 'Strike', SkillTarget.ENEMY_SINGLE, 10, 1, 0,
   'Inflict 100% damage.');
-export const heal: Skill = new Heal(SkillType.HEAL, 'Heal', SkillTarget.CHARACTER_ALIVE, 5, 0, 0,
+export const heal = new Heal(SkillType.HEAL, 'Heal', SkillTarget.CHARACTER_ALIVE, 5, 0, 0,
   'Heal a character for 100% damage.');
-export const healAll: Skill = new Heal(SkillType.HEAL, 'Heal All', SkillTarget.CHARACTER_ALL_ALIVE, 20, 0, 0,
+export const healAll = new Heal(SkillType.HEAL, 'Heal All', SkillTarget.CHARACTER_ALL_ALIVE, 20, 0, 0,
   'Heal all characters for 50% damage.', 0.5);
-export const regenerate: Skill = new Regenerate(SkillType.HEAL, 'Regenerate', SkillTarget.CHARACTER_ALIVE, 5, 0, 0,
+export const regenerate = new Regenerate(SkillType.HEAL, 'Regenerate', SkillTarget.CHARACTER_ALIVE, 5, 0, 0,
   'Heal a character for 50% damage and 120% damage over 3 rounds.', 0.5, 0.4);
-export const revive: Skill = new Revive(SkillType.HEAL, 'Revive', SkillTarget.CHARACTER_DEAD, 20, 0, 0,
+export const revive = new Revive(SkillType.HEAL, 'Revive', SkillTarget.CHARACTER_DEAD, 20, 0, 0,
   'Revive a character with 50% life.');
 
 // Warrior skills
@@ -484,11 +516,11 @@ export const slash = new Damage(SkillType.ATTACK, 'Slash', SkillTarget.ENEMY_DOU
   'Inflict 80% damage to two adjacent targets.', 0.8);
 
 // Monk skills
-export const recoveryStrike: Skill = new DamageAndHeal(SkillType.ATTACK, 'Recovery Strike', SkillTarget.ENEMY_SINGLE, 20, 1, 0,
+export const recoveryStrike = new DamageAndHeal(SkillType.ATTACK, 'Recovery Strike', SkillTarget.ENEMY_SINGLE, 20, 1, 0,
   'Inflict 100% damage to the target and heal for 50% damage.', 1.0, 0.5);
-export const monkHeal: Skill = new Heal(SkillType.HEAL, 'Heal', SkillTarget.CHARACTER_ALIVE, 10, 0, 0,
+export const monkHeal = new Heal(SkillType.HEAL, 'Heal', SkillTarget.CHARACTER_ALIVE, 10, 0, 0,
   'Heal a character for 100% damage.');
-export const monkRevive: Skill = new Revive(SkillType.HEAL, 'Revive', SkillTarget.CHARACTER_DEAD, 40, 0, 0,
+export const monkRevive = new Revive(SkillType.HEAL, 'Revive', SkillTarget.CHARACTER_DEAD, 40, 0, 0,
   'Revive a character with 50% life.');
 
 // Paladin skills

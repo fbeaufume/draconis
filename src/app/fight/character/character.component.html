@@ -12,12 +12,10 @@
     <div class="w-28 bg-green-900">
       <div class="h-1 bg-green-500" [style]="'width: ' + character.lifePercent + '%'"></div>
     </div>
-    <div *ngIf="character.lifeChange != null" class="absolute z-10 flex justify-center space-x-2">
-      <div class="border rounded-lg px-2 py-1 text-xl"
-           [ngClass]="character.lifeChange.isGain() ? 'border-green-400 bg-green-900 text-green-400' : 'border-red-400 bg-red-900 text-red-400'">
-        {{ character.lifeChange.amount }}
-      </div>
-    </div>
+    <app-life-change-popup *ngIf="character.lifeChange != null"
+                           class="absolute z-10 flex justify-center space-x-2"
+                           [lifeChange]="character.lifeChange">
+    </app-life-change-popup>
   </div>
   <div *ngIf="!character.useMana" class="flex flex-col items-center">
     <p class="pl-2" [ngClass]="character.isAlive() ? 'text-purple-400' : 'text-purple-900'">

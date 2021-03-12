@@ -10,6 +10,7 @@ import {LogComponent} from './fight/log/log.component';
 import {SkillIconComponent} from './fight/skill-icon/skill-icon.component';
 import {StatusComponent} from './fight/status/status.component';
 import {ClassIconComponent} from './fight/class-icon/class-icon.component';
+import {LifeChangePopupComponent} from './fight/life-change-popup/life-change-popup.component';
 
 @NgModule({
   declarations: [
@@ -20,7 +21,8 @@ import {ClassIconComponent} from './fight/class-icon/class-icon.component';
     LogComponent,
     SkillIconComponent,
     StatusComponent,
-    ClassIconComponent
+    ClassIconComponent,
+    LifeChangePopupComponent
   ],
   imports: [
     BrowserModule,

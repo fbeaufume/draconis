@@ -85,6 +85,14 @@ export class LifeChange {
     return this.type == LifeChangeType.GAIN;
   }
 
+  isCritical(): boolean {
+    return this.efficiency == LifeChangeEfficiency.CRITICAL;
+  }
+
+  isDodge(): boolean {
+    return this.efficiency == LifeChangeEfficiency.DODGE;
+  }
+
   /**
    * Return a signed amount, i.e. positive for a heal or negative for a damage
    */
@@ -205,7 +213,6 @@ export abstract class Creature {
   /**
    * Inflict some damage to the creature.
    */
-  // TODO FBE return nothing ?
   changeLife(lifeChange: LifeChange): LifeChange {
     this.life += lifeChange.getSignedAmount();
 

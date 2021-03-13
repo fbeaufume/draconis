@@ -38,7 +38,7 @@
     <span [ngClass]="getClassForCreature(log.args[0])">{{ $any(log.args[0]).name }}</span>
     damages <span [ngClass]="getClassForCreature(log.args[1])">{{ $any(log.args[1]).name }}</span>
     for <span class="text-red-500">{{ $any(log.args[2]).amount }}</span> HP
-    and heals for <span class="text-green-500">{{ $any(log.args[3]).amount }}</span> HP.
+    and gains <span class="text-green-500">{{ $any(log.args[3]).amount }}</span> HP.
   </div>
   <div *ngSwitchCase="9">
     <!-- Damage and damage -->

@@ -325,9 +325,15 @@ export class DamageAndHeal extends Skill {
     super.execute(fight);
 
     fight.targetCreatures.forEach(targetCreature => {
-      logs.add(LogType.DamageAndHeal, activeCreature, targetCreature,
-        targetCreature.changeLife(computeEffectiveDamage(activeCreature, targetCreature, this.power1)),
-        activeCreature.changeLife(computeEffectiveHeal(activeCreature, activeCreature, this.power2)));
+      const lifeChange: LifeChange = computeEffectiveDamage(activeCreature, targetCreature, this.power1);
+
+      if (lifeChange.isDodge()) {
+        logs.add(LogType.Damage, activeCreature, targetCreature, targetCreature.changeLife(lifeChange));
+      } else {
+        logs.add(LogType.DamageAndHeal, activeCreature, targetCreature,
+          targetCreature.changeLife(lifeChange),
+          activeCreature.changeLife(computeEffectiveHeal(activeCreature, activeCreature, this.power2)));
+      }
     });
   }
 }
@@ -347,9 +353,15 @@ export class DamageAndDamage extends Skill {
     super.execute(fight);
 
     fight.targetCreatures.forEach(targetCreature => {
-      logs.add(LogType.DamageAndDamage, activeCreature, targetCreature,
-        targetCreature.changeLife(computeEffectiveDamage(activeCreature, targetCreature, this.power1)),
-        activeCreature.changeLife(computeEffectiveDamage(activeCreature, activeCreature, this.power2, false)));
+      const lifeChange: LifeChange = computeEffectiveDamage(activeCreature, targetCreature, this.power1);
+
+      if (lifeChange.isDodge()) {
+        logs.add(LogType.Damage, activeCreature, targetCreature, targetCreature.changeLife(lifeChange));
+      } else {
+        logs.add(LogType.DamageAndDamage, activeCreature, targetCreature,
+          targetCreature.changeLife(computeEffectiveDamage(activeCreature, targetCreature, this.power1)),
+          activeCreature.changeLife(computeEffectiveDamage(activeCreature, activeCreature, this.power2, false)));
+      }
     });
   }
 }

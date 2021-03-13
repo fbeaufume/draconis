@@ -341,7 +341,7 @@ export abstract class Creature {
       // Log the total amount of life lost of gained, but do not display the critical type
       if (amount >= 0) {
         logs.add(LogType.Hot, this, amount);
-      } else if (amount >= 0) {
+      } else if (amount < 0) {
         logs.add(LogType.Dot, this, -amount);
       }
     }

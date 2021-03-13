@@ -61,12 +61,12 @@
   <div *ngSwitchCase="12">
     <!-- DOT -->
     <span [ngClass]="getClassForCreature(log.args[0])">{{ $any(log.args[0]).name }}</span>
-    looses <span class="text-red-500">{{ $any(log.args[1]).amount }}</span> HP.
+    looses a total of <span class="text-red-500">{{ log.args[1] }}</span> HP.
   </div>
   <div *ngSwitchCase="13">
     <!-- HOT -->
     <span [ngClass]="getClassForCreature(log.args[0])">{{ $any(log.args[0]).name }}</span>
-    gains <span class="text-green-500">{{ $any(log.args[1]).amount }}</span> HP.
+    gains a total of <span class="text-green-500">{{ log.args[1] }}</span> HP.
   </div>
   <div *ngSwitchCase="14">
     <!-- Enemy death -->

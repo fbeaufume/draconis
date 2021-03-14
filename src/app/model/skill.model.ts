@@ -7,6 +7,7 @@ import {
   Enemy,
   LifeChange,
   LifeChangeEfficiency,
+  LifeChangeType,
   LifeGain,
   LifeLoss,
   Status,
@@ -332,7 +333,7 @@ export class DamageAndHeal extends Skill {
       } else {
         logs.add(LogType.DamageAndHeal, activeCreature, targetCreature,
           targetCreature.changeLife(lifeChange),
-          activeCreature.changeLife(computeEffectiveHeal(activeCreature, activeCreature, this.power2)));
+          activeCreature.changeLife(new LifeChange(Math.round(lifeChange.amount * this.power2), lifeChange.efficiency, LifeChangeType.GAIN)));
       }
     });
   }
@@ -360,7 +361,7 @@ export class DamageAndDamage extends Skill {
       } else {
         logs.add(LogType.DamageAndDamage, activeCreature, targetCreature,
           targetCreature.changeLife(computeEffectiveDamage(activeCreature, targetCreature, this.power1)),
-          activeCreature.changeLife(computeEffectiveDamage(activeCreature, activeCreature, this.power2, false)));
+          activeCreature.changeLife(new LifeChange(Math.round(lifeChange.amount * this.power2), lifeChange.efficiency, LifeChangeType.LOSS)));
       }
     });
   }

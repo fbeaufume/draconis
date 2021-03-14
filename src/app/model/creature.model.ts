@@ -336,13 +336,13 @@ export abstract class Creature {
     });
 
     if (hasAtLeastOneDotOrHot) {
-      this.changeLife(new LifeChange(Math.abs(amount), LifeChangeEfficiency.NORMAL, amount >= 0 ? LifeChangeType.GAIN : LifeChangeType.LOSS));
+      const lifeChange = this.changeLife(new LifeChange(Math.abs(amount), LifeChangeEfficiency.NORMAL, amount >= 0 ? LifeChangeType.GAIN : LifeChangeType.LOSS));
 
       // Log the total amount of life lost of gained, but do not display the critical type
       if (amount >= 0) {
-        logs.add(LogType.Hot, this, amount);
+        logs.addCreatureLog(LogType.Hot, this, null, lifeChange, null);
       } else if (amount < 0) {
-        logs.add(LogType.Dot, this, -amount);
+        logs.addCreatureLog(LogType.Dot, this, null, lifeChange, null);
       }
     }
   }
@@ -631,7 +631,7 @@ export class OldManEnemy extends Enemy {
   changeLife(lifeChange: LifeChange): LifeChange {
     if (this.phase == 1) {
       // Turn into a druid
-      logs.add(LogType.OldManTransformation);
+      logs.addLog(LogType.OldManTransformation);
       this.phase = 2;
       this.name = 'Elder Druid';
 

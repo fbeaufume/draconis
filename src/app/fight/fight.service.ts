@@ -51,7 +51,7 @@ export class FightService {
     this.game.startNextEncounter();
 
     logs.clear();
-    logs.add(LogType.OppositionAppear, this.fight.opposition.description);
+    logs.addStringLog(LogType.OppositionAppear, this.fight.opposition.description);
   }
 
   /**
@@ -60,7 +60,7 @@ export class FightService {
   startFight() {
     this.game.state = GameState.END_OF_TURN;
 
-    logs.add(LogType.StartRound, this.fight.round);
+    logs.addNumberLog(LogType.StartRound, this.fight.round);
 
     this.processTurn();
   }
@@ -72,7 +72,7 @@ export class FightService {
     this.game = new Game();
 
     logs.clear();
-    logs.add(LogType.EnterZone, this.game.region);
+    logs.addStringLog(LogType.EnterZone, this.game.region);
   }
 
   /**
@@ -343,7 +343,7 @@ export class FightService {
         // Start the next round
         if (!this.processEndOfFight()) {
           this.fight.round++;
-          logs.add(LogType.StartRound, this.fight.round);
+          logs.addNumberLog(LogType.StartRound, this.fight.round);
 
           this.processNextTurn(true);
         }
@@ -352,7 +352,7 @@ export class FightService {
       // Start the next round
       if (!this.processEndOfFight()) {
         this.fight.round++;
-        logs.add(LogType.StartRound, this.fight.round);
+        logs.addNumberLog(LogType.StartRound, this.fight.round);
 
         this.processNextTurn(true);
       }
@@ -413,7 +413,7 @@ export class FightService {
     this.fight.turnOrder.removeDeadEnemies();
 
     // Log the defeated enemies
-    removedEnemies.forEach(enemy => logs.add(LogType.EnemyDefeated, enemy.name));
+    removedEnemies.forEach(enemy => logs.addCreatureLog(LogType.EnemyDefeated, enemy, null, null, null));
   }
 
   /**
@@ -424,7 +424,7 @@ export class FightService {
     // Handle party defeat
     if (this.party.isWiped()) {
       this.pause(() => {
-        logs.add(LogType.PartyDefeat);
+        logs.addLog(LogType.PartyDefeat);
 
         // The dungeon is over
         this.state = GameState.DUNGEON_END;
@@ -436,7 +436,7 @@ export class FightService {
     // Handle party victory
     if (this.fight.opposition.isWiped()) {
       this.pause(() => {
-        logs.add(LogType.PartyVictory);
+        logs.addLog(LogType.PartyVictory);
 
         if (this.game.hasNextEncounter()) {
           // Moving on to the next encounter

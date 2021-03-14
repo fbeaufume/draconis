@@ -239,7 +239,7 @@ export class Advance extends Skill {
   execute(fight: Fight): void {
     super.execute(fight);
 
-    logs.add(LogType.Advance, fight.activeCreature);
+    logs.addCreatureLog(LogType.Advance, fight.activeCreature, null, null, null);
   }
 }
 
@@ -251,7 +251,7 @@ export class Wait extends Skill {
   execute(fight: Fight): void {
     super.execute(fight);
 
-    logs.add(LogType.Wait, fight.activeCreature);
+    logs.addCreatureLog(LogType.Wait, fight.activeCreature, null, null, null);
   }
 }
 
@@ -270,7 +270,7 @@ export class Leave extends Skill {
       fight.opposition.removeEmptyRows();
     }
 
-    logs.add(LogType.Leave, fight.activeCreature);
+    logs.addCreatureLog(LogType.Leave, fight.activeCreature, null, null, null);
   }
 }
 
@@ -285,7 +285,7 @@ export class Defend extends Skill {
     if (fight.activeCreature != null) {
       fight.activeCreature.addStatus(new Status(StatusName.DEFEND, StatusExpiration.CREATURE_TURN, true, 1, 0, null));
 
-      logs.add(LogType.Defend, fight.activeCreature);
+      logs.addCreatureLog(LogType.Defend, fight.activeCreature, null, null, null);
     }
   }
 }
@@ -305,8 +305,8 @@ export class Damage extends Skill {
     super.execute(fight);
 
     fight.targetCreatures.forEach(targetCreature => {
-      logs.add(LogType.Damage, activeCreature, targetCreature,
-        targetCreature.changeLife(computeEffectiveDamage(activeCreature, targetCreature, this.power1)));
+      logs.addCreatureLog(LogType.Damage, activeCreature, targetCreature,
+        targetCreature.changeLife(computeEffectiveDamage(activeCreature, targetCreature, this.power1)), null);
     });
   }
 }
@@ -329,9 +329,9 @@ export class DamageAndHeal extends Skill {
       const lifeChange: LifeChange = computeEffectiveDamage(activeCreature, targetCreature, this.power1);
 
       if (lifeChange.isDodge()) {
-        logs.add(LogType.Damage, activeCreature, targetCreature, targetCreature.changeLife(lifeChange));
+        logs.addCreatureLog(LogType.Damage, activeCreature, targetCreature, targetCreature.changeLife(lifeChange), null);
       } else {
-        logs.add(LogType.DamageAndHeal, activeCreature, targetCreature,
+        logs.addCreatureLog(LogType.DamageAndHeal, activeCreature, targetCreature,
           targetCreature.changeLife(lifeChange),
           activeCreature.changeLife(new LifeChange(Math.round(lifeChange.amount * this.power2), lifeChange.efficiency, LifeChangeType.GAIN)));
       }
@@ -357,9 +357,9 @@ export class DamageAndDamage extends Skill {
       const lifeChange: LifeChange = computeEffectiveDamage(activeCreature, targetCreature, this.power1);
 
       if (lifeChange.isDodge()) {
-        logs.add(LogType.Damage, activeCreature, targetCreature, targetCreature.changeLife(lifeChange));
+        logs.addCreatureLog(LogType.Damage, activeCreature, targetCreature, targetCreature.changeLife(lifeChange), null);
       } else {
-        logs.add(LogType.DamageAndDamage, activeCreature, targetCreature,
+        logs.addCreatureLog(LogType.DamageAndDamage, activeCreature, targetCreature,
           targetCreature.changeLife(computeEffectiveDamage(activeCreature, targetCreature, this.power1)),
           activeCreature.changeLife(new LifeChange(Math.round(lifeChange.amount * this.power2), lifeChange.efficiency, LifeChangeType.LOSS)));
       }
@@ -386,8 +386,7 @@ export class DamageAndBleed extends Skill {
       const lifeChange: LifeChange = computeEffectiveDamage(activeCreature, targetCreature, this.power1);
 
       // Direct damage part
-      logs.add(LogType.Damage, activeCreature, targetCreature,
-        targetCreature.changeLife(lifeChange));
+      logs.addCreatureLog(LogType.Damage, activeCreature, targetCreature, targetCreature.changeLife(lifeChange), null);
 
       // Damage over time part
       if (!lifeChange.isDodge()) {
@@ -416,8 +415,7 @@ export class DamageAndPoison extends Skill {
       const lifeChange: LifeChange = computeEffectiveDamage(activeCreature, targetCreature, this.power1);
 
       // Direct damage part
-      logs.add(LogType.Damage, activeCreature, targetCreature,
-        targetCreature.changeLife(lifeChange));
+      logs.addCreatureLog(LogType.Damage, activeCreature, targetCreature, targetCreature.changeLife(lifeChange), null);
 
       // Damage over time part
       if (!lifeChange.isDodge()) {
@@ -442,8 +440,8 @@ export class Heal extends Skill {
     super.execute(fight);
 
     fight.targetCreatures.forEach(targetCreature => {
-      logs.add(LogType.Heal, activeCreature, targetCreature,
-        targetCreature.changeLife(computeEffectiveHeal(activeCreature, targetCreature, this.power1)));
+      logs.addCreatureLog(LogType.Heal, activeCreature, targetCreature,
+        targetCreature.changeLife(computeEffectiveHeal(activeCreature, targetCreature, this.power1)), null);
     });
   }
 }
@@ -461,11 +459,11 @@ export class DualHeal extends Skill {
     super.execute(fight);
 
     const targetCreature1: Creature = fight.targetCreatures[0];
-    logs.add(LogType.Heal, fight.activeCreature, targetCreature1,
-      targetCreature1.changeLife(computeEffectiveHeal(fight.activeCreature, targetCreature1, this.power1)));
+    logs.addCreatureLog(LogType.Heal, fight.activeCreature, targetCreature1,
+      targetCreature1.changeLife(computeEffectiveHeal(fight.activeCreature, targetCreature1, this.power1)), null);
     const targetCreature2: Creature = fight.targetCreatures[1];
-    logs.add(LogType.Heal, fight.activeCreature, targetCreature2,
-      targetCreature2.changeLife(computeEffectiveHeal(fight.activeCreature, targetCreature2, this.power2)));
+    logs.addCreatureLog(LogType.Heal, fight.activeCreature, targetCreature2,
+      targetCreature2.changeLife(computeEffectiveHeal(fight.activeCreature, targetCreature2, this.power2)), null);
   }
 }
 
@@ -493,7 +491,7 @@ export class Revive extends Skill {
 
     fight.targetCreatures.forEach(targetCreature => {
       targetCreature.changeLife(new LifeGain(targetCreature.lifeMax / 2));
-      logs.add(LogType.Revive, fight.activeCreature, targetCreature);
+      logs.addCreatureLog(LogType.Revive, fight.activeCreature, targetCreature, null, null);
     });
   }
 }

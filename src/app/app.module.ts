@@ -11,6 +11,8 @@ import {SkillIconComponent} from './fight/skill-icon/skill-icon.component';
 import {StatusComponent} from './fight/status/status.component';
 import {ClassIconComponent} from './fight/class-icon/class-icon.component';
 import {LifeChangePopupComponent} from './fight/life-change-popup/life-change-popup.component';
+import {LifeChangeLogComponent} from './fight/log/life-change-log/life-change-log.component';
+import {CreatureLogComponent} from './fight/log/creature-log/creature-log.component';
 
 @NgModule({
   declarations: [
@@ -22,7 +24,9 @@ import {LifeChangePopupComponent} from './fight/life-change-popup/life-change-po
     SkillIconComponent,
     StatusComponent,
     ClassIconComponent,
-    LifeChangePopupComponent
+    LifeChangePopupComponent,
+    LifeChangeLogComponent,
+    CreatureLogComponent
   ],
   imports: [
     BrowserModule,

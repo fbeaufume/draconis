@@ -73,7 +73,7 @@ export class Settings {
     } else {
       this.pauseDuration = PAUSE_LONG;
     }
-    logs.add(LogType.PauseDurationChanged, this.pauseDuration);
+    logs.addNumberLog(LogType.PauseDurationChanged, this.pauseDuration);
   }
 }
 

@@ -4,6 +4,8 @@
  * The various types of log messages.
  * When any numeric value is changed, update log.component.html.
  */
+import {Creature, LifeChange} from './creature.model';
+
 export enum LogType {
   EnterZone,
   OppositionAppear,
@@ -31,7 +33,14 @@ export enum LogType {
  */
 export class Log {
 
-  constructor(public type: LogType, public args: any[]) {
+  constructor(
+    public type: LogType,
+    public string: string | null,
+    public number: number | null,
+    public creature1: Creature | null,
+    public creature2: Creature | null,
+    public lifeChange1: LifeChange | null,
+    public lifeChange2: LifeChange | null) {
   }
 }
 
@@ -42,8 +51,20 @@ export class Logs {
 
   logs: Log[] = [];
 
-  add(type: LogType, ...args: any[]) {
-    this.logs.push(new Log(type, args));
+  addLog(type: LogType) {
+    this.logs.push(new Log(type, null, null, null, null, null, null));
+  }
+
+  addStringLog(type: LogType, string: string) {
+    this.logs.push(new Log(type, string, null, null, null, null, null));
+  }
+
+  addNumberLog(type: LogType, number: number) {
+    this.logs.push(new Log(type, null, number, null, null, null, null));
+  }
+
+  addCreatureLog(type: LogType, creature1: Creature | null, creature2: Creature | null, lifeChange1: LifeChange | null, lifeChange2: LifeChange | null) {
+    this.logs.push(new Log(type, null, null, creature1, creature2, lifeChange1, lifeChange2));
   }
 
   clear() {
@@ -51,4 +72,7 @@ export class Logs {
   }
 }
 
+/**
+ * The singleton containing the logs.
+ */
 export const logs: Logs = new Logs();

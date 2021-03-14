@@ -1,88 +1,88 @@
 <div [ngSwitch]="log.type">
   <div *ngSwitchCase="0">
     <!-- Enter zone -->
-    Entering <span class="text-gray-200">{{ log.args[0] }}</span>.
+    Entering <span class="text-gray-200">{{ log.string }}</span>.
   </div>
   <div *ngSwitchCase="1">
     <!-- Opposition appear -->
-    The party encounters <span class="text-gray-200">{{ log.args[0] }}</span>.
+    The party encounters <span class="text-gray-200">{{ log.string }}</span>.
   </div>
   <div *ngSwitchCase="2">
     <!-- Start round -->
-    Round <span class="text-gray-200">{{ log.args[0] }}</span> started.
+    Round <span class="text-gray-200">{{ log.number }}</span> starts.
   </div>
   <div *ngSwitchCase="3">
     <!-- Advance -->
-    <span [ngClass]="getClassForCreature(log.args[0])">{{ $any(log.args[0]).name }}</span> advances.
+    <app-creature-log [creature]="log.creature1"></app-creature-log> advances.
   </div>
   <div *ngSwitchCase="4">
     <!-- Wait -->
-    <span [ngClass]="getClassForCreature(log.args[0])">{{ $any(log.args[0]).name }}</span> waits.
+    <app-creature-log [creature]="log.creature1"></app-creature-log> waits.
   </div>
   <div *ngSwitchCase="5">
     <!-- Leave -->
-    <span [ngClass]="getClassForCreature(log.args[0])">{{ $any(log.args[0]).name }}</span> leaves the fight.
+    <app-creature-log [creature]="log.creature1"></app-creature-log> leaves the fight.
   </div>
   <div *ngSwitchCase="6">
     <!-- Defend -->
-    <span [ngClass]="getClassForCreature(log.args[0])">{{ $any(log.args[0]).name }}</span> defends.
+    <app-creature-log [creature]="log.creature1"></app-creature-log> defends.
   </div>
   <div *ngSwitchCase="7">
     <!-- Damage -->
-    <span [ngClass]="getClassForCreature(log.args[0])">{{ $any(log.args[0]).name }}</span>
-    damages <span [ngClass]="getClassForCreature(log.args[1])">{{ $any(log.args[1]).name }}</span>
-    for <span class="text-red-500">{{ $any(log.args[2]).amount }}</span> HP.
+    <app-creature-log [creature]="log.creature1"></app-creature-log>
+    damages <app-creature-log [creature]="log.creature2"></app-creature-log>
+    for <app-life-change-log [lifeChange]="log.lifeChange1"></app-life-change-log>.
   </div>
   <div *ngSwitchCase="8">
     <!-- Damage and heal -->
-    <span [ngClass]="getClassForCreature(log.args[0])">{{ $any(log.args[0]).name }}</span>
-    damages <span [ngClass]="getClassForCreature(log.args[1])">{{ $any(log.args[1]).name }}</span>
-    for <span class="text-red-500">{{ $any(log.args[2]).amount }}</span> HP
-    and gains <span class="text-green-500">{{ $any(log.args[3]).amount }}</span> HP.
+    <app-creature-log [creature]="log.creature1"></app-creature-log>
+    damages <app-creature-log [creature]="log.creature2"></app-creature-log>
+    for <app-life-change-log [lifeChange]="log.lifeChange1"></app-life-change-log>.
+    and gains <app-life-change-log [lifeChange]="log.lifeChange2"></app-life-change-log>.
   </div>
   <div *ngSwitchCase="9">
     <!-- Damage and damage -->
-    <span [ngClass]="getClassForCreature(log.args[0])">{{ $any(log.args[0]).name }}</span>
-    damages <span [ngClass]="getClassForCreature(log.args[1])">{{ $any(log.args[1]).name }}</span>
-    for <span class="text-red-500">{{ $any(log.args[2]).amount }}</span> HP
-    and looses <span class="text-red-500">{{ $any(log.args[3]).amount }}</span> HP.
+    <app-creature-log [creature]="log.creature1"></app-creature-log>
+    damages <app-creature-log [creature]="log.creature2"></app-creature-log>
+    for <app-life-change-log [lifeChange]="log.lifeChange1"></app-life-change-log>.
+    and looses <app-life-change-log [lifeChange]="log.lifeChange2"></app-life-change-log>.
   </div>
   <div *ngSwitchCase="10">
     <!-- Heal -->
-    <span [ngClass]="getClassForCreature(log.args[0])">{{ $any(log.args[0]).name }}</span>
-    heals <span [ngClass]="getClassForCreature(log.args[1])">{{ $any(log.args[1]).name }}</span>
-    for <span class="text-green-500">{{ $any(log.args[2]).amount }}</span> HP.
+    <app-creature-log [creature]="log.creature1"></app-creature-log>
+    heals <app-creature-log [creature]="log.creature2"></app-creature-log>
+    for <app-life-change-log [lifeChange]="log.lifeChange1"></app-life-change-log>.
   </div>
   <div *ngSwitchCase="11">
     <!-- Revive -->
-    <span [ngClass]="getClassForCreature(log.args[0])">{{ $any(log.args[0]).name }}</span>
-    revives <span [ngClass]="getClassForCreature(log.args[1])">{{ $any(log.args[1]).name }}</span>.
+    <app-creature-log [creature]="log.creature1"></app-creature-log>
+    revives <app-creature-log [creature]="log.creature2"></app-creature-log>.
   </div>
   <div *ngSwitchCase="12">
     <!-- DOT -->
-    <span [ngClass]="getClassForCreature(log.args[0])">{{ $any(log.args[0]).name }}</span>
-    looses a total of <span class="text-red-500">{{ log.args[1] }}</span> HP.
+    <app-creature-log [creature]="log.creature1"></app-creature-log>
+    looses a total of <app-life-change-log [lifeChange]="log.lifeChange1"></app-life-change-log>.
   </div>
   <div *ngSwitchCase="13">
     <!-- HOT -->
-    <span [ngClass]="getClassForCreature(log.args[0])">{{ $any(log.args[0]).name }}</span>
-    gains a total of <span class="text-green-500">{{ log.args[1] }}</span> HP.
+    <app-creature-log [creature]="log.creature1"></app-creature-log>
+    gains a total of <app-life-change-log [lifeChange]="log.lifeChange1"></app-life-change-log>.
   </div>
   <div *ngSwitchCase="14">
     <!-- Enemy death -->
-    <span class="text-yellow-200">{{ log.args[0] }}</span> was defeated.
+    <app-creature-log [creature]="log.creature1"></app-creature-log> is defeated.
   </div>
   <div *ngSwitchCase="15">
     <!-- Party victory -->
-    The party won!
+    The party wins!
   </div>
   <div *ngSwitchCase="16">
     <!-- Party defeat -->
-    The party lost!
+    The party loses!
   </div>
   <div *ngSwitchCase="17">
     <!-- Pause duration changed -->
-    Using pause of <span class="text-gray-200">{{ log.args[0] }}</span> msec.
+    Using pause of <span class="text-gray-200">{{ log.number }}</span> msec.
   </div>
   <div *ngSwitchCase="18">
     <!-- Old man transformation -->

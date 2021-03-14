@@ -636,12 +636,12 @@ export class OldManEnemy extends Enemy {
       this.name = 'Elder Druid';
 
       // Increase the max life
-      const lifeMaxGain = this.lifeMax * 2;
-      this.lifeMax += lifeMaxGain;
-      return super.changeLife(new LifeGain(lifeMaxGain));
-    } else {
-      return super.changeLife(lifeChange);
+      this.lifeMax = this.lifeMax * 3;
+      this.life = this.lifeMax;
+      this.updateLifePercent();
     }
+
+    return super.changeLife(lifeChange);
   }
 
   chooseAction(game: Game): EnemyAction {

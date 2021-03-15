@@ -296,29 +296,32 @@ class FangForestDungeon extends Dungeon {
       new Opposition('wild bears', [
         new MeleeEnemy('Bear A', 38, 7),
         new MeleeEnemy('Bear B', 38, 7),
+        new MeleeEnemy('Bear C', 38, 7),
       ]),
       new Opposition('a pack of wolves', [
-        new MeleeEnemy('Wolf A', 24, 5),
-        new MeleeEnemy('Wolf B', 24, 5),
+        new MeleeEnemy('Wolf A', 26, 5),
+        new MeleeEnemy('Wolf B', 26, 5),
       ], [
-        new MeleeEnemy('Wolf C', 24, 5),
-        new MeleeEnemy('Wolf D', 24, 5),
-        new MeleeEnemy('Wolf E', 24, 5),
+        new MeleeEnemy('Wolf C', 26, 5),
+        new MeleeEnemy('Wolf D', 26, 5),
+        new MeleeEnemy('Wolf E', 26, 5),
       ], [
-        new MeleeEnemy('Wolf F', 24, 5),
+        new MeleeEnemy('Wolf F', 26, 5),
+        new MeleeEnemy('Wolf G', 26, 5),
       ]),
       new Opposition('a mysterious old man', [
-        new OldManEnemy('Old Man', 24, 14)
+        new OldManEnemy('Old Man', 28, 14, 2)
       ]),
       new Opposition('a band of goblins', [
         new MeleeEnemy('Goblin Solder A', 32, 7),
         new MeleeEnemy('Goblin Solder B', 32, 7),
+        new MeleeEnemy('Goblin Solder C', 32, 7),
       ], [
         new DistanceEnemy('Goblin Hunter', 28, 8),
         new HealerEnemy('Goblin Shaman', 24, 8),
       ]),
       new Opposition('a young but fierce green dragon', [
-        new DragonEnemy('Green Dragon', 120, 10, 2),
+        new DragonEnemy('Green Dragon', 140, 10, 3),
       ]),
     ]);
   }

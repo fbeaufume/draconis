@@ -690,8 +690,9 @@ export class HealerEnemy extends Enemy {
 export class DragonEnemy extends Enemy {
 
   chooseAction(game: Game): EnemyAction {
-    switch (this.step % 2) {
+    switch (this.step % 3) {
       case 0:
+      case 1:
         // Claw attack on a character
         return new EnemyAction(strike, game.party.targetOneFrontRowAliveCharacter());
       default:

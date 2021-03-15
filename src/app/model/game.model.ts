@@ -64,6 +64,8 @@ export class Settings {
 
   devMode: boolean = getQueryStringParameterByName('dev') != null;
 
+  fight: number = parseInt(getQueryStringParameterByName('fight') || '1');
+
   // Pause in msec in the UI between actions
   pauseDuration: number = this.devMode ? PAUSE_SHORT : PAUSE_LONG;
 
@@ -368,7 +370,7 @@ export class Game {
   region: string = '';
 
   // Zero when not fighting, otherwise one-based identifier of the opposition in the dungeon
-  oppositionId: number = 0;
+  oppositionId: number = settings.fight - 1;
 
   party: Party = new Party([
       new Character('Melkan', CreatureClass.WARRIOR, 4, 20, false, 50, 10, [

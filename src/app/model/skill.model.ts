@@ -505,8 +505,8 @@ export const strikeSmall = new Damage(SkillType.ATTACK, '', SkillTarget.ENEMY_SI
 // Common characters skills
 export const techDefend = new Defend(SkillType.DEFENSE, 'Defend', SkillTarget.NONE, -30, 0, 0,
   'Reduce received damage by 20%. Gain 30 TP.');
-export const magicDefend = new Defend(SkillType.DEFENSE, 'Defend', SkillTarget.NONE, -5, 0, 0,
-  'Reduce received damage by 20%. Gain 5 MP.');
+export const magicDefend = new Defend(SkillType.DEFENSE, 'Defend', SkillTarget.NONE, -10, 0, 0,
+  'Reduce received damage by 20%. Gain 10 MP.');
 export const strike = new Damage(SkillType.ATTACK, 'Strike', SkillTarget.ENEMY_SINGLE, 10, 1, 0,
   'Inflict 100% damage.');
 export const heal = new Heal(SkillType.HEAL, 'Heal', SkillTarget.CHARACTER_ALIVE, 5, 0, 0,

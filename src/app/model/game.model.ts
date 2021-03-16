@@ -323,7 +323,7 @@ class FangForestDungeon extends Dungeon {
         new HealerEnemy('Goblin Shaman', 24, 8),
       ]),
       new Opposition('a young but fierce green dragon', [
-        new DragonEnemy('Green Dragon', 140, 10, 3),
+        new DragonEnemy('Green Dragon', 120, 9, 3),
       ]),
     ]);
   }

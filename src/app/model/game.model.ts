@@ -1,6 +1,7 @@
 // Classes for the whole game and fights
 
 import {
+  BleederMeleeEnemy,
   Character,
   Creature,
   CreatureClass,
@@ -296,9 +297,9 @@ class FangForestDungeon extends Dungeon {
   constructor() {
     super('Fang Forest', [
       new Opposition('wild bears', [
-        new MeleeEnemy('Bear A', 38, 7),
-        new MeleeEnemy('Bear B', 38, 7),
-        new MeleeEnemy('Bear C', 38, 7),
+        new BleederMeleeEnemy('Bear A', 38, 7), // TODO FBE increase the power ?
+        new BleederMeleeEnemy('Bear B', 38, 7),
+        new BleederMeleeEnemy('Bear C', 38, 7),
       ]),
       new Opposition('a pack of wolves', [
         new MeleeEnemy('Wolf A', 26, 5),

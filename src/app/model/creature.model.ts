@@ -1,7 +1,18 @@
 // Creature related classes
 
 import {Game} from './game.model';
-import {advance, computeEffectiveDamage, computeEffectiveHeal, heal, leave, Skill, strike, strikeSmall, wait} from './skill.model';
+import {
+  advance,
+  computeEffectiveDamage,
+  computeEffectiveHeal,
+  deepWound,
+  heal,
+  leave,
+  Skill,
+  strike,
+  strikeSmall,
+  wait
+} from './skill.model';
 import {logs, LogType} from './log.model';
 import {CRITICAL_BONUS, CRITICAL_CHANCE, DODGE_CHANCE, OPPOSITION_ROW_SIZE} from './constants.model';
 
@@ -278,6 +289,7 @@ export abstract class Creature {
    */
   addStatus(status: Status) {
     // Remove the status if already present
+    // TODO FBE modify so that DOT and HOT can be applied multiple times, one for each emitter
     this.statuses = this.statuses.filter(s => s.name != status.name);
 
     this.statuses.push(status);
@@ -535,7 +547,7 @@ export class EnemyAction {
 export abstract class Enemy extends Creature {
 
   /**
-   * The enemy action (zero-based) step, 0 the for the first action, 1 for the second, etc.
+   * The enemy action step. Zero based, i.e. 0 the for the first action, 1 for the second, etc.
    */
   step: number = -1;
 
@@ -549,6 +561,16 @@ export abstract class Enemy extends Creature {
    */
   distance: number = 1;
 
+  /**
+   * Main damaging skill.
+   */
+  mainAttack: Skill = strike;
+
+  /**
+   * Main healing skill, for enemy types that can heal.
+   */
+  mainHeal: Skill = heal;
+
   constructor(
     name: string,
     lifeMax: number,
@@ -556,6 +578,13 @@ export abstract class Enemy extends Creature {
     // Number of actions per turn
     public actions: number = 1) {
     super(name, CreatureClass.ENEMY, lifeMax, 100, power, []);
+    this.customize();
+  }
+
+  /**
+   * Called after the constructor. Used to customize the behavior of the enemy, for example to use a specific skill for attacks.
+   */
+  customize(): void {
   }
 
   isCharacter(): boolean {
@@ -618,8 +647,18 @@ export class MeleeEnemy extends Enemy {
     } else {
       // Hit a front row character
 
-      return new EnemyAction(strike, game.party.targetOneFrontRowAliveCharacter());
+      return new EnemyAction(this.mainAttack, game.party.targetOneFrontRowAliveCharacter());
     }
+  }
+}
+
+/**
+ * A melee enemy that uses a bleeding attack.
+ */
+export class BleederMeleeEnemy extends MeleeEnemy {
+
+  customize() {
+    this.mainAttack = deepWound;
   }
 }
 
@@ -653,7 +692,7 @@ export class OldManEnemy extends Enemy {
         return new EnemyAction(wait, []);
       }
     } else {
-      return new EnemyAction(strike, game.party.targetOneFrontRowAliveCharacter());
+      return new EnemyAction(this.mainAttack, game.party.targetOneFrontRowAliveCharacter());
     }
   }
 }
@@ -664,7 +703,7 @@ export class OldManEnemy extends Enemy {
 export class DistanceEnemy extends Enemy {
 
   chooseAction(game: Game): EnemyAction {
-    return new EnemyAction(strike, game.party.targetOneAliveCharacter());
+    return new EnemyAction(this.mainAttack, game.party.targetOneAliveCharacter());
   }
 }
 
@@ -677,9 +716,9 @@ export class HealerEnemy extends Enemy {
     const enemy: Enemy | null = game.opposition.targetOneDamagedEnemy();
 
     if (enemy != null) {
-      return new EnemyAction(heal, [enemy]);
+      return new EnemyAction(this.mainHeal, [enemy]);
     } else {
-      return new EnemyAction(strike, game.party.targetOneAliveCharacter());
+      return new EnemyAction(this.mainAttack, game.party.targetOneAliveCharacter());
     }
   }
 }
@@ -694,7 +733,7 @@ export class DragonEnemy extends Enemy {
       case 0:
       case 1:
         // Claw attack on a character
-        return new EnemyAction(strike, game.party.targetOneFrontRowAliveCharacter());
+        return new EnemyAction(this.mainAttack, game.party.targetOneFrontRowAliveCharacter());
       default:
         // AOE on all characters
         return new EnemyAction(strikeSmall, game.party.targetAllAliveCharacters());

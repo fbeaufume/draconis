@@ -66,6 +66,10 @@ export class Status {
   decreaseDuration() {
     this.duration--;
   }
+
+  getOriginCreatureName(): string {
+    return (this.originCreature && this.originCreature.name) || '';
+  }
 }
 
 export enum LifeChangeType {
@@ -288,7 +292,7 @@ export abstract class Creature {
    * Add a status to the creature. If already present, it is refreshed, i.e. replaced by a new one.
    */
   addStatus(status: Status) {
-    // Remove the status if already present
+    // Remove the status if necessary
     // TODO FBE modify so that DOT and HOT can be applied multiple times, one for each emitter
     this.statuses = this.statuses.filter(s => s.name != status.name);
 

@@ -297,7 +297,7 @@ class FangForestDungeon extends Dungeon {
   constructor() {
     super('Fang Forest', [
       new Opposition('wild bears', [
-        new BleederMeleeEnemy('Bear A', 38, 7), // TODO FBE increase the power ?
+        new BleederMeleeEnemy('Bear A', 38, 7),
         new BleederMeleeEnemy('Bear B', 38, 7),
         new BleederMeleeEnemy('Bear C', 38, 7),
       ]),

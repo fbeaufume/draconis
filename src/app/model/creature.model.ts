@@ -55,6 +55,13 @@ export class Status {
   ) {
   }
 
+  /**
+   * Can the status be applied multiple times (but only by different creatures).
+   */
+  isCumulative(): boolean {
+    return !(this.name == StatusName.DEFEND);
+  }
+
   isDot(): boolean {
     return this.name == StatusName.BLEED || this.name == StatusName.POISON;
   }
@@ -293,10 +300,10 @@ export abstract class Creature {
    */
   addStatus(status: Status) {
     // Remove the status if necessary
-    // TODO FBE modify so that DOT and HOT can be applied multiple times, one for each emitter
-    this.statuses = this.statuses.filter(s => s.name != status.name);
+    this.statuses = this.statuses.filter(s => s.name != status.name
+      || (status.isCumulative() && s.getOriginCreatureName() != status.getOriginCreatureName()));
 
-    this.statuses.push(status);
+    this.statuses.unshift(status);
   }
 
   hasBuff(name: StatusName): boolean {

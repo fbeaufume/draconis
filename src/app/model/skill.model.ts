@@ -529,8 +529,6 @@ export const slash = new Damage(SkillType.ATTACK, 'Slash', SkillTarget.ENEMY_DOU
 // Monk skills
 export const recoveryStrike = new DamageAndHeal(SkillType.ATTACK, 'Recovery Strike', SkillTarget.ENEMY_SINGLE, 20, 1, 0,
   'Inflict 100% damage to the target and heal for 50% damage.', 1.0, 0.5);
-export const monkHeal = new Heal(SkillType.HEAL, 'Heal', SkillTarget.CHARACTER_ALIVE, 10, 0, 0,
-  'Heal a character for 100% damage.');
 export const monkRevive = new Revive(SkillType.HEAL, 'Revive', SkillTarget.CHARACTER_DEAD, 40, 0, 0,
   'Revive a character with 50% life.');
 

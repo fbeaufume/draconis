@@ -59,3 +59,8 @@ export const CRITICAL_BONUS = 1.5;
  * Damage modification when using the defend status.
  */
 export const DEFEND_BONUS = 0.8;
+
+/**
+ * Percentage of mana gained by the characters after an enemy died.
+ */
+export const MANA_GAIN_PER_DEAD_ENEMY = 0.15;

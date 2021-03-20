@@ -505,18 +505,14 @@ export const strikeSmall = new Damage(SkillType.ATTACK, '', SkillTarget.ENEMY_SI
 // Common characters skills
 export const techDefend = new Defend(SkillType.DEFENSE, 'Defend', SkillTarget.NONE, -30, 0, 0,
   'Reduce received damage by 20%. Gain 30 TP.');
-export const magicDefend = new Defend(SkillType.DEFENSE, 'Defend', SkillTarget.NONE, -10, 0, 0,
-  'Reduce received damage by 20%. Gain 10 MP.');
+export const magicDefend = new Defend(SkillType.DEFENSE, 'Defend', SkillTarget.NONE, 0, 0, 0,
+  'Reduce received damage by 20%.');
 export const strike = new Damage(SkillType.ATTACK, 'Strike', SkillTarget.ENEMY_SINGLE, 10, 1, 0,
   'Inflict 100% damage.');
 export const heal = new Heal(SkillType.HEAL, 'Heal', SkillTarget.CHARACTER_ALIVE, 5, 0, 0,
   'Heal a character for 100% damage.');
-export const healAll = new Heal(SkillType.HEAL, 'Heal All', SkillTarget.CHARACTER_ALL_ALIVE, 20, 0, 0,
-  'Heal all characters for 50% damage.', 0.5);
 export const regenerate = new Regenerate(SkillType.HEAL, 'Regenerate', SkillTarget.CHARACTER_ALIVE, 5, 0, 0,
   'Heal a character for 50% damage and 120% damage over 3 rounds.', 0.5, 0.4);
-export const revive = new Revive(SkillType.HEAL, 'Revive', SkillTarget.CHARACTER_DEAD, 20, 0, 0,
-  'Revive a character with 50% life.');
 
 // Warrior skills
 export const furyStrike = new DamageAndDamage(SkillType.ATTACK, 'Fury Strike', SkillTarget.ENEMY_SINGLE, 15, 1, 0,
@@ -549,9 +545,13 @@ export const viperShot = new DamageAndPoison(SkillType.ATTACK, 'Viper Shot', Ski
 // Mage skills
 export const lightning = new Damage(SkillType.ATTACK, 'Lightning', SkillTarget.ENEMY_SINGLE, 5, 2, 0,
   'Inflict 100% damage.');
-export const fireball = new Damage(SkillType.ATTACK, 'Fireball', SkillTarget.ENEMY_TRIPLE, 12, 2, 0,
+export const fireball = new Damage(SkillType.ATTACK, 'Fireball', SkillTarget.ENEMY_TRIPLE, 10, 2, 0,
   'Inflict 60% damage to three adjacent targets.', 0.6);
 
 // Priest skills
 export const shock = new Damage(SkillType.ATTACK, 'Shock', SkillTarget.ENEMY_SINGLE, 5, 2, 0,
   'Inflict 100% damage.');
+export const healAll = new Heal(SkillType.HEAL, 'Heal All', SkillTarget.CHARACTER_ALL_ALIVE, 20, 0, 0,
+  'Heal all characters for 50% damage.', 0.5);
+export const revive = new Revive(SkillType.HEAL, 'Revive', SkillTarget.CHARACTER_DEAD, 20, 0, 0,
+  'Revive a character with 50% life.');

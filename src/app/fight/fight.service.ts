@@ -3,7 +3,7 @@ import {canSelectSkillStates, Fight, Game, GameState, settings} from '../model/g
 import {Character, Creature, Enemy, EnemyAction, Party, StatusExpiration} from '../model/creature.model';
 import {Skill, SkillTarget} from '../model/skill.model';
 import {Log, logs, LogType} from '../model/log.model';
-import {PARTY_ROW_SIZE, PARTY_SIZE} from '../model/constants.model';
+import {MANA_GAIN_PER_DEAD_ENEMY, PARTY_ROW_SIZE, PARTY_SIZE} from '../model/constants.model';
 
 @Injectable({
   providedIn: 'root'
@@ -403,7 +403,7 @@ export class FightService {
     // Restore some mana points to the characters when enemies died
     const totalRemovedEnemiesLife: number = removedEnemies.reduce((sum, enemy) => sum + enemy.lifeMax, 0);
     if (totalRemovedEnemiesLife > 0) {
-      this.party.restoreManaPoints(totalRemovedEnemiesLife * 0.1);
+      this.party.restoreManaPoints(totalRemovedEnemiesLife * MANA_GAIN_PER_DEAD_ENEMY);
     }
 
     // Remove the empty enemy rows

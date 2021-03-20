@@ -2,7 +2,7 @@
 <div class="flex flex-col items-center">
   <p class="pr-2 text-red-500">HP <span class="font-bold">{{ enemy.life}}/{{ enemy.lifeMax }}</span></p>
   <app-life-change-popup *ngIf="enemy.lifeChange != null"
-                         class="absolute z-10 flex justify-center space-x-2"
+                         class="absolute z-10 flex justify-center space-x-2 appear"
                          [lifeChange]="enemy.lifeChange">
   </app-life-change-popup>
   <div class="w-32 bg-red-900">

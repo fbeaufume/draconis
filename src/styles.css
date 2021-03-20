@@ -1,1 +1,17 @@
 /* You can add global styles to this file, and also import other style files */
+
+.appear {
+  animation: zoom 0.6s ease;
+}
+
+@keyframes bump {
+  0%   { transform: translateY(0); }
+  50%  { transform: translateY(-40px); }
+  100% { transform: translateY(0); }
+}
+
+@keyframes zoom {
+  0%   { transform: scale(1); }
+  50%  { transform: scale(1.5); }
+  100% { transform: scale(1); }
+}

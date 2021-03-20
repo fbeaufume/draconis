@@ -13,7 +13,7 @@
       <div class="h-1 bg-green-500" [style]="'width: ' + character.lifePercent + '%'"></div>
     </div>
     <app-life-change-popup *ngIf="character.lifeChange != null"
-                           class="absolute z-10 flex justify-center space-x-2"
+                           class="absolute z-10 flex justify-center space-x-2 appear"
                            [lifeChange]="character.lifeChange">
     </app-life-change-popup>
   </div>

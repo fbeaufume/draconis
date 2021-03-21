@@ -1,2 +1,4 @@
-<span *ngIf="lifeChange != null" [ngClass]="lifeChange.isGain() ? 'text-green-500' : 'text-red-500'" >{{ lifeChange.amount }}</span>
-HP<span *ngIf="lifeChange != null && lifeChange.isCritical()"> (critical)</span><span *ngIf="lifeChange != null && lifeChange.isDodge()"> (dodge)</span>
+<span *ngIf="lifeChange != null" class="font-bold"
+      [ngClass]=" lifeChange.isGain() ? 'text-green-500' : 'text-red-500'">{{ lifeChange.amount }}</span>
+HP<span *ngIf="lifeChange != null && lifeChange.isCritical()"> (critical)</span><span
+  *ngIf="lifeChange != null && lifeChange.isDodge()"> (dodge)</span>

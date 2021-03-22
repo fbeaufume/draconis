@@ -24,6 +24,8 @@ export enum StatusName {
   BLEED,
   POISON,
   REGEN,
+  COMBO1,
+  COMBO2,
 }
 
 /**
@@ -34,6 +36,8 @@ export enum StatusExpiration {
   CREATURE_TURN,
   // The status expires at the end of the round
   END_OF_ROUND,
+  // The status expires at the end of the origin creature turn
+  ORIGIN_CREATURE_TURN,
 }
 
 /**
@@ -291,8 +295,20 @@ export abstract class Creature {
     return amount;
   }
 
-  clearStatuses() {
-    this.statuses = [];
+  getBuffs(): Status[] {
+    return this.statuses.filter(status => status.improvement);
+  }
+
+  getDebuffs(): Status[] {
+    return this.statuses.filter(status => !status.improvement);
+  }
+
+  hasStatus(name: StatusName): boolean {
+    return this.statuses.map(status => status.name).includes(name);
+  }
+
+  hasBuff(name: StatusName): boolean {
+    return this.getBuffs().map(status => status.name).includes(name);
   }
 
   /**
@@ -306,26 +322,18 @@ export abstract class Creature {
     this.statuses.unshift(status);
   }
 
-  hasBuff(name: StatusName): boolean {
-    return this.getBuffs().map(status => status.name).includes(name);
-  }
-
-  getBuffs(): Status[] {
-    return this.statuses.filter(status => status.improvement);
-  }
-
-  getDebuffs(): Status[] {
-    return this.statuses.filter(status => !status.improvement);
-  }
-
   /**
    * Reduce the remaining duration of all statuses that use a given expiration type and remove the expired ones.
    */
-  decreaseStatusesDuration(expiration: StatusExpiration) {
+  decreaseStatusesDuration(expiration: StatusExpiration, originCreature: Creature | null = null) {
     for (let i = 0; i < this.statuses.length; i++) {
       const status = this.statuses[i];
 
       if (status.expiration != expiration) {
+        continue;
+      }
+
+      if (originCreature != null && status.getOriginCreatureName() != originCreature.name) {
         continue;
       }
 
@@ -368,6 +376,10 @@ export abstract class Creature {
         logs.addCreatureLog(LogType.Dot, this, null, lifeChange, null);
       }
     }
+  }
+
+  clearStatuses() {
+    this.statuses = [];
   }
 }
 

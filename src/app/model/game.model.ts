@@ -16,6 +16,7 @@ import {
   Party
 } from './creature.model';
 import {
+  comboStrike,
   deepWound,
   dualHeal,
   fireball,
@@ -377,7 +378,7 @@ export class Game {
         techDefend, strike, furyStrike, deepWound, slash
       ]),
       new Character('Cyl', CreatureClass.MONK, 4, 20, false, 50, 10, [
-        techDefend, strike, recoveryStrike, monkRevive
+        techDefend, strike, comboStrike, recoveryStrike, monkRevive
       ]),
       new Character('Arwin', CreatureClass.PALADIN, 4, 20, true, 50, 10, [
         magicDefend, holyStrike, heal, dualHeal, regenerate

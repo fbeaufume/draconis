@@ -69,6 +69,8 @@ export abstract class Skill {
     public power1: number = 1,
     // Second power of the skill, for example to damage an extra creature
     public power2: number = 1,
+    // Third power of the skill
+    public power3: number = 1
   ) {
   }
 
@@ -202,7 +204,7 @@ export function computeEffectiveDamage(emitter: Creature, receiver: Creature, sk
   const afterCritical = isCritical ? baseAmount * emitter.criticalBonus : baseAmount;
 
   // Apply the defend bonus
-  const afterDefend = receiver.hasBuff(StatusName.DEFEND) ? afterCritical * DEFEND_BONUS : afterCritical;
+  const afterDefend = receiver.hasStatus(StatusName.DEFEND) ? afterCritical * DEFEND_BONUS : afterCritical;
 
   return new LifeLoss(randomizeAndRound(afterDefend), isCritical ? LifeChangeEfficiency.CRITICAL : LifeChangeEfficiency.NORMAL);
 }
@@ -308,6 +310,43 @@ export class Damage extends Skill {
       logs.addCreatureLog(LogType.Damage, activeCreature, targetCreature,
         targetCreature.changeLife(computeEffectiveDamage(activeCreature, targetCreature, this.power1)), null);
     });
+  }
+}
+
+/**
+ * A damaging skill that increases damages when used on the same target during consecutive turns.
+ */
+export class ComboDamage extends Skill {
+
+  execute(fight: Fight): void {
+    if (fight.activeCreature == null || fight.targetCreatures.length != 1) {
+      return;
+    }
+
+    const activeCreature: Creature = fight.activeCreature;
+    const targetCreature = fight.targetCreatures[0];
+
+    super.execute(fight);
+
+    // Get the current step and power of the combo
+    let comboStep = 1;
+    let power: number = this.power1;
+    if (targetCreature.hasStatus(StatusName.COMBO1)) {
+      comboStep = 2;
+      power = this.power2;
+    } else if (targetCreature.hasStatus(StatusName.COMBO2)) {
+      comboStep = 3;
+      power = this.power3;
+    }
+
+    // Then add the current step buff
+    if (comboStep <= 2) {
+      targetCreature.addStatus(new Status(comboStep == 1 ? StatusName.COMBO1 : StatusName.COMBO2,
+        StatusExpiration.ORIGIN_CREATURE_TURN, false, 2, 0, activeCreature));
+    }
+
+    logs.addCreatureLog(LogType.Damage, activeCreature, targetCreature,
+      targetCreature.changeLife(computeEffectiveDamage(activeCreature, targetCreature, power)), null);
   }
 }
 
@@ -523,6 +562,8 @@ export const slash = new Damage(SkillType.ATTACK, 'Slash', SkillTarget.ENEMY_DOU
   'Inflict 80% damage to two adjacent targets.', 0.8);
 
 // Monk skills
+export const comboStrike = new ComboDamage(SkillType.ATTACK, 'Combo Strike', SkillTarget.ENEMY_SINGLE, 15, 1, 0,
+  'Inflict 100% damage then 150% then 200% when used on the same target during consecutive turns.', 1.0, 1.5, 2.0);
 export const recoveryStrike = new DamageAndHeal(SkillType.ATTACK, 'Recovery Strike', SkillTarget.ENEMY_SINGLE, 20, 1, 0,
   'Inflict 100% damage to the target and heal for 50% damage.', 1.0, 0.5);
 export const monkRevive = new Revive(SkillType.HEAL, 'Revive', SkillTarget.CHARACTER_DEAD, 40, 0, 0,

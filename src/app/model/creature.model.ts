@@ -115,6 +115,10 @@ export class LifeChange {
     return this.efficiency == LifeChangeEfficiency.CRITICAL;
   }
 
+  isSuccess(): boolean {
+    return !this.isDodge();
+  }
+
   isDodge(): boolean {
     return this.efficiency == LifeChangeEfficiency.DODGE;
   }

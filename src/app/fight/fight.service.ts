@@ -363,8 +363,11 @@ export class FightService {
    * Process the next turn immediately or after some pauses.
    */
   processNextTurn(pause: boolean) {
-    if (pause) {
+    this.getAllCreatures().forEach(creature => {
+      creature.decreaseStatusesDuration(StatusExpiration.ORIGIN_CREATURE_TURN, this.fight.activeCreature);
+    });
 
+    if (pause) {
       // Give some time to the player to see the skill result
       this.pause(() => {
         this.endOfTurnCleanup();
@@ -386,8 +389,6 @@ export class FightService {
    */
   endOfTurnCleanup() {
     this.getAllCreatures().forEach(creature => {
-      creature.decreaseStatusesDuration(StatusExpiration.ORIGIN_CREATURE_TURN, this.fight.activeCreature);
-
       creature.clearLifeChange();
     });
 

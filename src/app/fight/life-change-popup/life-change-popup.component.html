@@ -1,9 +1,9 @@
-<div *ngIf="lifeChange.isDodge()"
-     class="border rounded-lg px-2 py-1 text-xl border-gray-400 bg-gray-700 text-gray-400">
-  Dodge
-</div>
-<div *ngIf="!lifeChange.isDodge()"
+<div *ngIf="lifeChange.isSuccess()"
      class="border rounded-lg px-2 py-1 text-xl"
      [ngClass]="lifeChange.isGain() ? 'border-green-400 bg-green-900 text-green-400' : 'border-red-400 bg-red-900 text-red-400'">
   {{ lifeChange.amount + (lifeChange.isCritical() ? ' !' : '') }}
+</div>
+<div *ngIf="lifeChange.isDodge()"
+     class="border rounded-lg px-2 py-1 text-xl border-gray-400 bg-gray-700 text-gray-400">
+  Dodge
 </div>

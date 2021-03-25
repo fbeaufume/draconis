@@ -339,14 +339,14 @@ export class ComboDamage extends Skill {
       power = this.power3;
     }
 
-    // Then add the current step buff
-    if (comboStep <= 2) {
+    const lifeChange = targetCreature.changeLife(computeEffectiveDamage(activeCreature, targetCreature, power))
+    logs.addCreatureLog(LogType.Damage, activeCreature, targetCreature, lifeChange, null);
+
+    // Add the buff if the attack succeeded
+    if (comboStep <= 2 && lifeChange.isSuccess()) {
       targetCreature.addStatus(new Status(comboStep == 1 ? StatusName.COMBO1 : StatusName.COMBO2,
         StatusExpiration.ORIGIN_CREATURE_TURN, false, 2, 0, activeCreature));
     }
-
-    logs.addCreatureLog(LogType.Damage, activeCreature, targetCreature,
-      targetCreature.changeLife(computeEffectiveDamage(activeCreature, targetCreature, power)), null);
   }
 }
 
@@ -367,12 +367,12 @@ export class DamageAndHeal extends Skill {
     fight.targetCreatures.forEach(targetCreature => {
       const lifeChange: LifeChange = computeEffectiveDamage(activeCreature, targetCreature, this.power1);
 
-      if (lifeChange.isDodge()) {
-        logs.addCreatureLog(LogType.Damage, activeCreature, targetCreature, targetCreature.changeLife(lifeChange), null);
-      } else {
+      if (lifeChange.isSuccess()) {
         logs.addCreatureLog(LogType.DamageAndHeal, activeCreature, targetCreature,
           targetCreature.changeLife(lifeChange),
           activeCreature.changeLife(new LifeChange(Math.round(lifeChange.amount * this.power2), lifeChange.efficiency, LifeChangeType.GAIN)));
+      } else {
+        logs.addCreatureLog(LogType.Damage, activeCreature, targetCreature, targetCreature.changeLife(lifeChange), null);
       }
     });
   }
@@ -395,12 +395,12 @@ export class DamageAndDamage extends Skill {
     fight.targetCreatures.forEach(targetCreature => {
       const lifeChange: LifeChange = computeEffectiveDamage(activeCreature, targetCreature, this.power1);
 
-      if (lifeChange.isDodge()) {
-        logs.addCreatureLog(LogType.Damage, activeCreature, targetCreature, targetCreature.changeLife(lifeChange), null);
-      } else {
+      if (lifeChange.isSuccess()) {
         logs.addCreatureLog(LogType.DamageAndDamage, activeCreature, targetCreature,
           targetCreature.changeLife(computeEffectiveDamage(activeCreature, targetCreature, this.power1)),
           activeCreature.changeLife(new LifeChange(Math.round(lifeChange.amount * this.power2), lifeChange.efficiency, LifeChangeType.LOSS)));
+      } else {
+        logs.addCreatureLog(LogType.Damage, activeCreature, targetCreature, targetCreature.changeLife(lifeChange), null);
       }
     });
   }
@@ -428,7 +428,7 @@ export class DamageAndBleed extends Skill {
       logs.addCreatureLog(LogType.Damage, activeCreature, targetCreature, targetCreature.changeLife(lifeChange), null);
 
       // Damage over time part
-      if (!lifeChange.isDodge()) {
+      if (lifeChange.isSuccess()) {
         targetCreature.addStatus(new Status(StatusName.BLEED, StatusExpiration.END_OF_ROUND, false, 3, this.power2, fight.activeCreature));
       }
     });
@@ -457,7 +457,7 @@ export class DamageAndPoison extends Skill {
       logs.addCreatureLog(LogType.Damage, activeCreature, targetCreature, targetCreature.changeLife(lifeChange), null);
 
       // Damage over time part
-      if (!lifeChange.isDodge()) {
+      if (lifeChange.isSuccess()) {
         targetCreature.addStatus(new Status(StatusName.POISON, StatusExpiration.END_OF_ROUND, false, 3, this.power2, fight.activeCreature));
       }
     });

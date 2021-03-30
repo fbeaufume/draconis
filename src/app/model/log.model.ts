@@ -5,28 +5,7 @@
  * When any numeric value is changed, update log.component.html.
  */
 import {Creature, LifeChange} from './creature.model';
-
-export enum LogType {
-  EnterZone,
-  OppositionAppear,
-  StartRound,
-  Advance,
-  Wait,
-  Leave,
-  Defend,
-  Damage,
-  DamageAndHeal,
-  DamageAndDamage,
-  Heal,
-  Revive,
-  Dot,
-  Hot,
-  EnemyDefeated,
-  PartyVictory,
-  PartyDefeat,
-  PauseDurationChanged,
-  OldManTransformation,
-}
+import {LogType} from "./common.model";
 
 /**
  * A log message.

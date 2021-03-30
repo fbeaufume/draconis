@@ -1,6 +1,6 @@
 import {Component} from '@angular/core';
 import {FightService} from './fight/fight.service';
-import {GameState} from './model/game.model';
+import {GameState} from "./model/common.model";
 
 @Component({
   selector: 'app-root',

@@ -1,9 +1,10 @@
 import {Injectable} from '@angular/core';
-import {canSelectSkillStates, Fight, Game, GameState, settings} from '../model/game.model';
-import {Character, Creature, Enemy, EnemyAction, Party, StatusExpiration} from '../model/creature.model';
-import {Skill, SkillTarget} from '../model/skill.model';
-import {Log, logs, LogType} from '../model/log.model';
+import {canSelectSkillStates, Fight, Game, settings} from '../model/game.model';
+import {Character, Creature, Enemy, EnemyAction, Party} from '../model/creature.model';
+import {Skill} from '../model/skill.model';
+import {Log, logs} from '../model/log.model';
 import {MANA_GAIN_PER_DEAD_ENEMY, PARTY_ROW_SIZE, PARTY_SIZE} from '../model/constants.model';
+import {GameState, LogType, SkillTarget, StatusExpiration} from "../model/common.model";
 
 @Injectable({
   providedIn: 'root'
@@ -364,7 +365,7 @@ export class FightService {
    */
   processNextTurn(pause: boolean) {
     this.getAllCreatures().forEach(creature => {
-      creature.decreaseStatusesDuration(StatusExpiration.ORIGIN_CREATURE_TURN, this.fight.activeCreature);
+      creature.decreaseStatusesDuration(StatusExpiration.ORIGIN_CREATURE_TURN_END, this.fight.activeCreature);
     });
 
     if (pause) {

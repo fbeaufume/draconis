@@ -1,3 +1,5 @@
+// Constants
+
 /**
  * Number of character rows.
  */
@@ -64,3 +66,8 @@ export const DEFEND_BONUS = 0.8;
  * Percentage of mana gained by the characters after an enemy died.
  */
 export const MANA_GAIN_PER_DEAD_ENEMY = 0.15;
+
+/**
+ * Default duration of HOT, DOT, buff and debuff.
+ */
+export const EFFECT_DURATION = 3;

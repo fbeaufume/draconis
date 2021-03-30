@@ -1,8 +1,9 @@
 import {AfterViewInit, Component, ElementRef, HostListener, QueryList, ViewChild, ViewChildren} from '@angular/core';
-import {canSelectSkillStates, Fight, Game, GameState, settings} from '../model/game.model';
+import {canSelectSkillStates, Fight, Game, settings} from '../model/game.model';
 import {Character, Enemy} from '../model/creature.model';
 import {Skill} from '../model/skill.model';
 import {FightService} from './fight.service';
+import {GameState} from "../model/common.model";
 
 @Component({
   selector: 'app-fight',

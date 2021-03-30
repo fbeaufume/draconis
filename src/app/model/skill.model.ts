@@ -1,54 +1,18 @@
 // Skill related classes
 
 import {Fight} from './game.model';
+import {Character, Creature, Enemy, LifeChange, LifeGain, LifeLoss, Status} from './creature.model';
+import {logs} from './log.model';
+import {DEFEND_BONUS, EFFECT_DURATION, RANDOMIZE_BASE, RANDOMIZE_RANGE} from './constants.model';
 import {
-  Character,
-  Creature,
-  Enemy,
-  LifeChange,
   LifeChangeEfficiency,
   LifeChangeType,
-  LifeGain,
-  LifeLoss,
-  Status,
+  LogType,
+  SkillTarget,
+  SkillType,
   StatusExpiration,
   StatusName
-} from './creature.model';
-import {logs, LogType} from './log.model';
-import {DEFEND_BONUS, RANDOMIZE_BASE, RANDOMIZE_RANGE} from './constants.model';
-
-/**
- * The type of a skill, to use the right icon.
- * When any numeric value is changed, update skill-icon.component.html.
- */
-export enum SkillType {
-  DEFENSE,
-  ATTACK,
-  HEAL,
-  IMPROVEMENT,
-  DETERIORATION,
-}
-
-/**
- * The type of target of a skill
- */
-export enum SkillTarget {
-  NONE,
-  // An alive character
-  CHARACTER_ALIVE,
-  // All alive characters
-  CHARACTER_ALL_ALIVE,
-  // An alive character different than the current character
-  CHARACTER_OTHER,
-  // A dead character
-  CHARACTER_DEAD,
-  // A single enemy
-  ENEMY_SINGLE,
-  // Two adjacent enemies, the hovered one + its right one
-  ENEMY_DOUBLE,
-  // Three adjacent enemies, the hovered one + its left and right ones
-  ENEMY_TRIPLE,
-}
+} from "./common.model";
 
 /**
  * A character skill.
@@ -70,7 +34,11 @@ export abstract class Skill {
     // Second power of the skill, for example to damage an extra creature
     public power2: number = 1,
     // Third power of the skill
-    public power3: number = 1
+    public power3: number = 1,
+    // The applied effect, when used (warning, WebPack does not support using StatusName.SOMETHING)
+    public statusName: StatusName = StatusName.DEFEND,
+    // Is the effect an improvement
+    public improvementStatus: boolean = true,
   ) {
   }
 
@@ -206,6 +174,8 @@ export function computeEffectiveDamage(emitter: Creature, receiver: Creature, sk
   // Apply the defend bonus
   const afterDefend = receiver.hasStatus(StatusName.DEFEND) ? afterCritical * DEFEND_BONUS : afterCritical;
 
+  // TODO FBE apply attack and defense bonuses
+
   return new LifeLoss(randomizeAndRound(afterDefend), isCritical ? LifeChangeEfficiency.CRITICAL : LifeChangeEfficiency.NORMAL);
 }
 
@@ -293,6 +263,27 @@ export class Defend extends Skill {
 }
 
 /**
+ * Apply a positive or negative status.
+ */
+export class ApplyStatus extends Skill {
+
+  execute(fight: Fight): void {
+    if (fight.activeCreature == null) {
+      return;
+    }
+
+    super.execute(fight);
+
+    fight.targetCreatures.forEach(targetCreature => {
+      targetCreature.addStatus(new Status(this.statusName, StatusExpiration.ORIGIN_CREATURE_TURN_START, this.improvementStatus, EFFECT_DURATION, 0, fight.activeCreature));
+
+      // TODO FBE correctly implement the log messages
+      logs.addCreatureLog(this.improvementStatus ? LogType.PositiveStatus : LogType.NegativeStatus, fight.activeCreature, null, null, null);
+    });
+  }
+}
+
+/**
  * A damaging skill.
  */
 export class Damage extends Skill {
@@ -345,7 +336,7 @@ export class ComboDamage extends Skill {
     // Add the buff if the attack succeeded
     if (comboStep <= 2 && lifeChange.isSuccess()) {
       targetCreature.addStatus(new Status(comboStep == 1 ? StatusName.COMBO1 : StatusName.COMBO2,
-        StatusExpiration.ORIGIN_CREATURE_TURN, false, 2, 0, activeCreature));
+        StatusExpiration.ORIGIN_CREATURE_TURN_END, false, 2, 0, activeCreature));
     }
   }
 }
@@ -429,7 +420,7 @@ export class DamageAndBleed extends Skill {
 
       // Damage over time part
       if (lifeChange.isSuccess()) {
-        targetCreature.addStatus(new Status(StatusName.BLEED, StatusExpiration.END_OF_ROUND, false, 3, this.power2, fight.activeCreature));
+        targetCreature.addStatus(new Status(StatusName.BLEED, StatusExpiration.END_OF_ROUND, false, EFFECT_DURATION, this.power2, fight.activeCreature));
       }
     });
   }
@@ -458,7 +449,7 @@ export class DamageAndPoison extends Skill {
 
       // Damage over time part
       if (lifeChange.isSuccess()) {
-        targetCreature.addStatus(new Status(StatusName.POISON, StatusExpiration.END_OF_ROUND, false, 3, this.power2, fight.activeCreature));
+        targetCreature.addStatus(new Status(StatusName.POISON, StatusExpiration.END_OF_ROUND, false, EFFECT_DURATION, this.power2, fight.activeCreature));
       }
     });
   }
@@ -515,7 +506,7 @@ export class Regenerate extends Heal {
     super.execute(fight);
 
     fight.targetCreatures.forEach(targetCreature => {
-      targetCreature.addStatus(new Status(StatusName.REGEN, StatusExpiration.END_OF_ROUND, true, 3, this.power2, fight.activeCreature));
+      targetCreature.addStatus(new Status(StatusName.REGEN, StatusExpiration.END_OF_ROUND, true, EFFECT_DURATION, this.power2, fight.activeCreature));
     });
   }
 }
@@ -551,15 +542,17 @@ export const strike = new Damage(SkillType.ATTACK, 'Strike', SkillTarget.ENEMY_S
 export const heal = new Heal(SkillType.HEAL, 'Heal', SkillTarget.CHARACTER_ALIVE, 5, 0, 0,
   'Heal a character for 100% damage.');
 export const regenerate = new Regenerate(SkillType.HEAL, 'Regenerate', SkillTarget.CHARACTER_ALIVE, 5, 0, 0,
-  'Heal a character for 50% damage and 120% damage over 3 rounds.', 0.5, 0.4);
+  'Heal a character for 50% damage and 120% damage over ' + EFFECT_DURATION + ' rounds.', 0.5, 0.4);
 
 // Warrior skills
 export const furyStrike = new DamageAndDamage(SkillType.ATTACK, 'Fury Strike', SkillTarget.ENEMY_SINGLE, 15, 1, 0,
   'Inflict 150% damage to the target and 30% damage to self.', 1.5, 0.3);
 export const deepWound = new DamageAndBleed(SkillType.ATTACK, 'Deep Wound', SkillTarget.ENEMY_SINGLE, 20, 1, 0,
-  'Inflict 50% damage to the target and 120% damage over 3 rounds.', 0.5, 0.4);
+  'Inflict 50% damage to the target and 120% damage over ' + EFFECT_DURATION + ' rounds.', 0.5, 0.4);
 export const slash = new Damage(SkillType.ATTACK, 'Slash', SkillTarget.ENEMY_DOUBLE, 20, 1, 0,
   'Inflict 80% damage to two adjacent targets.', 0.8);
+export const intimidate = new ApplyStatus(SkillType.DETERIORATION, 'Intimidate', SkillTarget.ENEMY_SINGLE, 20, 1, 0,
+  'Reduce the enemy attack by 20% during ' + EFFECT_DURATION + ' rounds.', 1, 1, 1, StatusName.ATTACK, false);
 
 // Monk skills
 export const comboStrike = new ComboDamage(SkillType.ATTACK, 'Combo Strike', SkillTarget.ENEMY_SINGLE, 15, 1, 0,
@@ -581,13 +574,19 @@ export const shot = new Damage(SkillType.ATTACK, 'Shot', SkillTarget.ENEMY_SINGL
 export const preciseShot = new Damage(SkillType.ATTACK, 'Precise Shot', SkillTarget.ENEMY_SINGLE, 20, 2, 0,
   'Inflict 150% damage.', 1.5);
 export const viperShot = new DamageAndPoison(SkillType.ATTACK, 'Viper Shot', SkillTarget.ENEMY_SINGLE, 20, 2, 0,
-  'Inflict 50% damage to the target and 120% damage over 3 rounds.', 0.5, 0.4);
+  'Inflict 50% damage to the target and 120% damage over ' + EFFECT_DURATION + ' rounds.', 0.5, 0.4);
+export const cripplingShot = new ApplyStatus(SkillType.DETERIORATION, 'Crippling Shot', SkillTarget.ENEMY_SINGLE, 20, 2, 0,
+  'Reduce the enemy defense by 20% during ' + EFFECT_DURATION + ' rounds.', 1, 1, 1, StatusName.DEFENSE, false);
 
 // Mage skills
 export const lightning = new Damage(SkillType.ATTACK, 'Lightning', SkillTarget.ENEMY_SINGLE, 5, 2, 0,
   'Inflict 100% damage.');
 export const fireball = new Damage(SkillType.ATTACK, 'Fireball', SkillTarget.ENEMY_TRIPLE, 10, 2, 0,
   'Inflict 60% damage to three adjacent targets.', 0.6);
+export const weakness = new ApplyStatus(SkillType.DETERIORATION, 'Weakness', SkillTarget.ENEMY_SINGLE, 10, 2, 0,
+  'Reduce the enemy attack by 20% during ' + EFFECT_DURATION + ' rounds.', 1, 1, 1, StatusName.ATTACK, false);
+export const slow = new ApplyStatus(SkillType.DETERIORATION, 'Slow', SkillTarget.ENEMY_SINGLE, 10, 2, 0,
+  'Reduce the enemy defense by 20% during ' + EFFECT_DURATION + ' rounds.', 1, 1, 1, StatusName.DEFENSE, false);
 
 // Priest skills
 export const shock = new Damage(SkillType.ATTACK, 'Shock', SkillTarget.ENEMY_SINGLE, 5, 2, 0,

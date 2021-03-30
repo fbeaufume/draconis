@@ -4,7 +4,6 @@ import {
   BleederMeleeEnemy,
   Character,
   Creature,
-  CreatureClass,
   DistanceEnemy,
   DragonEnemy,
   EndOfRound,
@@ -17,13 +16,14 @@ import {
 } from './creature.model';
 import {
   comboStrike,
+  cripplingShot,
   deepWound,
   dualHeal,
   fireball,
   furyStrike,
   heal,
   healAll,
-  holyStrike,
+  holyStrike, intimidate,
   lightning,
   magicDefend,
   monkRevive,
@@ -34,13 +34,15 @@ import {
   shock,
   shot,
   Skill,
-  slash,
+  slash, slow,
   strike,
   techDefend,
   viperShot,
+  weakness,
 } from './skill.model';
-import {logs, LogType} from './log.model';
+import {logs} from './log.model';
 import {OPPOSITION_ROWS, PARTY_SIZE, PAUSE_LONG, PAUSE_SHORT} from './constants.model';
+import {CreatureClass, GameState, LogType} from "./common.model";
 
 /**
  * Get the value of a query string parameter (empty string if the param is present without a value) or null.
@@ -330,31 +332,6 @@ class FangForestDungeon extends Dungeon {
   }
 }
 
-/**
- * The current state in the game workflow.
- * Used to enable or disable action buttons, the selection of a target skill, enemy or character, etc
- * When some numeric values are changed, update accordingly the calls to 'usePointerForState' in fight.component.html.
- */
-export enum GameState {
-  // Waiting for the player to start the next encounter: display no opposition but a "Continue" button
-  START_NEXT_ENCOUNTER,
-  // Waiting for the player to start the fight
-  START_FIGHT,
-  // Between creature turns
-  END_OF_TURN,
-  // Enemy turn
-  ENEMY_TURN,
-  // Character turn, the player must select a skill
-  SELECT_SKILL,
-  // Character turn, the player must select an enemy
-  SELECT_ENEMY,
-  // Character turn, the player must select a character
-  SELECT_CHARACTER,
-  // Executing the player skill
-  EXECUTING_SKILL,
-  // Cleared the dungeon
-  DUNGEON_END,
-}
 
 /**
  * All states when it is ok for the player to choose a character skill, possibly to change his mind.
@@ -375,7 +352,7 @@ export class Game {
 
   party: Party = new Party([
       new Character('Melkan', CreatureClass.WARRIOR, 4, 20, false, 50, 10, [
-        techDefend, strike, furyStrike, deepWound, slash
+        techDefend, strike, furyStrike, deepWound, slash, intimidate
       ]),
       new Character('Cyl', CreatureClass.MONK, 4, 20, false, 50, 10, [
         techDefend, strike, comboStrike, recoveryStrike, monkRevive
@@ -385,10 +362,10 @@ export class Game {
       ])],
     [
       new Character('Faren', CreatureClass.ARCHER, 4, 20, false, 50, 10, [
-        techDefend, shot, preciseShot, viperShot
+        techDefend, shot, preciseShot, viperShot, cripplingShot
       ]),
       new Character('Harika', CreatureClass.MAGE, 4, 20, true, 50, 10, [
-        magicDefend, lightning, fireball
+        magicDefend, lightning, fireball, weakness, slow
       ]),
       new Character('Nairo', CreatureClass.PRIEST, 4, 20, true, 50, 10, [
         magicDefend, shock, heal, regenerate, healAll, revive

@@ -13,32 +13,16 @@ import {
   strikeSmall,
   wait
 } from './skill.model';
-import {logs, LogType} from './log.model';
+import {logs} from './log.model';
 import {CRITICAL_BONUS, CRITICAL_CHANCE, DODGE_CHANCE, OPPOSITION_ROW_SIZE} from './constants.model';
-
-/**
- * The various status names.
- */
-export enum StatusName {
-  DEFEND,
-  BLEED,
-  POISON,
-  REGEN,
-  COMBO1,
-  COMBO2,
-}
-
-/**
- * The type of expiration of a status.
- */
-export enum StatusExpiration {
-  // THe status expires at the beginning of the creature turn
-  CREATURE_TURN,
-  // The status expires at the end of the round
-  END_OF_ROUND,
-  // The status expires at the end of the origin creature turn
-  ORIGIN_CREATURE_TURN,
-}
+import {
+  CreatureClass,
+  LifeChangeEfficiency,
+  LifeChangeType,
+  LogType,
+  StatusExpiration,
+  StatusName
+} from "./common.model";
 
 /**
  * A status applied to a creature, such as a DOT, HOT, buff or debuff.
@@ -81,17 +65,6 @@ export class Status {
   getOriginCreatureName(): string {
     return (this.originCreature && this.originCreature.name) || '';
   }
-}
-
-export enum LifeChangeType {
-  GAIN,
-  LOSS
-}
-
-export enum LifeChangeEfficiency {
-  NORMAL,
-  CRITICAL,
-  DODGE
 }
 
 /**
@@ -159,20 +132,6 @@ export class LifeLoss extends LifeChange {
   }
 }
 
-/**
- * The various classes of creatures.
- * When any value is changed, update class-icon.component.html.
- */
-export enum CreatureClass {
-  ENEMY = 'enemy',
-  END_OF_ROUND = 'end-of-round',
-  WARRIOR = 'Warrior',
-  MONK = 'Monk',
-  PALADIN = 'Paladin',
-  ARCHER = 'Archer',
-  MAGE = 'Mage',
-  PRIEST = 'Priest'
-}
 
 /**
  * Base class for enemies and characters.

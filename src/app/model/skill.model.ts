@@ -275,10 +275,10 @@ export class ApplyStatus extends Skill {
     super.execute(fight);
 
     fight.targetCreatures.forEach(targetCreature => {
-      targetCreature.addStatus(new Status(this.statusName, StatusExpiration.ORIGIN_CREATURE_TURN_START, this.improvementStatus, EFFECT_DURATION, 0, fight.activeCreature));
+      const status = new Status(this.statusName, StatusExpiration.ORIGIN_CREATURE_TURN_START, this.improvementStatus, EFFECT_DURATION, 0, fight.activeCreature);
+      targetCreature.addStatus(status);
 
-      // TODO FBE correctly implement the log messages
-      logs.addCreatureLog(this.improvementStatus ? LogType.PositiveStatus : LogType.NegativeStatus, fight.activeCreature, null, null, null);
+      logs.addCreatureLog(this.improvementStatus ? LogType.PositiveStatus : LogType.NegativeStatus, fight.activeCreature, null, null, null, status);
     });
   }
 }

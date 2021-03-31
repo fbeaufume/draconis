@@ -13,6 +13,7 @@ import {ClassIconComponent} from './fight/class-icon/class-icon.component';
 import {LifeChangePopupComponent} from './fight/life-change-popup/life-change-popup.component';
 import {LifeChangeLogComponent} from './fight/log/life-change-log/life-change-log.component';
 import {CreatureLogComponent} from './fight/log/creature-log/creature-log.component';
+import {StatusLogComponent} from './fight/log/status-log/status-log.component';
 
 @NgModule({
   declarations: [
@@ -26,7 +27,8 @@ import {CreatureLogComponent} from './fight/log/creature-log/creature-log.compon
     ClassIconComponent,
     LifeChangePopupComponent,
     LifeChangeLogComponent,
-    CreatureLogComponent
+    CreatureLogComponent,
+    StatusLogComponent
   ],
   imports: [
     BrowserModule,

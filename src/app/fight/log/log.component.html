@@ -91,11 +91,13 @@
   <div *ngSwitchCase="19">
     <!-- Positive status -->
     <app-creature-log [creature]="log.creature1"></app-creature-log>
-    positive status to <app-creature-log [creature]="log.creature2"></app-creature-log>.
+    strengthens <app-creature-log [creature]="log.creature2"></app-creature-log>
+    with <app-status-log [status]="log.status"></app-status-log>
   </div>
   <div *ngSwitchCase="20">
     <!-- Negative status -->
     <app-creature-log [creature]="log.creature1"></app-creature-log>
-    negative status to <app-creature-log [creature]="log.creature2"></app-creature-log>.
+    weakens <app-creature-log [creature]="log.creature2"></app-creature-log>
+    with <app-status-log [status]="log.status"></app-status-log>
   </div>
 </div>

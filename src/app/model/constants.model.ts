@@ -68,6 +68,16 @@ export const DEFEND_BONUS = 0.8;
 export const MANA_GAIN_PER_DEAD_ENEMY = 0.15;
 
 /**
- * Default duration of HOT, DOT, buff and debuff.
+ * Duration for most statuses.
  */
 export const EFFECT_DURATION = 3;
+
+/**
+ * Duration for defend status.
+ */
+export const DEFEND_DURATION = 1;
+
+/**
+ * Duration for combo statuses.
+ */
+export const COMBO_DURATION = 2;

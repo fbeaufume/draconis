@@ -1,3 +1,2 @@
-<!-- TODO FBE use the proper name instead of status.name -->
-<span *ngIf="status != null" class="font-bold"
-      [ngClass]=" status.improvement ? 'text-green-500' : 'text-red-500'">{{ status.name }}</span>
+<span *ngIf="statusApplication != null" class="font-bold"
+      [ngClass]=" statusApplication.improvement ? 'text-green-500' : 'text-red-500'">{{ statusApplication.status.name }}</span>

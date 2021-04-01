@@ -10,6 +10,6 @@
   </div>
 </div>
 <div class="flex justify-center space-x-2 pt-3">
-  <app-status *ngFor="let buff of enemy.getBuffs()" [status]="buff"></app-status>
-  <app-status *ngFor="let debuff of enemy.getDebuffs()" [status]="debuff"></app-status>
+  <app-status *ngFor="let statusApplication of enemy.getPositiveStatuses()" [statusApplication]="statusApplication"></app-status>
+  <app-status *ngFor="let statusApplication of enemy.getNegativeStatuses()" [statusApplication]="statusApplication"></app-status>
 </div>

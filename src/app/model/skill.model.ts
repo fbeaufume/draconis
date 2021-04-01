@@ -1,18 +1,11 @@
 // Skill related classes
 
 import {Fight} from './game.model';
-import {Character, Creature, Enemy, LifeChange, LifeGain, LifeLoss, Status} from './creature.model';
+import {Character, Creature, Enemy, LifeChange, LifeGain, LifeLoss} from './creature.model';
 import {logs} from './log.model';
 import {DEFEND_BONUS, EFFECT_DURATION, RANDOMIZE_BASE, RANDOMIZE_RANGE} from './constants.model';
-import {
-  LifeChangeEfficiency,
-  LifeChangeType,
-  LogType,
-  SkillTarget,
-  SkillType,
-  StatusExpiration,
-  StatusName
-} from "./common.model";
+import {LifeChangeEfficiency, LifeChangeType, LogType, SkillTarget, SkillType} from "./common.model";
+import {attack, bleed, combo1, combo2, defend, defense, poison, regen, Status, StatusApplication} from "./status.model";
 
 /**
  * A character skill.
@@ -35,10 +28,10 @@ export abstract class Skill {
     public power2: number = 1,
     // Third power of the skill
     public power3: number = 1,
-    // The applied effect, when used (warning, WebPack does not support using StatusName.SOMETHING)
-    public statusName: StatusName = StatusName.DEFEND,
+    // The status to apply (an arbitrary value is used to simplify null management)
+    public status: Status = defend,
     // Is the effect an improvement
-    public improvementStatus: boolean = true,
+    public improvementStatus: boolean = true
   ) {
   }
 
@@ -172,7 +165,7 @@ export function computeEffectiveDamage(emitter: Creature, receiver: Creature, sk
   const afterCritical = isCritical ? baseAmount * emitter.criticalBonus : baseAmount;
 
   // Apply the defend bonus
-  const afterDefend = receiver.hasStatus(StatusName.DEFEND) ? afterCritical * DEFEND_BONUS : afterCritical;
+  const afterDefend = receiver.hasStatus(defend) ? afterCritical * DEFEND_BONUS : afterCritical;
 
   // TODO FBE apply attack and defense bonuses
 
@@ -255,7 +248,7 @@ export class Defend extends Skill {
     super.execute(fight);
 
     if (fight.activeCreature != null) {
-      fight.activeCreature.addStatus(new Status(StatusName.DEFEND, StatusExpiration.CREATURE_TURN, true, 1, 0, null));
+      fight.activeCreature.applyStatus(new StatusApplication(defend, true, 0, null));
 
       logs.addCreatureLog(LogType.Defend, fight.activeCreature, null, null, null);
     }
@@ -275,10 +268,10 @@ export class ApplyStatus extends Skill {
     super.execute(fight);
 
     fight.targetCreatures.forEach(targetCreature => {
-      const status = new Status(this.statusName, StatusExpiration.ORIGIN_CREATURE_TURN_START, this.improvementStatus, EFFECT_DURATION, 0, fight.activeCreature);
-      targetCreature.addStatus(status);
+      const status = new StatusApplication(this.status, this.improvementStatus, 0, fight.activeCreature);
+      targetCreature.applyStatus(status);
 
-      logs.addCreatureLog(this.improvementStatus ? LogType.PositiveStatus : LogType.NegativeStatus, fight.activeCreature, null, null, null, status);
+      logs.addCreatureLog(this.improvementStatus ? LogType.PositiveStatus : LogType.NegativeStatus, fight.activeCreature, targetCreature, null, null, status);
     });
   }
 }
@@ -322,10 +315,10 @@ export class ComboDamage extends Skill {
     // Get the current step and power of the combo
     let comboStep = 1;
     let power: number = this.power1;
-    if (targetCreature.hasStatus(StatusName.COMBO1)) {
+    if (targetCreature.hasStatus(combo1)) {
       comboStep = 2;
       power = this.power2;
-    } else if (targetCreature.hasStatus(StatusName.COMBO2)) {
+    } else if (targetCreature.hasStatus(combo2)) {
       comboStep = 3;
       power = this.power3;
     }
@@ -335,8 +328,8 @@ export class ComboDamage extends Skill {
 
     // Add the buff if the attack succeeded
     if (comboStep <= 2 && lifeChange.isSuccess()) {
-      targetCreature.addStatus(new Status(comboStep == 1 ? StatusName.COMBO1 : StatusName.COMBO2,
-        StatusExpiration.ORIGIN_CREATURE_TURN_END, false, 2, 0, activeCreature));
+      targetCreature.applyStatus(new StatusApplication(comboStep == 1 ? combo1 : combo2,
+        false, 0, activeCreature));
     }
   }
 }
@@ -420,7 +413,7 @@ export class DamageAndBleed extends Skill {
 
       // Damage over time part
       if (lifeChange.isSuccess()) {
-        targetCreature.addStatus(new Status(StatusName.BLEED, StatusExpiration.END_OF_ROUND, false, EFFECT_DURATION, this.power2, fight.activeCreature));
+        targetCreature.applyStatus(new StatusApplication(bleed, false, this.power2, fight.activeCreature));
       }
     });
   }
@@ -449,7 +442,7 @@ export class DamageAndPoison extends Skill {
 
       // Damage over time part
       if (lifeChange.isSuccess()) {
-        targetCreature.addStatus(new Status(StatusName.POISON, StatusExpiration.END_OF_ROUND, false, EFFECT_DURATION, this.power2, fight.activeCreature));
+        targetCreature.applyStatus(new StatusApplication(poison, false, this.power2, fight.activeCreature));
       }
     });
   }
@@ -506,7 +499,7 @@ export class Regenerate extends Heal {
     super.execute(fight);
 
     fight.targetCreatures.forEach(targetCreature => {
-      targetCreature.addStatus(new Status(StatusName.REGEN, StatusExpiration.END_OF_ROUND, true, EFFECT_DURATION, this.power2, fight.activeCreature));
+      targetCreature.applyStatus(new StatusApplication(regen, true, this.power2, fight.activeCreature));
     });
   }
 }
@@ -552,7 +545,7 @@ export const deepWound = new DamageAndBleed(SkillType.ATTACK, 'Deep Wound', Skil
 export const slash = new Damage(SkillType.ATTACK, 'Slash', SkillTarget.ENEMY_DOUBLE, 20, 1, 0,
   'Inflict 80% damage to two adjacent targets.', 0.8);
 export const intimidate = new ApplyStatus(SkillType.DETERIORATION, 'Intimidate', SkillTarget.ENEMY_SINGLE, 20, 1, 0,
-  'Reduce the enemy attack by 20% during ' + EFFECT_DURATION + ' rounds.', 1, 1, 1, StatusName.ATTACK, false);
+  'Reduce the enemy attack by 20% during ' + EFFECT_DURATION + ' rounds.', 1, 1, 1, attack, false);
 
 // Monk skills
 export const comboStrike = new ComboDamage(SkillType.ATTACK, 'Combo Strike', SkillTarget.ENEMY_SINGLE, 15, 1, 0,
@@ -576,7 +569,7 @@ export const preciseShot = new Damage(SkillType.ATTACK, 'Precise Shot', SkillTar
 export const viperShot = new DamageAndPoison(SkillType.ATTACK, 'Viper Shot', SkillTarget.ENEMY_SINGLE, 20, 2, 0,
   'Inflict 50% damage to the target and 120% damage over ' + EFFECT_DURATION + ' rounds.', 0.5, 0.4);
 export const cripplingShot = new ApplyStatus(SkillType.DETERIORATION, 'Crippling Shot', SkillTarget.ENEMY_SINGLE, 20, 2, 0,
-  'Reduce the enemy defense by 20% during ' + EFFECT_DURATION + ' rounds.', 1, 1, 1, StatusName.DEFENSE, false);
+  'Reduce the enemy defense by 20% during ' + EFFECT_DURATION + ' rounds.', 1, 1, 1, defense, false);
 
 // Mage skills
 export const lightning = new Damage(SkillType.ATTACK, 'Lightning', SkillTarget.ENEMY_SINGLE, 5, 2, 0,
@@ -584,9 +577,9 @@ export const lightning = new Damage(SkillType.ATTACK, 'Lightning', SkillTarget.E
 export const fireball = new Damage(SkillType.ATTACK, 'Fireball', SkillTarget.ENEMY_TRIPLE, 10, 2, 0,
   'Inflict 60% damage to three adjacent targets.', 0.6);
 export const weakness = new ApplyStatus(SkillType.DETERIORATION, 'Weakness', SkillTarget.ENEMY_SINGLE, 10, 2, 0,
-  'Reduce the enemy attack by 20% during ' + EFFECT_DURATION + ' rounds.', 1, 1, 1, StatusName.ATTACK, false);
+  'Reduce the enemy attack by 20% during ' + EFFECT_DURATION + ' rounds.', 1, 1, 1, attack, false);
 export const slow = new ApplyStatus(SkillType.DETERIORATION, 'Slow', SkillTarget.ENEMY_SINGLE, 10, 2, 0,
-  'Reduce the enemy defense by 20% during ' + EFFECT_DURATION + ' rounds.', 1, 1, 1, StatusName.DEFENSE, false);
+  'Reduce the enemy defense by 20% during ' + EFFECT_DURATION + ' rounds.', 1, 1, 1, defense, false);
 
 // Priest skills
 export const shock = new Damage(SkillType.ATTACK, 'Shock', SkillTarget.ENEMY_SINGLE, 5, 2, 0,

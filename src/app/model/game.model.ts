@@ -394,7 +394,7 @@ export class Game {
 
     this.oppositionId++;
 
-    this.party.forEachCharacter(c => c.clearStatuses());
+    this.party.forEachCharacter(c => c.clearStatusApplications());
     this.party.restoreTechPoints();
 
     this.fight = new Fight(this.party, this.dungeon.oppositions[this.oppositionId - 1]);

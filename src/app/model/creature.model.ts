@@ -15,57 +15,8 @@ import {
 } from './skill.model';
 import {logs} from './log.model';
 import {CRITICAL_BONUS, CRITICAL_CHANCE, DODGE_CHANCE, OPPOSITION_ROW_SIZE} from './constants.model';
-import {
-  CreatureClass,
-  LifeChangeEfficiency,
-  LifeChangeType,
-  LogType,
-  StatusExpiration,
-  StatusName
-} from "./common.model";
-
-/**
- * A status applied to a creature, such as a DOT, HOT, buff or debuff.
- */
-export class Status {
-
-  constructor(
-    public name: StatusName,
-    public expiration: StatusExpiration,
-    // True for a buff, false for a debuff,
-    public improvement: boolean,
-    // Duration in turns
-    public duration: number,
-    // For DOT and HOT, the power of the attack
-    public power: number,
-    // For DOT and HOT, the creature that inflicted the status
-    public originCreature: Creature | null
-  ) {
-  }
-
-  /**
-   * Can the status be applied multiple times (but only by different creatures).
-   */
-  isCumulative(): boolean {
-    return !(this.name == StatusName.DEFEND);
-  }
-
-  isDot(): boolean {
-    return this.name == StatusName.BLEED || this.name == StatusName.POISON;
-  }
-
-  isHot(): boolean {
-    return this.name == StatusName.REGEN;
-  }
-
-  decreaseDuration() {
-    this.duration--;
-  }
-
-  getOriginCreatureName(): string {
-    return (this.originCreature && this.originCreature.name) || '';
-  }
-}
+import {CreatureClass, LifeChangeEfficiency, LifeChangeType, LogType, StatusExpiration} from "./common.model";
+import {Status, StatusApplication} from "./status.model";
 
 /**
  * A life change due to a damage or heal.
@@ -160,8 +111,8 @@ export abstract class Creature {
   // Critical hit bonus, 1.5 means 50% extra hit or heal
   criticalBonus: number = CRITICAL_BONUS;
 
-  // Buffs and debuffs
-  statuses: Status[] = [];
+  // Applied statuses
+  statusApplications: StatusApplication[] = [];
 
   protected constructor(
     public name: string,
@@ -214,7 +165,7 @@ export abstract class Creature {
 
     // Remove all statuses when dead
     if (this.life <= 0) {
-      this.clearStatuses();
+      this.clearStatusApplications();
     }
 
     return lifeChange;
@@ -258,53 +209,57 @@ export abstract class Creature {
     return amount;
   }
 
-  getBuffs(): Status[] {
-    return this.statuses.filter(status => status.improvement);
+  getPositiveStatuses(): StatusApplication[] {
+    return this.statusApplications.filter(sa => sa.improvement);
   }
 
-  getDebuffs(): Status[] {
-    return this.statuses.filter(status => !status.improvement);
+  getNegativeStatuses(): StatusApplication[] {
+    return this.statusApplications.filter(sa => !sa.improvement);
   }
 
-  hasStatus(name: StatusName): boolean {
-    return this.statuses.map(status => status.name).includes(name);
+  hasStatus(status: Status): boolean {
+    return this.statusApplications.map(s => s.status.name).includes(status.name);
   }
 
-  hasBuff(name: StatusName): boolean {
-    return this.getBuffs().map(status => status.name).includes(name);
+  hasPositiveStatus(status: Status): boolean {
+    return this.getPositiveStatuses().map(s => s.status.name).includes(status.name);
+  }
+
+  hasNegativeStatus(status: Status): boolean {
+    return this.getNegativeStatuses().map(s => s.status.name).includes(status.name);
   }
 
   /**
    * Add a status to the creature. If already present, it is refreshed, i.e. replaced by a new one.
    */
-  addStatus(status: Status) {
+  applyStatus(statusApplication: StatusApplication) {
     // Remove the status if necessary
-    this.statuses = this.statuses.filter(s => s.name != status.name
-      || (status.isCumulative() && s.getOriginCreatureName() != status.getOriginCreatureName()));
+    this.statusApplications = this.statusApplications.filter(s => s.status.name != statusApplication.status.name
+      || (statusApplication.status.cumulative && s.getOriginCreatureName() != statusApplication.getOriginCreatureName()));
 
-    this.statuses.unshift(status);
+    this.statusApplications.unshift(statusApplication);
   }
 
   /**
    * Reduce the remaining duration of all statuses that use a given expiration type and remove the expired ones.
    */
   decreaseStatusesDuration(expiration: StatusExpiration, originCreature: Creature | null = null) {
-    for (let i = 0; i < this.statuses.length; i++) {
-      const status = this.statuses[i];
+    for (let i = 0; i < this.statusApplications.length; i++) {
+      const statusApplication = this.statusApplications[i];
 
-      if (status.expiration != expiration) {
+      if (statusApplication.status.expiration != expiration) {
         continue;
       }
 
-      if (originCreature != null && status.getOriginCreatureName() != originCreature.name) {
+      if (originCreature != null && statusApplication.getOriginCreatureName() != originCreature.name) {
         continue;
       }
 
-      status.decreaseDuration();
+      statusApplication.decreaseDuration();
 
-      if (status.duration <= 0) {
+      if (statusApplication.isOver()) {
         // Remove the status
-        this.statuses.splice(i--, 1);
+        this.statusApplications.splice(i--, 1);
       }
     }
   }
@@ -317,14 +272,14 @@ export abstract class Creature {
 
     // Compute the total amount of damage and heal
     let amount: number = 0;
-    this.statuses.forEach(status => {
-      if (status.originCreature != null) {
-        if (status.isDot()) {
+    this.statusApplications.forEach(statusApplication => {
+      if (statusApplication.originCreature != null) {
+        if (statusApplication.isDot()) {
           hasAtLeastOneDotOrHot = true;
-          amount -= computeEffectiveDamage(status.originCreature, this, status.power, false).amount;
-        } else if (status.isHot()) {
+          amount -= computeEffectiveDamage(statusApplication.originCreature, this, statusApplication.power, false).amount;
+        } else if (statusApplication.isHot()) {
           hasAtLeastOneDotOrHot = true;
-          amount += computeEffectiveHeal(status.originCreature, this, status.power).amount;
+          amount += computeEffectiveHeal(statusApplication.originCreature, this, statusApplication.power).amount;
         }
       }
     });
@@ -341,8 +296,8 @@ export abstract class Creature {
     }
   }
 
-  clearStatuses() {
-    this.statuses = [];
+  clearStatusApplications() {
+    this.statusApplications = [];
   }
 }
 

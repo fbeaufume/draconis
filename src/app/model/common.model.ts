@@ -27,30 +27,16 @@ export enum LifeChangeEfficiency {
 }
 
 /**
- * The various status names.
- */
-export enum StatusName {
-  DEFEND,
-  BLEED,
-  POISON,
-  REGEN,
-  COMBO1,
-  COMBO2,
-  ATTACK,
-  DEFENSE,
-}
-
-/**
  * Types of expiration of a status.
  */
 export enum StatusExpiration {
   // THe status expires at the beginning of the creature turn, used by Defend skill
   CREATURE_TURN,
-  // The status expires at the end of the round, used by HOTs and DOTs
+  // The status expires at the end of the round, used by life over time changes
   END_OF_ROUND,
   // The status expires at the end of the origin creature turn, used by combo strike
   ORIGIN_CREATURE_TURN_END,
-  // The status expires at the start of the origin creature turn, used by various buffs and debuffs
+  // The status expires at the start of the origin creature turn, used by attack or defense changes
   ORIGIN_CREATURE_TURN_START, // TODO FBE make these statuses expire
 }
 

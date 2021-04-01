@@ -1,5 +1,5 @@
 import {Component, Input} from '@angular/core';
-import {Status} from "../../../model/creature.model";
+import {StatusApplication} from "../../../model/status.model";
 
 @Component({
   selector: 'app-status-log',
@@ -9,7 +9,7 @@ import {Status} from "../../../model/creature.model";
 export class StatusLogComponent {
 
   @Input()
-  status: Status | null;
+  statusApplication: StatusApplication | null;
 
   constructor() {
   }

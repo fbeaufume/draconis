@@ -37,6 +37,6 @@
   </div>
 </div>
 <div class="flex justify-center space-x-2 pt-4">
-  <app-status *ngFor="let buff of character.getBuffs()" [status]="buff"></app-status>
-  <app-status *ngFor="let debuff of character.getDebuffs()" [status]="debuff"></app-status>
+  <app-status *ngFor="let statusApplication of character.getPositiveStatuses()" [statusApplication]="statusApplication"></app-status>
+  <app-status *ngFor="let statusApplication of character.getNegativeStatuses()" [statusApplication]="statusApplication"></app-status>
 </div>

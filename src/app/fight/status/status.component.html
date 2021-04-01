@@ -1,69 +1,70 @@
-<ng-container [ngSwitch]="status.name">
-  <svg *ngSwitchCase="0" class="inline-block" width="24" height="24" viewBox="0 0 100 100">
+<ng-container [ngSwitch]="statusApplication.status.name">
+  <svg *ngSwitchCase="'Defend'" class="inline-block" width="24" height="24" viewBox="0 0 100 100">
     <!-- Defend -->
-    <title>Defend, granted by {{ status.getOriginCreatureName() }}, 1 round left</title>
+    <title>Defend, granted by {{ statusApplication.getOriginCreatureName() }},
+      {{ statusApplication.remainingDuration }} round{{ statusApplication.remainingDuration > 1 ? 's' : '' }} left</title>
     <rect width="100" height="100" style="fill:#10B981;"/>
     <path d="M 20 20 A 20 40 0 1 0 80 20 Z" fill="none" stroke="#262626"
           style="stroke-width: 10; stroke-linecap: round;"/>
   </svg>
-  <svg *ngSwitchCase="1" class="inline-block" width="24" height="24" viewBox="0 0 100 100">
+  <svg *ngSwitchCase="'Bleed'" class="inline-block" width="24" height="24" viewBox="0 0 100 100">
     <!-- Bleed -->
     <title>
-      Bleed, inflicted by {{ status.getOriginCreatureName() }}, {{ status.duration }}
-      round{{ status.duration > 1 ? 's' : '' }} left</title>
+      Bleed, inflicted by {{ statusApplication.getOriginCreatureName() }},
+      {{ statusApplication.remainingDuration }} round{{ statusApplication.remainingDuration > 1 ? 's' : '' }} left</title>
     <rect width="100" height="100" style="fill:#EF4444;"/>
     <polyline points="35 50 50 25 65 50" stroke="#262626" style="stroke-width: 10; stroke-linecap: round; fill: none;"/>
     <path d="M 35 50 A 18 20 0 1 0 65 50" fill="none" stroke="#262626"
           style="stroke-width: 10; stroke-linecap: round;"/>
   </svg>
-  <svg *ngSwitchCase="2" class="inline-block" width="24" height="24" viewBox="0 0 100 100">
+  <svg *ngSwitchCase="'Poison'" class="inline-block" width="24" height="24" viewBox="0 0 100 100">
     <!-- Poison -->
-    <title>Poison, inflicted by {{ status.getOriginCreatureName() }}, {{ status.duration }}
-      round{{ status.duration > 1 ? 's' : '' }} left</title>
+    <title>Poison, inflicted by {{ statusApplication.getOriginCreatureName() }},
+      {{ statusApplication.remainingDuration }} round{{ statusApplication.remainingDuration > 1 ? 's' : '' }} left</title>
     <rect width="100" height="100" style="fill:#EF4444;"/>
     <circle cx="40" cy="25" r="10" fill="#262626"/>
     <circle cx="70" cy="45" r="15" fill="#262626"/>
     <circle cx="30" cy="65" r="20" fill="#262626"/>
   </svg>
-  <svg *ngSwitchCase="3" class="inline-block" width="24" height="24" viewBox="0 0 100 100">
+  <svg *ngSwitchCase="'Regen'" class="inline-block" width="24" height="24" viewBox="0 0 100 100">
     <!-- Regen -->
-    <title>Regeneration, granted by {{ status.getOriginCreatureName() }}, {{ status.duration }}
-      round{{ status.duration > 1 ? 's' : '' }} left</title>
+    <title>Regeneration, granted by {{ statusApplication.getOriginCreatureName() }},
+      {{ statusApplication.remainingDuration }} round{{ statusApplication.remainingDuration > 1 ? 's' : '' }} left</title>
     <rect width="100" height="100" style="fill:#10B981;"/>
     <line x1="35" y1="45" x2="35" y2="85" stroke="#262626" style="stroke-width: 10; stroke-linecap: round;"/>
     <line x1="15" y1="65" x2="55" y2="65" stroke="#262626" style="stroke-width: 10; stroke-linecap: round;"/>
     <line x1="70" y1="15" x2="70" y2="45" stroke="#262626" style="stroke-width: 10; stroke-linecap: round;"/>
     <line x1="55" y1="30" x2="85" y2="30" stroke="#262626" style="stroke-width: 10; stroke-linecap: round;"/>
   </svg>
-  <svg *ngSwitchCase="4" class="inline-block" width="24" height="24" viewBox="0 0 100 100">
+  <svg *ngSwitchCase="'Combo1'" class="inline-block" width="24" height="24" viewBox="0 0 100 100">
     <!-- Combo 1 -->
-    <title>Combo strike 1, granted by {{ status.getOriginCreatureName() }}, {{ status.duration }}
-      round{{ status.duration > 1 ? 's' : '' }} left</title>
+    <title>Combo strike 1, granted by {{ statusApplication.getOriginCreatureName() }},
+      {{ statusApplication.remainingDuration }} round{{ statusApplication.remainingDuration > 1 ? 's' : '' }} left</title>
     <rect width="100" height="100" style="fill:#EF4444;"/>
     <line x1="25" y1="75" x2="75" y2="25" stroke="#262626" style="stroke-width: 10; stroke-linecap: round;" />
   </svg>
-  <svg *ngSwitchCase="5" class="inline-block" width="24" height="24" viewBox="0 0 100 100">
+  <svg *ngSwitchCase="'Combo2'" class="inline-block" width="24" height="24" viewBox="0 0 100 100">
     <!-- Combo 2 -->
-    <title>Combo strike 2, granted by {{ status.getOriginCreatureName() }}, {{ status.duration }}
-      round{{ status.duration > 1 ? 's' : '' }} left</title>
+    <title>Combo strike 2, granted by {{ statusApplication.getOriginCreatureName() }},
+      {{ statusApplication.remainingDuration }} round{{ statusApplication.remainingDuration > 1 ? 's' : '' }} left</title>
     <rect width="100" height="100" style="fill:#EF4444;"/>
     <line x1="20" y1="60" x2="60" y2="20" stroke="#262626" style="stroke-width: 10; stroke-linecap: round;" />
     <line x1="40" y1="80" x2="80" y2="40" stroke="#262626" style="stroke-width: 10; stroke-linecap: round;" />
   </svg>
-  <svg *ngSwitchCase="6" class="inline-block" width="24" height="24" viewBox="0 0 100 100">
+  <svg *ngSwitchCase="'Attack'" class="inline-block" width="24" height="24" viewBox="0 0 100 100">
     <!-- Attack -->
-    <title>Attack, {{ status.improvement ? 'granted' : 'inflicted' }} by {{ status.getOriginCreatureName() }}, {{ status.duration }}
-      round{{ status.duration > 1 ? 's' : '' }} left</title>
-    <rect width="100" height="100" [ngStyle]="{ 'fill': status.improvement ? '#10B981' : '#EF4444' }" />
+    <title>Attack, {{ statusApplication.improvement ? 'granted' : 'inflicted' }} by {{ statusApplication.getOriginCreatureName() }},
+      {{ statusApplication.remainingDuration }} round{{ statusApplication.remainingDuration > 1 ? 's' : '' }} left</title>
+    <rect width="100" height="100" [ngStyle]="{ 'fill': statusApplication.improvement ? '#10B981' : '#EF4444' }" />
     <polygon points="40 55 50 10 60 55" style="fill: #262626;" />
     <line x1="30" y1="60" x2="70" y2="60" stroke="#262626" style="stroke-width: 10; stroke-linecap: round;" />
     <line x1="50" y1="60" x2="50" y2="80" stroke="#262626" style="stroke-width: 10; stroke-linecap: round;" />
   </svg>
-  <svg *ngSwitchCase="7" class="inline-block" width="24" height="24" viewBox="0 0 100 100">
+  <svg *ngSwitchCase="'Defense'" class="inline-block" width="24" height="24" viewBox="0 0 100 100">
     <!-- Defense -->
-    <title>Defense, {{ status.improvement ? 'granted' : 'inflicted' }} by {{ status.getOriginCreatureName() }}, {{ status.duration }}
-      round{{ status.duration > 1 ? 's' : '' }} left</title>
-    <rect width="100" height="100" [ngStyle]="{ 'fill': status.improvement ? '#10B981' : '#EF4444' }" />
+    <title>Defense, {{ statusApplication.improvement ? 'granted' : 'inflicted' }} by {{ statusApplication.getOriginCreatureName() }},
+      {{ statusApplication.remainingDuration }} round{{ statusApplication.remainingDuration > 1 ? 's' : '' }} left</title>
+    <rect width="100" height="100" [ngStyle]="{ 'fill': statusApplication.improvement ? '#10B981' : '#EF4444' }" />
     <path d="M 20 20 A 20 40 0 1 0 80 20 Z" fill="none" stroke="#262626" style="stroke-width: 10; stroke-linecap: round;"/>
     <path d="M 35 30 A 15 35 0 1 0 65 30 Z" fill="#262626" />
   </svg>

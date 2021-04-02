@@ -4,7 +4,7 @@ import {Fight} from './game.model';
 import {Character, Creature, Enemy, LifeChange, LifeGain, LifeLoss} from './creature.model';
 import {logs} from './log.model';
 import {DEFEND_BONUS, EFFECT_DURATION, RANDOMIZE_BASE, RANDOMIZE_RANGE} from './constants.model';
-import {LifeChangeEfficiency, LifeChangeType, LogType, SkillTarget, SkillType} from "./common.model";
+import {LifeChangeEfficiency, LifeChangeType, LogType, settings, SkillTarget, SkillType} from "./common.model";
 import {attack, bleed, combo1, combo2, defend, defense, poison, regen, Status, StatusApplication} from "./status.model";
 
 /**
@@ -193,7 +193,8 @@ export function computeEffectiveHeal(emitter: Creature, receiver: Creature, skil
  * Modify a number by adding or removing a small random value, then round the result
  */
 function randomizeAndRound(amount: number): number {
-  return Math.round((RANDOMIZE_BASE + Math.random() * RANDOMIZE_RANGE) * amount);
+  const randomizedDamage = settings.useRandom ? (RANDOMIZE_BASE + Math.random() * RANDOMIZE_RANGE) * amount : amount;
+  return Math.round(randomizedDamage);
 }
 
 /**
@@ -268,6 +269,8 @@ export class ApplyStatus extends Skill {
     super.execute(fight);
 
     fight.targetCreatures.forEach(targetCreature => {
+      // TODO FBE support dodge
+
       const status = new StatusApplication(this.status, this.improvementStatus, 0, fight.activeCreature);
       targetCreature.applyStatus(status);
 

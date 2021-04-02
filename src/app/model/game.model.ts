@@ -23,7 +23,8 @@ import {
   furyStrike,
   heal,
   healAll,
-  holyStrike, intimidate,
+  holyStrike,
+  intimidate,
   lightning,
   magicDefend,
   monkRevive,
@@ -34,55 +35,15 @@ import {
   shock,
   shot,
   Skill,
-  slash, slow,
+  slash,
+  slow,
   strike,
   techDefend,
   viperShot,
   weakness,
 } from './skill.model';
-import {logs} from './log.model';
-import {OPPOSITION_ROWS, PARTY_SIZE, PAUSE_LONG, PAUSE_SHORT} from './constants.model';
-import {CreatureClass, GameState, LogType} from "./common.model";
-
-/**
- * Get the value of a query string parameter (empty string if the param is present without a value) or null.
- */
-function getQueryStringParameterByName(name: string, url: string = window.location.href) {
-  name = name.replace(/[\[\]]/g, '\\$&');
-  const regex = new RegExp('[?&]' + name + '(=([^&#]*)|&|#|$)');
-  const results = regex.exec(url);
-  if (!results) {
-    return null;
-  }
-  if (!results[2]) {
-    return '';
-  }
-  return decodeURIComponent(results[2].replace(/\+/g, ' '));
-}
-
-/**
- * Global application settings.
- */
-export class Settings {
-
-  devMode: boolean = getQueryStringParameterByName('dev') != null;
-
-  fight: number = parseInt(getQueryStringParameterByName('fight') || '1');
-
-  // Pause in msec in the UI between actions
-  pauseDuration: number = this.devMode ? PAUSE_SHORT : PAUSE_LONG;
-
-  togglePauseDuration() {
-    if (this.pauseDuration == PAUSE_LONG) {
-      this.pauseDuration = PAUSE_SHORT;
-    } else {
-      this.pauseDuration = PAUSE_LONG;
-    }
-    logs.addNumberLog(LogType.PauseDurationChanged, this.pauseDuration);
-  }
-}
-
-export const settings: Settings = new Settings();
+import {OPPOSITION_ROWS, PARTY_SIZE} from './constants.model';
+import {CreatureClass, GameState, settings} from "./common.model";
 
 /**
  * The action order of characters and enemies during a turn.

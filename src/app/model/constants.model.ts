@@ -58,9 +58,19 @@ export const CRITICAL_CHANCE = 0.1;
 export const CRITICAL_BONUS = 1.5;
 
 /**
- * Damage modification when using the defend status.
+ * Damage modification when using the defend status. 0.2 means 20% damage reduction.
  */
-export const DEFEND_BONUS = 0.8;
+export const DEFEND_BONUS = 0.2;
+
+/**
+ * Damage modification when using the attack status. 0.2 means 20% damage augmentation or reduction.
+ */
+export const ATTACK_BONUS = 0.2;
+
+/**
+ * Damage modification when using the defend status. 0.2 means 20% damage augmentation or reduction.
+ */
+export const DEFENSE_BONUS = 0.2;
 
 /**
  * Percentage of mana gained by the characters after an enemy died.

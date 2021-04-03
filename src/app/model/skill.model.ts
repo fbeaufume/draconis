@@ -3,7 +3,14 @@
 import {Fight} from './game.model';
 import {Character, Creature, Enemy, LifeChange, LifeGain, LifeLoss} from './creature.model';
 import {logs} from './log.model';
-import {DEFEND_BONUS, EFFECT_DURATION, RANDOMIZE_BASE, RANDOMIZE_RANGE} from './constants.model';
+import {
+  ATTACK_BONUS,
+  DEFEND_BONUS,
+  DEFENSE_BONUS,
+  EFFECT_DURATION,
+  RANDOMIZE_BASE,
+  RANDOMIZE_RANGE
+} from './constants.model';
 import {LifeChangeEfficiency, LifeChangeType, LogType, settings, SkillTarget, SkillType} from "./common.model";
 import {attack, bleed, combo1, combo2, defend, defense, poison, regen, Status, StatusApplication} from "./status.model";
 
@@ -165,11 +172,27 @@ export function computeEffectiveDamage(emitter: Creature, receiver: Creature, sk
   const afterCritical = isCritical ? baseAmount * emitter.criticalBonus : baseAmount;
 
   // Apply the defend bonus
-  const afterDefend = receiver.hasStatus(defend) ? afterCritical * DEFEND_BONUS : afterCritical;
+  const afterDefend = receiver.hasStatus(defend) ? afterCritical * (1 - DEFEND_BONUS) : afterCritical;
 
-  // TODO FBE apply attack and defense bonuses
+  // Apply the attack bonus or malus
+  let afterAttack = afterDefend;
+  if (emitter.hasPositiveStatus(attack)) {
+    afterAttack = afterAttack * (1 + ATTACK_BONUS);
+  }
+  if (emitter.hasNegativeStatus(attack)) {
+    afterAttack = afterAttack * (1 - ATTACK_BONUS);
+  }
 
-  return new LifeLoss(randomizeAndRound(afterDefend), isCritical ? LifeChangeEfficiency.CRITICAL : LifeChangeEfficiency.NORMAL);
+  // Apply the defense bonus or malus
+  let afterDefense = afterAttack;
+  if (receiver.hasPositiveStatus(defense)) {
+    afterDefense = afterDefense * (1 - DEFENSE_BONUS);
+  }
+  if (receiver.hasNegativeStatus(defense)) {
+    afterDefense = afterDefense * (1 + DEFENSE_BONUS);
+  }
+
+  return new LifeLoss(randomizeAndRound(afterDefense), isCritical ? LifeChangeEfficiency.CRITICAL : LifeChangeEfficiency.NORMAL);
 }
 
 /**

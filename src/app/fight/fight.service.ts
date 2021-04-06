@@ -96,7 +96,12 @@ export class FightService {
     const creature = this.fight.turnOrder.currentOrder[0];
     this.fight.activeCreature = creature;
 
-    // Decrease the statuses duration and remove the expired ones
+    // Decrease some statuses duration and remove the expired ones
+    this.getAllCreatures().forEach(creature => {
+      creature.decreaseStatusesDuration(StatusExpiration.ORIGIN_CREATURE_TURN_START, this.fight.activeCreature);
+    });
+
+    // Decrease some statuses duration and remove the expired ones
     creature.decreaseStatusesDuration(StatusExpiration.CREATURE_TURN);
 
     // Skip dead characters

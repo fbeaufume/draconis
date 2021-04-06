@@ -272,7 +272,7 @@ export class Defend extends Skill {
     super.execute(fight);
 
     if (fight.activeCreature != null) {
-      fight.activeCreature.applyStatus(new StatusApplication(defend, true, 0, null));
+      fight.activeCreature.applyStatus(new StatusApplication(defend, true, 0, fight.activeCreature));
 
       logs.addCreatureLog(LogType.Defend, fight.activeCreature, null, null, null);
     }

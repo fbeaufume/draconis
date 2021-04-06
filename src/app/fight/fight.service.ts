@@ -101,9 +101,6 @@ export class FightService {
       creature.decreaseStatusesDuration(StatusExpiration.ORIGIN_CREATURE_TURN_START, this.fight.activeCreature);
     });
 
-    // Decrease some statuses duration and remove the expired ones
-    creature.decreaseStatusesDuration(StatusExpiration.CREATURE_TURN);
-
     // Skip dead characters
     if (creature.isDead()) {
       this.processNextTurn(false);

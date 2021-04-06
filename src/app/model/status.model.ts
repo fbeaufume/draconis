@@ -22,7 +22,7 @@ export class Status {
 }
 
 // The supported statuses
-export const defend = new Status('Defend', StatusExpiration.CREATURE_TURN, DEFEND_DURATION, false);
+export const defend = new Status('Defend', StatusExpiration.ORIGIN_CREATURE_TURN_START, DEFEND_DURATION, false);
 export const bleed = new Status('Bleed', StatusExpiration.END_OF_ROUND, EFFECT_DURATION, true);
 export const poison = new Status('Poison', StatusExpiration.END_OF_ROUND, EFFECT_DURATION, true);
 export const regen = new Status('Regen', StatusExpiration.END_OF_ROUND, EFFECT_DURATION, true);

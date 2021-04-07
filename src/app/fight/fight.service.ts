@@ -391,9 +391,7 @@ export class FightService {
    * Clear the selected creature and skill. Hide all displayed damages.
    */
   endOfTurnCleanup() {
-    this.getAllCreatures().forEach(creature => {
-      creature.clearLifeChange();
-    });
+    this.clearLifeChanges();
 
     this.fight.activeCreature = null;
     this.fight.focusedSkill = null;
@@ -402,9 +400,21 @@ export class FightService {
   }
 
   /**
+   * Clear the life changes on all creatures.
+   */
+  clearLifeChanges() {
+    this.getAllCreatures().forEach(creature => {
+      creature.clearLifeChange();
+    });
+  }
+
+  /**
    * Remove dead enemies.
    */
   processDeadEnemies() {
+    // Clear the life changes, otherwise the life change animation can be displayed a second time for alive creatures
+    this.clearLifeChanges();
+
     // Remove dead enemies from the opposition
     const removedEnemies: Enemy[] = this.fight.opposition.removeDeadEnemies();
 

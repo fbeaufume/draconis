@@ -32,7 +32,7 @@ export class Settings {
   useRandom: boolean = getQueryStringParameterByName('random') == null;
 
   // Pause in msec in the UI between actions
-  pauseDuration: number = this.devMode ? PAUSE_SHORT : PAUSE_LONG;
+  pauseDuration: number = PAUSE_LONG;
 
   togglePauseDuration() {
     if (this.pauseDuration == PAUSE_LONG) {

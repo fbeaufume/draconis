@@ -292,8 +292,6 @@ export class ApplyStatus extends Skill {
     super.execute(fight);
 
     fight.targetCreatures.forEach(targetCreature => {
-      // TODO FBE support dodge
-
       const status = new StatusApplication(this.status, this.improvementStatus, 0, fight.activeCreature);
       targetCreature.applyStatus(status);
 

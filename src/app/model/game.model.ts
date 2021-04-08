@@ -276,7 +276,7 @@ class FangForestDungeon extends Dungeon {
         new MeleeEnemy('Wolf G', 26, 5),
       ]),
       new Opposition('a mysterious old man', [
-        new OldManEnemy('Old Man', 28, 14, 2)
+        new OldManEnemy('Old Man', 28, 12, 2)
       ]),
       new Opposition('a band of goblins', [
         new MeleeEnemy('Goblin Solder A', 32, 7),
@@ -287,7 +287,7 @@ class FangForestDungeon extends Dungeon {
         new HealerEnemy('Goblin Shaman', 24, 8),
       ]),
       new Opposition('a young but fierce green dragon', [
-        new DragonEnemy('Green Dragon', 120, 9, 3),
+        new DragonEnemy('Green Dragon', 120, 10, 3),
       ]),
     ]);
   }

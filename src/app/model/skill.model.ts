@@ -563,7 +563,7 @@ export const regenerate = new Regenerate(SkillType.HEAL, 'Regenerate', SkillTarg
 
 // Warrior skills
 export const furyStrike = new DamageAndDamage(SkillType.ATTACK, 'Fury Strike', SkillTarget.ENEMY_SINGLE, 15, 1, 0,
-  'Inflict 150% damage to the target and 30% damage to self.', 1.5, 0.3);
+  'Inflict 140% damage to the target and 30% damage to self.', 1.4, 0.3);
 export const deepWound = new DamageAndBleed(SkillType.ATTACK, 'Deep Wound', SkillTarget.ENEMY_SINGLE, 20, 1, 0,
   'Inflict 50% damage to the target and 120% damage over ' + EFFECT_DURATION + ' rounds.', 0.5, 0.4);
 export const slash = new Damage(SkillType.ATTACK, 'Slash', SkillTarget.ENEMY_DOUBLE, 20, 1, 0,
@@ -572,8 +572,8 @@ export const intimidate = new ApplyStatus(SkillType.DETERIORATION, 'Intimidate',
   'Reduce the enemy attack by 20% during ' + EFFECT_DURATION + ' rounds.', 1, 1, 1, attack, false);
 
 // Monk skills
-export const comboStrike = new ComboDamage(SkillType.ATTACK, 'Combo Strike', SkillTarget.ENEMY_SINGLE, 15, 1, 0,
-  'Inflict 100% damage then 150% then 200% when used on the same target during consecutive turns.', 1.0, 1.5, 2.0);
+export const comboStrike = new ComboDamage(SkillType.ATTACK, 'Combo Strike', SkillTarget.ENEMY_SINGLE, 10, 1, 0,
+  'Inflict 80% damage then 120% then 160% when used on the same target during consecutive turns.', 0.8, 1.2, 1.6);
 export const recoveryStrike = new DamageAndHeal(SkillType.ATTACK, 'Recovery Strike', SkillTarget.ENEMY_SINGLE, 20, 1, 0,
   'Inflict 100% damage to the target and heal for 50% damage.', 1.0, 0.5);
 export const monkRevive = new Revive(SkillType.HEAL, 'Revive', SkillTarget.CHARACTER_DEAD, 40, 0, 0,

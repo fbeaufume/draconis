@@ -58,4 +58,4 @@ Features of the combat system :
 - Multiple element damages, e.g. physical damage plus poison damage
 - Chained attacks, i.e. consecutively using  the same attack changes its result
 - Taunts
-- Interceptions, e.g. intercept the next attack that would kill an allied crea ture
+- Interceptions, e.g. intercept the next attack that would kill an allied creature

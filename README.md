@@ -51,8 +51,9 @@ Features of the combat system :
 - Damaging skills and healing skills
 - One shot skills and over time skills
 - Bonus effects (a.k.a buffs) and malus effects (a.k.a debuffs)
+- State enabled skills (e.g. when full life or wounded, etc)
 - Several skill outcomes (success, miss, dodge, resist, critical)
-- Counter-attacks
+- Counter-attacks and/or thorns
 - Skills cooldown
 - Multiple effect skills, e.g. a damage and an effect
 - Multiple element damages, e.g. physical damage plus poison damage

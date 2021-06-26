@@ -236,17 +236,12 @@ class TestDungeon extends Dungeon {
         new MeleeEnemy('Monster 6', 50, 8),
         // new MeleeEnemy('Monster 7', 50, 8),
         // new MeleeEnemy('Monster 8', 50, 8),
-      ], [
-        // new MeleeEnemy('Monster 9', 5, 8),
-        // new MeleeEnemy('Monster 10', 5, 8),
-        // new MeleeEnemy('Monster 11', 5, 8),
-        // new MeleeEnemy('Monster 12', 5, 8),
       ]),
       new Opposition('some monsters', [
         new MeleeEnemy('Monster 1', 5, 8),
         new MeleeEnemy('Monster 2', 5, 8),
         new MeleeEnemy('Monster 3', 5, 8),
-      ], [], []),
+      ], []),
     ])
     ;
   }
@@ -262,18 +257,13 @@ class FangForestDungeon extends Dungeon {
       new Opposition('wild bears', [
         new BleederMeleeEnemy('Bear A', 38, 7),
         new BleederMeleeEnemy('Bear B', 38, 7),
-        new BleederMeleeEnemy('Bear C', 38, 7),
       ]),
       new Opposition('a pack of wolves', [
         new MeleeEnemy('Wolf A', 26, 5),
-        new MeleeEnemy('Wolf B', 26, 5),
       ], [
+        new MeleeEnemy('Wolf B', 26, 5),
         new MeleeEnemy('Wolf C', 26, 5),
         new MeleeEnemy('Wolf D', 26, 5),
-        new MeleeEnemy('Wolf E', 26, 5),
-      ], [
-        new MeleeEnemy('Wolf F', 26, 5),
-        new MeleeEnemy('Wolf G', 26, 5),
       ]),
       new Opposition('a mysterious old man', [
         new OldManEnemy('Old Man', 28, 12, 2)

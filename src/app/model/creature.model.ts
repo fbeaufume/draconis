@@ -706,13 +706,10 @@ export class Opposition {
     public description: string,
     // Front row enemies
     row1Enemies: Enemy[] = [],
-    // Middle row enemies
-    row2Enemies: Enemy[] = [],
     // Back row enemies
-    row3Enemies: Enemy[] = []) {
+    row2Enemies: Enemy[] = []) {
     this.rows.push(new EnemyRow(row1Enemies));
     this.rows.push(new EnemyRow(row2Enemies));
-    this.rows.push(new EnemyRow(row3Enemies));
   }
 
   /**

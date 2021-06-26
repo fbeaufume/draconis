@@ -18,12 +18,12 @@ export const PARTY_SIZE = PARTY_ROWS * PARTY_ROW_SIZE;
 /**
  * Number of enemy rows.
  */
-export const OPPOSITION_ROWS = 3;
+export const OPPOSITION_ROWS = 2;
 
 /**
  * Maximum number of enemies per row.
  */
-export const OPPOSITION_ROW_SIZE = 4;
+export const OPPOSITION_ROW_SIZE = 3;
 
 /**
  * A pause duration preset, in msec.

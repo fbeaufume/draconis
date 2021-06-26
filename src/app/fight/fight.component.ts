@@ -4,6 +4,7 @@ import {Character, Enemy} from '../model/creature.model';
 import {Skill} from '../model/skill.model';
 import {FightService} from './fight.service';
 import {GameState, settings} from "../model/common.model";
+import {OPPOSITION_ROWS} from "../model/constants.model";
 
 @Component({
   selector: 'app-fight',
@@ -32,6 +33,10 @@ export class FightComponent implements AfterViewInit {
 
   get game(): Game {
     return this.fightService.game;
+  }
+
+  get oppositionRowCount() {
+    return OPPOSITION_ROWS;
   }
 
   private scrollLogFrameToBottom(): void {

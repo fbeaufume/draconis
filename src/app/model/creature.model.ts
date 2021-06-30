@@ -83,7 +83,6 @@ export class LifeLoss extends LifeChange {
   }
 }
 
-
 /**
  * Base class for enemies and characters.
  */

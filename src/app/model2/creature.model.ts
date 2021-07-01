@@ -5,15 +5,44 @@ import {CreatureType} from "./creature-type.model";
  */
 export class Creature {
 
+  type: CreatureType;
+
+  /**
+   * The base creature name such as 'Bear'.
+   * Used to build the effective name, such as 'Bear A'.
+   */
+  name: string;
+
+  /**
+   * The maximum life.
+   */
+  lifeMax: number;
+
   /**
    * The current life.
    */
   life: number;
 
   constructor(
-    public type: CreatureType,
-    public lifeMax: number,
+    type: CreatureType,
+    name: string,
+    lifeMax: number,
   ) {
+    this.type = type;
+    this.name = name;
+    this.lifeMax = lifeMax;
     this.life = lifeMax;
+  }
+
+  isAlive(): boolean {
+    return this.life > 0;
+  }
+
+  isDead(): boolean {
+    return !this.isAlive();
+  }
+
+  isDamaged(): boolean {
+    return this.life < this.lifeMax;
   }
 }

@@ -1,4 +1,5 @@
 import {SkillType} from "./skill-type.model";
+import {SkillTargetType} from "./skill-target-type.model";
 
 /**
  * A creature skill. Can be used during a creature turn.
@@ -8,6 +9,8 @@ export class Skill {
   type: SkillType;
 
   name: string;
+
+  targetType: SkillTargetType;
 
   /**
    * The energy cost of the skill when used.
@@ -32,8 +35,9 @@ export class Skill {
 
   description: string;
 
-  constructor(type: SkillType, name: string) {
+  constructor(type: SkillType, name: string, targetType: SkillTargetType) {
     this.type = type;
     this.name = name;
+    this.targetType = targetType;
   }
 }

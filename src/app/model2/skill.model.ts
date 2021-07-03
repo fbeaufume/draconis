@@ -25,19 +25,31 @@ export class Skill {
   range: number;
 
   /**
-   * The cool down of the skill, i.e. the number of turns to wait before being able to use it again:
+   * The cooldown of the skill, i.e. the number of turns to wait before being able to use it again:
    * - 2 means that if the skill was used in the first turn, the creature will have to wait for
    * turn 3 before using it again
    * - 1 means that the skill can be used at most once per turn
    * - 0 means it can be used without restriction (relevant for multi attack creatures only)
    */
-  coolDown: number;
+  cooldownMax: number;
+
+  /**
+   * The current cooldown of the skill.
+   * This is decreased before a creature turn.
+   * When it reaches 0 the skill can be used.
+   */
+  cooldown: number;
 
   description: string;
 
-  constructor(type: SkillType, name: string, targetType: SkillTargetType) {
+  constructor(type: SkillType, name: string, targetType: SkillTargetType, cost: number, range: number, cooldownMax: number, description: string) {
     this.type = type;
     this.name = name;
     this.targetType = targetType;
+    this.cost = cost;
+    this.range = range;
+    this.cooldownMax = cooldownMax;
+    this.cooldown = cooldownMax;
+    this.description = description;
   }
 }

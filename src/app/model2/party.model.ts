@@ -2,7 +2,7 @@ import {Character} from "./character.model";
 import {CharacterRow} from "./character-row.model";
 
 /**
- * The characters party, i.e. the characters organized in rows.
+ * The characters party. The characters are organized in rows.
  */
 export class Party {
 
@@ -12,9 +12,9 @@ export class Party {
   rows: CharacterRow[] = [];
 
   constructor(
-    frontRowCharacters: Character[],
-    backRowCharacters: Character[]) {
-    this.rows.push(new CharacterRow(frontRowCharacters));
-    this.rows.push(new CharacterRow(backRowCharacters);
+    frontRow: Character[],
+    backRow: Character[]) {
+    this.rows.push(new CharacterRow(frontRow));
+    this.rows.push(new CharacterRow(backRow));
   }
 }

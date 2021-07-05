@@ -1,0 +1,39 @@
+@startuml
+
+class Creature {
+  type : CreatureType
+  name : string
+  lifeMax : number
+  life : number
+}
+
+class Character {
+}
+
+class CharacterRow {
+}
+
+class Party {
+}
+
+class Enemy {
+}
+
+class EnemyRow {
+}
+
+class Opposition {
+}
+
+class TurnOrder {
+}
+
+Creature <|-- Character
+Creature <|-- Enemy
+CharacterRow *-- "*" Character
+Party *-- "*" CharacterRow
+EnemyRow *-- "*" Enemy
+Opposition *-- "*" EnemyRow
+TurnOrder o-- "*" Creature
+
+@enduml

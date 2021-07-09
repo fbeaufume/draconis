@@ -7,6 +7,17 @@ class Creature {
   life : number
 }
 
+class Skill {
+  type: SkillType
+  name: string
+  targetType: SkillTargetType
+  cost: number
+  range: number
+  cooldownMax: number
+  cooldown: number
+  description: string
+}
+
 class Character {
 }
 
@@ -28,12 +39,22 @@ class Opposition {
 class TurnOrder {
 }
 
+class Fight {
+  round: number
+}
+
 Creature <|-- Character
+Character *-- "*" Skill
 Creature <|-- Enemy
 CharacterRow *-- "*" Character
 Party *-- "*" CharacterRow
 EnemyRow *-- "*" Enemy
 Opposition *-- "*" EnemyRow
 TurnOrder o-- "*" Creature
+Fight -- Party
+Fight -- Opposition
+Fight *-- TurnOrder
+Fight *-- Creature : "Active\ncreature"
+Fight *-- "*" Creature : "Target\ncreatures"
 
 @enduml

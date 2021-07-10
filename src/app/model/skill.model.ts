@@ -554,14 +554,10 @@ export const techDefend = new Defend(SkillType.DEFENSE, 'Defend', SkillTarget.NO
   'Reduce received damage by 20%. Gain 30 TP.');
 export const magicDefend = new Defend(SkillType.DEFENSE, 'Defend', SkillTarget.NONE, 0, 0, 0,
   'Reduce received damage by 20%.');
-export const strike = new Damage(SkillType.ATTACK, 'Strike', SkillTarget.ENEMY_SINGLE, 10, 1, 0,
-  'Inflict 100% damage.');
-export const heal = new Heal(SkillType.HEAL, 'Heal', SkillTarget.CHARACTER_ALIVE, 5, 0, 0,
-  'Heal a character for 100% damage.');
-export const regenerate = new Regenerate(SkillType.HEAL, 'Regenerate', SkillTarget.CHARACTER_ALIVE, 5, 0, 0,
-  'Heal a character for 50% damage and 120% damage over ' + EFFECT_DURATION + ' rounds.', 0.5, 0.4);
 
 // Warrior skills
+export const strike = new Damage(SkillType.ATTACK, 'Strike', SkillTarget.ENEMY_SINGLE, 10, 1, 0,
+  'Inflict 100% damage.');
 export const furyStrike = new DamageAndDamage(SkillType.ATTACK, 'Fury Strike', SkillTarget.ENEMY_SINGLE, 15, 1, 0,
   'Inflict 140% damage to the target and 30% damage to self.', 1.4, 0.3);
 export const deepWound = new DamageAndBleed(SkillType.ATTACK, 'Deep Wound', SkillTarget.ENEMY_SINGLE, 20, 1, 0,
@@ -571,28 +567,32 @@ export const slash = new Damage(SkillType.ATTACK, 'Slash', SkillTarget.ENEMY_DOU
 export const intimidate = new ApplyStatus(SkillType.DETERIORATION, 'Intimidate', SkillTarget.ENEMY_SINGLE, 20, 1, 0,
   'Reduce the enemy attack by 20% during ' + EFFECT_DURATION + ' rounds.', 1, 1, 1, attack, false);
 
-// Monk skills
-export const comboStrike = new ComboDamage(SkillType.ATTACK, 'Combo Strike', SkillTarget.ENEMY_SINGLE, 10, 1, 0,
-  'Inflict 80% damage then 120% then 160% when used on the same target during consecutive turns.', 0.8, 1.2, 1.6);
-export const recoveryStrike = new DamageAndHeal(SkillType.ATTACK, 'Recovery Strike', SkillTarget.ENEMY_SINGLE, 20, 1, 0,
-  'Inflict 100% damage to the target and heal for 50% damage.', 1.0, 0.5);
-export const monkRevive = new Revive(SkillType.HEAL, 'Revive', SkillTarget.CHARACTER_DEAD, 40, 0, 0,
-  'Revive a character with 50% life.');
-
 // Paladin skills
 export const holyStrike = new Damage(SkillType.ATTACK, 'Holy Strike', SkillTarget.ENEMY_SINGLE, 5, 1, 0,
   'Inflict 100% damage.');
+export const recoveryStrike = new DamageAndHeal(SkillType.ATTACK, 'Recovery Strike', SkillTarget.ENEMY_SINGLE, 10, 1, 0,
+  'Inflict 100% damage to the target and heal for 50% damage.', 1.0, 0.5);
+export const heal = new Heal(SkillType.HEAL, 'Heal', SkillTarget.CHARACTER_ALIVE, 5, 0, 0,
+  'Heal a character for 100% damage.');
 export const dualHeal: Skill = new DualHeal(SkillType.HEAL, 'Dual Heal', SkillTarget.CHARACTER_OTHER, 10, 0, 0,
   'Heal a character for 100% damage and self for 80% damage.', 1, 0.8);
+export const regenerate = new Regenerate(SkillType.HEAL, 'Regenerate', SkillTarget.CHARACTER_ALIVE, 5, 0, 0,
+  'Heal a character for 50% damage and 120% damage over ' + EFFECT_DURATION + ' rounds.', 0.5, 0.4);
+export const healAll = new Heal(SkillType.HEAL, 'Heal All', SkillTarget.CHARACTER_ALL_ALIVE, 20, 0, 0,
+  'Heal all characters for 50% damage.', 0.5);
+export const revive = new Revive(SkillType.HEAL, 'Revive', SkillTarget.CHARACTER_DEAD, 20, 0, 0,
+  'Revive a character with 50% life.');
 
 // Archer skills
 export const shot = new Damage(SkillType.ATTACK, 'Shot', SkillTarget.ENEMY_SINGLE, 10, 2, 0,
   'Inflict 100% damage.');
+export const comboShot = new ComboDamage(SkillType.ATTACK, 'Combo Shot', SkillTarget.ENEMY_SINGLE, 10, 1, 0,
+  'Inflict 80% damage then 120% then 160% when used on the same target during consecutive turns.', 0.8, 1.2, 1.6);
 export const preciseShot = new Damage(SkillType.ATTACK, 'Precise Shot', SkillTarget.ENEMY_SINGLE, 20, 2, 0,
   'Inflict 150% damage.', 1.5);
-export const viperShot = new DamageAndPoison(SkillType.ATTACK, 'Viper Shot', SkillTarget.ENEMY_SINGLE, 20, 2, 0,
+export const viperShot = new DamageAndPoison(SkillType.ATTACK, 'Viper Shot', SkillTarget.ENEMY_SINGLE, 15, 2, 0,
   'Inflict 50% damage to the target and 120% damage over ' + EFFECT_DURATION + ' rounds.', 0.5, 0.4);
-export const cripplingShot = new ApplyStatus(SkillType.DETERIORATION, 'Crippling Shot', SkillTarget.ENEMY_SINGLE, 20, 2, 0,
+export const cripplingShot = new ApplyStatus(SkillType.DETERIORATION, 'Crippling Shot', SkillTarget.ENEMY_SINGLE, 10, 2, 0,
   'Reduce the enemy defense by 20% during ' + EFFECT_DURATION + ' rounds.', 1, 1, 1, defense, false);
 
 // Mage skills
@@ -604,11 +604,3 @@ export const weakness = new ApplyStatus(SkillType.DETERIORATION, 'Weakness', Ski
   'Reduce the enemy attack by 20% during ' + EFFECT_DURATION + ' rounds.', 1, 1, 1, attack, false);
 export const slow = new ApplyStatus(SkillType.DETERIORATION, 'Slow', SkillTarget.ENEMY_SINGLE, 10, 2, 0,
   'Reduce the enemy defense by 20% during ' + EFFECT_DURATION + ' rounds.', 1, 1, 1, defense, false);
-
-// Priest skills
-export const shock = new Damage(SkillType.ATTACK, 'Shock', SkillTarget.ENEMY_SINGLE, 5, 2, 0,
-  'Inflict 100% damage.');
-export const healAll = new Heal(SkillType.HEAL, 'Heal All', SkillTarget.CHARACTER_ALL_ALIVE, 20, 0, 0,
-  'Heal all characters for 50% damage.', 0.5);
-export const revive = new Revive(SkillType.HEAL, 'Revive', SkillTarget.CHARACTER_DEAD, 20, 0, 0,
-  'Revive a character with 50% life.');

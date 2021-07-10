@@ -15,6 +15,7 @@ import {
   Party
 } from './creature.model';
 import {
+  comboShot,
   cripplingShot,
   deepWound,
   dualHeal,
@@ -26,7 +27,7 @@ import {
   intimidate,
   lightning,
   magicDefend,
-  preciseShot,
+  preciseShot, recoveryStrike,
   regenerate,
   revive,
   shot,
@@ -38,7 +39,6 @@ import {
   viperShot,
   weakness,
 } from './skill.model';
-import {OPPOSITION_ROWS, PARTY_SIZE} from './constants.model';
 import {CreatureClass, GameState, settings} from "./common.model";
 
 /**
@@ -81,8 +81,8 @@ export class TurnOrder {
     TurnOrder.shuffle(enemies);
 
     // Interleave all creatures
-    const bigFaction = enemies.length > PARTY_SIZE ? enemies : characters;
-    const smallFaction = enemies.length > PARTY_SIZE ? characters : enemies;
+    const bigFaction = enemies.length > characters.length ? enemies : characters;
+    const smallFaction = enemies.length > characters.length ? characters : enemies;
     let smallFactionPos = 0;
     for (let i = 0; i < bigFaction.length; i++) {
       this.currentOrder.push(bigFaction[i]);
@@ -291,12 +291,12 @@ export class Game {
         techDefend, strike, furyStrike, deepWound, slash, intimidate
       ]),
       new Character('Arwin', CreatureClass.PALADIN, 4, 20, true, 50, 10, [
-        magicDefend, holyStrike, heal, dualHeal, regenerate, healAll, revive
+        magicDefend, holyStrike, recoveryStrike, heal, dualHeal, regenerate, healAll, revive
       ])
     ],
     [
       new Character('Faren', CreatureClass.ARCHER, 4, 20, false, 50, 10, [
-        techDefend, shot, preciseShot, viperShot, cripplingShot
+        techDefend, shot, comboShot, preciseShot, viperShot, cripplingShot
       ]),
       new Character('Harika', CreatureClass.MAGE, 4, 20, true, 50, 10, [
         magicDefend, lightning, fireball, weakness, slow

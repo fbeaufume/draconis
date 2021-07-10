@@ -15,7 +15,6 @@ import {
   Party
 } from './creature.model';
 import {
-  comboStrike,
   cripplingShot,
   deepWound,
   dualHeal,
@@ -27,12 +26,9 @@ import {
   intimidate,
   lightning,
   magicDefend,
-  monkRevive,
   preciseShot,
-  recoveryStrike,
   regenerate,
   revive,
-  shock,
   shot,
   Skill,
   slash,
@@ -68,31 +64,20 @@ export class TurnOrder {
   }
 
   /**
-   * Build a good order of characters and enemies:
-   * - Good interleave of characters and monsters
-   * - Party healers must not evenly distributed
+   * Build a good order of characters and enemies.
    */
   initialize(party: Party, opposition: Opposition) {
-    // Shuffle the party damage dealers
-    const partyDealers: Character[] = [party.rows[0].characters[0], party.rows[1].characters[0], party.rows[1].characters[1]];
-    TurnOrder.shuffle(partyDealers);
-
-    // Shuffle the party healers
-    const partyHealers: Character[] = [party.rows[0].characters[1], party.rows[0].characters[2], party.rows[1].characters[2]];
-    TurnOrder.shuffle(partyHealers);
-
-    // Aggregate all party characters
-    const characters: Character[] = [partyDealers[0], partyHealers[0], partyDealers[1], partyHealers[1], partyDealers[2], partyHealers[2]];
+    // Shuffle tha party
+    const characters: Character[] = [];
+    party.forEachCharacter(character => characters.push(character));
+    TurnOrder.shuffle(characters);
 
     // Shuffle the enemies
     const enemies: Enemy[] = [];
-    for (let i = 0; i < OPPOSITION_ROWS; i++) { // Iterate over rows
-      for (let j = 0; j < opposition.rows[i].enemies.length; j++) { // Iterate over creatures
-        for (let k = 0; k < opposition.rows[i].enemies[j].actions; k++) { // Iterate over actions
-          enemies.push(opposition.rows[i].enemies[j]);
-        }
-      }
-    }
+    opposition.forEachEnemy(enemy => {
+      // An enemy with N actions is present N times in the turn order
+      for (let i = 0; i< enemy.actions; i++) {enemies.push(enemy)}
+    });
     TurnOrder.shuffle(enemies);
 
     // Interleave all creatures
@@ -305,21 +290,16 @@ export class Game {
       new Character('Melkan', CreatureClass.WARRIOR, 4, 20, false, 50, 10, [
         techDefend, strike, furyStrike, deepWound, slash, intimidate
       ]),
-      new Character('Cyl', CreatureClass.MONK, 4, 20, false, 50, 10, [
-        techDefend, strike, comboStrike, recoveryStrike, monkRevive
-      ]),
       new Character('Arwin', CreatureClass.PALADIN, 4, 20, true, 50, 10, [
-        magicDefend, holyStrike, heal, dualHeal, regenerate
-      ])],
+        magicDefend, holyStrike, heal, dualHeal, regenerate, healAll, revive
+      ])
+    ],
     [
       new Character('Faren', CreatureClass.ARCHER, 4, 20, false, 50, 10, [
         techDefend, shot, preciseShot, viperShot, cripplingShot
       ]),
       new Character('Harika', CreatureClass.MAGE, 4, 20, true, 50, 10, [
         magicDefend, lightning, fireball, weakness, slow
-      ]),
-      new Character('Nairo', CreatureClass.PRIEST, 4, 20, true, 50, 10, [
-        magicDefend, shock, heal, regenerate, healAll, revive
       ])
     ]);
 

@@ -8,7 +8,7 @@ export const PARTY_ROWS = 2;
 /**
  * Number of characters per row.
  */
-export const PARTY_ROW_SIZE = 3;
+export const PARTY_ROW_SIZE = 2;
 
 /**
  * Number of characters in the party.

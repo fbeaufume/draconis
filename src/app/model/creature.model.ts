@@ -447,7 +447,6 @@ export class Party {
 
     return characters;
   }
-
 }
 
 /**

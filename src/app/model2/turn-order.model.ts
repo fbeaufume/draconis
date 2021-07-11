@@ -12,4 +12,7 @@ export class TurnOrder {
    * Current turn order, the active creature if the first one.
    */
   currentOrder: Creature[] = [];
+
+  constructor(party: Party, opposition: Opposition) {
+  }
 }

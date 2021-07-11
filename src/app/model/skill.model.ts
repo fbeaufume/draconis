@@ -550,8 +550,8 @@ export const leave = new Leave(SkillType.DEFENSE, '', SkillTarget.NONE, 0, 0, 0,
 export const strikeSmall = new Damage(SkillType.ATTACK, '', SkillTarget.ENEMY_SINGLE, 0, 0, 0, '', 0.7);
 
 // Common characters skills
-export const techDefend = new Defend(SkillType.DEFENSE, 'Defend', SkillTarget.NONE, -30, 0, 0,
-  'Reduce received damage by 20%. Gain 30 TP.');
+export const techDefend = new Defend(SkillType.DEFENSE, 'Defend', SkillTarget.NONE, -1000, 0, 0,
+  'Reduce received damage by 20%. Regain all TP.');
 export const magicDefend = new Defend(SkillType.DEFENSE, 'Defend', SkillTarget.NONE, 0, 0, 0,
   'Reduce received damage by 20%.');
 
@@ -571,7 +571,7 @@ export const intimidate = new ApplyStatus(SkillType.DETERIORATION, 'Intimidate',
 export const holyStrike = new Damage(SkillType.ATTACK, 'Holy Strike', SkillTarget.ENEMY_SINGLE, 5, 1, 0,
   'Inflict 100% damage.');
 export const recoveryStrike = new DamageAndHeal(SkillType.ATTACK, 'Recovery Strike', SkillTarget.ENEMY_SINGLE, 10, 1, 0,
-  'Inflict 100% damage to the target and heal for 50% damage.', 1.0, 0.5);
+  'Inflict 100% damage to the target and heal self for 50% damage.', 1.0, 0.5);
 export const heal = new Heal(SkillType.HEAL, 'Heal', SkillTarget.CHARACTER_ALIVE, 5, 0, 0,
   'Heal a character for 100% damage.');
 export const dualHeal: Skill = new DualHeal(SkillType.HEAL, 'Dual Heal', SkillTarget.CHARACTER_OTHER, 10, 0, 0,

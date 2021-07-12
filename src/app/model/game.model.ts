@@ -19,6 +19,7 @@ import {
   cripplingShot,
   deepWound,
   dualHeal,
+  explosiveShot,
   fireball,
   furyStrike,
   heal,
@@ -27,7 +28,7 @@ import {
   intimidate,
   lightning,
   magicDefend,
-  preciseShot, recoveryStrike,
+  recoveryStrike,
   regenerate,
   revive,
   shot,
@@ -76,7 +77,9 @@ export class TurnOrder {
     const enemies: Enemy[] = [];
     opposition.forEachEnemy(enemy => {
       // An enemy with N actions is present N times in the turn order
-      for (let i = 0; i< enemy.actions; i++) {enemies.push(enemy)}
+      for (let i = 0; i < enemy.actions; i++) {
+        enemies.push(enemy)
+      }
     });
     TurnOrder.shuffle(enemies);
 
@@ -296,7 +299,7 @@ export class Game {
     ],
     [
       new Character('Faren', CreatureClass.ARCHER, 4, 20, false, 50, 10, [
-        techDefend, shot, comboShot, preciseShot, viperShot, cripplingShot
+        techDefend, shot, comboShot, viperShot, explosiveShot, cripplingShot
       ]),
       new Character('Harika', CreatureClass.MAGE, 4, 20, true, 50, 10, [
         magicDefend, lightning, fireball, weakness, slow

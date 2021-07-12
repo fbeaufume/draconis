@@ -588,8 +588,6 @@ export const shot = new Damage(SkillType.ATTACK, 'Shot', SkillTarget.ENEMY_SINGL
   'Inflict 100% damage.');
 export const comboShot = new ComboDamage(SkillType.ATTACK, 'Combo Shot', SkillTarget.ENEMY_SINGLE, 10, 1, 0,
   'Inflict 80% damage then 120% then 160% when used on the same target during consecutive turns.', 0.8, 1.2, 1.6);
-export const preciseShot = new Damage(SkillType.ATTACK, 'Precise Shot', SkillTarget.ENEMY_SINGLE, 20, 2, 0,
-  'Inflict 150% damage.', 1.5);
 export const viperShot = new DamageAndPoison(SkillType.ATTACK, 'Viper Shot', SkillTarget.ENEMY_SINGLE, 15, 2, 0,
   'Inflict 50% damage to the target and 120% damage over ' + EFFECT_DURATION + ' rounds.', 0.5, 0.4);
 export const cripplingShot = new ApplyStatus(SkillType.DETERIORATION, 'Crippling Shot', SkillTarget.ENEMY_SINGLE, 10, 2, 0,

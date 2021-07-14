@@ -236,7 +236,7 @@ class TestDungeon extends Dungeon {
 }
 
 /**
- * A simple forest themed dungeon.
+ * A forest themed dungeon.
  */
 class FangForestDungeon extends Dungeon {
 
@@ -271,6 +271,23 @@ class FangForestDungeon extends Dungeon {
   }
 }
 
+/**
+ * An undead themed dungeon.
+ */
+class ForgottenGraveyardDungeon extends Dungeon {
+
+  constructor() {
+    super('Forgotten Graveyard', [
+      new Opposition('skeletons', [
+        new MeleeEnemy('Skeleton A', 18, 6),
+        new MeleeEnemy('Skeleton B', 18, 6),
+      ],[
+        new MeleeEnemy('Skeleton C', 18, 6),
+        new MeleeEnemy('Skeleton D', 18, 6),
+      ]),
+    ]);
+  }
+}
 
 /**
  * All states when it is ok for the player to choose a character skill, possibly to change his mind.
@@ -306,7 +323,7 @@ export class Game {
       ])
     ]);
 
-  dungeons: Dungeon[] = [new TestDungeon(), new FangForestDungeon()];
+  dungeons: Dungeon[] = [new TestDungeon(), new FangForestDungeon(), new ForgottenGraveyardDungeon()];
   dungeon: Dungeon = this.dungeons[settings.devMode ? 0 : 1];
 
   fight: Fight = new Fight(this.party, new Opposition(''));

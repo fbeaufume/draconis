@@ -17,6 +17,8 @@ import {logs} from './log.model';
 import {CRITICAL_BONUS, CRITICAL_CHANCE, DODGE_CHANCE, OPPOSITION_ROW_SIZE} from './constants.model';
 import {CreatureClass, LifeChangeEfficiency, LifeChangeType, LogType, StatusExpiration} from "./common.model";
 import {Status, StatusApplication} from "./status.model";
+import {Character} from "./character.model";
+import {CharacterRow} from "./character-row.model";
 
 /**
  * A life change due to a damage or heal.
@@ -297,63 +299,6 @@ export abstract class Creature {
 
   clearStatusApplications() {
     this.statusApplications = [];
-  }
-}
-
-/**
- * A party character.
- */
-export class Character extends Creature {
-
-  constructor(
-    name: string,
-    // Character class, could be an enum
-    clazz: CreatureClass,
-    public level: number,
-    lifeMax: number,
-    // True for mana based character class, false for tech based
-    public useMana: boolean,
-    energyMax: number,
-    power: number,
-    skills: Skill[],
-  ) {
-    super(name, clazz, lifeMax, energyMax, power, skills);
-
-    this.restoreEnergy();
-  }
-
-  isCharacter(): boolean {
-    return true;
-  }
-
-  isEnemy(): boolean {
-    return false;
-  }
-
-  restoreEnergy() {
-    this.energy = this.energyMax;
-    this.updateEnergyPercent();
-  }
-}
-
-/**
- * A row of characters.
- */
-export class CharacterRow {
-
-  constructor(public characters: Character[]) {
-  }
-
-  /**
-   * Return true if there is at least one alive character in this row.
-   */
-  hasAliveCharacter(): boolean {
-    for (let i = 0; i < this.characters.length; i++) {
-      if (this.characters[i].isAlive()) {
-        return true;
-      }
-    }
-    return false;
   }
 }
 

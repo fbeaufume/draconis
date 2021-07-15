@@ -1,7 +1,7 @@
 // Skill related classes
 
 import {Fight} from './game.model';
-import {Character, Creature, Enemy, LifeChange, LifeGain, LifeLoss} from './creature.model';
+import {Creature, Enemy, LifeChange, LifeGain, LifeLoss} from './creature.model';
 import {logs} from './log.model';
 import {
   ATTACK_BONUS,
@@ -13,6 +13,7 @@ import {
 } from './constants.model';
 import {LifeChangeEfficiency, LifeChangeType, LogType, settings, SkillTarget, SkillType} from "./common.model";
 import {attack, bleed, combo1, combo2, defend, defense, poison, regen, Status, StatusApplication} from "./status.model";
+import {Character} from "./character.model";
 
 /**
  * A character skill.

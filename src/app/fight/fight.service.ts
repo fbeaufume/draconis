@@ -1,10 +1,11 @@
 import {Injectable} from '@angular/core';
 import {canSelectSkillStates, Fight, Game} from '../model/game.model';
-import {Character, Creature, Enemy, EnemyAction, Party} from '../model/creature.model';
+import {Creature, Enemy, EnemyAction, Party} from '../model/creature.model';
 import {Skill} from '../model/skill.model';
 import {Log, logs} from '../model/log.model';
 import {MANA_GAIN_PER_DEAD_ENEMY, PARTY_ROW_SIZE, PARTY_SIZE} from '../model/constants.model';
 import {GameState, LogType, settings, SkillTarget, StatusExpiration} from "../model/common.model";
+import {Character} from "../model/character.model";
 
 @Injectable({
   providedIn: 'root'

@@ -2,7 +2,6 @@
 
 import {
   BleederMeleeEnemy,
-  Character,
   Creature,
   DistanceEnemy,
   DragonEnemy,
@@ -41,6 +40,7 @@ import {
   weakness,
 } from './skill.model';
 import {CreatureClass, GameState, settings} from "./common.model";
+import {Character} from "./character.model";
 
 /**
  * The action order of characters and enemies during a turn.

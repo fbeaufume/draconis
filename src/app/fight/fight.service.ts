@@ -4,9 +4,10 @@ import {Creature, Enemy, EnemyAction} from '../model/creature.model';
 import {Skill} from '../model/skill.model';
 import {Log, logs} from '../model/log.model';
 import {MANA_GAIN_PER_DEAD_ENEMY, PARTY_ROW_SIZE, PARTY_SIZE} from '../model/constants.model';
-import {GameState, LogType, settings, SkillTarget, StatusExpiration} from "../model/common.model";
+import {GameState, LogType, SkillTarget, StatusExpiration} from "../model/common.model";
 import {Character} from "../model/character.model";
 import {Party} from "../model/party.model";
+import {settings} from "../model/settings.model";
 
 @Injectable({
   providedIn: 'root'

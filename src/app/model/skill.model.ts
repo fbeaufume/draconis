@@ -11,9 +11,10 @@ import {
   RANDOMIZE_BASE,
   RANDOMIZE_RANGE
 } from './constants.model';
-import {LifeChangeEfficiency, LifeChangeType, LogType, settings, SkillTarget, SkillType} from "./common.model";
+import {LifeChangeEfficiency, LifeChangeType, LogType, SkillTarget, SkillType} from "./common.model";
 import {attack, bleed, combo1, combo2, defend, defense, poison, regen, Status, StatusApplication} from "./status.model";
 import {Character} from "./character.model";
+import {settings} from "./settings.model";
 
 /**
  * A character skill.

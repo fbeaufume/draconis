@@ -3,9 +3,10 @@ import {canSelectSkillStates, Fight, Game} from '../model/game.model';
 import {Enemy} from '../model/creature.model';
 import {Skill} from '../model/skill.model';
 import {FightService} from './fight.service';
-import {GameState, settings} from "../model/common.model";
+import {GameState} from "../model/common.model";
 import {OPPOSITION_ROWS} from "../model/constants.model";
 import {Character} from "../model/character.model";
+import {settings} from "../model/settings.model";
 
 @Component({
   selector: 'app-fight',

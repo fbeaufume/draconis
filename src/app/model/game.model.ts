@@ -38,9 +38,10 @@ import {
   viperShot,
   weakness,
 } from './skill.model';
-import {CreatureClass, GameState, settings} from "./common.model";
+import {CreatureClass, GameState} from "./common.model";
 import {Character} from "./character.model";
 import {Party} from "./party.model";
+import {settings} from "./settings.model";
 
 /**
  * The action order of characters and enemies during a turn.

@@ -10,8 +10,7 @@ import {
   HealerEnemy,
   MeleeEnemy,
   OldManEnemy,
-  Opposition,
-  Party
+  Opposition
 } from './creature.model';
 import {
   comboShot,
@@ -41,6 +40,7 @@ import {
 } from './skill.model';
 import {CreatureClass, GameState, settings} from "./common.model";
 import {Character} from "./character.model";
+import {Party} from "./party.model";
 
 /**
  * The action order of characters and enemies during a turn.

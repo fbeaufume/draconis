@@ -5,7 +5,13 @@ import {Character} from "./character.model";
  */
 export class CharacterRow {
 
-  constructor(public characters: Character[]) {
+  /**
+   * The characters of the row.
+   */
+  characters: Character[];
+
+  constructor(characters: Character[]) {
+    this.characters = characters
   }
 
   /**

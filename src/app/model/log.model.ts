@@ -1,12 +1,9 @@
 // Log related classes
 
-/**
- * The various types of log messages.
- * When any numeric value is changed, update log.component.html.
- */
-import {Creature, LifeChange} from './creature.model';
+import {Creature} from './creature.model';
 import {LogType} from "./common.model";
 import {StatusApplication} from "./status.model";
+import {LifeChange} from "./life-change.model";
 
 /**
  * A log message.

@@ -16,8 +16,9 @@ import {
 import {logs} from './log.model';
 import {CRITICAL_BONUS, CRITICAL_CHANCE, DODGE_CHANCE, OPPOSITION_ROW_SIZE} from './constants.model';
 import {CreatureClass, LifeChangeEfficiency, LifeChangeType, LogType, StatusExpiration} from "./common.model";
-import {Status, StatusApplication} from "./status.model";
+import {StatusType} from "./status-type.model";
 import {LifeChange} from "./life-change.model";
+import {StatusApplication} from "./status-application.model";
 
 /**
  * Base class for enemies and characters.
@@ -152,15 +153,15 @@ export abstract class Creature {
     return this.statusApplications.filter(sa => !sa.improvement);
   }
 
-  hasStatus(status: Status): boolean {
+  hasStatus(status: StatusType): boolean {
     return this.statusApplications.map(s => s.status.name).includes(status.name);
   }
 
-  hasPositiveStatus(status: Status): boolean {
+  hasPositiveStatus(status: StatusType): boolean {
     return this.getPositiveStatuses().map(s => s.status.name).includes(status.name);
   }
 
-  hasNegativeStatus(status: Status): boolean {
+  hasNegativeStatus(status: StatusType): boolean {
     return this.getNegativeStatuses().map(s => s.status.name).includes(status.name);
   }
 

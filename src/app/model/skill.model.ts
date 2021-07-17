@@ -12,10 +12,11 @@ import {
   RANDOMIZE_RANGE
 } from './constants.model';
 import {LifeChangeEfficiency, LifeChangeType, LogType, SkillTarget, SkillType} from "./common.model";
-import {attack, bleed, combo1, combo2, defend, defense, poison, regen, Status, StatusApplication} from "./status.model";
+import {attack, bleed, combo1, combo2, defend, defense, poison, regen, StatusType} from "./status-type.model";
 import {Character} from "./character.model";
 import {settings} from "./settings.model";
 import {LifeChange, LifeGain, LifeLoss} from "./life-change.model";
+import {StatusApplication} from "./status-application.model";
 
 /**
  * A character skill.
@@ -35,7 +36,7 @@ export abstract class Skill {
     // The power levels of the skill
     public powers: number[] = [],
     // The status to apply (defaults to an arbitrary value is used to simplify null management)
-    public status: Status = defend,
+    public status: StatusType = defend,
     // Is the effect an improvement
     public improvementStatus: boolean = true
   ) {

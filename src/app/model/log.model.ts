@@ -2,8 +2,8 @@
 
 import {Creature} from './creature.model';
 import {LogType} from "./common.model";
-import {StatusApplication} from "./status.model";
 import {LifeChange} from "./life-change.model";
+import {StatusApplication} from "./status-application.model";
 
 /**
  * A log message.

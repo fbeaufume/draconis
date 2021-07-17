@@ -1,47 +1,19 @@
 // Classes for the whole game and fights
 
-import {
-  Creature,
-  EndOfRound
-} from './creature.model';
-import {
-  comboShot,
-  cripplingShot,
-  deepWound,
-  dualHeal,
-  explosiveShot,
-  fireball,
-  furyStrike,
-  heal,
-  healAll,
-  holyStrike,
-  intimidate,
-  lightning,
-  magicDefend,
-  recoveryStrike,
-  regenerate,
-  revive,
-  shot,
-  Skill,
-  slash,
-  slow,
-  strike,
-  techDefend,
-  viperShot,
-  weakness,
-} from './skill.model';
+import {Creature, EndOfRound} from './creature.model';
+import {Skill, SkillList} from './skill.model';
 import {CreatureClass, GameState} from "./common.model";
 import {Character} from "./character.model";
 import {Party} from "./party.model";
 import {settings} from "./settings.model";
 import {
-    BleederMeleeEnemy,
-    DistanceEnemy,
-    DragonEnemy,
-    Enemy,
-    HealerEnemy,
-    MeleeEnemy,
-    OldManEnemy
+  BleederMeleeEnemy,
+  DistanceEnemy,
+  DragonEnemy,
+  Enemy,
+  HealerEnemy,
+  MeleeEnemy,
+  OldManEnemy
 } from "./enemy.model";
 import {Opposition} from "./opposition.model";
 
@@ -284,7 +256,7 @@ class ForgottenGraveyardDungeon extends Dungeon {
       new Opposition('skeletons', [
         new MeleeEnemy('Skeleton A', 18, 6),
         new MeleeEnemy('Skeleton B', 18, 6),
-      ],[
+      ], [
         new MeleeEnemy('Skeleton C', 18, 6),
         new MeleeEnemy('Skeleton D', 18, 6),
       ]),
@@ -311,18 +283,18 @@ export class Game {
 
   party: Party = new Party([
       new Character('Melkan', CreatureClass.WARRIOR, 4, 20, false, 50, 10, [
-        techDefend, strike, furyStrike, deepWound, slash, intimidate
+        SkillList.techDefend, SkillList.strike, SkillList.furyStrike, SkillList.deepWound, SkillList.slash, SkillList.intimidate
       ]),
       new Character('Arwin', CreatureClass.PALADIN, 4, 20, true, 50, 10, [
-        magicDefend, holyStrike, recoveryStrike, heal, dualHeal, regenerate, healAll, revive
+        SkillList.magicDefend, SkillList.holyStrike, SkillList.recoveryStrike, SkillList.heal, SkillList.dualHeal, SkillList.regenerate, SkillList.healAll, SkillList.revive
       ])
     ],
     [
       new Character('Faren', CreatureClass.ARCHER, 4, 20, false, 50, 10, [
-        techDefend, shot, comboShot, viperShot, explosiveShot, cripplingShot
+        SkillList.techDefend, SkillList.shot, SkillList.comboShot, SkillList.viperShot, SkillList.explosiveShot, SkillList.cripplingShot
       ]),
       new Character('Harika', CreatureClass.MAGE, 4, 20, true, 50, 10, [
-        magicDefend, lightning, fireball, weakness, slow
+        SkillList.magicDefend, SkillList.lightning, SkillList.fireball, SkillList.weakness, SkillList.slow
       ])
     ]);
 

@@ -3,6 +3,7 @@
 import {Fight} from './game.model';
 import {Creature} from './creature.model';
 import {logs} from './log.model';
+// TODO FBE move the constants inside a Constants class to simplify these imports
 import {
   ATTACK_BONUS,
   DEFEND_BONUS,
@@ -544,64 +545,71 @@ export class Revive extends Skill {
   }
 }
 
-// Enemies skills
-export const advance = new Advance(SkillType.DEFENSE, '', SkillTarget.NONE, 0, 0, 0, '');
-export const wait = new Wait(SkillType.DEFENSE, '', SkillTarget.NONE, 0, 0, 0, '');
-export const leave = new Leave(SkillType.DEFENSE, '', SkillTarget.NONE, 0, 0, 0, '');
-export const strikeSmall = new Damage(SkillType.ATTACK, '', SkillTarget.ENEMY_SINGLE, 0, 0, 0, '', [0.7]);
+/**
+ * All the available skills.
+ * They are exported as static members of a class instead a constants to prevent circular dependency errors.
+ */
+export class SkillList {
 
-// Common characters skills
-export const techDefend = new Defend(SkillType.DEFENSE, 'Defend', SkillTarget.NONE, -1000, 0, 0,
-  'Reduce received damage by 20%. Regain all TP.');
-export const magicDefend = new Defend(SkillType.DEFENSE, 'Defend', SkillTarget.NONE, 0, 0, 0,
-  'Reduce received damage by 20%.');
+  // Enemies skills
+  public static readonly advance = new Advance(SkillType.DEFENSE, '', SkillTarget.NONE, 0, 0, 0, '');
+  public static readonly wait = new Wait(SkillType.DEFENSE, '', SkillTarget.NONE, 0, 0, 0, '');
+  public static readonly leave = new Leave(SkillType.DEFENSE, '', SkillTarget.NONE, 0, 0, 0, '');
+  public static readonly strikeSmall = new Damage(SkillType.ATTACK, '', SkillTarget.ENEMY_SINGLE, 0, 0, 0, '', [0.7]);
 
-// Warrior skills
-export const strike = new Damage(SkillType.ATTACK, 'Strike', SkillTarget.ENEMY_SINGLE, 10, 1, 0,
-  'Inflict 100% damage.');
-export const furyStrike = new DamageAndDamage(SkillType.ATTACK, 'Fury Strike', SkillTarget.ENEMY_SINGLE, 15, 1, 0,
-  'Inflict 140% damage to the target and 30% damage to self.', [1.4, 0.3]);
-export const deepWound = new DamageAndBleed(SkillType.ATTACK, 'Deep Wound', SkillTarget.ENEMY_SINGLE, 20, 1, 0,
-  'Inflict 50% damage to the target and 120% damage over ' + EFFECT_DURATION + ' rounds.', [0.5, 0.4]);
-export const slash = new Damage(SkillType.ATTACK, 'Slash', SkillTarget.ENEMY_DOUBLE, 20, 1, 0,
-  'Inflict 80% damage to two adjacent targets.', [0.8]);
-export const intimidate = new ApplyStatus(SkillType.DETERIORATION, 'Intimidate', SkillTarget.ENEMY_SINGLE, 20, 1, 0,
-  'Reduce the enemy attack by 20% during ' + EFFECT_DURATION + ' rounds.', [], attack, false);
+  // Common characters skills
+  public static readonly techDefend = new Defend(SkillType.DEFENSE, 'Defend', SkillTarget.NONE, -1000, 0, 0,
+    'Reduce received damage by 20%. Regain all TP.');
+  public static readonly magicDefend = new Defend(SkillType.DEFENSE, 'Defend', SkillTarget.NONE, 0, 0, 0,
+    'Reduce received damage by 20%.');
 
-// Paladin skills
-export const holyStrike = new Damage(SkillType.ATTACK, 'Holy Strike', SkillTarget.ENEMY_SINGLE, 5, 1, 0,
-  'Inflict 100% damage.');
-export const recoveryStrike = new DamageAndHeal(SkillType.ATTACK, 'Recovery Strike', SkillTarget.ENEMY_SINGLE, 10, 1, 0,
-  'Inflict 100% damage to the target and heal self for 50% damage.', [1.0, 0.5]);
-export const heal = new Heal(SkillType.HEAL, 'Heal', SkillTarget.CHARACTER_ALIVE, 5, 0, 0,
-  'Heal a character for 100% damage.');
-export const dualHeal: Skill = new DualHeal(SkillType.HEAL, 'Dual Heal', SkillTarget.CHARACTER_OTHER, 10, 0, 0,
-  'Heal a character for 100% damage and self for 80% damage.', [1, 0.8]);
-export const regenerate = new Regenerate(SkillType.HEAL, 'Regenerate', SkillTarget.CHARACTER_ALIVE, 5, 0, 0,
-  'Heal a character for 50% damage and 120% damage over ' + EFFECT_DURATION + ' rounds.', [0.5, 0.4]);
-export const healAll = new Heal(SkillType.HEAL, 'Heal All', SkillTarget.CHARACTER_ALL_ALIVE, 20, 0, 0,
-  'Heal all characters for 50% damage.', [0.5]);
-export const revive = new Revive(SkillType.HEAL, 'Revive', SkillTarget.CHARACTER_DEAD, 20, 0, 0,
-  'Revive a character with 50% life.');
+  // Warrior skills
+  public static readonly strike = new Damage(SkillType.ATTACK, 'Strike', SkillTarget.ENEMY_SINGLE, 10, 1, 0,
+    'Inflict 100% damage.');
+  public static readonly furyStrike = new DamageAndDamage(SkillType.ATTACK, 'Fury Strike', SkillTarget.ENEMY_SINGLE, 15, 1, 0,
+    'Inflict 140% damage to the target and 30% damage to self.', [1.4, 0.3]);
+  public static readonly deepWound = new DamageAndBleed(SkillType.ATTACK, 'Deep Wound', SkillTarget.ENEMY_SINGLE, 20, 1, 0,
+    'Inflict 50% damage to the target and 120% damage over ' + EFFECT_DURATION + ' rounds.', [0.5, 0.4]);
+  public static readonly slash = new Damage(SkillType.ATTACK, 'Slash', SkillTarget.ENEMY_DOUBLE, 20, 1, 0,
+    'Inflict 80% damage to two adjacent targets.', [0.8]);
+  public static readonly intimidate = new ApplyStatus(SkillType.DETERIORATION, 'Intimidate', SkillTarget.ENEMY_SINGLE, 20, 1, 0,
+    'Reduce the enemy attack by 20% during ' + EFFECT_DURATION + ' rounds.', [], attack, false);
 
-// Archer skills
-export const shot = new Damage(SkillType.ATTACK, 'Shot', SkillTarget.ENEMY_SINGLE, 10, 2, 0,
-  'Inflict 100% damage.');
-export const comboShot = new ComboDamage(SkillType.ATTACK, 'Combo Shot', SkillTarget.ENEMY_SINGLE, 10, 1, 0,
-  'Inflict 80% damage then 120% then 160% when used on the same target during consecutive turns.', [0.8, 1.2, 1.6]);
-export const viperShot = new DamageAndPoison(SkillType.ATTACK, 'Viper Shot', SkillTarget.ENEMY_SINGLE, 15, 2, 0,
-  'Inflict 50% damage to the target and 120% damage over ' + EFFECT_DURATION + ' rounds.', [0.5, 0.4]);
-export const explosiveShot = new Damage(SkillType.ATTACK, 'Explosive Shot', SkillTarget.ENEMY_TRIPLE, 20, 2, 0,
-  'Inflict 60% damage to three adjacent targets.', [0.6]);
-export const cripplingShot = new ApplyStatus(SkillType.DETERIORATION, 'Crippling Shot', SkillTarget.ENEMY_SINGLE, 10, 2, 0,
-  'Reduce the enemy defense by 20% during ' + EFFECT_DURATION + ' rounds.', [], defense, false);
+  // Paladin skills
+  public static readonly holyStrike = new Damage(SkillType.ATTACK, 'Holy Strike', SkillTarget.ENEMY_SINGLE, 5, 1, 0,
+    'Inflict 100% damage.');
+  public static readonly recoveryStrike = new DamageAndHeal(SkillType.ATTACK, 'Recovery Strike', SkillTarget.ENEMY_SINGLE, 10, 1, 0,
+    'Inflict 100% damage to the target and heal self for 50% damage.', [1.0, 0.5]);
+  public static readonly heal = new Heal(SkillType.HEAL, 'Heal', SkillTarget.CHARACTER_ALIVE, 5, 0, 0,
+    'Heal a character for 100% damage.');
+  public static readonly dualHeal: Skill = new DualHeal(SkillType.HEAL, 'Dual Heal', SkillTarget.CHARACTER_OTHER, 10, 0, 0,
+    'Heal a character for 100% damage and self for 80% damage.', [1, 0.8]);
+  public static readonly regenerate = new Regenerate(SkillType.HEAL, 'Regenerate', SkillTarget.CHARACTER_ALIVE, 5, 0, 0,
+    'Heal a character for 50% damage and 120% damage over ' + EFFECT_DURATION + ' rounds.', [0.5, 0.4]);
+  public static readonly healAll = new Heal(SkillType.HEAL, 'Heal All', SkillTarget.CHARACTER_ALL_ALIVE, 20, 0, 0,
+    'Heal all characters for 50% damage.', [0.5]);
+  public static readonly revive = new Revive(SkillType.HEAL, 'Revive', SkillTarget.CHARACTER_DEAD, 20, 0, 0,
+    'Revive a character with 50% life.');
 
-// Mage skills
-export const lightning = new Damage(SkillType.ATTACK, 'Lightning', SkillTarget.ENEMY_SINGLE, 5, 2, 0,
-  'Inflict 100% damage.');
-export const fireball = new Damage(SkillType.ATTACK, 'Fireball', SkillTarget.ENEMY_TRIPLE, 10, 2, 0,
-  'Inflict 60% damage to three adjacent targets.', [0.6]);
-export const weakness = new ApplyStatus(SkillType.DETERIORATION, 'Weakness', SkillTarget.ENEMY_SINGLE, 10, 2, 0,
-  'Reduce the enemy attack by 20% during ' + EFFECT_DURATION + ' rounds.', [], attack, false);
-export const slow = new ApplyStatus(SkillType.DETERIORATION, 'Slow', SkillTarget.ENEMY_SINGLE, 10, 2, 0,
-  'Reduce the enemy defense by 20% during ' + EFFECT_DURATION + ' rounds.', [], defense, false);
+  // Archer skills
+  public static readonly shot = new Damage(SkillType.ATTACK, 'Shot', SkillTarget.ENEMY_SINGLE, 10, 2, 0,
+    'Inflict 100% damage.');
+  public static readonly comboShot = new ComboDamage(SkillType.ATTACK, 'Combo Shot', SkillTarget.ENEMY_SINGLE, 10, 1, 0,
+    'Inflict 80% damage then 120% then 160% when used on the same target during consecutive turns.', [0.8, 1.2, 1.6]);
+  public static readonly viperShot = new DamageAndPoison(SkillType.ATTACK, 'Viper Shot', SkillTarget.ENEMY_SINGLE, 15, 2, 0,
+    'Inflict 50% damage to the target and 120% damage over ' + EFFECT_DURATION + ' rounds.', [0.5, 0.4]);
+  public static readonly explosiveShot = new Damage(SkillType.ATTACK, 'Explosive Shot', SkillTarget.ENEMY_TRIPLE, 20, 2, 0,
+    'Inflict 60% damage to three adjacent targets.', [0.6]);
+  public static readonly cripplingShot = new ApplyStatus(SkillType.DETERIORATION, 'Crippling Shot', SkillTarget.ENEMY_SINGLE, 10, 2, 0,
+    'Reduce the enemy defense by 20% during ' + EFFECT_DURATION + ' rounds.', [], defense, false);
+
+  // Mage skills
+  public static readonly lightning = new Damage(SkillType.ATTACK, 'Lightning', SkillTarget.ENEMY_SINGLE, 5, 2, 0,
+    'Inflict 100% damage.');
+  public static readonly fireball = new Damage(SkillType.ATTACK, 'Fireball', SkillTarget.ENEMY_TRIPLE, 10, 2, 0,
+    'Inflict 60% damage to three adjacent targets.', [0.6]);
+  public static readonly weakness = new ApplyStatus(SkillType.DETERIORATION, 'Weakness', SkillTarget.ENEMY_SINGLE, 10, 2, 0,
+    'Reduce the enemy attack by 20% during ' + EFFECT_DURATION + ' rounds.', [], attack, false);
+  public static readonly slow = new ApplyStatus(SkillType.DETERIORATION, 'Slow', SkillTarget.ENEMY_SINGLE, 10, 2, 0,
+    'Reduce the enemy defense by 20% during ' + EFFECT_DURATION + ' rounds.', [], defense, false);
+}

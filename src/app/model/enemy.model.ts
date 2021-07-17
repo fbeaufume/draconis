@@ -1,5 +1,5 @@
 import {Game} from "./game.model";
-import {advance, deepWound, heal, leave, Skill, strike, strikeSmall, wait} from "./skill.model";
+import {Skill, SkillList} from "./skill.model";
 import {CreatureClass, LogType} from "./common.model";
 import {LifeChange} from "./life-change.model";
 import {logs} from "./log.model";
@@ -28,12 +28,12 @@ export abstract class Enemy extends Creature {
     /**
      * Main damaging skill.
      */
-    mainAttack: Skill = strike;
+    mainAttack: Skill = SkillList.strike;
 
     /**
      * Main healing skill, for enemy types that can heal.
      */
-    mainHeal: Skill = heal;
+    mainHeal: Skill = SkillList.heal;
 
     constructor(
         name: string,
@@ -102,11 +102,11 @@ export class MeleeEnemy extends Enemy {
 
                 game.opposition.removeEmptyRows();
 
-                return new EnemyAction(advance, []);
+                return new EnemyAction(SkillList.advance, []);
             } else {
                 // The target row is full, so wait
 
-                return new EnemyAction(wait, []);
+                return new EnemyAction(SkillList.wait, []);
             }
         } else {
             // Hit a front row character
@@ -122,7 +122,7 @@ export class MeleeEnemy extends Enemy {
 export class BleederMeleeEnemy extends MeleeEnemy {
 
     customize() {
-        this.mainAttack = deepWound;
+        this.mainAttack = SkillList.deepWound;
     }
 }
 
@@ -151,9 +151,9 @@ export class OldManEnemy extends Enemy {
         if (this.phase == 1) {
             if (this.step >= 1) {
                 // Leave the fight
-                return new EnemyAction(leave, []);
+                return new EnemyAction(SkillList.leave, []);
             } else {
-                return new EnemyAction(wait, []);
+                return new EnemyAction(SkillList.wait, []);
             }
         } else {
             return new EnemyAction(this.mainAttack, game.party.targetOneFrontRowAliveCharacter());
@@ -200,7 +200,7 @@ export class DragonEnemy extends Enemy {
                 return new EnemyAction(this.mainAttack, game.party.targetOneFrontRowAliveCharacter());
             default:
                 // AOE on all characters
-                return new EnemyAction(strikeSmall, game.party.targetAllAliveCharacters());
+                return new EnemyAction(SkillList.strikeSmall, game.party.targetAllAliveCharacters());
         }
     }
 }

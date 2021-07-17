@@ -1,16 +1,8 @@
 // Classes for the whole game and fights
 
 import {
-  BleederMeleeEnemy,
   Creature,
-  DistanceEnemy,
-  DragonEnemy,
-  EndOfRound,
-  Enemy,
-  HealerEnemy,
-  MeleeEnemy,
-  OldManEnemy,
-  Opposition
+  EndOfRound
 } from './creature.model';
 import {
   comboShot,
@@ -42,6 +34,16 @@ import {CreatureClass, GameState} from "./common.model";
 import {Character} from "./character.model";
 import {Party} from "./party.model";
 import {settings} from "./settings.model";
+import {
+    BleederMeleeEnemy,
+    DistanceEnemy,
+    DragonEnemy,
+    Enemy,
+    HealerEnemy,
+    MeleeEnemy,
+    OldManEnemy
+} from "./enemy.model";
+import {Opposition} from "./opposition.model";
 
 /**
  * The action order of characters and enemies during a turn.

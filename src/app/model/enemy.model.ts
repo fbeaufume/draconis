@@ -21,11 +21,6 @@ export abstract class Enemy extends Creature {
   phase: number = 1;
 
   /**
-   * The distance between the enemy and the party, i.e. 1 means the opposition front row, 2 means the middle row, 3 the back row.
-   */
-  distance: number = 1;
-
-  /**
    * Main damaging skill.
    */
   mainAttack: Skill = new Strike('Strike');
@@ -52,6 +47,10 @@ export abstract class Enemy extends Creature {
 
   isEnemy(): boolean {
     return true;
+  }
+
+  isEndOfRound(): boolean {
+    return false;
   }
 
   /**
@@ -172,7 +171,7 @@ export class DistanceEnemy extends Enemy {
  */
 export class HealerEnemy extends Enemy {
 
-  heal = new Heal(SkillType.HEAL, 'Heal', SkillTarget.ENEMY_SINGLE, 5, 0, 0, '');
+  heal: Heal = new Heal(SkillType.HEAL, 'Heal', SkillTarget.ENEMY_SINGLE, 5, 0, 0, '');
 
   chooseAction(game: Game): EnemyAction {
     const enemy: Enemy | null = game.opposition.targetOneDamagedEnemy();
@@ -190,7 +189,7 @@ export class HealerEnemy extends Enemy {
  */
 export class DragonEnemy extends Enemy {
 
-  strikeSmall = new StrikeSmall('Claw');
+  strikeSmall: StrikeSmall = new StrikeSmall('Claw');
 
   chooseAction(game: Game): EnemyAction {
     switch (this.step % 3) {

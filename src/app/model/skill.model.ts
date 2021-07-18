@@ -8,7 +8,6 @@ import {
   ATTACK_BONUS,
   DEFEND_BONUS,
   DEFENSE_BONUS,
-  EFFECT_DURATION,
   RANDOMIZE_BASE,
   RANDOMIZE_RANGE
 } from './constants.model';
@@ -64,18 +63,18 @@ export abstract class Skill {
   /**
    * Return true if the player is able to use this skill on the target creature.
    */
-  isUsableOn(creature: Character | Enemy, fight: Fight): boolean {
+  isUsableOn(creature: Creature, fight: Fight): boolean {
     switch (this.target) {
       case SkillTarget.CHARACTER_ALIVE:
-        return (creature instanceof Character) && creature.isAlive();
+        return creature.isCharacter() && creature.isAlive();
       case SkillTarget.CHARACTER_OTHER:
-        return (creature instanceof Character) && creature != fight.activeCreature;
+        return creature.isCharacter() && creature != fight.activeCreature;
       case SkillTarget.CHARACTER_DEAD:
-        return (creature instanceof Character) && creature.isDead();
+        return creature.isCharacter() && creature.isDead();
       case SkillTarget.ENEMY_SINGLE:
       case SkillTarget.ENEMY_DOUBLE:
       case SkillTarget.ENEMY_TRIPLE:
-        return (creature instanceof Enemy) && creature.isAlive() && (this.range >= creature.distance);
+        return creature.isEnemy() && creature.isAlive() && (this.range >= creature.distance);
       default:
         return false;
     }
@@ -128,7 +127,7 @@ export abstract class Skill {
    * Some skills have an area of effect. This method returns the effective target characters for the skill based
    * on the currently aimed (i.e. hovered or selected) character.
    */
-  getTargetCharacters(character: Character, fight: Fight): Character[] {
+  getTargetCharacters(character: Character, fight: Fight): Creature[] {
     const targets = [];
 
     switch (this.target) {
@@ -139,7 +138,7 @@ export abstract class Skill {
         break;
       case SkillTarget.CHARACTER_OTHER:
         targets.push(character);
-        if (fight.activeCreature instanceof Character) {
+        if (fight.activeCreature != null && fight.activeCreature.isCharacter()) {
           targets.push(fight.activeCreature);
         }
 

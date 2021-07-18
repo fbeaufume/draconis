@@ -24,6 +24,10 @@ export abstract class Creature {
   // Max mana or tech points (depends on the character class) (currently only used by characters)
   energyPercent: number;
 
+  // The distance between the enemy and the party, i.e. 1 means the opposition front row, 2 means the middle row, 3 the back row
+  // Not in the Enemy class to prevent circular dependency issues
+  distance: number = 1;
+
   // Dodge chance, 0.1 means 10% dodge chance
   dodgeChance: number = DODGE_CHANCE;
 
@@ -56,9 +60,7 @@ export abstract class Creature {
 
   abstract isEnemy(): boolean;
 
-  isEndOfRound(): boolean {
-    return this instanceof EndOfRound;
-  }
+  abstract isEndOfRound(): boolean;
 
   isAlive(): boolean {
     return this.life > 0;
@@ -238,6 +240,10 @@ export class EndOfRound extends Creature {
 
   isEnemy(): boolean {
     return false;
+  }
+
+  isEndOfRound(): boolean {
+    return true;
   }
 }
 

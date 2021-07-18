@@ -107,7 +107,7 @@ export class TurnOrder {
     for (let i = 0; i < this.currentOrder.length; i++) {
       const creature = this.currentOrder[i];
 
-      if (creature.life <= 0 && creature instanceof Enemy) {
+      if (creature.life <= 0 && creature.isEnemy()) {
         this.currentOrder.splice(i--, 1);
       }
     }

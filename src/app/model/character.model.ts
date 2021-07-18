@@ -33,6 +33,10 @@ export class Character extends Creature {
     return false;
   }
 
+  isEndOfRound(): boolean {
+    return false;
+  }
+
   restoreEnergy() {
     this.energy = this.energyMax;
     this.updateEnergyPercent();

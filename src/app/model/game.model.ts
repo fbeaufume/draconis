@@ -1,7 +1,7 @@
 // Classes for the whole game and fights
 
 import {Creature, EndOfRound} from './creature.model';
-import {CreatureClass, GameState, SkillTarget, SkillType} from "./common.model";
+import {CreatureClass, GameState, SkillTarget, SkillIconType} from "./common.model";
 import {Character} from "./character.model";
 import {Party} from "./party.model";
 import {settings} from "./settings.model";
@@ -303,56 +303,56 @@ export class Game {
       new Character('Melkan', CreatureClass.WARRIOR, 4, 20, false, 50, 10, [
         new DefendTech(),
         new Strike('Strike'),
-        new DamageAndDamage(SkillType.ATTACK, 'Fury Strike', SkillTarget.ENEMY_SINGLE, 15, 1, 0,
+        new DamageAndDamage(SkillIconType.ATTACK, 'Fury Strike', SkillTarget.ENEMY_SINGLE, 15, 1, 0,
           'Inflict 140% damage to the target and 30% damage to self.', [1.4, 0.3]),
-        new DamageAndBleed(SkillType.ATTACK, 'Deep Wound', SkillTarget.ENEMY_SINGLE, 20, 1, 0,
+        new DamageAndBleed(SkillIconType.ATTACK, 'Deep Wound', SkillTarget.ENEMY_SINGLE, 20, 1, 0,
           'Inflict 50% damage to the target and 120% damage over ' + EFFECT_DURATION + ' rounds.', [0.5, 0.4]),
-        new Damage(SkillType.ATTACK, 'Slash', SkillTarget.ENEMY_DOUBLE, 20, 1, 0,
+        new Damage(SkillIconType.ATTACK, 'Slash', SkillTarget.ENEMY_DOUBLE, 20, 1, 0,
           'Inflict 80% damage to two adjacent targets.', [0.8]),
-        new ApplyStatus(SkillType.DETERIORATION, 'Intimidate', SkillTarget.ENEMY_SINGLE, 20, 1, 0,
+        new ApplyStatus(SkillIconType.DETERIORATION, 'Intimidate', SkillTarget.ENEMY_SINGLE, 20, 1, 0,
           'Reduce the enemy attack by 20% during ' + EFFECT_DURATION + ' rounds.', [], attack, false),
       ]),
       new Character('Arwin', CreatureClass.PALADIN, 4, 20, true, 50, 10, [
         new DefendMagic(),
-        new Damage(SkillType.ATTACK, 'Holy Strike', SkillTarget.ENEMY_SINGLE, 5, 1, 0,
+        new Damage(SkillIconType.ATTACK, 'Holy Strike', SkillTarget.ENEMY_SINGLE, 5, 1, 0,
           'Inflict 100% damage.'),
-        new DamageAndHeal(SkillType.ATTACK, 'Recovery Strike', SkillTarget.ENEMY_SINGLE, 10, 1, 0,
+        new DamageAndHeal(SkillIconType.ATTACK, 'Recovery Strike', SkillTarget.ENEMY_SINGLE, 10, 1, 0,
           'Inflict 100% damage to the target and heal self for 50% damage.', [1.0, 0.5]),
-        new Heal(SkillType.HEAL, 'Heal', SkillTarget.CHARACTER_ALIVE, 5, 0, 0,
+        new Heal(SkillIconType.HEAL, 'Heal', SkillTarget.CHARACTER_ALIVE, 5, 0, 0,
           'Heal a character for 100% damage.'),
-        new DualHeal(SkillType.HEAL, 'Dual Heal', SkillTarget.CHARACTER_OTHER, 10, 0, 0,
+        new DualHeal(SkillIconType.HEAL, 'Dual Heal', SkillTarget.CHARACTER_OTHER, 10, 0, 0,
           'Heal a character for 100% damage and self for 80% damage.', [1, 0.8]),
-        new Regenerate(SkillType.HEAL, 'Regenerate', SkillTarget.CHARACTER_ALIVE, 5, 0, 0,
+        new Regenerate(SkillIconType.HEAL, 'Regenerate', SkillTarget.CHARACTER_ALIVE, 5, 0, 0,
           'Heal a character for 50% damage and 120% damage over ' + EFFECT_DURATION + ' rounds.', [0.5, 0.4]),
-        new Heal(SkillType.HEAL, 'Heal All', SkillTarget.CHARACTER_ALL_ALIVE, 20, 0, 0,
+        new Heal(SkillIconType.HEAL, 'Heal All', SkillTarget.CHARACTER_ALL_ALIVE, 20, 0, 0,
           'Heal all characters for 50% damage.', [0.5]),
-        new Revive(SkillType.HEAL, 'Revive', SkillTarget.CHARACTER_DEAD, 20, 0, 0,
+        new Revive(SkillIconType.HEAL, 'Revive', SkillTarget.CHARACTER_DEAD, 20, 0, 0,
           'Revive a character with 50% life.'),
       ])
     ],
     [
       new Character('Faren', CreatureClass.ARCHER, 4, 20, false, 50, 10, [
         new DefendTech(),
-        new Damage(SkillType.ATTACK, 'Shot', SkillTarget.ENEMY_SINGLE, 10, 2, 0,
+        new Damage(SkillIconType.ATTACK, 'Shot', SkillTarget.ENEMY_SINGLE, 10, 2, 0,
           'Inflict 100% damage.'),
-        new ComboDamage(SkillType.ATTACK, 'Combo Shot', SkillTarget.ENEMY_SINGLE, 10, 1, 0,
+        new ComboDamage(SkillIconType.ATTACK, 'Combo Shot', SkillTarget.ENEMY_SINGLE, 10, 1, 0,
           'Inflict 80% damage then 120% then 160% when used on the same target during consecutive turns.', [0.8, 1.2, 1.6]),
-        new DamageAndPoison(SkillType.ATTACK, 'Viper Shot', SkillTarget.ENEMY_SINGLE, 15, 2, 0,
+        new DamageAndPoison(SkillIconType.ATTACK, 'Viper Shot', SkillTarget.ENEMY_SINGLE, 15, 2, 0,
           'Inflict 50% damage to the target and 120% damage over ' + EFFECT_DURATION + ' rounds.', [0.5, 0.4]),
-        new Damage(SkillType.ATTACK, 'Explosive Shot', SkillTarget.ENEMY_TRIPLE, 20, 2, 0,
+        new Damage(SkillIconType.ATTACK, 'Explosive Shot', SkillTarget.ENEMY_TRIPLE, 20, 2, 0,
           'Inflict 60% damage to three adjacent targets.', [0.6]),
-        new ApplyStatus(SkillType.DETERIORATION, 'Crippling Shot', SkillTarget.ENEMY_SINGLE, 10, 2, 0,
+        new ApplyStatus(SkillIconType.DETERIORATION, 'Crippling Shot', SkillTarget.ENEMY_SINGLE, 10, 2, 0,
           'Reduce the enemy defense by 20% during ' + EFFECT_DURATION + ' rounds.', [], defense, false),
       ]),
       new Character('Harika', CreatureClass.MAGE, 4, 20, true, 50, 10, [
         new DefendMagic(),
-        new Damage(SkillType.ATTACK, 'Lightning', SkillTarget.ENEMY_SINGLE, 5, 2, 0,
+        new Damage(SkillIconType.ATTACK, 'Lightning', SkillTarget.ENEMY_SINGLE, 5, 2, 0,
           'Inflict 100% damage.'),
-        new Damage(SkillType.ATTACK, 'Fireball', SkillTarget.ENEMY_TRIPLE, 10, 2, 0,
+        new Damage(SkillIconType.ATTACK, 'Fireball', SkillTarget.ENEMY_TRIPLE, 10, 2, 0,
           'Inflict 60% damage to three adjacent targets.', [0.6]),
-        new ApplyStatus(SkillType.DETERIORATION, 'Weakness', SkillTarget.ENEMY_SINGLE, 10, 2, 0,
+        new ApplyStatus(SkillIconType.DETERIORATION, 'Weakness', SkillTarget.ENEMY_SINGLE, 10, 2, 0,
           'Reduce the enemy attack by 20% during ' + EFFECT_DURATION + ' rounds.', [], attack, false),
-        new ApplyStatus(SkillType.DETERIORATION, 'Slow', SkillTarget.ENEMY_SINGLE, 10, 2, 0,
+        new ApplyStatus(SkillIconType.DETERIORATION, 'Slow', SkillTarget.ENEMY_SINGLE, 10, 2, 0,
           'Reduce the enemy defense by 20% during ' + EFFECT_DURATION + ' rounds.', [], defense, false),
       ])
     ]);

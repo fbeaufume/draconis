@@ -39,11 +39,10 @@ export enum StatusExpiration {
 }
 
 /**
- * The type of a skill, to use the right icon.
+ * The icon type used by a skill.
  * When any numeric value is changed, update skill-icon.component.html.
  */
-// TODO FBE rename top SkillIconType
-export enum SkillType {
+export enum SkillIconType {
   DEFENSE,
   ATTACK,
   HEAL,

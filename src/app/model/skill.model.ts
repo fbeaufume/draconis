@@ -11,7 +11,7 @@ import {
   RANDOMIZE_BASE,
   RANDOMIZE_RANGE
 } from './constants.model';
-import {LifeChangeEfficiency, LifeChangeType, LogType, SkillTarget, SkillType} from "./common.model";
+import {LifeChangeEfficiency, LifeChangeType, LogType, SkillTarget, SkillIconType} from "./common.model";
 import {attack, bleed, combo1, combo2, defend, defense, poison, regen, StatusType} from "./status-type.model";
 import {Character} from "./character.model";
 import {settings} from "./settings.model";
@@ -25,7 +25,7 @@ import {Enemy} from "./enemy.model";
 export abstract class Skill {
 
   constructor(
-    public type: SkillType,
+    public type: SkillIconType,
     public name: string,
     public target: SkillTarget,
     // Skill cost, in energy points
@@ -227,7 +227,7 @@ function randomizeAndRound(amount: number): number {
 export class Advance extends Skill {
 
   constructor() {
-    super(SkillType.DEFENSE, 'Advance', SkillTarget.NONE, 0, 0, 0, '');
+    super(SkillIconType.DEFENSE, 'Advance', SkillTarget.NONE, 0, 0, 0, '');
   }
 
   execute(fight: Fight): void {
@@ -243,7 +243,7 @@ export class Advance extends Skill {
 export class Wait extends Skill {
 
   constructor() {
-    super(SkillType.DEFENSE, 'Wait', SkillTarget.NONE, 0, 0, 0, '');
+    super(SkillIconType.DEFENSE, 'Wait', SkillTarget.NONE, 0, 0, 0, '');
   }
 
   execute(fight: Fight): void {
@@ -259,7 +259,7 @@ export class Wait extends Skill {
 export class Leave extends Skill {
 
   constructor() {
-    super(SkillType.DEFENSE, 'Leave', SkillTarget.NONE, 0, 0, 0, '');
+    super(SkillIconType.DEFENSE, 'Leave', SkillTarget.NONE, 0, 0, 0, '');
   }
 
   execute(fight: Fight): void {
@@ -298,7 +298,7 @@ export class Defend extends Skill {
 export class DefendTech extends Defend {
 
   constructor() {
-    super(SkillType.DEFENSE, 'Defend', SkillTarget.NONE, -1000, 0, 0,
+    super(SkillIconType.DEFENSE, 'Defend', SkillTarget.NONE, -1000, 0, 0,
       'Reduce received damage by 20%. Regain all TP.');
   }
 }
@@ -309,7 +309,7 @@ export class DefendTech extends Defend {
 export class DefendMagic extends Defend {
 
   constructor() {
-    super(SkillType.DEFENSE, 'Defend', SkillTarget.NONE, 0, 0, 0,
+    super(SkillIconType.DEFENSE, 'Defend', SkillTarget.NONE, 0, 0, 0,
       'Reduce received damage by 20%.');
   }
 }
@@ -362,7 +362,7 @@ export class Damage extends Skill {
 export class Strike extends Damage {
 
   constructor(name: string) {
-    super(SkillType.ATTACK, name, SkillTarget.ENEMY_SINGLE, 10, 1, 0, 'Inflict 100% damage.');
+    super(SkillIconType.ATTACK, name, SkillTarget.ENEMY_SINGLE, 10, 1, 0, 'Inflict 100% damage.');
   }
 }
 
@@ -372,7 +372,7 @@ export class Strike extends Damage {
 export class StrikeSmall extends Damage {
 
   constructor(name: string) {
-    super(SkillType.ATTACK, name, SkillTarget.ENEMY_SINGLE, 10, 1, 0, '', [0.7]);
+    super(SkillIconType.ATTACK, name, SkillTarget.ENEMY_SINGLE, 10, 1, 0, '', [0.7]);
   }
 }
 

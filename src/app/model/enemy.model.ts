@@ -1,6 +1,6 @@
 import {Game} from "./game.model";
 import {Advance, DamageAndBleed, Heal, Leave, Skill, Strike, StrikeSmall, Wait} from "./skill.model";
-import {CreatureClass, LogType, SkillTarget, SkillType} from "./common.model";
+import {CreatureClass, LogType, SkillTarget, SkillIconType} from "./common.model";
 import {LifeChange} from "./life-change.model";
 import {logs} from "./log.model";
 import {Creature, EnemyAction} from "./creature.model";
@@ -116,7 +116,7 @@ export class MeleeEnemy extends Enemy {
 export class BleederMeleeEnemy extends MeleeEnemy {
 
   customize() {
-    this.mainAttack = new DamageAndBleed(SkillType.ATTACK, 'Deep Wound', SkillTarget.ENEMY_SINGLE, 20, 1, 0,
+    this.mainAttack = new DamageAndBleed(SkillIconType.ATTACK, 'Deep Wound', SkillTarget.ENEMY_SINGLE, 20, 1, 0,
       '', [0.5, 0.4]);
   }
 }
@@ -171,7 +171,7 @@ export class DistanceEnemy extends Enemy {
  */
 export class HealerEnemy extends Enemy {
 
-  heal: Heal = new Heal(SkillType.HEAL, 'Heal', SkillTarget.ENEMY_SINGLE, 5, 0, 0, '');
+  heal: Heal = new Heal(SkillIconType.HEAL, 'Heal', SkillTarget.ENEMY_SINGLE, 5, 0, 0, '');
 
   chooseAction(game: Game): EnemyAction {
     const enemy: Enemy | null = game.opposition.targetOneDamagedEnemy();

@@ -36,7 +36,7 @@ export abstract class Skill {
     public coolDown: number,
     public description: string,
     // The power levels of the skill
-    public powers: number[] = [],
+    public powers: number[] = [1],
     // The status to apply (defaults to an arbitrary value is used to simplify null management)
     public status: StatusType = defend,
     // Is the effect an improvement
@@ -227,6 +227,10 @@ function randomizeAndRound(amount: number): number {
  */
 export class Advance extends Skill {
 
+  constructor() {
+    super(SkillType.DEFENSE, 'Advance', SkillTarget.NONE, 0, 0, 0, '');
+  }
+
   execute(fight: Fight): void {
     super.execute(fight);
 
@@ -235,9 +239,13 @@ export class Advance extends Skill {
 }
 
 /**
- * No action.
+ * No action. Only used by enemies.
  */
 export class Wait extends Skill {
+
+  constructor() {
+    super(SkillType.DEFENSE, 'Wait', SkillTarget.NONE, 0, 0, 0, '');
+  }
 
   execute(fight: Fight): void {
     super.execute(fight);
@@ -247,9 +255,13 @@ export class Wait extends Skill {
 }
 
 /**
- * Leave the fight.
+ * Leave the fight. Only used by enemies.
  */
 export class Leave extends Skill {
+
+  constructor() {
+    super(SkillType.DEFENSE, 'Leave', SkillTarget.NONE, 0, 0, 0, '');
+  }
 
   execute(fight: Fight): void {
     super.execute(fight);
@@ -266,7 +278,7 @@ export class Leave extends Skill {
 }
 
 /**
- * A defend skill.
+ * A base defend skill.
  */
 export class Defend extends Skill {
 
@@ -278,6 +290,28 @@ export class Defend extends Skill {
 
       logs.addCreatureLog(LogType.Defend, fight.activeCreature, null, null, null);
     }
+  }
+}
+
+/**
+ * A defend skill for tech users.
+ */
+export class DefendTech extends Defend {
+
+  constructor() {
+    super(SkillType.DEFENSE, 'Defend', SkillTarget.NONE, -1000, 0, 0,
+      'Reduce received damage by 20%. Regain all TP.');
+  }
+}
+
+/**
+ * A defend skill for mana users.
+ */
+export class DefendMagic extends Defend {
+
+  constructor() {
+    super(SkillType.DEFENSE, 'Defend', SkillTarget.NONE, 0, 0, 0,
+      'Reduce received damage by 20%.');
   }
 }
 
@@ -320,6 +354,26 @@ export class Damage extends Skill {
       logs.addCreatureLog(LogType.Damage, activeCreature, targetCreature,
         targetCreature.changeLife(computeEffectiveDamage(activeCreature, targetCreature, this.powers[0])), null);
     });
+  }
+}
+
+/**
+ * A single target regular damaging skill.
+ */
+export class Strike extends Damage {
+
+  constructor(name: string) {
+    super(SkillType.ATTACK, name, SkillTarget.ENEMY_SINGLE, 10, 1, 0, 'Inflict 100% damage.');
+  }
+}
+
+/**
+ * A single target small damaging skill.
+ */
+export class StrikeSmall extends Damage {
+
+  constructor(name: string) {
+    super(SkillType.ATTACK, name, SkillTarget.ENEMY_SINGLE, 10, 1, 0, '', [0.7]);
   }
 }
 
@@ -543,73 +597,4 @@ export class Revive extends Skill {
       logs.addCreatureLog(LogType.Revive, fight.activeCreature, targetCreature, null, null);
     });
   }
-}
-
-/**
- * All the available skills.
- * They are exported as static members of a class instead a constants to prevent circular dependency errors.
- */
-export class SkillList {
-
-  // Enemies skills
-  public static readonly advance = new Advance(SkillType.DEFENSE, '', SkillTarget.NONE, 0, 0, 0, '');
-  public static readonly wait = new Wait(SkillType.DEFENSE, '', SkillTarget.NONE, 0, 0, 0, '');
-  public static readonly leave = new Leave(SkillType.DEFENSE, '', SkillTarget.NONE, 0, 0, 0, '');
-  public static readonly strikeSmall = new Damage(SkillType.ATTACK, '', SkillTarget.ENEMY_SINGLE, 0, 0, 0, '', [0.7]);
-
-  // Common characters skills
-  public static readonly techDefend = new Defend(SkillType.DEFENSE, 'Defend', SkillTarget.NONE, -1000, 0, 0,
-    'Reduce received damage by 20%. Regain all TP.');
-  public static readonly magicDefend = new Defend(SkillType.DEFENSE, 'Defend', SkillTarget.NONE, 0, 0, 0,
-    'Reduce received damage by 20%.');
-
-  // Warrior skills
-  public static readonly strike = new Damage(SkillType.ATTACK, 'Strike', SkillTarget.ENEMY_SINGLE, 10, 1, 0,
-    'Inflict 100% damage.');
-  public static readonly furyStrike = new DamageAndDamage(SkillType.ATTACK, 'Fury Strike', SkillTarget.ENEMY_SINGLE, 15, 1, 0,
-    'Inflict 140% damage to the target and 30% damage to self.', [1.4, 0.3]);
-  public static readonly deepWound = new DamageAndBleed(SkillType.ATTACK, 'Deep Wound', SkillTarget.ENEMY_SINGLE, 20, 1, 0,
-    'Inflict 50% damage to the target and 120% damage over ' + EFFECT_DURATION + ' rounds.', [0.5, 0.4]);
-  public static readonly slash = new Damage(SkillType.ATTACK, 'Slash', SkillTarget.ENEMY_DOUBLE, 20, 1, 0,
-    'Inflict 80% damage to two adjacent targets.', [0.8]);
-  public static readonly intimidate = new ApplyStatus(SkillType.DETERIORATION, 'Intimidate', SkillTarget.ENEMY_SINGLE, 20, 1, 0,
-    'Reduce the enemy attack by 20% during ' + EFFECT_DURATION + ' rounds.', [], attack, false);
-
-  // Paladin skills
-  public static readonly holyStrike = new Damage(SkillType.ATTACK, 'Holy Strike', SkillTarget.ENEMY_SINGLE, 5, 1, 0,
-    'Inflict 100% damage.');
-  public static readonly recoveryStrike = new DamageAndHeal(SkillType.ATTACK, 'Recovery Strike', SkillTarget.ENEMY_SINGLE, 10, 1, 0,
-    'Inflict 100% damage to the target and heal self for 50% damage.', [1.0, 0.5]);
-  public static readonly heal = new Heal(SkillType.HEAL, 'Heal', SkillTarget.CHARACTER_ALIVE, 5, 0, 0,
-    'Heal a character for 100% damage.');
-  public static readonly dualHeal: Skill = new DualHeal(SkillType.HEAL, 'Dual Heal', SkillTarget.CHARACTER_OTHER, 10, 0, 0,
-    'Heal a character for 100% damage and self for 80% damage.', [1, 0.8]);
-  public static readonly regenerate = new Regenerate(SkillType.HEAL, 'Regenerate', SkillTarget.CHARACTER_ALIVE, 5, 0, 0,
-    'Heal a character for 50% damage and 120% damage over ' + EFFECT_DURATION + ' rounds.', [0.5, 0.4]);
-  public static readonly healAll = new Heal(SkillType.HEAL, 'Heal All', SkillTarget.CHARACTER_ALL_ALIVE, 20, 0, 0,
-    'Heal all characters for 50% damage.', [0.5]);
-  public static readonly revive = new Revive(SkillType.HEAL, 'Revive', SkillTarget.CHARACTER_DEAD, 20, 0, 0,
-    'Revive a character with 50% life.');
-
-  // Archer skills
-  public static readonly shot = new Damage(SkillType.ATTACK, 'Shot', SkillTarget.ENEMY_SINGLE, 10, 2, 0,
-    'Inflict 100% damage.');
-  public static readonly comboShot = new ComboDamage(SkillType.ATTACK, 'Combo Shot', SkillTarget.ENEMY_SINGLE, 10, 1, 0,
-    'Inflict 80% damage then 120% then 160% when used on the same target during consecutive turns.', [0.8, 1.2, 1.6]);
-  public static readonly viperShot = new DamageAndPoison(SkillType.ATTACK, 'Viper Shot', SkillTarget.ENEMY_SINGLE, 15, 2, 0,
-    'Inflict 50% damage to the target and 120% damage over ' + EFFECT_DURATION + ' rounds.', [0.5, 0.4]);
-  public static readonly explosiveShot = new Damage(SkillType.ATTACK, 'Explosive Shot', SkillTarget.ENEMY_TRIPLE, 20, 2, 0,
-    'Inflict 60% damage to three adjacent targets.', [0.6]);
-  public static readonly cripplingShot = new ApplyStatus(SkillType.DETERIORATION, 'Crippling Shot', SkillTarget.ENEMY_SINGLE, 10, 2, 0,
-    'Reduce the enemy defense by 20% during ' + EFFECT_DURATION + ' rounds.', [], defense, false);
-
-  // Mage skills
-  public static readonly lightning = new Damage(SkillType.ATTACK, 'Lightning', SkillTarget.ENEMY_SINGLE, 5, 2, 0,
-    'Inflict 100% damage.');
-  public static readonly fireball = new Damage(SkillType.ATTACK, 'Fireball', SkillTarget.ENEMY_TRIPLE, 10, 2, 0,
-    'Inflict 60% damage to three adjacent targets.', [0.6]);
-  public static readonly weakness = new ApplyStatus(SkillType.DETERIORATION, 'Weakness', SkillTarget.ENEMY_SINGLE, 10, 2, 0,
-    'Reduce the enemy attack by 20% during ' + EFFECT_DURATION + ' rounds.', [], attack, false);
-  public static readonly slow = new ApplyStatus(SkillType.DETERIORATION, 'Slow', SkillTarget.ENEMY_SINGLE, 10, 2, 0,
-    'Reduce the enemy defense by 20% during ' + EFFECT_DURATION + ' rounds.', [], defense, false);
 }

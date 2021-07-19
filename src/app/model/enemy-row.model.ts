@@ -1,5 +1,5 @@
 import {Enemy} from "./enemy.model";
-import {OPPOSITION_ROW_SIZE} from "./constants.model";
+import {Constants} from "./constants.model";
 
 /**
  * A row of enemies.
@@ -10,6 +10,6 @@ export class EnemyRow {
     }
 
     isNotFull(): boolean {
-        return this.enemies.length < OPPOSITION_ROW_SIZE;
+        return this.enemies.length < Constants.OPPOSITION_ROW_SIZE;
     }
 }

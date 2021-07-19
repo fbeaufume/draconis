@@ -1,6 +1,6 @@
 import {computeEffectiveDamage, computeEffectiveHeal, Skill} from './skill.model';
 import {logs} from './log.model';
-import {CRITICAL_BONUS, CRITICAL_CHANCE, DODGE_CHANCE} from './constants.model';
+import {Constants} from './constants.model';
 import {CreatureClass, LifeChangeEfficiency, LifeChangeType, LogType, StatusExpiration} from "./common.model";
 import {StatusType} from "./status-type.model";
 import {LifeChange} from "./life-change.model";
@@ -29,13 +29,13 @@ export abstract class Creature {
   distance: number = 1;
 
   // Dodge chance, 0.1 means 10% dodge chance
-  dodgeChance: number = DODGE_CHANCE;
+  dodgeChance: number = Constants.DODGE_CHANCE;
 
   // Critical hit chance, 0.1 means 10% critical hit chance
-  criticalChance: number = CRITICAL_CHANCE;
+  criticalChance: number = Constants.CRITICAL_CHANCE;
 
   // Critical hit bonus, 1.5 means 50% extra hit or heal
-  criticalBonus: number = CRITICAL_BONUS;
+  criticalBonus: number = Constants.CRITICAL_BONUS;
 
   // Applied statuses
   statusApplications: StatusApplication[] = [];

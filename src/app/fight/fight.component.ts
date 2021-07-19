@@ -3,7 +3,7 @@ import {canSelectSkillStates, Fight, Game} from '../model/game.model';
 import {Skill} from '../model/skill.model';
 import {FightService} from './fight.service';
 import {GameState} from "../model/common.model";
-import {OPPOSITION_ROWS} from "../model/constants.model";
+import {Constants} from "../model/constants.model";
 import {Character} from "../model/character.model";
 import {settings} from "../model/settings.model";
 import {Enemy} from "../model/enemy.model";
@@ -38,7 +38,7 @@ export class FightComponent implements AfterViewInit {
   }
 
   get oppositionRowCount() {
-    return OPPOSITION_ROWS;
+    return Constants.OPPOSITION_ROWS;
   }
 
   private scrollLogFrameToBottom(): void {

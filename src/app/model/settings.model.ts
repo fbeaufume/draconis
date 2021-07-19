@@ -1,4 +1,4 @@
-import {PAUSE_LONG, PAUSE_SHORT} from "./constants.model";
+import {Constants} from "./constants.model";
 import {logs} from "./log.model";
 import {LogType} from "./common.model";
 
@@ -31,13 +31,13 @@ export class Settings {
     useRandom: boolean = getQueryStringParameterByName('random') == null;
 
     // Pause in msec in the UI between actions
-    pauseDuration: number = PAUSE_LONG;
+    pauseDuration: number = Constants.PAUSE_LONG;
 
     togglePauseDuration() {
-        if (this.pauseDuration == PAUSE_LONG) {
-            this.pauseDuration = PAUSE_SHORT;
+        if (this.pauseDuration == Constants.PAUSE_LONG) {
+            this.pauseDuration = Constants.PAUSE_SHORT;
         } else {
-            this.pauseDuration = PAUSE_LONG;
+            this.pauseDuration = Constants.PAUSE_LONG;
         }
         logs.addNumberLog(LogType.PauseDurationChanged, this.pauseDuration);
     }

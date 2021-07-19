@@ -1,5 +1,5 @@
 import {StatusExpiration} from "./common.model";
-import {COMBO_DURATION, DEFEND_DURATION, EFFECT_DURATION} from "./constants.model";
+import {Constants} from "./constants.model";
 
 /**
  * An immutable status descriptor.
@@ -41,11 +41,11 @@ export class StatusType {
 }
 
 // The supported statuses
-export const defend = new StatusType('Defend', StatusExpiration.ORIGIN_CREATURE_TURN_START, DEFEND_DURATION, false);
-export const bleed = new StatusType('Bleed', StatusExpiration.END_OF_ROUND, EFFECT_DURATION, true);
-export const poison = new StatusType('Poison', StatusExpiration.END_OF_ROUND, EFFECT_DURATION, true);
-export const regen = new StatusType('Regen', StatusExpiration.END_OF_ROUND, EFFECT_DURATION, true);
-export const combo1 = new StatusType('Combo1', StatusExpiration.ORIGIN_CREATURE_TURN_END, COMBO_DURATION, true);
-export const combo2 = new StatusType('Combo2', StatusExpiration.ORIGIN_CREATURE_TURN_END, COMBO_DURATION, true);
-export const attack = new StatusType('Attack', StatusExpiration.ORIGIN_CREATURE_TURN_START, EFFECT_DURATION, false);
-export const defense = new StatusType('Defense', StatusExpiration.ORIGIN_CREATURE_TURN_START, EFFECT_DURATION, false);
+export const defend = new StatusType('Defend', StatusExpiration.ORIGIN_CREATURE_TURN_START, Constants.DEFEND_DURATION, false);
+export const bleed = new StatusType('Bleed', StatusExpiration.END_OF_ROUND, Constants.EFFECT_DURATION, true);
+export const poison = new StatusType('Poison', StatusExpiration.END_OF_ROUND, Constants.EFFECT_DURATION, true);
+export const regen = new StatusType('Regen', StatusExpiration.END_OF_ROUND, Constants.EFFECT_DURATION, true);
+export const combo1 = new StatusType('Combo1', StatusExpiration.ORIGIN_CREATURE_TURN_END, Constants.COMBO_DURATION, true);
+export const combo2 = new StatusType('Combo2', StatusExpiration.ORIGIN_CREATURE_TURN_END, Constants.COMBO_DURATION, true);
+export const attack = new StatusType('Attack', StatusExpiration.ORIGIN_CREATURE_TURN_START, Constants.EFFECT_DURATION, false);
+export const defense = new StatusType('Defense', StatusExpiration.ORIGIN_CREATURE_TURN_START, Constants.EFFECT_DURATION, false);

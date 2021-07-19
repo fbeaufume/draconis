@@ -3,7 +3,7 @@ import {canSelectSkillStates, Fight, Game} from '../model/game.model';
 import {Creature, EnemyAction} from '../model/creature.model';
 import {Skill} from '../model/skill.model';
 import {Log, logs} from '../model/log.model';
-import {MANA_GAIN_PER_DEAD_ENEMY, PARTY_ROW_SIZE, PARTY_SIZE} from '../model/constants.model';
+import {Constants} from '../model/constants.model';
 import {GameState, LogType, SkillTarget, StatusExpiration} from "../model/common.model";
 import {Character} from "../model/character.model";
 import {Party} from "../model/party.model";
@@ -273,10 +273,10 @@ export class FightService {
         }
         break;
       case GameState.SELECT_CHARACTER:
-        if (index < PARTY_ROW_SIZE) {
+        if (index < Constants.PARTY_ROW_SIZE) {
           this.selectCharacter(this.party.rows[1].characters[index]);
-        } else if (index < PARTY_SIZE) {
-          this.selectCharacter(this.party.rows[0].characters[index - PARTY_ROW_SIZE]);
+        } else if (index < Constants.PARTY_SIZE) {
+          this.selectCharacter(this.party.rows[0].characters[index - Constants.PARTY_ROW_SIZE]);
         }
         break;
       case GameState.SELECT_ENEMY:
@@ -425,7 +425,7 @@ export class FightService {
     // Restore some mana points to the characters when enemies died
     const totalRemovedEnemiesLife: number = removedEnemies.reduce((sum, enemy) => sum + enemy.lifeMax, 0);
     if (totalRemovedEnemiesLife > 0) {
-      this.party.restoreManaPoints(totalRemovedEnemiesLife * MANA_GAIN_PER_DEAD_ENEMY);
+      this.party.restoreManaPoints(totalRemovedEnemiesLife * Constants.MANA_GAIN_PER_DEAD_ENEMY);
     }
 
     // Remove the empty enemy rows

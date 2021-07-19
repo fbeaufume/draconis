@@ -15,7 +15,7 @@ import {
   OldManEnemy
 } from "./enemy.model";
 import {Opposition} from "./opposition.model";
-import {EFFECT_DURATION} from "./constants.model";
+import {Constants} from "./constants.model";
 import {attack, defense} from "./status-type.model";
 import {
   ApplyStatus,
@@ -306,11 +306,11 @@ export class Game {
         new DamageAndDamage(SkillIconType.ATTACK, 'Fury Strike', SkillTarget.ENEMY_SINGLE, 15, 1, 0,
           'Inflict 140% damage to the target and 30% damage to self.', [1.4, 0.3]),
         new DamageAndBleed(SkillIconType.ATTACK, 'Deep Wound', SkillTarget.ENEMY_SINGLE, 20, 1, 0,
-          'Inflict 50% damage to the target and 120% damage over ' + EFFECT_DURATION + ' rounds.', [0.5, 0.4]),
+          'Inflict 50% damage to the target and 120% damage over ' + Constants.EFFECT_DURATION + ' rounds.', [0.5, 0.4]),
         new Damage(SkillIconType.ATTACK, 'Slash', SkillTarget.ENEMY_DOUBLE, 20, 1, 0,
           'Inflict 80% damage to two adjacent targets.', [0.8]),
         new ApplyStatus(SkillIconType.DETERIORATION, 'Intimidate', SkillTarget.ENEMY_SINGLE, 20, 1, 0,
-          'Reduce the enemy attack by 20% during ' + EFFECT_DURATION + ' rounds.', [], attack, false),
+          'Reduce the enemy attack by 20% during ' + Constants.EFFECT_DURATION + ' rounds.', [], attack, false),
       ]),
       new Character('Arwin', CreatureClass.PALADIN, 4, 20, true, 50, 10, [
         new DefendMagic(),
@@ -323,7 +323,7 @@ export class Game {
         new DualHeal(SkillIconType.HEAL, 'Dual Heal', SkillTarget.CHARACTER_OTHER, 10, 0, 0,
           'Heal a character for 100% damage and self for 80% damage.', [1, 0.8]),
         new Regenerate(SkillIconType.HEAL, 'Regenerate', SkillTarget.CHARACTER_ALIVE, 5, 0, 0,
-          'Heal a character for 50% damage and 120% damage over ' + EFFECT_DURATION + ' rounds.', [0.5, 0.4]),
+          'Heal a character for 50% damage and 120% damage over ' + Constants.EFFECT_DURATION + ' rounds.', [0.5, 0.4]),
         new Heal(SkillIconType.HEAL, 'Heal All', SkillTarget.CHARACTER_ALL_ALIVE, 20, 0, 0,
           'Heal all characters for 50% damage.', [0.5]),
         new Revive(SkillIconType.HEAL, 'Revive', SkillTarget.CHARACTER_DEAD, 20, 0, 0,
@@ -338,11 +338,11 @@ export class Game {
         new ComboDamage(SkillIconType.ATTACK, 'Combo Shot', SkillTarget.ENEMY_SINGLE, 10, 1, 0,
           'Inflict 80% damage then 120% then 160% when used on the same target during consecutive turns.', [0.8, 1.2, 1.6]),
         new DamageAndPoison(SkillIconType.ATTACK, 'Viper Shot', SkillTarget.ENEMY_SINGLE, 15, 2, 0,
-          'Inflict 50% damage to the target and 120% damage over ' + EFFECT_DURATION + ' rounds.', [0.5, 0.4]),
+          'Inflict 50% damage to the target and 120% damage over ' + Constants.EFFECT_DURATION + ' rounds.', [0.5, 0.4]),
         new Damage(SkillIconType.ATTACK, 'Explosive Shot', SkillTarget.ENEMY_TRIPLE, 20, 2, 0,
           'Inflict 60% damage to three adjacent targets.', [0.6]),
         new ApplyStatus(SkillIconType.DETERIORATION, 'Crippling Shot', SkillTarget.ENEMY_SINGLE, 10, 2, 0,
-          'Reduce the enemy defense by 20% during ' + EFFECT_DURATION + ' rounds.', [], defense, false),
+          'Reduce the enemy defense by 20% during ' + Constants.EFFECT_DURATION + ' rounds.', [], defense, false),
       ]),
       new Character('Harika', CreatureClass.MAGE, 4, 20, true, 50, 10, [
         new DefendMagic(),
@@ -351,9 +351,9 @@ export class Game {
         new Damage(SkillIconType.ATTACK, 'Fireball', SkillTarget.ENEMY_TRIPLE, 10, 2, 0,
           'Inflict 60% damage to three adjacent targets.', [0.6]),
         new ApplyStatus(SkillIconType.DETERIORATION, 'Weakness', SkillTarget.ENEMY_SINGLE, 10, 2, 0,
-          'Reduce the enemy attack by 20% during ' + EFFECT_DURATION + ' rounds.', [], attack, false),
+          'Reduce the enemy attack by 20% during ' + Constants.EFFECT_DURATION + ' rounds.', [], attack, false),
         new ApplyStatus(SkillIconType.DETERIORATION, 'Slow', SkillTarget.ENEMY_SINGLE, 10, 2, 0,
-          'Reduce the enemy defense by 20% during ' + EFFECT_DURATION + ' rounds.', [], defense, false),
+          'Reduce the enemy defense by 20% during ' + Constants.EFFECT_DURATION + ' rounds.', [], defense, false),
       ])
     ]);
 

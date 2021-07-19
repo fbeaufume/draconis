@@ -1,93 +1,96 @@
-// Constants
+// Application constants
 
-/**
- * Number of character rows.
- */
-export const PARTY_ROWS = 2;
+export class Constants {
 
-/**
- * Number of characters per row.
- */
-export const PARTY_ROW_SIZE = 2;
+  /**
+   * Number of character rows.
+   */
+  static readonly PARTY_ROWS = 2;
 
-/**
- * Number of characters in the party.
- */
-export const PARTY_SIZE = PARTY_ROWS * PARTY_ROW_SIZE;
+  /**
+   * Number of characters per row.
+   */
+  static readonly PARTY_ROW_SIZE = 2;
 
-/**
- * Number of enemy rows.
- */
-export const OPPOSITION_ROWS = 2;
+  /**
+   * Number of characters in the party.
+   */
+  static readonly PARTY_SIZE = Constants.PARTY_ROWS * Constants.PARTY_ROW_SIZE;
 
-/**
- * Maximum number of enemies per row.
- */
-export const OPPOSITION_ROW_SIZE = 3;
+  /**
+   * Number of enemy rows.
+   */
+  static readonly OPPOSITION_ROWS = 2;
 
-/**
- * A pause duration preset, in msec.
- */
-export const PAUSE_SHORT = 100;
+  /**
+   * Maximum number of enemies per row.
+   */
+  static readonly OPPOSITION_ROW_SIZE = 3;
 
-/**
- * A pause duration preset, in msec.
- */
-export const PAUSE_LONG = 1000;
+  /**
+   * A pause duration preset, in msec.
+   */
+  static readonly PAUSE_SHORT = 100;
 
-/**
- * The randomization range of damages and heals, 0.3 means +/- 15%.
- */
-export const RANDOMIZE_RANGE = 0.3;
+  /**
+   * A pause duration preset, in msec.
+   */
+  static readonly PAUSE_LONG = 1000;
 
-export const RANDOMIZE_BASE = 1 - RANDOMIZE_RANGE / 2;
+  /**
+   * The randomization range of damages and heals, 0.3 means +/- 15%.
+   */
+  static readonly RANDOMIZE_RANGE = 0.3;
 
-/**
- * Default dodge chance.
- */
-export const DODGE_CHANCE = 0.1;
+  static readonly RANDOMIZE_BASE = 1 - Constants.RANDOMIZE_RANGE / 2;
 
-/**
- * Default critical hit chance for damages and heals.
- */
-export const CRITICAL_CHANCE = 0.1;
+  /**
+   * Default dodge chance.
+   */
+  static readonly DODGE_CHANCE = 0.1;
 
-/**
- * Default critical bonus for damages and heals.
- */
-export const CRITICAL_BONUS = 1.5;
+  /**
+   * Default critical hit chance for damages and heals.
+   */
+  static readonly CRITICAL_CHANCE = 0.1;
 
-/**
- * Damage modification when using the defend status. 0.2 means 20% damage reduction.
- */
-export const DEFEND_BONUS = 0.2;
+  /**
+   * Default critical bonus for damages and heals.
+   */
+  static readonly CRITICAL_BONUS = 1.5;
 
-/**
- * Damage modification when using the attack status. 0.2 means 20% damage augmentation or reduction.
- */
-export const ATTACK_BONUS = 0.2;
+  /**
+   * Damage modification when using the defend status. 0.2 means 20% damage reduction.
+   */
+  static readonly DEFEND_BONUS = 0.2;
 
-/**
- * Damage modification when using the defend status. 0.2 means 20% damage augmentation or reduction.
- */
-export const DEFENSE_BONUS = 0.2;
+  /**
+   * Damage modification when using the attack status. 0.2 means 20% damage augmentation or reduction.
+   */
+  static readonly ATTACK_BONUS = 0.2;
 
-/**
- * Percentage of mana gained by the characters after an enemy died.
- */
-export const MANA_GAIN_PER_DEAD_ENEMY = 0.15;
+  /**
+   * Damage modification when using the defend status. 0.2 means 20% damage augmentation or reduction.
+   */
+  static readonly DEFENSE_BONUS = 0.2;
 
-/**
- * Duration for most statuses.
- */
-export const EFFECT_DURATION = 3;
+  /**
+   * Percentage of mana gained by the characters after an enemy died.
+   */
+  static readonly MANA_GAIN_PER_DEAD_ENEMY = 0.15;
 
-/**
- * Duration for defend status.
- */
-export const DEFEND_DURATION = 1;
+  /**
+   * Duration for most statuses.
+   */
+  static readonly EFFECT_DURATION = 3;
 
-/**
- * Duration for combo statuses.
- */
-export const COMBO_DURATION = 2;
+  /**
+   * Duration for defend status.
+   */
+  static readonly DEFEND_DURATION = 1;
+
+  /**
+   * Duration for combo statuses.
+   */
+  static readonly COMBO_DURATION = 2;
+}

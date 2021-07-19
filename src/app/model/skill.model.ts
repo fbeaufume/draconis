@@ -3,21 +3,14 @@
 import {Fight} from './game.model';
 import {Creature} from './creature.model';
 import {logs} from './log.model';
-// TODO FBE move the constants inside a Constants class to simplify these imports
-import {
-  ATTACK_BONUS,
-  DEFEND_BONUS,
-  DEFENSE_BONUS,
-  RANDOMIZE_BASE,
-  RANDOMIZE_RANGE
-} from './constants.model';
-import {LifeChangeEfficiency, LifeChangeType, LogType, SkillTarget, SkillIconType} from "./common.model";
+import {LifeChangeEfficiency, LifeChangeType, LogType, SkillIconType, SkillTarget} from "./common.model";
 import {attack, bleed, combo1, combo2, defend, defense, poison, regen, StatusType} from "./status-type.model";
 import {Character} from "./character.model";
 import {settings} from "./settings.model";
 import {LifeChange, LifeGain, LifeLoss} from "./life-change.model";
 import {StatusApplication} from "./status-application.model";
 import {Enemy} from "./enemy.model";
+import {Constants} from "./constants.model";
 
 /**
  * A character skill.
@@ -173,24 +166,24 @@ export function computeEffectiveDamage(emitter: Creature, receiver: Creature, sk
   const afterCritical = isCritical ? baseAmount * emitter.criticalBonus : baseAmount;
 
   // Apply the defend bonus
-  const afterDefend = receiver.hasStatus(defend) ? afterCritical * (1 - DEFEND_BONUS) : afterCritical;
+  const afterDefend = receiver.hasStatus(defend) ? afterCritical * (1 - Constants.DEFEND_BONUS) : afterCritical;
 
   // Apply the attack bonus or malus
   let afterAttack = afterDefend;
   if (emitter.hasPositiveStatus(attack)) {
-    afterAttack = afterAttack * (1 + ATTACK_BONUS);
+    afterAttack = afterAttack * (1 + Constants.ATTACK_BONUS);
   }
   if (emitter.hasNegativeStatus(attack)) {
-    afterAttack = afterAttack * (1 - ATTACK_BONUS);
+    afterAttack = afterAttack * (1 - Constants.ATTACK_BONUS);
   }
 
   // Apply the defense bonus or malus
   let afterDefense = afterAttack;
   if (receiver.hasPositiveStatus(defense)) {
-    afterDefense = afterDefense * (1 - DEFENSE_BONUS);
+    afterDefense = afterDefense * (1 - Constants.DEFENSE_BONUS);
   }
   if (receiver.hasNegativeStatus(defense)) {
-    afterDefense = afterDefense * (1 + DEFENSE_BONUS);
+    afterDefense = afterDefense * (1 + Constants.DEFENSE_BONUS);
   }
 
   return new LifeLoss(randomizeAndRound(afterDefense), isCritical ? LifeChangeEfficiency.CRITICAL : LifeChangeEfficiency.NORMAL);
@@ -217,7 +210,7 @@ export function computeEffectiveHeal(emitter: Creature, receiver: Creature, skil
  * Modify a number by adding or removing a small random value, then round the result
  */
 function randomizeAndRound(amount: number): number {
-  const randomizedDamage = settings.useRandom ? (RANDOMIZE_BASE + Math.random() * RANDOMIZE_RANGE) * amount : amount;
+  const randomizedDamage = settings.useRandom ? (Constants.RANDOMIZE_BASE + Math.random() * Constants.RANDOMIZE_RANGE) * amount : amount;
   return Math.round(randomizedDamage);
 }
 

@@ -8,20 +8,30 @@ import {Creature} from "./creature.model";
  */
 export class Character extends Creature {
 
+  /**
+   * The character level.
+   */
+  level: number;
+
+  /**
+   * True for mana based character class, false for tech based.
+   */
+  useMana: boolean;
+
   constructor(
     name: string,
     // Character class, could be an enum
     clazz: CreatureClass,
-    public level: number,
+    level: number,
     lifeMax: number,
-    // True for mana based character class, false for tech based
-    public useMana: boolean,
+    useMana: boolean,
     energyMax: number,
     power: number,
     skills: Skill[],
   ) {
     super(name, clazz, lifeMax, energyMax, power, skills);
-
+    this.level = level;
+    this.useMana = useMana;
     this.restoreEnergy();
   }
 

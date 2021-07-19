@@ -40,6 +40,7 @@ export class StatusType {
   }
 }
 
+// TODO FBE refactor these ?
 // The supported statuses
 export const defend = new StatusType('Defend', StatusExpiration.ORIGIN_CREATURE_TURN_START, Constants.DEFEND_DURATION, false);
 export const bleed = new StatusType('Bleed', StatusExpiration.END_OF_ROUND, Constants.EFFECT_DURATION, true);

@@ -11,48 +11,104 @@ import {StatusApplication} from "./status-application.model";
  */
 export abstract class Creature {
 
+  /**
+   * The creature name.
+   */
+  name: string
+
+  /**
+   * The character class or 'enemy' for enemies or 'end-round' for the end of round special creature.
+   */
+  clazz: CreatureClass
+
+  /**
+   * The maximum life amount.
+   */
+  lifeMax: number;
+
+  /**
+   * The current life amount.
+   */
   life: number;
 
+  /**
+   * The current life percent.
+   */
   lifePercent: number;
 
-  // Damages or heals received this turn and displayed in a popup
+  /**
+   * Damages or heals received this turn and displayed in a popup.
+   */
+
   lifeChange: LifeChange | null = null;
 
-  // Current mana or tech points (depends on the character class) (currently only used by characters)
+  /**
+   * Maximum mana or tech points (depends on the character class) (currently only used by characters).
+   */
+  energyMax: number;
+
+  /**
+   * Current mana or tech points (depends on the character class) (currently only used by characters).
+   */
   energy: number;
 
-  // Max mana or tech points (depends on the character class) (currently only used by characters)
+  /**
+   * Max mana or tech points (depends on the character class) (currently only used by characters).
+   */
   energyPercent: number;
 
-  // The distance between the enemy and the party, i.e. 1 means the opposition front row, 2 means the middle row, 3 the back row
-  // Not in the Enemy class to prevent circular dependency issues
+  /**
+   * Generic power of the creature, used to compute damage or heal amounts.
+   */
+  power: number;
+
+  /**
+   * Creature skills (currently only used by characters).
+   */
+  skills: Skill[];
+
+  /**
+   * The distance between the enemy and the party, i.e. 1 means the opposition front row, 2 means the middle row, 3 the back row
+   * Not in the Enemy class to prevent circular dependency issues.
+   */
   distance: number = 1;
 
-  // Dodge chance, 0.1 means 10% dodge chance
+  /**
+   * Dodge chance, 0.1 means 10% dodge chance.
+   */
   dodgeChance: number = Constants.DODGE_CHANCE;
 
-  // Critical hit chance, 0.1 means 10% critical hit chance
+  /**
+   * Critical hit chance, 0.1 means 10% critical hit chance.
+   */
   criticalChance: number = Constants.CRITICAL_CHANCE;
 
-  // Critical hit bonus, 1.5 means 50% extra hit or heal
+  /**
+   * Critical hit bonus, 1.5 means 50% extra hit or heal.
+   */
   criticalBonus: number = Constants.CRITICAL_BONUS;
 
-  // Applied statuses
+  /**
+   * Applied statuses.
+   */
   statusApplications: StatusApplication[] = [];
 
   protected constructor(
-    public name: string,
-    // Character class or 'enemy' for enemies or 'end-round' for the end of round special creature
-    public clazz: CreatureClass,
-    public lifeMax: number,
-    public energyMax: number,
-    // Generic power of the creature, used to compute damage or heal amounts
-    public power: number,
-    // Creature skills (currently only used by characters)
-    public skills: Skill[]
+    name: string,
+    clazz: CreatureClass,
+    lifeMax: number,
+    energyMax: number,
+    power: number,
+    skills: Skill[]
   ) {
+    this.name = name;
+    this.clazz = clazz;
+    this.lifeMax = lifeMax;
     this.life = lifeMax;
+    this.energyMax = energyMax;
     this.energy = energyMax;
+    this.power = power;
+    this.skills = skills;
     this.updateLifePercent();
   }
 
@@ -252,11 +308,20 @@ export class EndOfRound extends Creature {
  */
 export class EnemyAction {
 
+  /**
+   * The executed skill.
+   */
+  skill: Skill;
+
+  /**
+   * The creatures targeted by the skill, if any.
+   */
+  targetCreatures: Creature[];
+
   constructor(
-    // The executed skill
-    public skill: Skill,
-    // The target characters, if any
-    public targetCreatures: Creature[]) {
+    skill: Skill,
+    targetCreatures: Creature[]) {
+    this.skill = skill;
+    this.targetCreatures = targetCreatures;
   }
 }
-

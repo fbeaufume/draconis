@@ -1,6 +1,6 @@
 import {Game} from "./game.model";
 import {Advance, DamageAndBleed, Heal, Leave, Skill, Strike, StrikeSmall, Wait} from "./skill.model";
-import {CreatureClass, LogType, SkillTarget, SkillIconType} from "./common.model";
+import {CreatureClass, LogType, SkillIconType, SkillTarget} from "./common.model";
 import {LifeChange} from "./life-change.model";
 import {logs} from "./log.model";
 import {Creature, EnemyAction} from "./creature.model";
@@ -9,6 +9,11 @@ import {Creature, EnemyAction} from "./creature.model";
  * An enemy. Subclasses implement the enemy behavior and used skills (attacks, heals, etc).
  */
 export abstract class Enemy extends Creature {
+
+  /**
+   * Number of actions per turn.
+   */
+  actions: number;
 
   /**
    * The enemy action step. Zero based, i.e. 0 the for the first action, 1 for the second, etc.
@@ -29,9 +34,9 @@ export abstract class Enemy extends Creature {
     name: string,
     lifeMax: number,
     power: number,
-    // Number of actions per turn
-    public actions: number = 1) {
+    actions: number = 1) {
     super(name, CreatureClass.ENEMY, lifeMax, 100, power, []);
+    this.actions = actions;
     this.customize();
   }
 

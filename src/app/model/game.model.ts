@@ -39,7 +39,10 @@ import {
  * The action order of characters and enemies during a turn.
  */
 export class TurnOrder {
-  // Turn order with active (e.g. living) living creatures
+
+  /**
+   * Turn order of playable creatures, i.e. characters and living enemies.
+   */
   currentOrder: Creature[] = [];
 
   constructor(
@@ -119,45 +122,63 @@ export class TurnOrder {
  */
 export class Fight {
 
+  opposition: Opposition;
+
+  /**
+   * The current round number.
+   */
   round: number = 1;
 
   turnOrder: TurnOrder;
 
-  // The currently active character or enemy
+  /**
+   * The currently active character or enemy.
+   */
   activeCreature: Creature | null;
 
-  // The character under the mouse pointer during the selection of a character
+  /**
+   * The character under the mouse pointer during the selection of a character.
+   */
   hoveredCharacter: Character | null;
 
-  // The skill currently under the mouse pointer during the selection of a skill
+  /**
+   * The skill currently under the mouse pointer during the selection of a skill.
+   */
   hoveredSkill: Skill | null;
 
-  // The skill currently displayed in the focus skill panel
+  /**
+   * The skill currently displayed in the focus skill panel.
+   */
   focusedSkill: Skill | null;
 
-  // Skill selected by the player
+  /**
+   * Skill selected by the player.
+   */
   selectedSkill: Skill | null;
 
-  // The enemy under the mouse pointer during the selection of an enemy
+  /**
+   * The enemy under the mouse pointer during the selection of an enemy.
+   */
   hoveredEnemy: Enemy | null;
 
-  // The creatures targeted by the chosen skill of the active character or enemy
+  /**
+   * The creatures targeted by the chosen skill of the active character or enemy.
+   */
   targetCreatures: Creature[] = [];
 
   constructor(
     party: Party,
-    public opposition: Opposition,
+    opposition: Opposition,
   ) {
+    this.opposition = opposition;
+    this.opposition.updateDistances();
+    this.turnOrder = new TurnOrder(party, this.opposition);
     this.activeCreature = null;
     this.hoveredSkill = null;
     this.focusedSkill = null;
     this.selectedSkill = null;
     this.hoveredEnemy = null;
     this.targetCreatures = [];
-
-    this.turnOrder = new TurnOrder(party, this.opposition);
-
-    this.opposition.updateDistances();
   }
 
   getAllEnemies(): Creature[] {
@@ -191,10 +212,16 @@ export class Fight {
  */
 export class Dungeon {
 
+  name: string;
+
+  oppositions: Opposition[];
+
   constructor(
-    public name: string,
-    public oppositions: Opposition[]
+    name: string,
+    oppositions: Opposition[]
   ) {
+    this.name = name;
+    this.oppositions = oppositions;
   }
 }
 

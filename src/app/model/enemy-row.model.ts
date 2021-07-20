@@ -6,10 +6,16 @@ import {Constants} from "./constants.model";
  */
 export class EnemyRow {
 
-    constructor(public enemies: Enemy[]) {
-    }
+  /**
+   * The enemies of the row.
+   */
+  enemies: Enemy[];
 
-    isNotFull(): boolean {
-        return this.enemies.length < Constants.OPPOSITION_ROW_SIZE;
-    }
+  constructor(enemies: Enemy[]) {
+    this.enemies = enemies;
+  }
+
+  isNotFull(): boolean {
+    return this.enemies.length < Constants.OPPOSITION_ROW_SIZE;
+  }
 }

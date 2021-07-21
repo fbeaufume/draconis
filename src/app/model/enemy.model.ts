@@ -1,5 +1,5 @@
 import {Game} from "./game.model";
-import {Advance, DamageAndBleed, Heal, Leave, Skill, Strike, StrikeSmall, Wait} from "./skill.model";
+import {Advance, DamageAndBleed, DamageAndPoison, Heal, Leave, Skill, Strike, StrikeSmall, Wait} from "./skill.model";
 import {CreatureClass, LogType, SkillIconType, SkillTarget} from "./common.model";
 import {LifeChange} from "./life-change.model";
 import {logs} from "./log.model";
@@ -121,8 +121,19 @@ export class MeleeEnemy extends Enemy {
 export class BleederMeleeEnemy extends MeleeEnemy {
 
   customize() {
-    this.mainAttack = new DamageAndBleed(SkillIconType.ATTACK, 'Deep Wound', SkillTarget.ENEMY_SINGLE, 20, 1, 0,
-      '', [0.5, 0.4]);
+    this.mainAttack = new DamageAndBleed(SkillIconType.ATTACK, 'Deep Wound',
+      SkillTarget.ENEMY_SINGLE, 20, 1, 0, '', [0.5, 0.4]);
+  }
+}
+
+/**
+ * A melee enemy that uses a poison attack.
+ */
+export class PoisonMeleeEnemy extends MeleeEnemy {
+
+  customize() {
+    this.mainAttack = new DamageAndPoison(SkillIconType.ATTACK, 'Poison',
+      SkillTarget.ENEMY_SINGLE, 20, 1, 0, '', [0.5, 0.4]);
   }
 }
 

@@ -1,7 +1,7 @@
 // Classes for the whole game and fights
 
 import {Creature, EndOfRound} from './creature.model';
-import {CreatureClass, GameState, SkillTarget, SkillIconType} from "./common.model";
+import {CreatureClass, GameState, SkillIconType, SkillTarget} from "./common.model";
 import {Character} from "./character.model";
 import {Party} from "./party.model";
 import {settings} from "./settings.model";
@@ -12,7 +12,8 @@ import {
   Enemy,
   HealerEnemy,
   MeleeEnemy,
-  OldManEnemy
+  OldManEnemy,
+  PoisonMeleeEnemy
 } from "./enemy.model";
 import {Opposition} from "./opposition.model";
 import {Constants} from "./constants.model";
@@ -263,15 +264,15 @@ class FangForestDungeon extends Dungeon {
   constructor() {
     super('Fang Forest', [
       new Opposition('wild bears', [
-        new BleederMeleeEnemy('Bear A', 38, 7),
-        new BleederMeleeEnemy('Bear B', 38, 7),
+        new BleederMeleeEnemy('Bear A', 34, 7),
+        new BleederMeleeEnemy('Bear B', 34, 7),
       ]),
       new Opposition('a pack of wolves', [
-        new MeleeEnemy('Wolf A', 26, 5),
+        new MeleeEnemy('Wolf A', 22, 5),
       ], [
-        new MeleeEnemy('Wolf B', 26, 5),
-        new MeleeEnemy('Wolf C', 26, 5),
-        new MeleeEnemy('Wolf D', 26, 5),
+        new MeleeEnemy('Wolf B', 22, 5),
+        new MeleeEnemy('Wolf C', 22, 5),
+        new MeleeEnemy('Wolf D', 22, 5),
       ]),
       new Opposition('a mysterious old man', [
         new OldManEnemy('Old Man', 28, 12, 2)
@@ -305,7 +306,11 @@ class ForgottenGraveyardDungeon extends Dungeon {
         new MeleeEnemy('Skeleton C', 18, 6),
         new MeleeEnemy('Skeleton D', 18, 6),
       ]),
-    ]);
+      new Opposition('zombies', [
+        new PoisonMeleeEnemy('Zombie A', 28, 6),
+        new PoisonMeleeEnemy('Zombie B', 28, 6),
+        new PoisonMeleeEnemy('Zombie B', 28, 6),
+      ])]);
   }
 }
 

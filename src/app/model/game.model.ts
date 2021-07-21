@@ -390,7 +390,7 @@ export class Game {
     ]);
 
   dungeons: Dungeon[] = [new TestDungeon(), new FangForestDungeon(), new ForgottenGraveyardDungeon()];
-  dungeon: Dungeon = this.dungeons[settings.devMode ? 0 : 1];
+  dungeon: Dungeon = this.dungeons[settings.dungeon] || this.dungeons[1] || this.dungeons[0];
 
   fight: Fight = new Fight(this.party, new Opposition(''));
 

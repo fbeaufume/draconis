@@ -464,7 +464,7 @@ export class DamageAndDamage extends Skill {
 
 /**
  * A damaging skill that also adds a bleed damage over time.
- * This and DamageAndPoison should be a single class, but it's really painful to do so in TypeScript.
+ * This and DamageAndPoison should be a single class, but it's painful to do so in TypeScript.
  */
 export class DamageAndBleed extends Skill {
 
@@ -493,7 +493,7 @@ export class DamageAndBleed extends Skill {
 
 /**
  * A damaging skill that also adds a poison damage over time.
- * This and DamageAndBleed should be a single class, but it's really painful to do so in TypeScript.
+ * This and DamageAndBleed should be a single class, but it's painful to do so in TypeScript.
  */
 export class DamageAndPoison extends Skill {
 

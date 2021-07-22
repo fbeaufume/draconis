@@ -6,11 +6,11 @@ import {Character} from "./character.model";
 import {Party} from "./party.model";
 import {settings} from "./settings.model";
 import {
-  BleederMeleeEnemy,
+  BleedMeleeEnemy,
   DistanceEnemy,
   DragonEnemy,
   Enemy,
-  HealerEnemy,
+  HealerEnemy, LeechMeleeEnemy,
   MeleeEnemy,
   OldManEnemy,
   PoisonMeleeEnemy
@@ -251,8 +251,7 @@ class TestDungeon extends Dungeon {
         new MeleeEnemy('Monster 2', 5, 8),
         new MeleeEnemy('Monster 3', 5, 8),
       ], []),
-    ])
-    ;
+    ]);
   }
 }
 
@@ -264,8 +263,8 @@ class FangForestDungeon extends Dungeon {
   constructor() {
     super('Fang Forest', [
       new Opposition('wild bears', [
-        new BleederMeleeEnemy('Bear A', 34, 7),
-        new BleederMeleeEnemy('Bear B', 34, 7),
+        new BleedMeleeEnemy('Bear A', 34, 7),
+        new BleedMeleeEnemy('Bear B', 34, 7),
       ]),
       new Opposition('a pack of wolves', [
         new MeleeEnemy('Wolf A', 22, 5),
@@ -309,8 +308,13 @@ class ForgottenGraveyardDungeon extends Dungeon {
       new Opposition('zombies', [
         new PoisonMeleeEnemy('Zombie A', 28, 6),
         new PoisonMeleeEnemy('Zombie B', 28, 6),
-        new PoisonMeleeEnemy('Zombie B', 28, 6),
-      ])]);
+        new PoisonMeleeEnemy('Zombie C', 28, 6),
+      ]),
+      new Opposition('vampires', [
+        new LeechMeleeEnemy('Vampire A', 34, 5),
+        new LeechMeleeEnemy('Vampire B', 34, 5),
+      ]),
+    ]);
   }
 }
 

@@ -314,6 +314,13 @@ class ForgottenGraveyardDungeon extends Dungeon {
         new LeechMeleeEnemy('Vampire A', 34, 5),
         new LeechMeleeEnemy('Vampire B', 34, 5),
       ]),
+      new Opposition('undeads', [
+        new MeleeEnemy('Skeleton A', 18, 6),
+        new LeechMeleeEnemy('Vampire', 34, 5),
+        new PoisonMeleeEnemy('Zombie', 28, 6),
+      ],[
+        new MeleeEnemy('Skeleton B', 18, 6),
+      ]),
     ]);
   }
 }

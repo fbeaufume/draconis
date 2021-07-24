@@ -28,8 +28,9 @@ export class Character extends Creature {
     energyMax: number,
     power: number,
     skills: Skill[],
+    specialities: CreatureType[]
   ) {
-    super(CreatureType.HUMANOID, name, clazz, lifeMax, energyMax, power, skills);
+    super(CreatureType.HUMANOID, name, clazz, lifeMax, energyMax, power, skills, specialities);
     this.level = level;
     this.useMana = useMana;
     this.restoreEnergy();

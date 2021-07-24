@@ -80,6 +80,11 @@ export abstract class Creature {
   skills: Skill[];
 
   /**
+   * The specialties are the creature types this creature is strong against (deals extra damage and receive less damage).
+   */
+  specialties: CreatureType[];
+
+  /**
    * The distance between the enemy and the party, i.e. 1 means the opposition front row, 2 means the middle row, 3 the back row
    * Not in the Enemy class to prevent circular dependency issues.
    */
@@ -112,9 +117,10 @@ export abstract class Creature {
     lifeMax: number,
     energyMax: number,
     power: number,
-    skills: Skill[]
+    skills: Skill[],
+    specialties: CreatureType[] = []
   ) {
-    this.type = type,
+    this.type = type;
     this.name = name;
     this.clazz = clazz;
     this.lifeMax = lifeMax;
@@ -123,6 +129,7 @@ export abstract class Creature {
     this.energy = energyMax;
     this.power = power;
     this.skills = skills;
+    this.specialties = specialties;
     this.updateLifePercent();
   }
 

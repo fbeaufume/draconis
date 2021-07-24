@@ -237,20 +237,20 @@ class TestDungeon extends Dungeon {
       new Opposition('some monsters', [
         // new OldManEnemy(CreatureType.HUMANOID, 'Old Man', 24, 14),
         // new DragonEnemy(CreatureType.BEAST, 'Green Dragon', 120, 10, 2),
-        new MeleeEnemy(CreatureType.OTHER,'Monster 1', 1, 8),
-        new MeleeEnemy(CreatureType.OTHER,'Monster 2', 1, 8),
+        new MeleeEnemy(CreatureType.OTHER, 'Monster 1', 1, 8),
+        new MeleeEnemy(CreatureType.OTHER, 'Monster 2', 1, 8),
         // new MeleeEnemy(CreatureType.OTHER, Monster 3', 20, 8),
         // new MeleeEnemy(CreatureType.OTHER, 'Monster 4', 2, 5),
       ], [
-        new MeleeEnemy(CreatureType.OTHER,'Monster 5', 50, 8),
-        new MeleeEnemy(CreatureType.OTHER,'Monster 6', 50, 8),
+        new MeleeEnemy(CreatureType.OTHER, 'Monster 5', 50, 8),
+        new MeleeEnemy(CreatureType.OTHER, 'Monster 6', 50, 8),
         // new MeleeEnemy(CreatureType.OTHER, Monster 7', 50, 8),
         // new MeleeEnemy(CreatureType.OTHER, 'Monster 8', 50, 8),
       ]),
       new Opposition('some monsters', [
         new MeleeEnemy(CreatureType.OTHER, 'Monster 1', 5, 8),
-        new MeleeEnemy(CreatureType.OTHER,'Monster 2', 5, 8),
-        new MeleeEnemy(CreatureType.OTHER,'Monster 3', 5, 8),
+        new MeleeEnemy(CreatureType.OTHER, 'Monster 2', 5, 8),
+        new MeleeEnemy(CreatureType.OTHER, 'Monster 3', 5, 8),
       ], []),
     ]);
   }
@@ -275,15 +275,15 @@ class FangForestDungeon extends Dungeon {
         new MeleeEnemy(CreatureType.BEAST, 'Wolf D', 22, 7),
       ]),
       new Opposition('a mysterious old man', [
-        new OldManEnemy(CreatureType.HUMANOID,'Old Man', 28, 12, 2)
+        new OldManEnemy(CreatureType.HUMANOID, 'Old Man', 28, 12, 2)
       ]),
       new Opposition('a band of goblins', [
         new MeleeEnemy(CreatureType.HUMANOID, 'Goblin Solder A', 22, 6),
-        new MeleeEnemy(CreatureType.HUMANOID,'Goblin Solder B', 22, 6),
-        new MeleeEnemy(CreatureType.HUMANOID,'Goblin Solder C', 22, 6),
+        new MeleeEnemy(CreatureType.HUMANOID, 'Goblin Solder B', 22, 6),
+        new MeleeEnemy(CreatureType.HUMANOID, 'Goblin Solder C', 22, 6),
       ], [
-        new DistanceEnemy(CreatureType.HUMANOID,'Goblin Hunter', 24, 7),
-        new HealerEnemy(CreatureType.HUMANOID,'Goblin Shaman', 26, 7),
+        new DistanceEnemy(CreatureType.HUMANOID, 'Goblin Hunter', 24, 7),
+        new HealerEnemy(CreatureType.HUMANOID, 'Goblin Shaman', 26, 7),
       ]),
       new Opposition('a young but fierce green dragon', [
         new DragonEnemy(CreatureType.BEAST, 'Green Dragon', 120, 10, 2),
@@ -300,27 +300,27 @@ class ForgottenGraveyardDungeon extends Dungeon {
   constructor() {
     super('Forgotten Graveyard', [
       new Opposition('skeletons', [
-        new MeleeEnemy(CreatureType.UNDEAD,'Skeleton A', 18, 7),
-        new MeleeEnemy(CreatureType.UNDEAD,'Skeleton B', 18, 7),
+        new MeleeEnemy(CreatureType.UNDEAD, 'Skeleton A', 18, 7),
+        new MeleeEnemy(CreatureType.UNDEAD, 'Skeleton B', 18, 7),
       ], [
-        new MeleeEnemy(CreatureType.UNDEAD,'Skeleton C', 18, 7),
-        new MeleeEnemy(CreatureType.UNDEAD,'Skeleton D', 18, 7),
+        new MeleeEnemy(CreatureType.UNDEAD, 'Skeleton C', 18, 7),
+        new MeleeEnemy(CreatureType.UNDEAD, 'Skeleton D', 18, 7),
       ]),
       new Opposition('zombies', [
-        new PoisonMeleeEnemy(CreatureType.UNDEAD,'Zombie A', 28, 8),
-        new PoisonMeleeEnemy(CreatureType.UNDEAD,'Zombie B', 28, 8),
-        new PoisonMeleeEnemy(CreatureType.UNDEAD,'Zombie C', 28, 8),
+        new PoisonMeleeEnemy(CreatureType.UNDEAD, 'Zombie A', 28, 8),
+        new PoisonMeleeEnemy(CreatureType.UNDEAD, 'Zombie B', 28, 8),
+        new PoisonMeleeEnemy(CreatureType.UNDEAD, 'Zombie C', 28, 8),
       ]),
       new Opposition('vampires', [
-        new LeechMeleeEnemy(CreatureType.UNDEAD,'Vampire A', 34, 8),
-        new LeechMeleeEnemy(CreatureType.UNDEAD,'Vampire B', 34, 8),
+        new LeechMeleeEnemy(CreatureType.UNDEAD, 'Vampire A', 34, 8),
+        new LeechMeleeEnemy(CreatureType.UNDEAD, 'Vampire B', 34, 8),
       ]),
       new Opposition('undeads', [
-        new MeleeEnemy(CreatureType.UNDEAD,'Skeleton A', 18, 7),
-        new LeechMeleeEnemy(CreatureType.UNDEAD,'Vampire', 34, 8),
-        new PoisonMeleeEnemy(CreatureType.UNDEAD,'Zombie', 28, 8),
-      ],[
-        new MeleeEnemy(CreatureType.UNDEAD,'Skeleton B', 18, 7),
+        new MeleeEnemy(CreatureType.UNDEAD, 'Skeleton A', 18, 7),
+        new LeechMeleeEnemy(CreatureType.UNDEAD, 'Vampire', 34, 8),
+        new PoisonMeleeEnemy(CreatureType.UNDEAD, 'Zombie', 28, 8),
+      ], [
+        new MeleeEnemy(CreatureType.UNDEAD, 'Skeleton B', 18, 7),
       ]),
     ]);
   }
@@ -345,60 +345,64 @@ export class Game {
 
   party: Party = new Party([
       new Character('Melkan', CreatureClass.WARRIOR, 4, 30, false, 50, 8, [
-        new DefendTech(),
-        new Strike('Strike'),
-        new DamageAndDamage(SkillIconType.ATTACK, 'Fury Strike', SkillTarget.ENEMY_SINGLE, 15, 1, 0,
-          'Inflict 140% damage to the target and 30% damage to self.', [1.4, 0.3]),
-        new DamageAndBleed(SkillIconType.ATTACK, 'Deep Wound', SkillTarget.ENEMY_SINGLE, 20, 1, 0,
-          'Inflict 50% damage to the target and 120% damage over ' + Constants.EFFECT_DURATION + ' rounds.', [0.5, 0.4]),
-        new Damage(SkillIconType.ATTACK, 'Slash', SkillTarget.ENEMY_DOUBLE, 20, 1, 0,
-          'Inflict 80% damage to two adjacent targets.', [0.8]),
-        new ApplyStatus(SkillIconType.DETERIORATION, 'Intimidate', SkillTarget.ENEMY_SINGLE, 20, 1, 0,
-          'Reduce the enemy attack by 20% during ' + Constants.EFFECT_DURATION + ' rounds.', [], attack, false),
-      ]),
+          new DefendTech(),
+          new Strike('Strike'),
+          new DamageAndDamage(SkillIconType.ATTACK, 'Fury Strike', SkillTarget.ENEMY_SINGLE, 15, 1, 0,
+            'Inflict 140% damage to the target and 30% damage to self.', [1.4, 0.3]),
+          new DamageAndBleed(SkillIconType.ATTACK, 'Deep Wound', SkillTarget.ENEMY_SINGLE, 20, 1, 0,
+            'Inflict 50% damage to the target and 120% damage over ' + Constants.EFFECT_DURATION + ' rounds.', [0.5, 0.4]),
+          new Damage(SkillIconType.ATTACK, 'Slash', SkillTarget.ENEMY_DOUBLE, 20, 1, 0,
+            'Inflict 80% damage to two adjacent targets.', [0.8]),
+          new ApplyStatus(SkillIconType.DETERIORATION, 'Intimidate', SkillTarget.ENEMY_SINGLE, 20, 1, 0,
+            'Reduce the enemy attack by 20% during ' + Constants.EFFECT_DURATION + ' rounds.', [], attack, false),
+        ],
+        [CreatureType.HUMANOID]),
       new Character('Arwin', CreatureClass.PALADIN, 4, 30, true, 50, 8, [
-        new DefendMagic(),
-        new Damage(SkillIconType.ATTACK, 'Holy Strike', SkillTarget.ENEMY_SINGLE, 5, 1, 0,
-          'Inflict 100% damage.'),
-        new DamageAndHeal(SkillIconType.ATTACK, 'Recovery Strike', SkillTarget.ENEMY_SINGLE, 10, 1, 0,
-          'Inflict 100% damage to the target and heal self for 50% damage.', [1.0, 0.5]),
-        new Heal(SkillIconType.HEAL, 'Heal', SkillTarget.CHARACTER_ALIVE, 5, 0, 0,
-          'Heal a character for 100% damage.'),
-        new DualHeal(SkillIconType.HEAL, 'Dual Heal', SkillTarget.CHARACTER_OTHER, 10, 0, 0,
-          'Heal a character for 100% damage and self for 80% damage.', [1, 0.8]),
-        new Regenerate(SkillIconType.HEAL, 'Regenerate', SkillTarget.CHARACTER_ALIVE, 5, 0, 0,
-          'Heal a character for 50% damage and 120% damage over ' + Constants.EFFECT_DURATION + ' rounds.', [0.5, 0.4]),
-        new Heal(SkillIconType.HEAL, 'Heal All', SkillTarget.CHARACTER_ALL_ALIVE, 20, 0, 0,
-          'Heal all characters for 50% damage.', [0.5]),
-        new Revive(SkillIconType.HEAL, 'Revive', SkillTarget.CHARACTER_DEAD, 20, 0, 0,
-          'Revive a character with 50% life.'),
-      ])
+          new DefendMagic(),
+          new Damage(SkillIconType.ATTACK, 'Holy Strike', SkillTarget.ENEMY_SINGLE, 5, 1, 0,
+            'Inflict 100% damage.'),
+          new DamageAndHeal(SkillIconType.ATTACK, 'Recovery Strike', SkillTarget.ENEMY_SINGLE, 10, 1, 0,
+            'Inflict 100% damage to the target and heal self for 50% damage.', [1.0, 0.5]),
+          new Heal(SkillIconType.HEAL, 'Heal', SkillTarget.CHARACTER_ALIVE, 5, 0, 0,
+            'Heal a character for 100% damage.'),
+          new DualHeal(SkillIconType.HEAL, 'Dual Heal', SkillTarget.CHARACTER_OTHER, 10, 0, 0,
+            'Heal a character for 100% damage and self for 80% damage.', [1, 0.8]),
+          new Regenerate(SkillIconType.HEAL, 'Regenerate', SkillTarget.CHARACTER_ALIVE, 5, 0, 0,
+            'Heal a character for 50% damage and 120% damage over ' + Constants.EFFECT_DURATION + ' rounds.', [0.5, 0.4]),
+          new Heal(SkillIconType.HEAL, 'Heal All', SkillTarget.CHARACTER_ALL_ALIVE, 20, 0, 0,
+            'Heal all characters for 50% damage.', [0.5]),
+          new Revive(SkillIconType.HEAL, 'Revive', SkillTarget.CHARACTER_DEAD, 20, 0, 0,
+            'Revive a character with 50% life.'),
+        ],
+        [CreatureType.UNDEAD])
     ],
     [
       new Character('Faren', CreatureClass.ARCHER, 4, 30, false, 50, 8, [
-        new DefendTech(),
-        new Damage(SkillIconType.ATTACK, 'Shot', SkillTarget.ENEMY_SINGLE, 10, 2, 0,
-          'Inflict 100% damage.'),
-        new ComboDamage(SkillIconType.ATTACK, 'Combo Shot', SkillTarget.ENEMY_SINGLE, 10, 1, 0,
-          'Inflict 80% damage then 120% then 160% when used on the same target during consecutive turns.', [0.8, 1.2, 1.6]),
-        new DamageAndPoison(SkillIconType.ATTACK, 'Viper Shot', SkillTarget.ENEMY_SINGLE, 15, 2, 0,
-          'Inflict 50% damage to the target and 120% damage over ' + Constants.EFFECT_DURATION + ' rounds.', [0.5, 0.4]),
-        new Damage(SkillIconType.ATTACK, 'Explosive Shot', SkillTarget.ENEMY_TRIPLE, 20, 2, 0,
-          'Inflict 60% damage to three adjacent targets.', [0.6]),
-        new ApplyStatus(SkillIconType.DETERIORATION, 'Crippling Shot', SkillTarget.ENEMY_SINGLE, 10, 2, 0,
-          'Reduce the enemy defense by 20% during ' + Constants.EFFECT_DURATION + ' rounds.', [], defense, false),
-      ]),
+          new DefendTech(),
+          new Damage(SkillIconType.ATTACK, 'Shot', SkillTarget.ENEMY_SINGLE, 10, 2, 0,
+            'Inflict 100% damage.'),
+          new ComboDamage(SkillIconType.ATTACK, 'Combo Shot', SkillTarget.ENEMY_SINGLE, 10, 1, 0,
+            'Inflict 80% damage then 120% then 160% when used on the same target during consecutive turns.', [0.8, 1.2, 1.6]),
+          new DamageAndPoison(SkillIconType.ATTACK, 'Viper Shot', SkillTarget.ENEMY_SINGLE, 15, 2, 0,
+            'Inflict 50% damage to the target and 120% damage over ' + Constants.EFFECT_DURATION + ' rounds.', [0.5, 0.4]),
+          new Damage(SkillIconType.ATTACK, 'Explosive Shot', SkillTarget.ENEMY_TRIPLE, 20, 2, 0,
+            'Inflict 60% damage to three adjacent targets.', [0.6]),
+          new ApplyStatus(SkillIconType.DETERIORATION, 'Crippling Shot', SkillTarget.ENEMY_SINGLE, 10, 2, 0,
+            'Reduce the enemy defense by 20% during ' + Constants.EFFECT_DURATION + ' rounds.', [], defense, false),
+        ],
+        [CreatureType.BEAST]),
       new Character('Harika', CreatureClass.MAGE, 4, 30, true, 50, 8, [
-        new DefendMagic(),
-        new Damage(SkillIconType.ATTACK, 'Lightning', SkillTarget.ENEMY_SINGLE, 5, 2, 0,
-          'Inflict 100% damage.'),
-        new Damage(SkillIconType.ATTACK, 'Fireball', SkillTarget.ENEMY_TRIPLE, 10, 2, 0,
-          'Inflict 60% damage to three adjacent targets.', [0.6]),
-        new ApplyStatus(SkillIconType.DETERIORATION, 'Weakness', SkillTarget.ENEMY_SINGLE, 10, 2, 0,
-          'Reduce the enemy attack by 20% during ' + Constants.EFFECT_DURATION + ' rounds.', [], attack, false),
-        new ApplyStatus(SkillIconType.DETERIORATION, 'Slow', SkillTarget.ENEMY_SINGLE, 10, 2, 0,
-          'Reduce the enemy defense by 20% during ' + Constants.EFFECT_DURATION + ' rounds.', [], defense, false),
-      ])
+          new DefendMagic(),
+          new Damage(SkillIconType.ATTACK, 'Lightning', SkillTarget.ENEMY_SINGLE, 5, 2, 0,
+            'Inflict 100% damage.'),
+          new Damage(SkillIconType.ATTACK, 'Fireball', SkillTarget.ENEMY_TRIPLE, 10, 2, 0,
+            'Inflict 60% damage to three adjacent targets.', [0.6]),
+          new ApplyStatus(SkillIconType.DETERIORATION, 'Weakness', SkillTarget.ENEMY_SINGLE, 10, 2, 0,
+            'Reduce the enemy attack by 20% during ' + Constants.EFFECT_DURATION + ' rounds.', [], attack, false),
+          new ApplyStatus(SkillIconType.DETERIORATION, 'Slow', SkillTarget.ENEMY_SINGLE, 10, 2, 0,
+            'Reduce the enemy defense by 20% during ' + Constants.EFFECT_DURATION + ' rounds.', [], defense, false),
+        ],
+        [CreatureType.ELEMENTAL])
     ]);
 
   dungeons: Dungeon[] = [new TestDungeon(), new FangForestDungeon(), new ForgottenGraveyardDungeon()];

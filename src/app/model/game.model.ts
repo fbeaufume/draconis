@@ -263,29 +263,29 @@ class FangForestDungeon extends Dungeon {
   constructor() {
     super('Fang Forest', [
       new Opposition('wild bears', [
-        new BleedMeleeEnemy('Bear A', 34, 7),
-        new BleedMeleeEnemy('Bear B', 34, 7),
+        new BleedMeleeEnemy('Bear A', 34, 8),
+        new BleedMeleeEnemy('Bear B', 34, 8),
       ]),
       new Opposition('a pack of wolves', [
-        new MeleeEnemy('Wolf A', 22, 5),
+        new MeleeEnemy('Wolf A', 22, 7),
       ], [
-        new MeleeEnemy('Wolf B', 22, 5),
-        new MeleeEnemy('Wolf C', 22, 5),
-        new MeleeEnemy('Wolf D', 22, 5),
+        new MeleeEnemy('Wolf B', 22, 7),
+        new MeleeEnemy('Wolf C', 22, 7),
+        new MeleeEnemy('Wolf D', 22, 7),
       ]),
       new Opposition('a mysterious old man', [
         new OldManEnemy('Old Man', 28, 12, 2)
       ]),
       new Opposition('a band of goblins', [
-        new MeleeEnemy('Goblin Solder A', 32, 7),
-        new MeleeEnemy('Goblin Solder B', 32, 7),
-        new MeleeEnemy('Goblin Solder C', 32, 7),
+        new MeleeEnemy('Goblin Solder A', 22, 6),
+        new MeleeEnemy('Goblin Solder B', 22, 6),
+        new MeleeEnemy('Goblin Solder C', 22, 6),
       ], [
-        new DistanceEnemy('Goblin Hunter', 28, 8),
-        new HealerEnemy('Goblin Shaman', 24, 8),
+        new DistanceEnemy('Goblin Hunter', 24, 7),
+        new HealerEnemy('Goblin Shaman', 26, 7),
       ]),
       new Opposition('a young but fierce green dragon', [
-        new DragonEnemy('Green Dragon', 120, 10, 3),
+        new DragonEnemy('Green Dragon', 120, 10, 2),
       ]),
     ]);
   }
@@ -299,27 +299,27 @@ class ForgottenGraveyardDungeon extends Dungeon {
   constructor() {
     super('Forgotten Graveyard', [
       new Opposition('skeletons', [
-        new MeleeEnemy('Skeleton A', 18, 6),
-        new MeleeEnemy('Skeleton B', 18, 6),
+        new MeleeEnemy('Skeleton A', 18, 7),
+        new MeleeEnemy('Skeleton B', 18, 7),
       ], [
-        new MeleeEnemy('Skeleton C', 18, 6),
-        new MeleeEnemy('Skeleton D', 18, 6),
+        new MeleeEnemy('Skeleton C', 18, 7),
+        new MeleeEnemy('Skeleton D', 18, 7),
       ]),
       new Opposition('zombies', [
-        new PoisonMeleeEnemy('Zombie A', 28, 6),
-        new PoisonMeleeEnemy('Zombie B', 28, 6),
-        new PoisonMeleeEnemy('Zombie C', 28, 6),
+        new PoisonMeleeEnemy('Zombie A', 28, 8),
+        new PoisonMeleeEnemy('Zombie B', 28, 8),
+        new PoisonMeleeEnemy('Zombie C', 28, 8),
       ]),
       new Opposition('vampires', [
-        new LeechMeleeEnemy('Vampire A', 34, 5),
-        new LeechMeleeEnemy('Vampire B', 34, 5),
+        new LeechMeleeEnemy('Vampire A', 34, 8),
+        new LeechMeleeEnemy('Vampire B', 34, 8),
       ]),
       new Opposition('undeads', [
-        new MeleeEnemy('Skeleton A', 18, 6),
-        new LeechMeleeEnemy('Vampire', 34, 5),
-        new PoisonMeleeEnemy('Zombie', 28, 6),
+        new MeleeEnemy('Skeleton A', 18, 7),
+        new LeechMeleeEnemy('Vampire', 34, 8),
+        new PoisonMeleeEnemy('Zombie', 28, 8),
       ],[
-        new MeleeEnemy('Skeleton B', 18, 6),
+        new MeleeEnemy('Skeleton B', 18, 7),
       ]),
     ]);
   }
@@ -343,7 +343,7 @@ export class Game {
   oppositionId: number = settings.fight - 1;
 
   party: Party = new Party([
-      new Character('Melkan', CreatureClass.WARRIOR, 4, 20, false, 50, 10, [
+      new Character('Melkan', CreatureClass.WARRIOR, 4, 30, false, 50, 8, [
         new DefendTech(),
         new Strike('Strike'),
         new DamageAndDamage(SkillIconType.ATTACK, 'Fury Strike', SkillTarget.ENEMY_SINGLE, 15, 1, 0,
@@ -355,7 +355,7 @@ export class Game {
         new ApplyStatus(SkillIconType.DETERIORATION, 'Intimidate', SkillTarget.ENEMY_SINGLE, 20, 1, 0,
           'Reduce the enemy attack by 20% during ' + Constants.EFFECT_DURATION + ' rounds.', [], attack, false),
       ]),
-      new Character('Arwin', CreatureClass.PALADIN, 4, 20, true, 50, 10, [
+      new Character('Arwin', CreatureClass.PALADIN, 4, 30, true, 50, 8, [
         new DefendMagic(),
         new Damage(SkillIconType.ATTACK, 'Holy Strike', SkillTarget.ENEMY_SINGLE, 5, 1, 0,
           'Inflict 100% damage.'),
@@ -374,7 +374,7 @@ export class Game {
       ])
     ],
     [
-      new Character('Faren', CreatureClass.ARCHER, 4, 20, false, 50, 10, [
+      new Character('Faren', CreatureClass.ARCHER, 4, 30, false, 50, 8, [
         new DefendTech(),
         new Damage(SkillIconType.ATTACK, 'Shot', SkillTarget.ENEMY_SINGLE, 10, 2, 0,
           'Inflict 100% damage.'),
@@ -387,7 +387,7 @@ export class Game {
         new ApplyStatus(SkillIconType.DETERIORATION, 'Crippling Shot', SkillTarget.ENEMY_SINGLE, 10, 2, 0,
           'Reduce the enemy defense by 20% during ' + Constants.EFFECT_DURATION + ' rounds.', [], defense, false),
       ]),
-      new Character('Harika', CreatureClass.MAGE, 4, 20, true, 50, 10, [
+      new Character('Harika', CreatureClass.MAGE, 4, 30, true, 50, 8, [
         new DefendMagic(),
         new Damage(SkillIconType.ATTACK, 'Lightning', SkillTarget.ENEMY_SINGLE, 5, 2, 0,
           'Inflict 100% damage.'),

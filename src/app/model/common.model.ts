@@ -1,6 +1,18 @@
 // Common model classes such as enumerations and utility classes
 
 /**
+ * The types of creature.
+ * Some characters, creatures or skills can be more or less efficient toward specific creature types.
+ */
+export enum CreatureType {
+  HUMANOID,
+  BEAST,
+  UNDEAD,
+  ELEMENTAL,
+  OTHER
+}
+
+/**
  * The various classes of creatures.
  * When any value is changed, update class-icon.component.html.
  */
@@ -8,11 +20,9 @@ export enum CreatureClass {
   ENEMY = 'enemy',
   END_OF_ROUND = 'end-of-round',
   WARRIOR = 'Warrior',
-  MONK = 'Monk',
   PALADIN = 'Paladin',
   ARCHER = 'Archer',
   MAGE = 'Mage',
-  PRIEST = 'Priest'
 }
 
 export enum LifeChangeType {

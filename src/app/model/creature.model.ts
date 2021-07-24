@@ -1,7 +1,14 @@
 import {computeEffectiveDamage, computeEffectiveHeal, Skill} from './skill.model';
 import {logs} from './log.model';
 import {Constants} from './constants.model';
-import {CreatureClass, LifeChangeEfficiency, LifeChangeType, LogType, StatusExpiration} from "./common.model";
+import {
+  CreatureClass,
+  CreatureType,
+  LifeChangeEfficiency,
+  LifeChangeType,
+  LogType,
+  StatusExpiration
+} from "./common.model";
 import {StatusType} from "./status-type.model";
 import {LifeChange} from "./life-change.model";
 import {StatusApplication} from "./status-application.model";
@@ -10,6 +17,11 @@ import {StatusApplication} from "./status-application.model";
  * Base class for enemies and characters.
  */
 export abstract class Creature {
+
+  /**
+   * The type of creature.
+   */
+  type: CreatureType;
 
   /**
    * The creature name.
@@ -94,6 +106,7 @@ export abstract class Creature {
   statusApplications: StatusApplication[] = [];
 
   protected constructor(
+    type: CreatureType,
     name: string,
     clazz: CreatureClass,
     lifeMax: number,
@@ -101,6 +114,7 @@ export abstract class Creature {
     power: number,
     skills: Skill[]
   ) {
+    this.type = type,
     this.name = name;
     this.clazz = clazz;
     this.lifeMax = lifeMax;
@@ -287,7 +301,7 @@ export abstract class Creature {
 export class EndOfRound extends Creature {
 
   constructor() {
-    super('End of round', CreatureClass.END_OF_ROUND, 1, 1, 0, []);
+    super(CreatureType.OTHER, 'End of round', CreatureClass.END_OF_ROUND, 1, 1, 0, []);
   }
 
   isCharacter(): boolean {

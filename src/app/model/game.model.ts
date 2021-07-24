@@ -1,7 +1,7 @@
 // Classes for the whole game and fights
 
 import {Creature, EndOfRound} from './creature.model';
-import {CreatureClass, GameState, SkillIconType, SkillTarget} from "./common.model";
+import {CreatureClass, CreatureType, GameState, SkillIconType, SkillTarget} from "./common.model";
 import {Character} from "./character.model";
 import {Party} from "./party.model";
 import {settings} from "./settings.model";
@@ -10,7 +10,8 @@ import {
   DistanceEnemy,
   DragonEnemy,
   Enemy,
-  HealerEnemy, LeechMeleeEnemy,
+  HealerEnemy,
+  LeechMeleeEnemy,
   MeleeEnemy,
   OldManEnemy,
   PoisonMeleeEnemy
@@ -234,22 +235,22 @@ class TestDungeon extends Dungeon {
   constructor() {
     super('Test Dungeon', [
       new Opposition('some monsters', [
-        // new OldManEnemy('Old Man', 24, 14),
-        // new DragonEnemy('Green Dragon', 120, 10, 2),
-        new MeleeEnemy('Monster 1', 1, 8),
-        new MeleeEnemy('Monster 2', 1, 8),
-        // new MeleeEnemy('Monster 3', 20, 8),
-        // new MeleeEnemy('Monster 4', 2, 5),
+        // new OldManEnemy(CreatureType.HUMANOID, 'Old Man', 24, 14),
+        // new DragonEnemy(CreatureType.BEAST, 'Green Dragon', 120, 10, 2),
+        new MeleeEnemy(CreatureType.OTHER,'Monster 1', 1, 8),
+        new MeleeEnemy(CreatureType.OTHER,'Monster 2', 1, 8),
+        // new MeleeEnemy(CreatureType.OTHER, Monster 3', 20, 8),
+        // new MeleeEnemy(CreatureType.OTHER, 'Monster 4', 2, 5),
       ], [
-        new MeleeEnemy('Monster 5', 50, 8),
-        new MeleeEnemy('Monster 6', 50, 8),
-        // new MeleeEnemy('Monster 7', 50, 8),
-        // new MeleeEnemy('Monster 8', 50, 8),
+        new MeleeEnemy(CreatureType.OTHER,'Monster 5', 50, 8),
+        new MeleeEnemy(CreatureType.OTHER,'Monster 6', 50, 8),
+        // new MeleeEnemy(CreatureType.OTHER, Monster 7', 50, 8),
+        // new MeleeEnemy(CreatureType.OTHER, 'Monster 8', 50, 8),
       ]),
       new Opposition('some monsters', [
-        new MeleeEnemy('Monster 1', 5, 8),
-        new MeleeEnemy('Monster 2', 5, 8),
-        new MeleeEnemy('Monster 3', 5, 8),
+        new MeleeEnemy(CreatureType.OTHER, 'Monster 1', 5, 8),
+        new MeleeEnemy(CreatureType.OTHER,'Monster 2', 5, 8),
+        new MeleeEnemy(CreatureType.OTHER,'Monster 3', 5, 8),
       ], []),
     ]);
   }
@@ -263,29 +264,29 @@ class FangForestDungeon extends Dungeon {
   constructor() {
     super('Fang Forest', [
       new Opposition('wild bears', [
-        new BleedMeleeEnemy('Bear A', 34, 8),
-        new BleedMeleeEnemy('Bear B', 34, 8),
+        new BleedMeleeEnemy(CreatureType.BEAST, 'Bear A', 34, 8),
+        new BleedMeleeEnemy(CreatureType.BEAST, 'Bear B', 34, 8),
       ]),
       new Opposition('a pack of wolves', [
-        new MeleeEnemy('Wolf A', 22, 7),
+        new MeleeEnemy(CreatureType.BEAST, 'Wolf A', 22, 7),
       ], [
-        new MeleeEnemy('Wolf B', 22, 7),
-        new MeleeEnemy('Wolf C', 22, 7),
-        new MeleeEnemy('Wolf D', 22, 7),
+        new MeleeEnemy(CreatureType.BEAST, 'Wolf B', 22, 7),
+        new MeleeEnemy(CreatureType.BEAST, 'Wolf C', 22, 7),
+        new MeleeEnemy(CreatureType.BEAST, 'Wolf D', 22, 7),
       ]),
       new Opposition('a mysterious old man', [
-        new OldManEnemy('Old Man', 28, 12, 2)
+        new OldManEnemy(CreatureType.HUMANOID,'Old Man', 28, 12, 2)
       ]),
       new Opposition('a band of goblins', [
-        new MeleeEnemy('Goblin Solder A', 22, 6),
-        new MeleeEnemy('Goblin Solder B', 22, 6),
-        new MeleeEnemy('Goblin Solder C', 22, 6),
+        new MeleeEnemy(CreatureType.HUMANOID, 'Goblin Solder A', 22, 6),
+        new MeleeEnemy(CreatureType.HUMANOID,'Goblin Solder B', 22, 6),
+        new MeleeEnemy(CreatureType.HUMANOID,'Goblin Solder C', 22, 6),
       ], [
-        new DistanceEnemy('Goblin Hunter', 24, 7),
-        new HealerEnemy('Goblin Shaman', 26, 7),
+        new DistanceEnemy(CreatureType.HUMANOID,'Goblin Hunter', 24, 7),
+        new HealerEnemy(CreatureType.HUMANOID,'Goblin Shaman', 26, 7),
       ]),
       new Opposition('a young but fierce green dragon', [
-        new DragonEnemy('Green Dragon', 120, 10, 2),
+        new DragonEnemy(CreatureType.BEAST, 'Green Dragon', 120, 10, 2),
       ]),
     ]);
   }
@@ -299,27 +300,27 @@ class ForgottenGraveyardDungeon extends Dungeon {
   constructor() {
     super('Forgotten Graveyard', [
       new Opposition('skeletons', [
-        new MeleeEnemy('Skeleton A', 18, 7),
-        new MeleeEnemy('Skeleton B', 18, 7),
+        new MeleeEnemy(CreatureType.UNDEAD,'Skeleton A', 18, 7),
+        new MeleeEnemy(CreatureType.UNDEAD,'Skeleton B', 18, 7),
       ], [
-        new MeleeEnemy('Skeleton C', 18, 7),
-        new MeleeEnemy('Skeleton D', 18, 7),
+        new MeleeEnemy(CreatureType.UNDEAD,'Skeleton C', 18, 7),
+        new MeleeEnemy(CreatureType.UNDEAD,'Skeleton D', 18, 7),
       ]),
       new Opposition('zombies', [
-        new PoisonMeleeEnemy('Zombie A', 28, 8),
-        new PoisonMeleeEnemy('Zombie B', 28, 8),
-        new PoisonMeleeEnemy('Zombie C', 28, 8),
+        new PoisonMeleeEnemy(CreatureType.UNDEAD,'Zombie A', 28, 8),
+        new PoisonMeleeEnemy(CreatureType.UNDEAD,'Zombie B', 28, 8),
+        new PoisonMeleeEnemy(CreatureType.UNDEAD,'Zombie C', 28, 8),
       ]),
       new Opposition('vampires', [
-        new LeechMeleeEnemy('Vampire A', 34, 8),
-        new LeechMeleeEnemy('Vampire B', 34, 8),
+        new LeechMeleeEnemy(CreatureType.UNDEAD,'Vampire A', 34, 8),
+        new LeechMeleeEnemy(CreatureType.UNDEAD,'Vampire B', 34, 8),
       ]),
       new Opposition('undeads', [
-        new MeleeEnemy('Skeleton A', 18, 7),
-        new LeechMeleeEnemy('Vampire', 34, 8),
-        new PoisonMeleeEnemy('Zombie', 28, 8),
+        new MeleeEnemy(CreatureType.UNDEAD,'Skeleton A', 18, 7),
+        new LeechMeleeEnemy(CreatureType.UNDEAD,'Vampire', 34, 8),
+        new PoisonMeleeEnemy(CreatureType.UNDEAD,'Zombie', 28, 8),
       ],[
-        new MeleeEnemy('Skeleton B', 18, 7),
+        new MeleeEnemy(CreatureType.UNDEAD,'Skeleton B', 18, 7),
       ]),
     ]);
   }

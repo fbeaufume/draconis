@@ -11,7 +11,7 @@ import {
   StrikeSmall,
   Wait
 } from "./skill.model";
-import {CreatureClass, LogType, SkillIconType, SkillTarget} from "./common.model";
+import {CreatureClass, CreatureType, LogType, SkillIconType, SkillTarget} from "./common.model";
 import {LifeChange} from "./life-change.model";
 import {logs} from "./log.model";
 import {Creature, EnemyAction} from "./creature.model";
@@ -42,11 +42,12 @@ export abstract class Enemy extends Creature {
   mainAttack: Skill = new Strike('Strike');
 
   constructor(
+    type: CreatureType,
     name: string,
     lifeMax: number,
     power: number,
     actions: number = 1) {
-    super(name, CreatureClass.ENEMY, lifeMax, 100, power, []);
+    super(type, name, CreatureClass.ENEMY, lifeMax, 100, power, []);
     this.actions = actions;
     this.customize();
   }

@@ -210,6 +210,13 @@ export abstract class Creature {
     return amount;
   }
 
+  /**
+   * Return true if this creature has the specialty of the target creature.
+   */
+  hasSpecialtyOfCreature(creature: Creature): boolean {
+    return this.specialties.includes(creature.type);
+  }
+
   getPositiveStatuses(): StatusApplication[] {
     return this.statusApplications.filter(sa => sa.improvement);
   }

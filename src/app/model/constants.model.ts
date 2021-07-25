@@ -75,6 +75,16 @@ export class Constants {
   static readonly DEFENSE_BONUS = 0.2;
 
   /**
+   * Attack modification for specialty. 0.15 means a 15% damage increase.
+   */
+  static readonly SPECIALTY_ATTACK_BONUS = 0.15;
+
+  /**
+   * Defense modification for specialty. 0.1 means a 10% damage reduction.
+   */
+  static readonly SPECIALTY_DEFENSE_BONUS = 0.1;
+
+  /**
    * Percentage of mana gained by the characters after an enemy died.
    */
   static readonly MANA_GAIN_PER_DEAD_ENEMY = 0.15;

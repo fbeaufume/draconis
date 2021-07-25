@@ -186,7 +186,11 @@ export function computeEffectiveDamage(emitter: Creature, receiver: Creature, sk
     afterDefense = afterDefense * (1 + Constants.DEFENSE_BONUS);
   }
 
-  return new LifeLoss(randomizeAndRound(afterDefense), isCritical ? LifeChangeEfficiency.CRITICAL : LifeChangeEfficiency.NORMAL);
+  // Apply the specialty
+  const afterSpecialtyAttack = emitter.hasSpecialtyOfCreature(receiver) ? afterDefense * (1 + Constants.SPECIALTY_ATTACK_BONUS) : afterDefense;
+  const afterSpecialtyDefense = receiver.hasSpecialtyOfCreature(emitter) ? afterSpecialtyAttack * (1 - Constants.SPECIALTY_DEFENSE_BONUS) : afterSpecialtyAttack;
+
+  return new LifeLoss(randomizeAndRound(afterSpecialtyDefense), isCritical ? LifeChangeEfficiency.CRITICAL : LifeChangeEfficiency.NORMAL);
 }
 
 /**

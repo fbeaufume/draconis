@@ -30,7 +30,7 @@ The major application systems and their progress are:
 
 | System     | Description                                        | Progress |
 |------------|----------------------------------------------------|----------|
-| Combat     | Turns, actions, targets, rows, outcomes, statuses  | 20 %     |
+| Combat     | Turns, actions, targets, rows, outcomes, statuses  | 25 %     |
 | Characters | Classes, skills, attributes, levels                | 10 %     |
 | Enemies    | Classes, skills, A.I.                              | 10 %     |
 | World      | Dungeons, cities, quests                           | 5 %      |
@@ -41,22 +41,22 @@ The major application systems and their progress are:
 
 Features of the combat system :
 
-- Group based, i.e. multiple characters vs multiple enemies
-- Turn based
-- Turn order is randomly generated for each fight and evenly interleaves characters and enemies
-- Some creatures (e.g. bosses) can have multiple actions per turn
-- Row based, i.e. creatures are front row or back row
-- Skill have a range, i.e. melee attacks can only reach front row opponents while distance attacks can reach any opponent
-- Single target skills and area of effect skills
-- Damaging skills and healing skills
-- One shot skills and over time skills
-- Bonus effects (a.k.a buffs) and malus effects (a.k.a debuffs)
-- State enabled skills (e.g. when full life or wounded, etc)
-- Several skill outcomes (success, miss, dodge, resist, critical)
-- Counter-attacks and/or thorns
-- Skills cooldown
-- Multiple effect skills, e.g. a damage and an effect
-- Multiple element damages, e.g. physical damage plus poison damage
-- Chained attacks, i.e. consecutively using  the same attack changes its result
-- Taunts
-- Interceptions, e.g. intercept the next attack that would kill an allied creature
+- [x] Group based, i.e. multiple characters vs multiple enemies
+- [x] Turn based
+- [x] Turn order is randomly generated for each fight and evenly interleaves characters and enemies
+- [x] Some creatures (e.g. bosses) can have multiple actions per turn
+- [x] Row based, i.e. creatures are front row or back row
+- [x] Skill have a range, i.e. melee attacks can only reach front row opponents while distance attacks can reach any opponent
+- [x] Single target skills and area of effect skills
+- [x] Damaging skills and healing skills
+- [x] Over time damage and heals
+- [x] Bonus effects (a.k.a buffs) and malus effects (a.k.a debuffs)
+- [ ] State enabled skills (e.g. when full life or wounded, etc)
+- [x] Several skill outcomes (success, miss, dodge, resist, critical)
+- [ ] Counter-attacks and/or thorns
+- [ ] Skills cooldown
+- [ ] Multiple effect skills, e.g. a damage and an effect
+- [ ] Multiple element damages, e.g. physical damage plus poison damage
+- [x] Chained attacks, i.e. consecutively using  the same attack changes its result
+- [ ] Taunts
+- [ ] Interceptions, e.g. intercept the next attack that would kill an allied creature

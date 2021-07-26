@@ -13,6 +13,11 @@ export class StatusType {
   name: String;
 
   /**
+   * True for a positive status, false otherwise.
+   */
+  improvement: boolean;
+
+  /**
    * The expiration type of the status
    */
   expiration: StatusExpiration;
@@ -29,24 +34,27 @@ export class StatusType {
 
   constructor(
     name: string,
+    improvement: boolean,
     expiration: StatusExpiration,
     totalDuration: number,
     cumulative: boolean
   ) {
     this.name = name;
+    this.improvement = improvement;
     this.expiration = expiration;
     this.totalDuration = totalDuration;
     this.cumulative = cumulative;
   }
 }
 
-// TODO FBE refactor these ?
 // The supported statuses
-export const defend = new StatusType('Defend', StatusExpiration.ORIGIN_CREATURE_TURN_START, Constants.DEFEND_DURATION, false);
-export const bleed = new StatusType('Bleed', StatusExpiration.END_OF_ROUND, Constants.EFFECT_DURATION, true);
-export const poison = new StatusType('Poison', StatusExpiration.END_OF_ROUND, Constants.EFFECT_DURATION, true);
-export const regen = new StatusType('Regen', StatusExpiration.END_OF_ROUND, Constants.EFFECT_DURATION, true);
-export const combo1 = new StatusType('Combo1', StatusExpiration.ORIGIN_CREATURE_TURN_END, Constants.COMBO_DURATION, true);
-export const combo2 = new StatusType('Combo2', StatusExpiration.ORIGIN_CREATURE_TURN_END, Constants.COMBO_DURATION, true);
-export const attack = new StatusType('Attack', StatusExpiration.ORIGIN_CREATURE_TURN_START, Constants.EFFECT_DURATION, false);
-export const defense = new StatusType('Defense', StatusExpiration.ORIGIN_CREATURE_TURN_START, Constants.EFFECT_DURATION, false);
+export const defend = new StatusType('Defend', true, StatusExpiration.ORIGIN_CREATURE_TURN_START, Constants.DEFEND_DURATION, false);
+export const bleed = new StatusType('Bleed', false, StatusExpiration.END_OF_ROUND, Constants.EFFECT_DURATION, true);
+export const poison = new StatusType('Poison', false, StatusExpiration.END_OF_ROUND, Constants.EFFECT_DURATION, true);
+export const regen = new StatusType('Regen', true, StatusExpiration.END_OF_ROUND, Constants.EFFECT_DURATION, true);
+export const combo1 = new StatusType('Combo1', false, StatusExpiration.ORIGIN_CREATURE_TURN_END, Constants.COMBO_DURATION, true);
+export const combo2 = new StatusType('Combo2', false, StatusExpiration.ORIGIN_CREATURE_TURN_END, Constants.COMBO_DURATION, true);
+export const attackBonus = new StatusType('Attack', true, StatusExpiration.ORIGIN_CREATURE_TURN_START, Constants.EFFECT_DURATION, false);
+export const attackMalus = new StatusType('Attack', false, StatusExpiration.ORIGIN_CREATURE_TURN_START, Constants.EFFECT_DURATION, false);
+export const defenseBonus = new StatusType('Defense', true, StatusExpiration.ORIGIN_CREATURE_TURN_START, Constants.EFFECT_DURATION, false);
+export const defenseMalus = new StatusType('Defense', false, StatusExpiration.ORIGIN_CREATURE_TURN_START, Constants.EFFECT_DURATION, false);

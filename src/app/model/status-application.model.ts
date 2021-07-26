@@ -11,12 +11,6 @@ export class StatusApplication {
    */
   status: StatusType;
 
-  // TODO FBE move this to the status class
-  /**
-   * True for a positive status, false otherwise.
-   */
-  improvement: boolean;
-
   /**
    * For a damaging status, such as a life over time change, the power of the attack.
    */
@@ -34,15 +28,17 @@ export class StatusApplication {
 
   constructor(
     status: StatusType,
-    improvement: boolean,
     power: number,
     originCreature: Creature | null
   ) {
     this.status = status;
-    this.improvement = improvement;
     this.power = power;
     this.originCreature = originCreature;
     this.remainingDuration = status.totalDuration;
+  }
+
+  isImprovement(): boolean {
+    return this.status.improvement;
   }
 
   isDot(): boolean {

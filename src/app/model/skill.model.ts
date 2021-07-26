@@ -4,7 +4,19 @@ import {Fight} from './game.model';
 import {Creature} from './creature.model';
 import {logs} from './log.model';
 import {LifeChangeEfficiency, LifeChangeType, LogType, SkillIconType, SkillTarget} from "./common.model";
-import {attack, bleed, combo1, combo2, defend, defense, poison, regen, StatusType} from "./status-type.model";
+import {
+  attackBonus,
+  attackMalus,
+  bleed,
+  combo1,
+  combo2,
+  defend,
+  defenseBonus,
+  defenseMalus,
+  poison,
+  regen,
+  StatusType
+} from "./status-type.model";
 import {Character} from "./character.model";
 import {settings} from "./settings.model";
 import {LifeChange, LifeGain, LifeLoss} from "./life-change.model";
@@ -170,19 +182,19 @@ export function computeEffectiveDamage(emitter: Creature, receiver: Creature, sk
 
   // Apply the attack bonus or malus
   let afterAttack = afterDefend;
-  if (emitter.hasPositiveStatus(attack)) {
+  if (emitter.hasPositiveStatus(attackBonus)) {
     afterAttack = afterAttack * (1 + Constants.ATTACK_BONUS);
   }
-  if (emitter.hasNegativeStatus(attack)) {
+  if (emitter.hasNegativeStatus(attackMalus)) {
     afterAttack = afterAttack * (1 - Constants.ATTACK_BONUS);
   }
 
   // Apply the defense bonus or malus
   let afterDefense = afterAttack;
-  if (receiver.hasPositiveStatus(defense)) {
+  if (receiver.hasPositiveStatus(defenseBonus)) {
     afterDefense = afterDefense * (1 - Constants.DEFENSE_BONUS);
   }
-  if (receiver.hasNegativeStatus(defense)) {
+  if (receiver.hasNegativeStatus(defenseMalus)) {
     afterDefense = afterDefense * (1 + Constants.DEFENSE_BONUS);
   }
 
@@ -282,7 +294,7 @@ export class Defend extends Skill {
     super.execute(fight);
 
     if (fight.activeCreature != null) {
-      fight.activeCreature.applyStatus(new StatusApplication(defend, true, 0, fight.activeCreature));
+      fight.activeCreature.applyStatus(new StatusApplication(defend, 0, fight.activeCreature));
 
       logs.addCreatureLog(LogType.Defend, fight.activeCreature, null, null, null);
     }
@@ -324,7 +336,7 @@ export class ApplyStatus extends Skill {
     super.execute(fight);
 
     fight.targetCreatures.forEach(targetCreature => {
-      const status = new StatusApplication(this.status, this.improvementStatus, 0, fight.activeCreature);
+      const status = new StatusApplication(this.status, 0, fight.activeCreature);
       targetCreature.applyStatus(status);
 
       logs.addCreatureLog(this.improvementStatus ? LogType.PositiveStatus : LogType.NegativeStatus, fight.activeCreature, targetCreature, null, null, status);
@@ -404,8 +416,7 @@ export class ComboDamage extends Skill {
 
     // Add the buff if the attack succeeded
     if (comboStep <= 2 && lifeChange.isSuccess()) {
-      targetCreature.applyStatus(new StatusApplication(comboStep == 1 ? combo1 : combo2,
-        false, 0, activeCreature));
+      targetCreature.applyStatus(new StatusApplication(comboStep == 1 ? combo1 : combo2, 0, activeCreature));
     }
   }
 }
@@ -489,7 +500,7 @@ export class DamageAndBleed extends Skill {
 
       // Damage over time part
       if (lifeChange.isSuccess()) {
-        targetCreature.applyStatus(new StatusApplication(bleed, false, this.powers[1], fight.activeCreature));
+        targetCreature.applyStatus(new StatusApplication(bleed, this.powers[1], fight.activeCreature));
       }
     });
   }
@@ -518,7 +529,7 @@ export class DamageAndPoison extends Skill {
 
       // Damage over time part
       if (lifeChange.isSuccess()) {
-        targetCreature.applyStatus(new StatusApplication(poison, false, this.powers[1], fight.activeCreature));
+        targetCreature.applyStatus(new StatusApplication(poison, this.powers[1], fight.activeCreature));
       }
     });
   }
@@ -575,7 +586,7 @@ export class Regenerate extends Heal {
     super.execute(fight);
 
     fight.targetCreatures.forEach(targetCreature => {
-      targetCreature.applyStatus(new StatusApplication(regen, true, this.powers[1], fight.activeCreature));
+      targetCreature.applyStatus(new StatusApplication(regen, this.powers[1], fight.activeCreature));
     });
   }
 }

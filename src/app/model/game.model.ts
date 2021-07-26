@@ -18,7 +18,7 @@ import {
 } from "./enemy.model";
 import {Opposition} from "./opposition.model";
 import {Constants} from "./constants.model";
-import {attack, defense} from "./status-type.model";
+import {attackMalus, defenseMalus} from "./status-type.model";
 import {
   ApplyStatus,
   ComboDamage,
@@ -354,7 +354,7 @@ export class Game {
           new Damage(SkillIconType.ATTACK, 'Slash', SkillTarget.ENEMY_DOUBLE, 20, 1, 0,
             'Inflict 80% damage to two adjacent targets.', [0.8]),
           new ApplyStatus(SkillIconType.DETERIORATION, 'Intimidate', SkillTarget.ENEMY_SINGLE, 20, 1, 0,
-            'Reduce the enemy attack by 20% during ' + Constants.EFFECT_DURATION + ' rounds.', [], attack, false),
+            'Reduce the enemy attack by 20% during ' + Constants.EFFECT_DURATION + ' rounds.', [], attackMalus, false),
         ],
         [CreatureType.HUMANOID]),
       new Character('Arwin', CreatureClass.PALADIN, 4, 30, true, 50, 8, [
@@ -388,7 +388,7 @@ export class Game {
           new Damage(SkillIconType.ATTACK, 'Explosive Shot', SkillTarget.ENEMY_TRIPLE, 20, 2, 0,
             'Inflict 60% damage to three adjacent targets.', [0.6]),
           new ApplyStatus(SkillIconType.DETERIORATION, 'Crippling Shot', SkillTarget.ENEMY_SINGLE, 10, 2, 0,
-            'Reduce the enemy defense by 20% during ' + Constants.EFFECT_DURATION + ' rounds.', [], defense, false),
+            'Reduce the enemy defense by 20% during ' + Constants.EFFECT_DURATION + ' rounds.', [], defenseMalus, false),
         ],
         [CreatureType.BEAST]),
       new Character('Harika', CreatureClass.MAGE, 4, 30, true, 50, 8, [
@@ -398,9 +398,9 @@ export class Game {
           new Damage(SkillIconType.ATTACK, 'Fireball', SkillTarget.ENEMY_TRIPLE, 10, 2, 0,
             'Inflict 60% damage to three adjacent targets.', [0.6]),
           new ApplyStatus(SkillIconType.DETERIORATION, 'Weakness', SkillTarget.ENEMY_SINGLE, 10, 2, 0,
-            'Reduce the enemy attack by 20% during ' + Constants.EFFECT_DURATION + ' rounds.', [], attack, false),
+            'Reduce the enemy attack by 20% during ' + Constants.EFFECT_DURATION + ' rounds.', [], attackMalus, false),
           new ApplyStatus(SkillIconType.DETERIORATION, 'Slow', SkillTarget.ENEMY_SINGLE, 10, 2, 0,
-            'Reduce the enemy defense by 20% during ' + Constants.EFFECT_DURATION + ' rounds.', [], defense, false),
+            'Reduce the enemy defense by 20% during ' + Constants.EFFECT_DURATION + ' rounds.', [], defenseMalus, false),
         ],
         [CreatureType.ELEMENTAL])
     ]);

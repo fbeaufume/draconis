@@ -218,11 +218,11 @@ export abstract class Creature {
   }
 
   getPositiveStatuses(): StatusApplication[] {
-    return this.statusApplications.filter(sa => sa.improvement);
+    return this.statusApplications.filter(sa => sa.isImprovement());
   }
 
   getNegativeStatuses(): StatusApplication[] {
-    return this.statusApplications.filter(sa => !sa.improvement);
+    return this.statusApplications.filter(sa => !sa.isImprovement());
   }
 
   hasStatus(status: StatusType): boolean {

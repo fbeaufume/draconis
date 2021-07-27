@@ -147,6 +147,10 @@ export abstract class Creature {
     return !this.isAlive();
   }
 
+  isFullLife(): boolean {
+    return !this.isDamaged();
+  }
+
   isDamaged(): boolean {
     return this.life < this.lifeMax;
   }

@@ -49,10 +49,11 @@ Features of the combat system :
 - [x] Skill have a range, i.e. melee attacks can only reach front row opponents while distance attacks can reach any opponent
 - [x] Single target skills and area of effect skills
 - [x] Damaging skills and healing skills
-- [x] Over time damage and heals
+- [x] Initial impact damage and heals and over time damage and heals
 - [x] Bonus effects (a.k.a buffs) and malus effects (a.k.a debuffs)
 - [ ] State enabled skills (e.g. when full life or wounded, etc)
 - [x] Several skill outcomes (success, miss, dodge, resist, critical)
+- [ ] Skill modifiers, e.g. cannot be dodged 
 - [ ] Counter-attacks and/or thorns
 - [ ] Skills cooldown
 - [ ] Multiple effect skills, e.g. a damage and an effect
@@ -60,3 +61,4 @@ Features of the combat system :
 - [x] Chained attacks, i.e. consecutively using  the same attack changes its result
 - [ ] Taunts
 - [ ] Interceptions, e.g. intercept the next attack that would kill an allied creature
+- [x] Specialties, i.e. per class benefits against specific creature types (such as beasts, undeads, etc)

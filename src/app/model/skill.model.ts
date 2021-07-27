@@ -386,6 +386,28 @@ export class StrikeSmall extends Damage {
 }
 
 /**
+ * A damaging skill that does different damage to full life target creatures.
+ */
+export class FullLifeDamage extends Skill {
+
+  execute(fight: Fight): void {
+    if (fight.activeCreature == null) {
+      return;
+    }
+
+    const activeCreature: Creature = fight.activeCreature;
+
+    super.execute(fight);
+
+    fight.targetCreatures.forEach(targetCreature => {
+      const isFullLife: boolean = targetCreature.isFullLife();
+      logs.addCreatureLog(LogType.Damage, activeCreature, targetCreature,
+        targetCreature.changeLife(computeEffectiveDamage(activeCreature, targetCreature, isFullLife ? this.powers[1] : this.powers[0])), null);
+    });
+  }
+}
+
+/**
  * A damaging skill that increases damages when used on the same target during consecutive turns.
  */
 export class ComboDamage extends Skill {

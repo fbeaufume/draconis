@@ -36,6 +36,7 @@ import {
   Skill,
   Strike
 } from './skill.model';
+import {EnemyBuilder} from "./enemy-builder.model";
 
 /**
  * The action order of characters and enemies during a turn.
@@ -264,29 +265,29 @@ class FangForestDungeon extends Dungeon {
   constructor() {
     super('Fang Forest', [
       new Opposition('wild bears', [
-        new BleedMeleeEnemy(CreatureType.BEAST, 'Bear', 34, 8),
-        new BleedMeleeEnemy(CreatureType.BEAST, 'Bear', 34, 8),
+        EnemyBuilder.buildBear(),
+        EnemyBuilder.buildBear(),
       ]),
       new Opposition('a pack of wolves', [
-        new MeleeEnemy(CreatureType.BEAST, 'Wolf', 22, 7),
+        EnemyBuilder.buildWolf(),
       ], [
-        new MeleeEnemy(CreatureType.BEAST, 'Wolf', 22, 7),
-        new MeleeEnemy(CreatureType.BEAST, 'Wolf', 22, 7),
-        new MeleeEnemy(CreatureType.BEAST, 'Wolf', 22, 7),
+        EnemyBuilder.buildWolf(),
+        EnemyBuilder.buildWolf(),
+        EnemyBuilder.buildWolf(),
       ]),
       new Opposition('a mysterious old man', [
-        new OldManEnemy(CreatureType.HUMANOID, 'Old Man', 28, 12, 2)
+        EnemyBuilder.buildOldMan()
       ]),
       new Opposition('a band of goblins', [
-        new MeleeEnemy(CreatureType.HUMANOID, 'Goblin Solder', 22, 6),
-        new MeleeEnemy(CreatureType.HUMANOID, 'Goblin Solder', 22, 6),
-        new MeleeEnemy(CreatureType.HUMANOID, 'Goblin Solder', 22, 6),
+        EnemyBuilder.buildGoblinSoldier(),
+        EnemyBuilder.buildGoblinSoldier(),
+        EnemyBuilder.buildGoblinSoldier(),
       ], [
-        new DistanceEnemy(CreatureType.HUMANOID, 'Goblin Hunter', 24, 7),
-        new HealerEnemy(CreatureType.HUMANOID, 'Goblin Shaman', 26, 7),
+        EnemyBuilder.buildGoblinHunter(),
+        EnemyBuilder.buildGoblinShaman(),
       ]),
       new Opposition('a young but fierce green dragon', [
-        new DragonEnemy(CreatureType.BEAST, 'Green Dragon', 120, 10, 2),
+        EnemyBuilder.buildGreenDragon(),
       ]),
     ]);
   }
@@ -300,27 +301,27 @@ class ForgottenGraveyardDungeon extends Dungeon {
   constructor() {
     super('Forgotten Graveyard', [
       new Opposition('skeletons', [
-        new MeleeEnemy(CreatureType.UNDEAD, 'Skeleton', 18, 7),
-        new MeleeEnemy(CreatureType.UNDEAD, 'Skeleton', 18, 7),
+        EnemyBuilder.buildSkeleton(),
+        EnemyBuilder.buildSkeleton(),
       ], [
-        new MeleeEnemy(CreatureType.UNDEAD, 'Skeleton', 18, 7),
-        new MeleeEnemy(CreatureType.UNDEAD, 'Skeleton', 18, 7),
+        EnemyBuilder.buildSkeleton(),
+        EnemyBuilder.buildSkeleton(),
       ]),
       new Opposition('zombies', [
-        new PoisonMeleeEnemy(CreatureType.UNDEAD, 'Zombie', 28, 8),
-        new PoisonMeleeEnemy(CreatureType.UNDEAD, 'Zombie', 28, 8),
-        new PoisonMeleeEnemy(CreatureType.UNDEAD, 'Zombie', 28, 8),
+        EnemyBuilder.buildZombie(),
+        EnemyBuilder.buildZombie(),
+        EnemyBuilder.buildZombie(),
       ]),
       new Opposition('vampires', [
-        new LeechMeleeEnemy(CreatureType.UNDEAD, 'Vampire', 34, 8),
-        new LeechMeleeEnemy(CreatureType.UNDEAD, 'Vampire', 34, 8),
+        EnemyBuilder.buildVampire(),
+        EnemyBuilder.buildVampire(),
       ]),
       new Opposition('undeads', [
-        new MeleeEnemy(CreatureType.UNDEAD, 'Skeleton', 18, 7),
-        new LeechMeleeEnemy(CreatureType.UNDEAD, 'Vampire', 34, 8),
-        new PoisonMeleeEnemy(CreatureType.UNDEAD, 'Zombie', 28, 8),
+        EnemyBuilder.buildSkeleton(),
+        EnemyBuilder.buildVampire(),
+        EnemyBuilder.buildZombie(),
       ], [
-        new MeleeEnemy(CreatureType.UNDEAD, 'Skeleton', 18, 7),
+        EnemyBuilder.buildSkeleton(),
       ]),
     ]);
   }

@@ -10,6 +10,12 @@ export class Opposition {
 
   rows: EnemyRow[] = [];
 
+  /**
+   * For each enemy base name, the number of such enemies.
+   * Used to generate the letter in the effective name of the enemies.
+   */
+  enemyCountPerBaseName: Map<string, number> = new Map<string, number>();
+
   constructor(
     description: string,
     // Front row enemies
@@ -19,6 +25,31 @@ export class Opposition {
     this.description = description;
     this.rows.push(new EnemyRow(row1Enemies));
     this.rows.push(new EnemyRow(row2Enemies));
+
+    this.computeEffectiveNames();
+  }
+
+  /**
+   * Compute the effective name of all enemies.
+   */
+  computeEffectiveNames() {
+    // First count the enemies for each base name
+    this.forEachEnemy(enemy => {
+      let count: number = this.enemyCountPerBaseName.get(enemy.baseName) || 0;
+      this.enemyCountPerBaseName.set(enemy.baseName, count + 1);
+    })
+
+    // Then for enemies that are present multiple times, update the effective name
+    this.enemyCountPerBaseName.forEach((count, baseName) => {
+      if (count > 1) {
+        let position = 0;
+        this.forEachEnemy(enemy => {
+          const letter = String.fromCharCode('A'.charCodeAt(0) + position);
+          enemy.name = enemy.baseName + ' ' +  letter;
+          position++;
+        }, enemy => enemy.baseName === baseName);
+      }
+    })
   }
 
   /**

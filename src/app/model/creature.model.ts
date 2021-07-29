@@ -24,7 +24,10 @@ export abstract class Creature {
   type: CreatureType;
 
   /**
-   * The creature name.
+   * The effective creature name.
+   * For a character it is the character name.
+   * For an enemy ist may contain a letter to differentiate multiple enemies of the same name,
+   * e.g. "Goblin A" and "Goblin B".
    */
   name: string
 

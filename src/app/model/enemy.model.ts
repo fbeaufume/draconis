@@ -22,6 +22,11 @@ import {Creature, EnemyAction} from "./creature.model";
 export abstract class Enemy extends Creature {
 
   /**
+   * The base name of the creature, such as 'Goblin'.
+   */
+  baseName: string;
+
+  /**
    * Number of actions per turn.
    */
   actions: number;
@@ -48,6 +53,7 @@ export abstract class Enemy extends Creature {
     power: number,
     actions: number = 1) {
     super(type, name, CreatureClass.ENEMY, lifeMax, 100, power, []);
+    this.baseName = name;
     this.actions = actions;
     this.customize();
   }

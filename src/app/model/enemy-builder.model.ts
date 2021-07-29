@@ -19,11 +19,11 @@ export class EnemyBuilder {
   }
 
   static buildWolf(): Enemy {
-    return new MeleeEnemy(CreatureType.BEAST, 'Wolf', 22, 7);
+    return new MeleeEnemy(CreatureType.BEAST, 'Wolf', 22, 6);
   }
 
   static buildOldMan(): Enemy {
-    return new OldManEnemy(CreatureType.HUMANOID, 'Old Man', 28, 12, 2);
+    return new OldManEnemy(CreatureType.HUMANOID, 'Old Man', 28, 10, 2);
   }
 
   static buildGoblinSoldier(): Enemy {

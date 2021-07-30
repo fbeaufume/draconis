@@ -1,5 +1,15 @@
 @startuml
 
+class Game {
+  state: GameState
+  region: string
+  oppositionId: number
+}
+
+class Dungeon {
+  name: string
+}
+
 class Creature {
   type : CreatureType
   name : string
@@ -43,6 +53,11 @@ class Fight {
   round: number
 }
 
+Game *-- Party
+Game *-- Fight
+Game *-- "*" Dungeon
+Game *-- Dungeon
+Dungeon *-- "*" Opposition
 Creature <|-- Character
 Character *-- "*" Skill
 Creature <|-- Enemy

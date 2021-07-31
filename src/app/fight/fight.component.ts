@@ -1,5 +1,5 @@
 import {AfterViewInit, Component, ElementRef, HostListener, QueryList, ViewChild, ViewChildren} from '@angular/core';
-import {Fight, Game} from '../model/game.model';
+import {Game} from '../model/game.model';
 import {Skill} from '../model/skill.model';
 import {FightService} from './fight.service';
 import {GameState} from "../model/common.model";
@@ -7,6 +7,7 @@ import {Constants} from "../model/constants.model";
 import {Character} from "../model/character.model";
 import {settings} from "../model/settings.model";
 import {Enemy} from "../model/enemy.model";
+import {Fight} from "../model/fight.model";
 
 @Component({
   selector: 'app-fight',

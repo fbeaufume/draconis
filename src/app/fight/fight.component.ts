@@ -1,5 +1,5 @@
 import {AfterViewInit, Component, ElementRef, HostListener, QueryList, ViewChild, ViewChildren} from '@angular/core';
-import {canSelectSkillStates, Fight, Game} from '../model/game.model';
+import {Fight, Game} from '../model/game.model';
 import {Skill} from '../model/skill.model';
 import {FightService} from './fight.service';
 import {GameState} from "../model/common.model";
@@ -76,7 +76,7 @@ export class FightComponent implements AfterViewInit {
   }
 
   getSkillBorderClass(skill: Skill): string {
-    if (canSelectSkillStates.includes(this.game.state)) {
+    if (Constants.CAN_SELECT_SKILL_STATES.includes(this.game.state)) {
       // Choosing a skill
 
       if (skill.name == this.fight.hoveredSkill?.name) {

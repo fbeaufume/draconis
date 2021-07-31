@@ -122,11 +122,6 @@ export class Fight {
 }
 
 /**
- * All states when it is ok for the player to choose a character skill, possibly to change his mind.
- */
-export const canSelectSkillStates = [GameState.SELECT_SKILL, GameState.SELECT_ENEMY, GameState.SELECT_CHARACTER];
-
-/**
  * The party location in the "world".
  */
 export class Game {

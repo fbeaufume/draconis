@@ -339,7 +339,7 @@ export class EndOfRound extends Creature {
 }
 
 /**
- * An enemy actions.
+ * An enemy action.
  */
 export class EnemyAction {
 

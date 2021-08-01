@@ -62,6 +62,9 @@ class Skill {
   cooldownMax: number
   cooldown: number
   description: string
+  powerLevels: number[]
+  status: StatusType
+  improvementStatus: boolean
 }
 
 Game *-- Party

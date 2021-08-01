@@ -4,7 +4,7 @@ import {Creature, EnemyAction} from '../model/creature.model';
 import {Skill} from '../model/skill.model';
 import {Log, logs} from '../model/log.model';
 import {Constants} from '../model/constants.model';
-import {GameState, LogType, SkillTarget, StatusExpiration} from "../model/common.model";
+import {GameState, LogType, SkillTargetType, StatusExpiration} from "../model/common.model";
 import {Character} from "../model/character.model";
 import {Party} from "../model/party.model";
 import {settings} from "../model/settings.model";
@@ -159,10 +159,10 @@ export class FightService {
     this.fight.selectedSkill = skill;
 
     // The next step depends on the target type of the skill
-    switch (skill.target) {
-      case SkillTarget.NONE:
-      case SkillTarget.CHARACTER_ALL_ALIVE:
-        if (skill.target == SkillTarget.CHARACTER_ALL_ALIVE) {
+    switch (skill.targetType) {
+      case SkillTargetType.NONE:
+      case SkillTargetType.SAME_ALIVE_ALL:
+        if (skill.targetType == SkillTargetType.SAME_ALIVE_ALL) {
           this.fight.targetCreatures.push(...this.party.targetAllAliveCharacters());
         }
 
@@ -172,14 +172,14 @@ export class FightService {
 
         this.processNextTurn(true);
         break;
-      case SkillTarget.ENEMY_SINGLE:
-      case SkillTarget.ENEMY_DOUBLE:
-      case SkillTarget.ENEMY_TRIPLE:
+      case SkillTargetType.OTHER_ALIVE:
+      case SkillTargetType.OTHER_ALIVE_DOUBLE:
+      case SkillTargetType.OTHER_ALIVE_TRIPLE:
         this.state = GameState.SELECT_ENEMY;
         break;
-      case SkillTarget.CHARACTER_ALIVE:
-      case SkillTarget.CHARACTER_OTHER:
-      case SkillTarget.CHARACTER_DEAD:
+      case SkillTargetType.SAME_ALIVE:
+      case SkillTargetType.SAME_ALIVE_OTHER:
+      case SkillTargetType.SAME_DEAD:
         this.state = GameState.SELECT_CHARACTER;
         break;
     }
@@ -300,7 +300,7 @@ export class FightService {
     // Execute the enemy strategy
     const action = enemy.handleTurn(this.game);
 
-    if (action.skill.target == SkillTarget.NONE) {
+    if (action.skill.targetType == SkillTargetType.NONE) {
       // Actions without target are executed immediately
 
       this.processEnemyTurnStep2(action);

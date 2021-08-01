@@ -11,7 +11,7 @@ import {
   StrikeSmall,
   Wait
 } from "./skill.model";
-import {CreatureClass, CreatureType, LogType, SkillIconType, SkillTarget} from "./common.model";
+import {CreatureClass, CreatureType, LogType, SkillIconType, SkillTargetType} from "./common.model";
 import {LifeChange} from "./life-change.model";
 import {logs} from "./log.model";
 import {Creature, EnemyAction} from "./creature.model";
@@ -140,7 +140,7 @@ export class BleedMeleeEnemy extends MeleeEnemy {
 
   customize() {
     this.mainAttack = new DamageAndBleed(SkillIconType.ATTACK, 'Deep Wound',
-      SkillTarget.ENEMY_SINGLE, 20, 1, 0, '', [0.5, 0.4]);
+      SkillTargetType.OTHER_ALIVE, 20, 1, 0, '', [0.5, 0.4]);
   }
 }
 
@@ -151,7 +151,7 @@ export class PoisonMeleeEnemy extends MeleeEnemy {
 
   customize() {
     this.mainAttack = new DamageAndPoison(SkillIconType.ATTACK, 'Poison',
-      SkillTarget.ENEMY_SINGLE, 20, 1, 0, '', [0.5, 0.4]);
+      SkillTargetType.OTHER_ALIVE, 20, 1, 0, '', [0.5, 0.4]);
   }
 }
 
@@ -162,7 +162,7 @@ export class LeechMeleeEnemy extends MeleeEnemy {
 
   customize() {
     this.mainAttack = new DamageAndHeal(SkillIconType.ATTACK, 'Leech',
-      SkillTarget.ENEMY_SINGLE, 20, 1, 0, '', [0.8, 0.5]);
+      SkillTargetType.OTHER_ALIVE, 20, 1, 0, '', [0.8, 0.5]);
   }
 }
 
@@ -216,7 +216,7 @@ export class DistanceEnemy extends Enemy {
  */
 export class HealerEnemy extends Enemy {
 
-  heal: Heal = new Heal(SkillIconType.HEAL, 'Heal', SkillTarget.ENEMY_SINGLE, 5, 0, 0, '');
+  heal: Heal = new Heal(SkillIconType.HEAL, 'Heal', SkillTargetType.OTHER_ALIVE, 5, 0, 0, '');
 
   chooseAction(game: Game): EnemyAction {
     const enemy: Enemy | null = game.opposition.targetOneDamagedEnemy();

@@ -1,5 +1,7 @@
 // Common model classes such as enumerations and utility classes
 
+// TODO FBE improve the doc of the enums
+
 /**
  * The types of creature.
  * Some characters, creatures or skills can be more or less efficient toward specific creature types.
@@ -53,32 +55,88 @@ export enum StatusExpiration {
  * When any numeric value is changed, update skill-icon.component.html.
  */
 export enum SkillIconType {
+
+  /**
+   * The skill is mostly a defensive one.
+   */
   DEFENSE,
+
+  /**
+   * The skill is mostly a damaging one.
+   */
   ATTACK,
+
+  /**
+   * The skill is mostly a healing one.
+   */
   HEAL,
+
+  /**
+   * The skill is mostly an improvement for a creature of the same faction.
+   */
   IMPROVEMENT,
+
+  /**
+   * The skill is mostly a deterioration for a creature of the other faction.
+   */
   DETERIORATION,
 }
 
 /**
  * The type of target of a skill.
  */
-export enum SkillTarget {
+// TODO FBE use the values and descriptions of the next enum
+export enum SkillTargetType {
+
+  /**
+   * The skill has no target.
+   */
   NONE,
-  // An alive character
-  CHARACTER_ALIVE,
-  // All alive characters
-  CHARACTER_ALL_ALIVE,
-  // An alive character different than the current character
-  CHARACTER_OTHER,
-  // A dead character
-  CHARACTER_DEAD,
-  // A single enemy
-  ENEMY_SINGLE,
-  // Two adjacent enemies, the hovered one + its right one
-  ENEMY_DOUBLE,
-  // Three adjacent enemies, the hovered one + its left and right ones
-  ENEMY_TRIPLE,
+
+  /**
+   * An alive creature from the same faction.
+   */
+  SAME_ALIVE,
+
+  /**
+   * An alive creature from the same faction and different than the current creature.
+   */
+  SAME_ALIVE_OTHER,
+
+  /**
+   * All alive creatures of the same faction.
+   */
+  SAME_ALIVE_ALL,
+
+  /**
+   * A dead creature from the same faction.
+   */
+  SAME_DEAD,
+
+  /**
+   * An alive creature from the other faction.
+   */
+  OTHER_ALIVE,
+
+  /**
+   * Two adjacent alive creatures (e.g. the hovered one + its right one) from the other faction.
+   */
+  OTHER_ALIVE_DOUBLE,
+
+  /**
+   * Three adjacent alive creatures (e.g., the hovered one + its left and right ones) from the other faction.
+   */
+  OTHER_ALIVE_TRIPLE,
+
+  /**
+   * An entire row of the other faction.
+   */
+  OTHER_ROW,
+
+  /**
+   * All creatures of the other faction.
+   */
+  OTHER_ALL,
 }
 
 /**

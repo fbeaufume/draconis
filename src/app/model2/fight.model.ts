@@ -3,7 +3,6 @@ import {Party} from "./party.model";
 import {TurnOrder} from "./turn-order.model";
 import {Creature} from "./creature.model";
 import {Character} from "./character.model";
-import {Skill} from "./skill.model";
 import {Enemy} from "./enemy.model";
 
 /**
@@ -31,21 +30,6 @@ export class Fight {
    * The character under the mouse pointer during the selection of a character.
    */
   hoveredCharacter: Character | null;
-
-  /**
-   * The skill currently under the mouse pointer during the selection of a skill.
-   */
-  hoveredSkill: Skill | null;
-
-  /**
-   * The skill currently displayed in the focus skill panel.
-   */
-  focusedSkill: Skill | null;
-
-  /**
-   * Skill selected by the player for the currently active character.
-   */
-  selectedSkill: Skill | null;
 
   /**
    * The enemy under the mouse pointer during the selection of an enemy.

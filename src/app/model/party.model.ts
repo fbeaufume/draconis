@@ -1,4 +1,4 @@
-import {CharacterRow} from "./character-row.model";
+import {PartyRow} from "./party-row.model";
 import {Character} from "./character.model";
 
 /**
@@ -6,15 +6,15 @@ import {Character} from "./character.model";
  */
 export class Party {
 
-  rows: CharacterRow[] = [];
+  rows: PartyRow[] = [];
 
   constructor(
     // Front row characters
     row1Characters: Character[],
     // Back row characters
     row2Characters: Character[]) {
-    this.rows.push(new CharacterRow(row1Characters));
-    this.rows.push(new CharacterRow(row2Characters));
+    this.rows.push(new PartyRow(row1Characters));
+    this.rows.push(new PartyRow(row2Characters));
   }
 
   /**

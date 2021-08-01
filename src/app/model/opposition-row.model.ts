@@ -2,9 +2,9 @@ import {Enemy} from "./enemy.model";
 import {Constants} from "./constants.model";
 
 /**
- * A row of enemies.
+ * A row of enemies in the opposition.
  */
-export class EnemyRow {
+export class OppositionRow {
 
   /**
    * The enemies of the row.

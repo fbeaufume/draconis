@@ -10,6 +10,26 @@ class Dungeon {
   name: string
 }
 
+class Fight {
+  round: number
+}
+
+
+class Party {
+}
+
+class PartyRow {
+}
+
+class Opposition {
+}
+
+class OppositionRow {
+}
+
+class TurnOrder {
+}
+
 class Creature {
   type : CreatureType
   name : string
@@ -17,8 +37,24 @@ class Creature {
   life : number
 }
 
+class Character {
+  level: number
+  useMana: boolean
+}
+
+class Enemy {
+  baseName: string
+  actions: number
+}
+
+class EnemyStrategy {
+}
+
+class SingleSkillStrategy {
+}
+
 class Skill {
-  type: SkillType
+  type: SkillIconType
   name: string
   targetType: SkillTargetType
   cost: number
@@ -28,48 +64,26 @@ class Skill {
   description: string
 }
 
-class Character {
-}
-
-class CharacterRow {
-}
-
-class Party {
-}
-
-class Enemy {
-}
-
-class EnemyRow {
-}
-
-class Opposition {
-}
-
-class TurnOrder {
-}
-
-class Fight {
-  round: number
-}
-
 Game *-- Party
 Game *-- Fight
 Game *-- "*" Dungeon
 Game *-- Dungeon
 Dungeon *-- "*" Opposition
-Creature <|-- Character
-Character *-- "*" Skill
-Creature <|-- Enemy
-CharacterRow *-- "*" Character
-Party *-- "*" CharacterRow
-EnemyRow *-- "*" Enemy
-Opposition *-- "*" EnemyRow
-TurnOrder o-- "*" Creature
 Fight -- Party
 Fight -- Opposition
 Fight *-- TurnOrder
 Fight *-- Creature : "Active\ncreature"
 Fight *-- "*" Creature : "Target\ncreatures"
+TurnOrder o-- "*" Creature
+Party *-- "*" PartyRow
+PartyRow *-- "*" Character
+Opposition *-- "*" OppositionRow
+OppositionRow *-- "*" Enemy
+Creature <|-- Character
+Character *-- "*" Skill
+Enemy *-- EnemyStrategy
+Creature <|-- Enemy
+EnemyStrategy <|-- SingleSkillStrategy
+SingleSkillStrategy -right- Skill
 
 @enduml

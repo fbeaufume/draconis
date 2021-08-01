@@ -1,4 +1,4 @@
-import {EnemyRow} from "./enemy-row.model";
+import {OppositionRow} from "./opposition-row.model";
 import {Enemy} from "./enemy.model";
 
 /**
@@ -8,7 +8,7 @@ export class Opposition {
 
   description: string;
 
-  rows: EnemyRow[] = [];
+  rows: OppositionRow[] = [];
 
   /**
    * For each enemy base name, the number of such enemies.
@@ -23,8 +23,8 @@ export class Opposition {
     // Back row enemies
     row2Enemies: Enemy[] = []) {
     this.description = description;
-    this.rows.push(new EnemyRow(row1Enemies));
-    this.rows.push(new EnemyRow(row2Enemies));
+    this.rows.push(new OppositionRow(row1Enemies));
+    this.rows.push(new OppositionRow(row2Enemies));
 
     this.computeEffectiveNames();
   }
@@ -100,7 +100,7 @@ export class Opposition {
 
     // Remove empty rows
     for (let i = 0; i < this.rows.length - 1; i++) {
-      const row: EnemyRow = this.rows[i];
+      const row: OppositionRow = this.rows[i];
       if (row.enemies.length <= 0) {
         this.rows.splice(i--, 1);
         removeRows++;
@@ -111,7 +111,7 @@ export class Opposition {
 
     // Add empty rows in the back
     for (let i = 0; i < removeRows; i++) {
-      this.rows.push(new EnemyRow([]));
+      this.rows.push(new OppositionRow([]));
     }
   }
 

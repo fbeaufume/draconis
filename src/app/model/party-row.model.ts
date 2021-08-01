@@ -1,9 +1,9 @@
 import {Character} from "./character.model";
 
 /**
- * A row of characters.
+ * A row of characters in the party.
  */
-export class CharacterRow {
+export class PartyRow {
 
   /**
    * The characters of the row.

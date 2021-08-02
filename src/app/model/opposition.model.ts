@@ -6,8 +6,14 @@ import {Enemy} from "./enemy.model";
  */
 export class Opposition {
 
+  /**
+   * The description of the opposition.
+   */
   description: string;
 
+  /**
+   * The enemies rows. The first row in the array is the front row.
+   */
   rows: OppositionRow[] = [];
 
   /**

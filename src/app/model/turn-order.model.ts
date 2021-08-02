@@ -10,7 +10,8 @@ import {Enemy} from "./enemy.model";
 export class TurnOrder {
 
     /**
-     * Turn order of playable creatures, i.e. characters and living enemies.
+     * Turn order of playable creatures (i.e. characters and living enemies).
+     * The active creature if the first one in the array.
      */
     currentOrder: Creature[] = [];
 

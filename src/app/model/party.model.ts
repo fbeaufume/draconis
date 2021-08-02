@@ -6,6 +6,9 @@ import {Character} from "./character.model";
  */
 export class Party {
 
+  /**
+   * The characters rows. The first row in the array is the front row.
+   */
   rows: PartyRow[] = [];
 
   constructor(

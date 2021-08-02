@@ -1,7 +1,5 @@
 // Common model classes such as enumerations and utility classes
 
-// TODO FBE improve the doc of the enums
-
 /**
  * The types of creature.
  * Some characters, creatures or skills can be more or less efficient toward specific creature types.
@@ -42,11 +40,20 @@ export enum LifeChangeEfficiency {
  * Types of expiration of a status.
  */
 export enum StatusExpiration {
-  // The status expires at the end of the round, used by life over time changes
+
+  /**
+   * The status expires at the end of the round, used by life over time changes.
+   */
   END_OF_ROUND,
-  // The status expires at the end of the origin creature turn, used by combo strike
+
+  /**
+   * The status expires at the end of the origin creature turn, used by combo strike.
+   */
   ORIGIN_CREATURE_TURN_END,
-  // The status expires at the start of the origin creature turn, used by defend, attack or defense changes
+
+  /**
+   * The status expires at the start of the origin creature turn, used by defend, attack or defense changes.
+   */
   ORIGIN_CREATURE_TURN_START,
 }
 
@@ -85,7 +92,6 @@ export enum SkillIconType {
 /**
  * The type of target of a skill.
  */
-// TODO FBE use the values and descriptions of the next enum
 export enum SkillTargetType {
 
   /**
@@ -145,23 +151,50 @@ export enum SkillTargetType {
  * When some numeric values are changed, update accordingly the calls to 'usePointerForState' in fight.component.html.
  */
 export enum GameState {
-  // Waiting for the player to start the next encounter: display no opposition but a "Continue" button
+
+  /**
+   * Waiting for the player to start the next encounter: display no opposition but a "Continue" button.
+   */
   START_NEXT_ENCOUNTER,
-  // Waiting for the player to start the fight
+
+  /**
+   * Waiting for the player to start the fight.
+   */
   START_FIGHT,
-  // Between creature turns
+
+  /**
+   * Between creature turns.
+   */
   END_OF_TURN,
-  // Enemy turn
+
+  /**
+   * Enemy turn.
+   */
   ENEMY_TURN,
-  // Character turn, the player must select a skill
+
+  /**
+   * Character turn, the player must select a skill.
+   */
   SELECT_SKILL,
-  // Character turn, the player must select an enemy
+
+  /**
+   * Character turn, the player must select an enemy.
+   */
   SELECT_ENEMY,
-  // Character turn, the player must select a character
+
+  /**
+   * Character turn, the player must select a character.
+   */
   SELECT_CHARACTER,
-  // Executing the player skill
+
+  /**
+   * Executing the player skill.
+   */
   EXECUTING_SKILL,
-  // Cleared the dungeon
+
+  /**
+   * Cleared the dungeon.
+   */
   DUNGEON_END,
 }
 

@@ -45,6 +45,11 @@ export class Constants {
   static readonly PAUSE_LONG = 1000;
 
   /**
+   * The default number of attacks per round for enemies.
+   */
+  static readonly DEFAULT_ATTACK_COUNT = 1;
+
+  /**
    * The randomization range of damages and heals, 0.3 means +/- 15%.
    */
   static readonly RANDOMIZE_RANGE = 0.3;

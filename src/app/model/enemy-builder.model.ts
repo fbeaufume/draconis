@@ -1,14 +1,17 @@
 import {
   BleedMeleeEnemy,
-  DistanceEnemy,
   DragonEnemy,
   Enemy,
-  HealerEnemy, LeechMeleeEnemy,
+  HealerEnemy,
+  LeechMeleeEnemy,
   MeleeEnemy,
   OldManEnemy,
-  PoisonMeleeEnemy
+  PoisonMeleeEnemy,
+  StrategicEnemy
 } from "./enemy.model";
 import {CreatureType} from "./common.model";
+import {SingleSkillStrategy} from "./enemy-strategy.model";
+import {Strike} from "./skill.model";
 
 export class EnemyBuilder {
 
@@ -31,7 +34,8 @@ export class EnemyBuilder {
   }
 
   static buildGoblinHunter(): Enemy {
-    return new DistanceEnemy(CreatureType.HUMANOID, 'Goblin Hunter', 24, 7);
+    return new StrategicEnemy(CreatureType.HUMANOID, 'Goblin Hunter', 24, 7,
+      new SingleSkillStrategy(new Strike('Shot')));
   }
 
   static buildGoblinShaman(): Enemy {

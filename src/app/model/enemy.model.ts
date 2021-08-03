@@ -15,9 +15,12 @@ import {CreatureClass, CreatureType, LogType, SkillIconType, SkillTargetType} fr
 import {LifeChange} from "./life-change.model";
 import {logs} from "./log.model";
 import {Creature, EnemyAction} from "./creature.model";
+import {EnemyStrategy} from "./enemy-strategy.model";
+import {Constants} from "./constants.model";
 
 /**
- * An enemy. Subclasses implement the enemy behavior and used skills (attacks, heals, etc).
+ * Base class for enemy classes.
+ * Before subclassing this class consider using the subclasses with strategies, such as StrategicEnemy.
  */
 export abstract class Enemy extends Creature {
 
@@ -44,6 +47,7 @@ export abstract class Enemy extends Creature {
   /**
    * Main damaging skill.
    */
+    // TODO FBE remove this attribute when done migrating to strategy based enemies
   mainAttack: Skill = new Strike('Strike');
 
   constructor(
@@ -51,7 +55,7 @@ export abstract class Enemy extends Creature {
     name: string,
     lifeMax: number,
     power: number,
-    actions: number = 1) {
+    actions: number = Constants.DEFAULT_ATTACK_COUNT) {
     super(type, name, CreatureClass.ENEMY, lifeMax, 100, power, []);
     this.baseName = name;
     this.actions = actions;
@@ -92,8 +96,32 @@ export abstract class Enemy extends Creature {
 }
 
 /**
+ * An enemy class using a strategy to select its actions.
+ */
+export class StrategicEnemy extends Enemy {
+
+  strategy: EnemyStrategy;
+
+  constructor(
+    type: CreatureType,
+    name: string,
+    lifeMax: number,
+    power: number,
+    strategy: EnemyStrategy,
+    actions: number = Constants.DEFAULT_ATTACK_COUNT) {
+    super(type, name, lifeMax, power, actions);
+    this.strategy = strategy;
+  }
+
+  chooseAction(game: Game): EnemyAction {
+    return this.strategy.chooseAction(game.fight);
+  }
+}
+
+/**
  * Default melee enemy class. Hits when in front row, otherwise tries to advance.
  */
+// TODO FBE replace this class by a MeleeStrategicEnemy
 export class MeleeEnemy extends Enemy {
 
   chooseAction(game: Game): EnemyAction {
@@ -198,16 +226,6 @@ export class OldManEnemy extends Enemy {
     } else {
       return new EnemyAction(this.mainAttack, game.party.targetOneFrontRowAliveCharacter());
     }
-  }
-}
-
-/**
- * Default distance enemy class.
- */
-export class DistanceEnemy extends Enemy {
-
-  chooseAction(game: Game): EnemyAction {
-    return new EnemyAction(this.mainAttack, game.party.targetOneAliveCharacter());
   }
 }
 

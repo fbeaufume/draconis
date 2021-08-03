@@ -47,6 +47,9 @@ class Enemy {
   actions: number
 }
 
+class StrategicEnemy {
+}
+
 class EnemyStrategy {
 }
 
@@ -84,8 +87,9 @@ Opposition *-- "*" OppositionRow
 OppositionRow *-- "*" Enemy
 Creature <|-- Character
 Character *-- "*" Skill
-Enemy *-- EnemyStrategy
 Creature <|-- Enemy
+Enemy <|-- StrategicEnemy
+StrategicEnemy *-- EnemyStrategy
 EnemyStrategy <|-- SingleSkillStrategy
 SingleSkillStrategy -right- Skill
 

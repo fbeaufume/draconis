@@ -1,8 +1,7 @@
-// TODO FBE keep Enemy and MeleeEnemy but remove other Enemy classes and replace them with strategies
-
 import {Fight} from "./fight.model";
 import {Creature, EnemyAction} from "./creature.model";
 import {Skill} from "./skill.model";
+import {SkillTargetType} from "./common.model";
 
 /**
  * Interface for the various enemy combat strategies.
@@ -14,8 +13,23 @@ export abstract class EnemyStrategy {
    */
   abstract chooseAction(fight: Fight): EnemyAction;
 
+  /**
+   * Choose the targets for a given skill based on its target type.
+   * The choice is currently random, but enemies could be smarter for exampel by focusing on the weaker party member.
+   */
   chooseTargets(skill: Skill, fight: Fight): Creature[] {
-    // TODO FBE implement this
+    switch (skill.targetType) {
+      case SkillTargetType.OTHER_ALIVE:
+        return fight.party.targetOneFrontRowAliveCharacter();
+        break;
+      case SkillTargetType.OTHER_ALL:
+        return fight.party.targetAllAliveCharacters();
+        break;
+      default:
+        // Programming error
+        return [];
+    }
+
     return [];
   }
 }
@@ -39,3 +53,5 @@ export class SingleSkillStrategy extends EnemyStrategy {
     return new EnemyAction(this.skill, this.chooseTargets(this.skill, fight));
   }
 }
+
+// TODO FBE add a WeightedSkillStrategy

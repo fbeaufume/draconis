@@ -50,6 +50,9 @@ class Enemy {
 class StrategicEnemy {
 }
 
+class StrategicMeleeEnemy {
+}
+
 class EnemyStrategy {
 }
 
@@ -89,6 +92,7 @@ Creature <|-- Character
 Character *-- "*" Skill
 Creature <|-- Enemy
 Enemy <|-- StrategicEnemy
+StrategicEnemy <|-left- StrategicMeleeEnemy
 StrategicEnemy *-- EnemyStrategy
 EnemyStrategy <|-- SingleSkillStrategy
 SingleSkillStrategy -right- Skill

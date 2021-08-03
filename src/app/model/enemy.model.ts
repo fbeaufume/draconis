@@ -1,9 +1,6 @@
 import {Game} from "./game.model";
 import {
   Advance,
-  DamageAndBleed,
-  DamageAndHeal,
-  DamageAndPoison,
   Heal,
   Leave,
   Skill,
@@ -119,10 +116,10 @@ export class StrategicEnemy extends Enemy {
 }
 
 /**
- * Default melee enemy class. Hits when in front row, otherwise tries to advance.
+ * An melee enemy class using a strategy to select its actions.
+ * Uses a skill only when in the first row. If not it will try to advance.
  */
-// TODO FBE replace this class by a MeleeStrategicEnemy
-export class MeleeEnemy extends Enemy {
+export class StrategicMeleeEnemy extends StrategicEnemy {
 
   chooseAction(game: Game): EnemyAction {
     if (this.distance > 1) {
@@ -154,43 +151,10 @@ export class MeleeEnemy extends Enemy {
         return new EnemyAction(new Wait(), []);
       }
     } else {
-      // Hit a front row character
+      // Already in the front row, so we can use the skill
 
-      return new EnemyAction(this.mainAttack, game.party.targetOneFrontRowAliveCharacter());
+      return super.chooseAction(game);
     }
-  }
-}
-
-/**
- * A melee enemy that uses a bleeding attack.
- */
-export class BleedMeleeEnemy extends MeleeEnemy {
-
-  customize() {
-    this.mainAttack = new DamageAndBleed(SkillIconType.ATTACK, 'Deep Wound',
-      SkillTargetType.OTHER_ALIVE, 20, 1, 0, '', [0.5, 0.4]);
-  }
-}
-
-/**
- * A melee enemy that uses a poison attack.
- */
-export class PoisonMeleeEnemy extends MeleeEnemy {
-
-  customize() {
-    this.mainAttack = new DamageAndPoison(SkillIconType.ATTACK, 'Poison',
-      SkillTargetType.OTHER_ALIVE, 20, 1, 0, '', [0.5, 0.4]);
-  }
-}
-
-/**
- * A melee enemy that uses a leech attack.
- */
-export class LeechMeleeEnemy extends MeleeEnemy {
-
-  customize() {
-    this.mainAttack = new DamageAndHeal(SkillIconType.ATTACK, 'Leech',
-      SkillTargetType.OTHER_ALIVE, 20, 1, 0, '', [0.8, 0.5]);
   }
 }
 

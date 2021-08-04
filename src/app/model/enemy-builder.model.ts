@@ -1,6 +1,6 @@
 import {DragonEnemy, Enemy, HealerEnemy, OldManEnemy, StrategicEnemy, StrategicMeleeEnemy} from "./enemy.model";
 import {CreatureType, SkillIconType, SkillTargetType} from "./common.model";
-import {SingleSkillStrategy} from "./enemy-strategy.model";
+import {SingleSkillStrategy, WeightedSkillStrategy} from "./enemy-strategy.model";
 import {DamageAndBleed, DamageAndHeal, DamageAndPoison, Strike} from "./skill.model";
 
 export class EnemyBuilder {
@@ -16,8 +16,10 @@ export class EnemyBuilder {
 
   static buildBear(): Enemy {
     return new StrategicMeleeEnemy(CreatureType.BEAST, 'Bear', 34, 8,
-      new SingleSkillStrategy(new DamageAndBleed(SkillIconType.ATTACK, 'Maul',
-        SkillTargetType.OTHER_ALIVE, 20, 1, 0, '', [0.5, 0.4])));
+      new WeightedSkillStrategy()
+        .addSkill(new Strike('Bite'), 1)
+        .addSkill(new DamageAndBleed(SkillIconType.ATTACK, 'Maul',
+          SkillTargetType.OTHER_ALIVE, 20, 1, 0, '', [0.5, 0.4]), 1));
   }
 
   static buildWolf(): Enemy {

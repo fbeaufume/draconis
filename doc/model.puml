@@ -14,7 +14,6 @@ class Fight {
   round: number
 }
 
-
 class Party {
 }
 
@@ -59,6 +58,9 @@ class EnemyStrategy {
 class SingleSkillStrategy {
 }
 
+class WeightedSkillStrategy {
+}
+
 class Skill {
   type: SkillIconType
   name: string
@@ -73,10 +75,10 @@ class Skill {
   improvementStatus: boolean
 }
 
+Game *-left- "*" Dungeon
+Game *-left- Dungeon
+Game *-right- Fight
 Game *-- Party
-Game *-- Fight
-Game *-- "*" Dungeon
-Game *-- Dungeon
 Dungeon *-- "*" Opposition
 Fight -- Party
 Fight -- Opposition
@@ -91,10 +93,12 @@ OppositionRow *-- "*" Enemy
 Creature <|-- Character
 Character *-- "*" Skill
 Creature <|-- Enemy
-Enemy <|-- StrategicEnemy
+Enemy <|-right- StrategicEnemy
 StrategicEnemy <|-left- StrategicMeleeEnemy
 StrategicEnemy *-- EnemyStrategy
 EnemyStrategy <|-- SingleSkillStrategy
-SingleSkillStrategy -right- Skill
+SingleSkillStrategy *-right- Skill
+EnemyStrategy <|-- WeightedSkillStrategy
+WeightedSkillStrategy *-right- "*" Skill
 
 @enduml

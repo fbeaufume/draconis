@@ -483,6 +483,7 @@ export class FightService {
           this.state = GameState.START_NEXT_ENCOUNTER;
         } else {
           // The dungeon is over
+          logs.addLog(LogType.DungeonCleared);
           this.state = GameState.DUNGEON_END;
         }
       });

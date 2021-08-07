@@ -224,4 +224,5 @@ export enum LogType {
   OldManTransformation,
   PositiveStatus,
   NegativeStatus,
+  DungeonCleared,
 }

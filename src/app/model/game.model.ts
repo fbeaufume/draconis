@@ -39,6 +39,9 @@ export class Game {
   // Zero when not fighting, otherwise one-based identifier of the opposition in the dungeon
   oppositionId: number = settings.fight - 1;
 
+  // Zero when not fighting, increases when starting a fight, used to display the proper game proceed message
+  oppositionCount: number = 0;
+
   party: Party = new Party([
       new Character('Melkan', CreatureClass.WARRIOR, 4, 30, false, 50, 8, [
           new DefendTech(),
@@ -122,6 +125,8 @@ export class Game {
     this.state = GameState.START_FIGHT;
 
     this.oppositionId++;
+
+    this.oppositionCount++;
 
     this.party.forEachCharacter(c => c.clearStatusApplications());
     this.party.restoreTechPoints();

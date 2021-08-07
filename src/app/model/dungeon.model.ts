@@ -32,14 +32,14 @@ export class TestDungeon extends Dungeon {
         EnemyBuilder.buildGenericMonster(1, 8),
         // EnemyBuilder.buildGenericMonster(20,8),
       ], [
-        EnemyBuilder.buildGenericMonster(50, 8),
-        EnemyBuilder.buildGenericMonster(50, 8),
-        // EnemyBuilder.buildGenericMonster(50,8),
+        // EnemyBuilder.buildGenericMonster(50, 8),
+        // EnemyBuilder.buildGenericMonster(50, 8),
+        // EnemyBuilder.buildGenericMonster(50, 8),
       ]),
       new Opposition('some monsters', [
-        EnemyBuilder.buildGenericMonster(5, 8),
-        EnemyBuilder.buildGenericMonster(5, 8),
-        EnemyBuilder.buildGenericMonster(5, 8),
+        EnemyBuilder.buildGenericMonster(1, 8),
+        // EnemyBuilder.buildGenericMonster(1, 8),
+        // EnemyBuilder.buildGenericMonster(1, 8),
       ], []),
     ]);
   }

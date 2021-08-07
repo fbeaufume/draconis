@@ -82,7 +82,7 @@ export class FightService {
   }
 
   /**
-   * Called after a click on the main action button to proceed to the next state.
+   * Called after a click on the main action button to proceed to the next fight state.
    */
   proceed() {
     if (this.game.state == GameState.START_NEXT_ENCOUNTER) {
@@ -92,6 +92,23 @@ export class FightService {
     } else if (this.game.state == GameState.DUNGEON_END) {
       this.restart();
     }
+  }
+
+  /**
+   * Return the message displayed in the main action button to proceed to the next fight state.
+   */
+  getProceedMessage(): string | null {
+    if (this.game.state == GameState.START_NEXT_ENCOUNTER) {
+      if (this.game.oppositionCount <= 0) {
+        return 'Start dungeon';
+      } else {
+        return 'Continue';
+      }
+    } else if (this.game.state == GameState.START_FIGHT) {
+      return 'Start fight';
+    } else if (this.game.state == GameState.DUNGEON_END) {
+      return 'Quit dungeon';
+    } else return null;
   }
 
   /**

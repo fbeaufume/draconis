@@ -4,20 +4,9 @@
       <p class="text-4xl font-bold">Draconis</p>
     </div>
     <div class="flex-1 flex justify-center">
-      <div *ngIf="displayStartEncounterButton()">
+      <div *ngIf="fightService.getProceedMessage() != null">
         <button class="text-white bg-blue-500 font-bold px-4 py-2 rounded" (click)="fightService.proceed()">
-          <!-- TODO FBE when proceeding to the next fight display 'Continue' instead -->
-          Start dungeon
-        </button>
-      </div>
-      <div *ngIf="displayStartFightButton()">
-        <button class="text-white bg-blue-500 font-bold px-4 py-2 rounded" (click)="fightService.proceed()">
-          Start fight
-        </button>
-      </div>
-      <div *ngIf="displayRestartButton()">
-        <button class="text-white bg-blue-500 font-bold px-4 py-2 rounded" (click)="fightService.proceed()">
-          Restart
+          {{fightService.getProceedMessage()}}
         </button>
       </div>
     </div>

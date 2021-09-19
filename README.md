@@ -46,7 +46,7 @@ Features of the combat system :
 - [x] Turn order is randomly generated for each fight and evenly interleaves characters and enemies
 - [x] Some creatures (e.g. bosses) can have multiple actions per turn
 - [x] Row based, i.e. creatures are front row or back row
-- [x] Skill have a range, i.e. melee attacks can only reach front row opponents while distance attacks can reach any opponent
+- [x] Skill ranges, i.e. melee attacks can only reach front row opponents while distance attacks can reach any opponent
 - [x] Single target skills and area of effect skills
 - [x] Damaging skills and healing skills
 - [x] Initial impact damage and heals and over time damage and heals
@@ -55,7 +55,7 @@ Features of the combat system :
 - [x] Several skill outcomes (success, miss, dodge, resist, critical)
 - [ ] Skill modifiers, e.g. cannot be dodged 
 - [ ] Counter-attacks and/or thorns
-- [ ] Skills cooldown
+- [x] Skills cooldown
 - [ ] Multiple effect skills, e.g. a damage and an effect
 - [ ] Multiple element damages, e.g. physical damage plus poison damage
 - [x] Chained attacks, i.e. consecutively using  the same attack changes its result

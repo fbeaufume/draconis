@@ -400,7 +400,7 @@ export class DefendTech extends Defend {
 
   constructor() {
     super(SkillIconType.DEFENSE, 'Defend', SkillTargetType.NONE, -1000, 0, 1,
-      'Reduce received damage by 20%. Regain all TP.');
+      'Reduce received damage by 20% during one turn. Regain all TP.');
   }
 }
 
@@ -411,7 +411,7 @@ export class DefendMagic extends Defend {
 
   constructor() {
     super(SkillIconType.DEFENSE, 'Defend', SkillTargetType.NONE, 0, 0, 1,
-      'Reduce received damage by 20%.');
+      'Reduce received damage by 20% during one turn.');
   }
 }
 

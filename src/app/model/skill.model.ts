@@ -57,11 +57,11 @@ export abstract class Skill {
   range: number;
 
   /**
-   * The cooldown of the skill, i.e. the number of turns to wait before being able to use it again:
-   * - 2 means that if the skill was used in the first turn, the creature will have to wait for
-   * turn 3 before using it again
-   * - 1 means that the skill can be used at most once per turn
-   * - 0 means it can be used without restriction (relevant for multi attack creatures only)
+   * The cooldown of the skill, i.e. the number of turns to wait before being able to use it again.
+   * Defaults to one, meaning that the skill can be used each turn.
+   * For example two means that if the skill was used in the first turn, the creature will have to wait for
+   * turn 3 before using it again.
+   * Note that this is relevant only for characters, since the skill choice for enemies is defined by their strategies.
    */
   cooldownMax: number;
 
@@ -69,6 +69,8 @@ export abstract class Skill {
    * The current cooldown of the skill.
    * This is decreased before a creature turn.
    * When it reaches 0 the skill can be used.
+   * Starts at zero.
+   * Note that this is relevant only for characters, since the skill choice for enemies is defined by their strategies.
    */
   cooldown: number;
 
@@ -112,7 +114,7 @@ export abstract class Skill {
     this.cost = cost;
     this.range = range;
     this.cooldownMax = coolDownMax;
-    this.cooldown = coolDownMax;
+    this.cooldown = 0;
     this.description = description;
     this.powerLevels = powerLevels;
     this.status = status;
@@ -128,8 +130,13 @@ export abstract class Skill {
     }
 
     // Check the skill cost
-    // noinspection RedundantIfStatementJS
     if (this.cost > creature.energy) {
+      return false;
+    }
+
+    // Check the cooldown
+    // noinspection RedundantIfStatementJS
+    if (this.cooldown > 0) {
       return false;
     }
 
@@ -224,8 +231,22 @@ export abstract class Skill {
     return targets;
   }
 
+  /**
+   * Reduce the cooldown of this skills by one.
+   */
+  reduceCooldown() {
+    this.cooldown--;
+    if (this.cooldown < 0) {
+      this.cooldown = 0;
+    }
+  }
+
   execute(fight: Fight): void {
+    // Apply the energy cost to the creature
     fight.activeCreature?.spendEnergy(this.cost);
+
+    // Update the cooldown
+    this.cooldown = this.cooldownMax;
   }
 }
 
@@ -307,7 +328,7 @@ function randomizeAndRound(amount: number): number {
 export class Advance extends Skill {
 
   constructor() {
-    super(SkillIconType.DEFENSE, 'Advance', SkillTargetType.NONE, 0, 0, 0, '');
+    super(SkillIconType.DEFENSE, 'Advance', SkillTargetType.NONE, 0, 0, 1, '');
   }
 
   execute(fight: Fight): void {
@@ -323,7 +344,7 @@ export class Advance extends Skill {
 export class Wait extends Skill {
 
   constructor() {
-    super(SkillIconType.DEFENSE, 'Wait', SkillTargetType.NONE, 0, 0, 0, '');
+    super(SkillIconType.DEFENSE, 'Wait', SkillTargetType.NONE, 0, 0, 1, '');
   }
 
   execute(fight: Fight): void {
@@ -339,7 +360,7 @@ export class Wait extends Skill {
 export class Leave extends Skill {
 
   constructor() {
-    super(SkillIconType.DEFENSE, 'Leave', SkillTargetType.NONE, 0, 0, 0, '');
+    super(SkillIconType.DEFENSE, 'Leave', SkillTargetType.NONE, 0, 0, 1, '');
   }
 
   execute(fight: Fight): void {
@@ -378,7 +399,7 @@ export class Defend extends Skill {
 export class DefendTech extends Defend {
 
   constructor() {
-    super(SkillIconType.DEFENSE, 'Defend', SkillTargetType.NONE, -1000, 0, 0,
+    super(SkillIconType.DEFENSE, 'Defend', SkillTargetType.NONE, -1000, 0, 1,
       'Reduce received damage by 20%. Regain all TP.');
   }
 }
@@ -389,7 +410,7 @@ export class DefendTech extends Defend {
 export class DefendMagic extends Defend {
 
   constructor() {
-    super(SkillIconType.DEFENSE, 'Defend', SkillTargetType.NONE, 0, 0, 0,
+    super(SkillIconType.DEFENSE, 'Defend', SkillTargetType.NONE, 0, 0, 1,
       'Reduce received damage by 20%.');
   }
 }
@@ -442,7 +463,7 @@ export class Damage extends Skill {
 export class Strike extends Damage {
 
   constructor(name: string) {
-    super(SkillIconType.ATTACK, name, SkillTargetType.OTHER_ALIVE, 10, 1, 0, 'Inflict 100% damage.');
+    super(SkillIconType.ATTACK, name, SkillTargetType.OTHER_ALIVE, 10, 1, 1, 'Inflict 100% damage.');
   }
 }
 
@@ -452,7 +473,7 @@ export class Strike extends Damage {
 export class StrikeSmall extends Damage {
 
   constructor(name: string) {
-    super(SkillIconType.ATTACK, name, SkillTargetType.OTHER_ALIVE, 10, 1, 0, '', [0.7]);
+    super(SkillIconType.ATTACK, name, SkillTargetType.OTHER_ALIVE, 10, 1, 1, '', [0.7]);
   }
 }
 

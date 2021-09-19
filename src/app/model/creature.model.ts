@@ -218,6 +218,13 @@ export abstract class Creature {
   }
 
   /**
+   * Reduce the cooldown of all skills by one.
+   */
+  decreaseCooldowns() {
+    this.skills.forEach(skill => skill.reduceCooldown());
+  }
+
+  /**
    * Return true if this creature has the specialty of the target creature.
    */
   hasSpecialtyOfCreature(creature: Creature): boolean {

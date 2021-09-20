@@ -153,6 +153,11 @@ Bonuses
   <line x1="30" y1="80" x2="50" y2="60" stroke="#262626" style="stroke-width: 10; stroke-linecap: round;" />
   <line x1="70" y1="80" x2="50" y2="60" stroke="#262626" style="stroke-width: 10; stroke-linecap: round;" />
 </svg>
+<svg width="100" height="100"><!-- Ice trap -->
+  <rect width="100" height="100" style="fill:#10B981;" />
+  <polyline points="50 15 65 40 50 65 35 40 50 15" fill="none" stroke="#262626" style="stroke-width: 10; stroke-linecap: round; stroke-linejoin: round"/>
+  <line x1="25" y1="80" x2="75" y2="80" stroke="#262626" style="stroke-width: 10; stroke-linecap: round;" />
+</svg>
 
 <br>
 Bonuses alternatives

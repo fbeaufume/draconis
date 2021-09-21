@@ -42,11 +42,11 @@ export class StatusApplication {
   }
 
   isDot(): boolean {
-    return this.status == bleed || this.status == poison;
+    return this.status.isDot;
   }
 
   isHot(): boolean {
-    return this.status == regen;
+    return this.status.isHot;
   }
 
   decreaseDuration() {

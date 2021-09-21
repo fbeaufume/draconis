@@ -7,6 +7,7 @@ import {
   attackBonus,
   attackMalus,
   bleed,
+  burn,
   combo1,
   combo2,
   defend,
@@ -593,7 +594,6 @@ export class DamageAndDamage extends Skill {
 
 /**
  * A damaging skill that also adds a bleed damage over time.
- * This and DamageAndPoison should be a single class, but it's painful to do so in TypeScript.
  */
 export class DamageAndBleed extends Skill {
 
@@ -622,7 +622,6 @@ export class DamageAndBleed extends Skill {
 
 /**
  * A damaging skill that also adds a poison damage over time.
- * This and DamageAndBleed should be a single class, but it's painful to do so in TypeScript.
  */
 export class DamageAndPoison extends Skill {
 
@@ -644,6 +643,34 @@ export class DamageAndPoison extends Skill {
       // Damage over time part
       if (lifeChange.isSuccess()) {
         targetCreature.applyStatus(new StatusApplication(poison, this.powerLevels[1], fight.activeCreature));
+      }
+    });
+  }
+}
+
+/**
+ * A damaging skill that also adds a fire damage over time.
+ */
+export class DamageAndBurn extends Skill {
+
+  execute(fight: Fight): void {
+    if (fight.activeCreature == null) {
+      return;
+    }
+
+    const activeCreature: Creature = fight.activeCreature;
+
+    super.execute(fight);
+
+    fight.targetCreatures.forEach(targetCreature => {
+      const lifeChange: LifeChange = computeEffectiveDamage(activeCreature, targetCreature, this.powerLevels[0]);
+
+      // Direct damage part
+      logs.addCreatureLog(LogType.Damage, activeCreature, targetCreature, targetCreature.changeLife(lifeChange), null);
+
+      // Damage over time part
+      if (lifeChange.isSuccess()) {
+        targetCreature.applyStatus(new StatusApplication(burn, this.powerLevels[1], fight.activeCreature));
       }
     });
   }

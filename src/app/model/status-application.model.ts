@@ -1,5 +1,5 @@
 import {Creature} from "./creature.model";
-import {bleed, poison, regen, StatusType} from "./status-type.model";
+import {StatusType} from "./status-type.model";
 
 /**
  * A status applied to a creature, such as a life change over time, an attack or defense modification, etc.
@@ -34,6 +34,7 @@ export class StatusApplication {
     this.status = status;
     this.power = power;
     this.originCreature = originCreature;
+    // TODO FBE remove the status.totalDuration attribute and initialize this.remainingDuration from a constructor parameter
     this.remainingDuration = status.totalDuration;
   }
 

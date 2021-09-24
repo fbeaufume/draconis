@@ -16,6 +16,7 @@ import {
   DamageAndDamage,
   DamageAndHeal,
   DamageAndPoison,
+  DamageAndStatus,
   DefendMagic,
   DefendTech,
   DualHeal,
@@ -54,7 +55,7 @@ export class Game {
           new Damage(SkillIconType.ATTACK, 'Slash', SkillTargetType.OTHER_ALIVE_DOUBLE, 10, 1, 2,
             'Inflict 80% damage to two adjacent targets.', [0.8]),
           new ApplyStatus(SkillIconType.DETERIORATION, 'Intimidate', SkillTargetType.OTHER_ALIVE, 20, 1, 1,
-            'Reduce the enemy attack by 20% during ' + Constants.EFFECT_DURATION + ' rounds.', [], attackMalus, false),
+            'Reduce the target attack by 20% during ' + Constants.EFFECT_DURATION + ' rounds.', [], [attackMalus]),
         ],
         [CreatureType.HUMANOID]),
       new Character('Arwin', CreatureClass.PALADIN, 4, 30, true, 50, 8, [
@@ -88,7 +89,7 @@ export class Game {
           new Damage(SkillIconType.ATTACK, 'Explosive Shot', SkillTargetType.OTHER_ALIVE_TRIPLE, 20, 2, 1,
             'Inflict 60% damage to three adjacent targets.', [0.6]),
           new ApplyStatus(SkillIconType.DETERIORATION, 'Crippling Shot', SkillTargetType.OTHER_ALIVE, 10, 2, 1,
-            'Reduce the enemy defense by 20% during ' + Constants.EFFECT_DURATION + ' rounds.', [], defenseMalus, false),
+            'Reduce the target defense by 20% during ' + Constants.EFFECT_DURATION + ' rounds.', [], [defenseMalus]),
         ],
         [CreatureType.BEAST]),
       new Character('Harika', CreatureClass.MAGE, 4, 30, true, 50, 8, [
@@ -97,12 +98,14 @@ export class Game {
             'Inflict 100% damage.'),
           new DamageAndBurn(SkillIconType.ATTACK, 'Burn', SkillTargetType.OTHER_ALIVE, 10, 2, 2,
             'Inflict 50% damage to the target and 150% damage over ' + Constants.EFFECT_DURATION + ' rounds.', [0.5, 0.5]),
+          new DamageAndStatus(SkillIconType.ATTACK, 'Ice Blast', SkillTargetType.OTHER_ALIVE, 10, 2, 1,
+            'Inflict 50% damage to the target and reduce the target attack and defense by 20% during one round.', [0.5], [defenseMalus, attackMalus]),
           new Damage(SkillIconType.ATTACK, 'Fireball', SkillTargetType.OTHER_ALIVE_TRIPLE, 10, 2, 3,
             'Inflict 80% damage to three adjacent targets.', [0.8]),
           new ApplyStatus(SkillIconType.DETERIORATION, 'Weakness', SkillTargetType.OTHER_ALIVE, 10, 2, 1,
-            'Reduce the enemy attack by 20% during ' + Constants.EFFECT_DURATION + ' rounds.', [], attackMalus, false),
+            'Reduce the target attack by 20% during ' + Constants.EFFECT_DURATION + ' rounds.', [], [attackMalus]),
           new ApplyStatus(SkillIconType.DETERIORATION, 'Slow', SkillTargetType.OTHER_ALIVE, 10, 2, 1,
-            'Reduce the enemy defense by 20% during ' + Constants.EFFECT_DURATION + ' rounds.', [], defenseMalus, false),
+            'Reduce the target defense by 20% during ' + Constants.EFFECT_DURATION + ' rounds.', [], [defenseMalus]),
         ],
         [CreatureType.ELEMENTAL])
     ]);

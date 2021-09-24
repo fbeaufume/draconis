@@ -90,12 +90,7 @@ export abstract class Skill {
   /**
    * The status to apply, if applicable. Defaults to an arbitrary value to simplify null management.
    */
-  status: StatusType;
-
-  /**
-   * Is the applied status an improvement.
-   */
-  improvementStatus: boolean;
+  statuses: StatusType[];
 
   constructor(
     iconType: SkillIconType,
@@ -106,8 +101,7 @@ export abstract class Skill {
     coolDownMax: number,
     description: string,
     powerLevels: number[] = [1],
-    status: StatusType = defend,
-    improvementStatus: boolean = true
+    statuses: StatusType[] = [defend],
   ) {
     this.iconType = iconType;
     this.name = name;
@@ -118,8 +112,7 @@ export abstract class Skill {
     this.cooldown = 0;
     this.description = description;
     this.powerLevels = powerLevels;
-    this.status = status;
-    this.improvementStatus = improvementStatus;
+    this.statuses = statuses;
   }
 
   /**
@@ -417,7 +410,7 @@ export class DefendMagic extends Defend {
 }
 
 /**
- * Apply a positive or negative status.
+ * Apply one or more statuses.
  */
 export class ApplyStatus extends Skill {
 
@@ -429,10 +422,12 @@ export class ApplyStatus extends Skill {
     super.execute(fight);
 
     fight.targetCreatures.forEach(targetCreature => {
-      const status = new StatusApplication(this.status, 0, fight.activeCreature);
-      targetCreature.applyStatus(status);
+      this.statuses.forEach(status => {
+        const statusApplication = new StatusApplication(status, 0, fight.activeCreature);
+        targetCreature.applyStatus(statusApplication);
 
-      logs.addCreatureLog(this.improvementStatus ? LogType.PositiveStatus : LogType.NegativeStatus, fight.activeCreature, targetCreature, null, null, status);
+        logs.addCreatureLog(status.improvement ? LogType.PositiveStatus : LogType.NegativeStatus, fight.activeCreature, targetCreature, null, null, statusApplication);
+      })
     });
   }
 }
@@ -671,6 +666,34 @@ export class DamageAndBurn extends Skill {
       // Damage over time part
       if (lifeChange.isSuccess()) {
         targetCreature.applyStatus(new StatusApplication(burn, this.powerLevels[1], fight.activeCreature));
+      }
+    });
+  }
+}
+
+/**
+ * A damaging skill that also applies one or more statuses.
+ */
+export class DamageAndStatus extends Skill {
+
+  execute(fight: Fight): void {
+    if (fight.activeCreature == null) {
+      return;
+    }
+
+    const activeCreature: Creature = fight.activeCreature;
+
+    super.execute(fight);
+
+    fight.targetCreatures.forEach(targetCreature => {
+      const lifeChange: LifeChange = computeEffectiveDamage(activeCreature, targetCreature, this.powerLevels[0]);
+
+      // Damage part
+      logs.addCreatureLog(LogType.Damage, activeCreature, targetCreature, targetCreature.changeLife(lifeChange), null);
+
+      // Statuses part
+      if (lifeChange.isSuccess()) {
+        this.statuses.forEach(status => targetCreature.applyStatus(new StatusApplication(status, 0, fight.activeCreature)))
       }
     });
   }

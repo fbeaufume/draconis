@@ -158,6 +158,21 @@ Bonuses
   <polyline points="50 15 65 40 50 65 35 40 50 15" fill="none" stroke="#262626" style="stroke-width: 10; stroke-linecap: round; stroke-linejoin: round"/>
   <line x1="25" y1="80" x2="75" y2="80" stroke="#262626" style="stroke-width: 10; stroke-linecap: round;" />
 </svg>
+<svg width="100" height="100"><!-- Fire trap -->
+  <rect width="100" height="100" style="fill:#10B981;" />
+  <path d="M 37 20 C 44 27 44 33 37 40" fill ="none" stroke ="#262626" style="stroke-width: 10; stroke-linecap: round;" />
+  <path d="M 37 40 C 29 47 29 53 37 60" fill ="none" stroke ="#262626" style="stroke-width: 10; stroke-linecap: round;" />
+  <path d="M 63 20 C 69 27 70 33 63 40" fill ="none" stroke ="#262626" style="stroke-width: 10; stroke-linecap: round;" />
+  <path d="M 63 40 C 55 47 55 53 63 60" fill ="none" stroke ="#262626" style="stroke-width: 10; stroke-linecap: round;" />
+  <line x1="25" y1="80" x2="75" y2="80" stroke="#262626" style="stroke-width: 10; stroke-linecap: round;" />
+</svg>
+<svg width="100" height="100"><!-- Taunt -->
+  <rect width="100" height="100" style="fill:#10B981;" />
+  <circle cx="50" cy="70" r="15" fill="#262626"/>
+    <line x1="50" y1="45" x2="50" y2="25" stroke="#262626" style="stroke-width: 10; stroke-linecap: round;" />
+    <line x1="50" y1="45" x2="50" y2="25" stroke="#262626" style="stroke-width: 10; stroke-linecap: round;" transform="rotate(-40 50 70)"/>
+    <line x1="50" y1="45" x2="50" y2="25" stroke="#262626" style="stroke-width: 10; stroke-linecap: round;" transform="rotate(40 50 70)" />
+</svg>
 
 <br>
 Bonuses alternatives

@@ -99,7 +99,7 @@ export class Game {
           new DamageAndBurn(SkillIconType.ATTACK, 'Burn', SkillTargetType.OTHER_ALIVE, 10, 2, 2,
             'Inflict 50% damage to the target and 150% damage over 3 rounds.', [0.5, 0.5]),
           new DamageAndStatus(SkillIconType.ATTACK, 'Ice Blast', SkillTargetType.OTHER_ALIVE, 10, 2, 1,
-            'Inflict 50% damage to the target and reduce the target attack and defense by 20% during one round.', [0.5], [defenseMalus, attackMalus], 1),
+            'Inflict 50% damage to the target and reduce the target attack and defense by 20% during one round.', [0.5], [attackMalus, defenseMalus], 1),
           new Damage(SkillIconType.ATTACK, 'Fireball', SkillTargetType.OTHER_ALIVE_TRIPLE, 10, 2, 3,
             'Inflict 80% damage to three adjacent targets.', [0.8]),
           new ApplyStatus(SkillIconType.DETERIORATION, 'Weakness', SkillTargetType.OTHER_ALIVE, 10, 2, 1,

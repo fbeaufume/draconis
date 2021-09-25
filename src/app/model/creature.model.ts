@@ -259,7 +259,7 @@ export abstract class Creature {
     this.statusApplications = this.statusApplications.filter(s => s.status.name != statusApplication.status.name
       || (statusApplication.status.cumulative && s.getOriginCreatureName() != statusApplication.getOriginCreatureName()));
 
-    this.statusApplications.unshift(statusApplication);
+    this.statusApplications.push(statusApplication);
   }
 
   /**

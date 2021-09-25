@@ -39,7 +39,7 @@ export enum LifeChangeEfficiency {
 /**
  * Types of expiration of a status.
  */
-export enum StatusExpiration {
+export enum StatusExpirationType {
 
   /**
    * The status expires at the end of the round, used by life over time changes.

@@ -4,7 +4,7 @@ import {Creature, EnemyAction} from '../model/creature.model';
 import {Skill} from '../model/skill.model';
 import {Log, logs} from '../model/log.model';
 import {Constants} from '../model/constants.model';
-import {GameState, LogType, SkillTargetType, StatusExpiration} from "../model/common.model";
+import {GameState, LogType, SkillTargetType, StatusExpirationType} from "../model/common.model";
 import {Character} from "../model/character.model";
 import {Party} from "../model/party.model";
 import {settings} from "../model/settings.model";
@@ -123,7 +123,7 @@ export class FightService {
 
     // Decrease some statuses duration and remove the expired ones
     this.getAllCreatures().forEach(creature => {
-      creature.decreaseStatusesDuration(StatusExpiration.ORIGIN_CREATURE_TURN_START, this.fight.activeCreature);
+      creature.decreaseStatusesDuration(StatusExpirationType.ORIGIN_CREATURE_TURN_START, this.fight.activeCreature);
     });
 
     // Skip dead characters
@@ -360,7 +360,7 @@ export class FightService {
       creature.applyDotsAndHots();
 
       // Decrease the statuses duration and remove the expired ones
-      creature.decreaseStatusesDuration(StatusExpiration.END_OF_ROUND);
+      creature.decreaseStatusesDuration(StatusExpirationType.END_OF_ROUND);
     });
 
     // If there are dead enemies, remove them after a pause
@@ -392,7 +392,7 @@ export class FightService {
    */
   processNextTurn(pause: boolean) {
     this.getAllCreatures().forEach(creature => {
-      creature.decreaseStatusesDuration(StatusExpiration.ORIGIN_CREATURE_TURN_END, this.fight.activeCreature);
+      creature.decreaseStatusesDuration(StatusExpirationType.ORIGIN_CREATURE_TURN_END, this.fight.activeCreature);
     });
 
     if (pause) {

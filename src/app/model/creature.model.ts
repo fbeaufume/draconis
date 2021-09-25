@@ -7,7 +7,7 @@ import {
   LifeChangeEfficiency,
   LifeChangeType,
   LogType,
-  StatusExpiration
+  StatusExpirationType
 } from "./common.model";
 import {StatusType} from "./status-type.model";
 import {LifeChange} from "./life-change.model";
@@ -265,11 +265,11 @@ export abstract class Creature {
   /**
    * Reduce the remaining duration of all statuses that use a given expiration type and remove the expired ones.
    */
-  decreaseStatusesDuration(expiration: StatusExpiration, originCreature: Creature | null = null) {
+  decreaseStatusesDuration(expirationType: StatusExpirationType, originCreature: Creature | null = null) {
     for (let i = 0; i < this.statusApplications.length; i++) {
       const statusApplication = this.statusApplications[i];
 
-      if (statusApplication.status.expiration != expiration) {
+      if (statusApplication.status.expirationType != expirationType) {
         continue;
       }
 

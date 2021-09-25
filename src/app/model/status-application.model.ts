@@ -29,13 +29,13 @@ export class StatusApplication {
   constructor(
     status: StatusType,
     power: number,
-    originCreature: Creature | null
+    originCreature: Creature | null,
+    remainingDuration: number
   ) {
     this.status = status;
     this.power = power;
     this.originCreature = originCreature;
-    // TODO FBE remove the status.totalDuration attribute and initialize this.remainingDuration from a constructor parameter
-    this.remainingDuration = status.totalDuration;
+    this.remainingDuration = remainingDuration;
   }
 
   isImprovement(): boolean {

@@ -5,7 +5,6 @@ import {Character} from "./character.model";
 import {Party} from "./party.model";
 import {settings} from "./settings.model";
 import {Opposition} from "./opposition.model";
-import {Constants} from "./constants.model";
 import {attackMalus, defenseMalus} from "./status-type.model";
 import {
   ApplyStatus,
@@ -28,6 +27,7 @@ import {
 } from './skill.model';
 import {Dungeon, FangForestDungeon, ForgottenGraveyardDungeon, TestDungeon} from "./dungeon.model";
 import {Fight} from "./fight.model";
+import {Constants} from "./constants.model";
 
 /**
  * Main model class. Contains the party, the dungeons, the current fight, etc.
@@ -51,11 +51,11 @@ export class Game {
           new DamageAndDamage(SkillIconType.ATTACK, 'Fury Strike', SkillTargetType.OTHER_ALIVE, 15, 1, 1,
             'Inflict 140% damage to the target and 30% damage to self.', [1.4, 0.3]),
           new DamageAndBleed(SkillIconType.ATTACK, 'Deep Wound', SkillTargetType.OTHER_ALIVE, 15, 1, 1,
-            'Inflict 50% damage to the target and 120% damage over ' + Constants.EFFECT_DURATION + ' rounds.', [0.5, 0.4]),
+            'Inflict 50% damage to the target and 120% damage over 3 rounds.', [0.5, 0.4]),
           new Damage(SkillIconType.ATTACK, 'Slash', SkillTargetType.OTHER_ALIVE_DOUBLE, 10, 1, 2,
             'Inflict 80% damage to two adjacent targets.', [0.8]),
           new ApplyStatus(SkillIconType.DETERIORATION, 'Intimidate', SkillTargetType.OTHER_ALIVE, 20, 1, 1,
-            'Reduce the target attack by 20% during ' + Constants.EFFECT_DURATION + ' rounds.', [], [attackMalus]),
+            'Reduce the target attack by 20% during 3 rounds.', [], [attackMalus]),
         ],
         [CreatureType.HUMANOID]),
       new Character('Arwin', CreatureClass.PALADIN, 4, 30, true, 50, 8, [
@@ -69,7 +69,7 @@ export class Game {
           new DualHeal(SkillIconType.HEAL, 'Dual Heal', SkillTargetType.SAME_ALIVE_OTHER, 10, 0, 2,
             'Heal a character for 100% damage and self for 80% damage.', [1, 0.8]),
           new Regenerate(SkillIconType.HEAL, 'Regenerate', SkillTargetType.SAME_ALIVE, 5, 0, 1,
-            'Heal a character for 50% damage and 120% damage over ' + Constants.EFFECT_DURATION + ' rounds.', [0.5, 0.4]),
+            'Heal a character for 50% damage and 120% damage over 3 rounds.', [0.5, 0.4]),
           new Heal(SkillIconType.HEAL, 'Heal All', SkillTargetType.SAME_ALIVE_ALL, 15, 0, 3,
             'Heal all characters for 50% damage.', [0.5]),
           new Revive(SkillIconType.HEAL, 'Revive', SkillTargetType.SAME_DEAD, 15, 0, 2,
@@ -83,13 +83,13 @@ export class Game {
           new FullLifeDamage(SkillIconType.ATTACK, 'First Shot', SkillTargetType.OTHER_ALIVE, 10, 2, 1,
             'Inflict 100% damage. Add 50% damage if the target is full life.', [1.0, 1.5]),
           new DamageAndPoison(SkillIconType.ATTACK, 'Viper Shot', SkillTargetType.OTHER_ALIVE, 15, 2, 1,
-            'Inflict 50% damage to the target and 120% damage over ' + Constants.EFFECT_DURATION + ' rounds.', [0.5, 0.4]),
+            'Inflict 50% damage to the target and 120% damage over 3 rounds.', [0.5, 0.4]),
           new ComboDamage(SkillIconType.ATTACK, 'Combo Shot', SkillTargetType.OTHER_ALIVE, 10, 1, 1,
-            'Inflict 80% damage then 120% then 160% when used on the same target during consecutive turns.', [0.8, 1.2, 1.6]),
+            'Inflict 80% damage then 120% then 160% when used on the same target during consecutive turns.', [0.8, 1.2, 1.6], [], Constants.COMBO_DURATION),
           new Damage(SkillIconType.ATTACK, 'Explosive Shot', SkillTargetType.OTHER_ALIVE_TRIPLE, 20, 2, 1,
             'Inflict 60% damage to three adjacent targets.', [0.6]),
           new ApplyStatus(SkillIconType.DETERIORATION, 'Crippling Shot', SkillTargetType.OTHER_ALIVE, 10, 2, 1,
-            'Reduce the target defense by 20% during ' + Constants.EFFECT_DURATION + ' rounds.', [], [defenseMalus]),
+            'Reduce the target defense by 20% during 3 rounds.', [], [defenseMalus]),
         ],
         [CreatureType.BEAST]),
       new Character('Harika', CreatureClass.MAGE, 4, 30, true, 50, 8, [
@@ -97,15 +97,15 @@ export class Game {
           new Damage(SkillIconType.ATTACK, 'Lightning', SkillTargetType.OTHER_ALIVE, 5, 2, 1,
             'Inflict 100% damage.'),
           new DamageAndBurn(SkillIconType.ATTACK, 'Burn', SkillTargetType.OTHER_ALIVE, 10, 2, 2,
-            'Inflict 50% damage to the target and 150% damage over ' + Constants.EFFECT_DURATION + ' rounds.', [0.5, 0.5]),
+            'Inflict 50% damage to the target and 150% damage over 3 rounds.', [0.5, 0.5]),
           new DamageAndStatus(SkillIconType.ATTACK, 'Ice Blast', SkillTargetType.OTHER_ALIVE, 10, 2, 1,
-            'Inflict 50% damage to the target and reduce the target attack and defense by 20% during one round.', [0.5], [defenseMalus, attackMalus]),
+            'Inflict 50% damage to the target and reduce the target attack and defense by 20% during one round.', [0.5], [defenseMalus, attackMalus], 1),
           new Damage(SkillIconType.ATTACK, 'Fireball', SkillTargetType.OTHER_ALIVE_TRIPLE, 10, 2, 3,
             'Inflict 80% damage to three adjacent targets.', [0.8]),
           new ApplyStatus(SkillIconType.DETERIORATION, 'Weakness', SkillTargetType.OTHER_ALIVE, 10, 2, 1,
-            'Reduce the target attack by 20% during ' + Constants.EFFECT_DURATION + ' rounds.', [], [attackMalus]),
+            'Reduce the target attack by 20% during 3 rounds.', [], [attackMalus]),
           new ApplyStatus(SkillIconType.DETERIORATION, 'Slow', SkillTargetType.OTHER_ALIVE, 10, 2, 1,
-            'Reduce the target defense by 20% during ' + Constants.EFFECT_DURATION + ' rounds.', [], [defenseMalus]),
+            'Reduce the target defense by 20% during 3 rounds.', [], [defenseMalus]),
         ],
         [CreatureType.ELEMENTAL])
     ]);

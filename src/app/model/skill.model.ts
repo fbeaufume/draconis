@@ -92,6 +92,11 @@ export abstract class Skill {
    */
   statuses: StatusType[];
 
+  /**
+   * The duration of the applied statuses.
+   */
+  statusDuration: number;
+
   constructor(
     iconType: SkillIconType,
     name: string,
@@ -101,7 +106,8 @@ export abstract class Skill {
     coolDownMax: number,
     description: string,
     powerLevels: number[] = [1],
-    statuses: StatusType[] = [defend],
+    statuses: StatusType[] = [],
+    statusDuration: number = Constants.DEFAULT_STATUS_DURATION
   ) {
     this.iconType = iconType;
     this.name = name;
@@ -113,6 +119,7 @@ export abstract class Skill {
     this.description = description;
     this.powerLevels = powerLevels;
     this.statuses = statuses;
+    this.statusDuration = statusDuration;
   }
 
   /**
@@ -380,7 +387,7 @@ export class Defend extends Skill {
     super.execute(fight);
 
     if (fight.activeCreature != null) {
-      fight.activeCreature.applyStatus(new StatusApplication(defend, 0, fight.activeCreature));
+      fight.activeCreature.applyStatus(new StatusApplication(defend, 0, fight.activeCreature, this.statusDuration));
 
       logs.addCreatureLog(LogType.Defend, fight.activeCreature, null, null, null);
     }
@@ -394,7 +401,7 @@ export class DefendTech extends Defend {
 
   constructor() {
     super(SkillIconType.DEFENSE, 'Defend', SkillTargetType.NONE, -1000, 0, 1,
-      'Reduce received damage by 20% during one turn. Regain all TP.');
+      'Reduce received damage by 20% during one turn. Regain all TP.',[1],[], Constants.DEFEND_DURATION);
   }
 }
 
@@ -405,7 +412,7 @@ export class DefendMagic extends Defend {
 
   constructor() {
     super(SkillIconType.DEFENSE, 'Defend', SkillTargetType.NONE, 0, 0, 1,
-      'Reduce received damage by 20% during one turn.');
+      'Reduce received damage by 20% during one turn.',[1],[], Constants.DEFEND_DURATION);
   }
 }
 
@@ -423,7 +430,7 @@ export class ApplyStatus extends Skill {
 
     fight.targetCreatures.forEach(targetCreature => {
       this.statuses.forEach(status => {
-        const statusApplication = new StatusApplication(status, 0, fight.activeCreature);
+        const statusApplication = new StatusApplication(status, 0, fight.activeCreature, this.statusDuration);
         targetCreature.applyStatus(statusApplication);
 
         logs.addCreatureLog(status.improvement ? LogType.PositiveStatus : LogType.NegativeStatus, fight.activeCreature, targetCreature, null, null, statusApplication);
@@ -526,7 +533,7 @@ export class ComboDamage extends Skill {
 
     // Add the buff if the attack succeeded
     if (comboStep <= 2 && lifeChange.isSuccess()) {
-      targetCreature.applyStatus(new StatusApplication(comboStep == 1 ? combo1 : combo2, 0, activeCreature));
+      targetCreature.applyStatus(new StatusApplication(comboStep == 1 ? combo1 : combo2, 0, activeCreature, this.statusDuration));
     }
   }
 }
@@ -609,7 +616,7 @@ export class DamageAndBleed extends Skill {
 
       // Damage over time part
       if (lifeChange.isSuccess()) {
-        targetCreature.applyStatus(new StatusApplication(bleed, this.powerLevels[1], fight.activeCreature));
+        targetCreature.applyStatus(new StatusApplication(bleed, this.powerLevels[1], fight.activeCreature, this.statusDuration));
       }
     });
   }
@@ -637,7 +644,7 @@ export class DamageAndPoison extends Skill {
 
       // Damage over time part
       if (lifeChange.isSuccess()) {
-        targetCreature.applyStatus(new StatusApplication(poison, this.powerLevels[1], fight.activeCreature));
+        targetCreature.applyStatus(new StatusApplication(poison, this.powerLevels[1], fight.activeCreature, this.statusDuration));
       }
     });
   }
@@ -665,7 +672,7 @@ export class DamageAndBurn extends Skill {
 
       // Damage over time part
       if (lifeChange.isSuccess()) {
-        targetCreature.applyStatus(new StatusApplication(burn, this.powerLevels[1], fight.activeCreature));
+        targetCreature.applyStatus(new StatusApplication(burn, this.powerLevels[1], fight.activeCreature, this.statusDuration));
       }
     });
   }
@@ -693,7 +700,7 @@ export class DamageAndStatus extends Skill {
 
       // Statuses part
       if (lifeChange.isSuccess()) {
-        this.statuses.forEach(status => targetCreature.applyStatus(new StatusApplication(status, 0, fight.activeCreature)))
+        this.statuses.forEach(status => targetCreature.applyStatus(new StatusApplication(status, 0, fight.activeCreature, this.statusDuration)))
       }
     });
   }
@@ -750,7 +757,7 @@ export class Regenerate extends Heal {
     super.execute(fight);
 
     fight.targetCreatures.forEach(targetCreature => {
-      targetCreature.applyStatus(new StatusApplication(regen, this.powerLevels[1], fight.activeCreature));
+      targetCreature.applyStatus(new StatusApplication(regen, this.powerLevels[1], fight.activeCreature, this.statusDuration));
     });
   }
 }

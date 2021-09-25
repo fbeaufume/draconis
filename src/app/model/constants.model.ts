@@ -102,9 +102,9 @@ export class Constants {
   static readonly MANA_GAIN_PER_DEAD_ENEMY = 0.2;
 
   /**
-   * Duration for most statuses.
+   * Default duration for statuses.
    */
-  static readonly EFFECT_DURATION = 3;
+  static readonly DEFAULT_STATUS_DURATION = 3;
 
   /**
    * Duration for defend status.

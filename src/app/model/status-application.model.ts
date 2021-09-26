@@ -9,7 +9,7 @@ export class StatusApplication {
   /**
    * The status type.
    */
-  status: StatusType;
+  statusType: StatusType;
 
   /**
    * For a damaging status, such as a life over time change, the power of the attack.
@@ -27,27 +27,27 @@ export class StatusApplication {
   remainingDuration: number;
 
   constructor(
-    status: StatusType,
+    statusType: StatusType,
     power: number,
     originCreature: Creature | null,
     remainingDuration: number
   ) {
-    this.status = status;
+    this.statusType = statusType;
     this.power = power;
     this.originCreature = originCreature;
     this.remainingDuration = remainingDuration;
   }
 
   isImprovement(): boolean {
-    return this.status.improvement;
+    return this.statusType.improvement;
   }
 
   isDot(): boolean {
-    return this.status.isDot;
+    return this.statusType.isDot;
   }
 
   isHot(): boolean {
-    return this.status.isHot;
+    return this.statusType.isHot;
   }
 
   decreaseDuration() {

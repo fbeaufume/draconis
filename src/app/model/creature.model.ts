@@ -240,26 +240,53 @@ export abstract class Creature {
   }
 
   hasStatus(status: StatusType): boolean {
-    return this.statusApplications.map(s => s.status.name).includes(status.name);
+    return this.statusApplications.map(s => s.statusType.name).includes(status.name);
   }
 
   hasPositiveStatus(status: StatusType): boolean {
-    return this.getPositiveStatuses().map(s => s.status.name).includes(status.name);
+    return this.getPositiveStatuses().map(s => s.statusType.name).includes(status.name);
   }
 
   hasNegativeStatus(status: StatusType): boolean {
-    return this.getNegativeStatuses().map(s => s.status.name).includes(status.name);
+    return this.getNegativeStatuses().map(s => s.statusType.name).includes(status.name);
   }
 
   /**
-   * Add a status to the creature. If already present, it is refreshed, i.e. replaced by a new one.
+   * Add a status to the creature.
    */
   applyStatus(statusApplication: StatusApplication) {
-    // Remove the status if necessary
-    this.statusApplications = this.statusApplications.filter(s => s.status.name != statusApplication.status.name
-      || (statusApplication.status.cumulative && s.getOriginCreatureName() != statusApplication.getOriginCreatureName()));
+    // remaining duration of the current status, if applicable
+    let remainingDuration: number = 0; // TODO FBE
 
-    this.statusApplications.push(statusApplication);
+    // Do we have to add the new status
+    let addStatus: boolean = true;
+
+    // Remove the current status if necessary
+    this.statusApplications = this.statusApplications.filter(s => {
+      if (s.statusType.name != statusApplication.statusType.name) {
+        // Keep other statuses
+        return true;
+      }
+
+      if (statusApplication.statusType.cumulative && s.getOriginCreatureName() != statusApplication.getOriginCreatureName()) {
+        // Keep cumulative statuses from other creatures
+        return true;
+      }
+
+      if (statusApplication.remainingDuration >= s.remainingDuration) {
+        // The new status has the same duration or is longer, so we use it instead of the current one
+        return false;
+      }
+      else {
+        // The new status has a shorter duration, so we keep the current status
+        addStatus = false;
+        return true;
+      }
+    });
+
+    if (addStatus) {
+      this.statusApplications.push(statusApplication);
+    }
   }
 
   /**
@@ -269,7 +296,7 @@ export abstract class Creature {
     for (let i = 0; i < this.statusApplications.length; i++) {
       const statusApplication = this.statusApplications[i];
 
-      if (statusApplication.status.expirationType != expirationType) {
+      if (statusApplication.statusType.expirationType != expirationType) {
         continue;
       }
 

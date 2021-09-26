@@ -5,16 +5,14 @@ import {Character} from "./character.model";
 import {Party} from "./party.model";
 import {settings} from "./settings.model";
 import {Opposition} from "./opposition.model";
-import {attackMalus, defenseMalus} from "./status-type.model";
+import {attackMalus, bleed, burn, defenseMalus, poison} from "./status-type.model";
 import {
   ApplyStatus,
   ComboDamage,
   Damage,
-  DamageAndBleed,
-  DamageAndBurn,
   DamageAndDamage,
+  DamageAndDot,
   DamageAndHeal,
-  DamageAndPoison,
   DamageAndStatus,
   DefendMagic,
   DefendTech,
@@ -50,8 +48,8 @@ export class Game {
           new Strike('Strike'),
           new DamageAndDamage(SkillIconType.ATTACK, 'Fury Strike', SkillTargetType.OTHER_ALIVE, 15, 1, 1,
             'Inflict 140% damage to the target and 30% damage to self.', [1.4, 0.3]),
-          new DamageAndBleed(SkillIconType.ATTACK, 'Deep Wound', SkillTargetType.OTHER_ALIVE, 15, 1, 1,
-            'Inflict 50% damage to the target and 120% damage over 3 rounds.', [0.5, 0.4]),
+          new DamageAndDot(SkillIconType.ATTACK, 'Deep Wound', SkillTargetType.OTHER_ALIVE, 15, 1, 1,
+            'Inflict 50% damage to the target and 120% damage over 3 rounds.', [0.5, 0.4], [bleed]),
           new Damage(SkillIconType.ATTACK, 'Slash', SkillTargetType.OTHER_ALIVE_DOUBLE, 10, 1, 2,
             'Inflict 80% damage to two adjacent targets.', [0.8]),
           new ApplyStatus(SkillIconType.DETERIORATION, 'Intimidate', SkillTargetType.OTHER_ALIVE, 20, 1, 1,
@@ -82,8 +80,8 @@ export class Game {
           new DefendTech(),
           new FullLifeDamage(SkillIconType.ATTACK, 'First Shot', SkillTargetType.OTHER_ALIVE, 10, 2, 1,
             'Inflict 100% damage. Add 50% damage if the target is full life.', [1.0, 1.5]),
-          new DamageAndPoison(SkillIconType.ATTACK, 'Viper Shot', SkillTargetType.OTHER_ALIVE, 15, 2, 1,
-            'Inflict 50% damage to the target and 120% damage over 3 rounds.', [0.5, 0.4]),
+          new DamageAndDot(SkillIconType.ATTACK, 'Viper Shot', SkillTargetType.OTHER_ALIVE, 15, 2, 1,
+            'Inflict 50% damage to the target and 120% damage over 3 rounds.', [0.5, 0.4], [poison]),
           new ComboDamage(SkillIconType.ATTACK, 'Combo Shot', SkillTargetType.OTHER_ALIVE, 10, 1, 1,
             'Inflict 80% damage then 120% then 160% when used on the same target during consecutive turns.', [0.8, 1.2, 1.6], [], Constants.COMBO_DURATION),
           new Damage(SkillIconType.ATTACK, 'Explosive Shot', SkillTargetType.OTHER_ALIVE_TRIPLE, 20, 2, 1,
@@ -96,8 +94,8 @@ export class Game {
           new DefendMagic(),
           new Damage(SkillIconType.ATTACK, 'Lightning', SkillTargetType.OTHER_ALIVE, 5, 2, 1,
             'Inflict 100% damage.'),
-          new DamageAndBurn(SkillIconType.ATTACK, 'Burn', SkillTargetType.OTHER_ALIVE, 10, 2, 2,
-            'Inflict 50% damage to the target and 150% damage over 3 rounds.', [0.5, 0.5]),
+          new DamageAndDot(SkillIconType.ATTACK, 'Burn', SkillTargetType.OTHER_ALIVE, 10, 2, 2,
+            'Inflict 50% damage to the target and 150% damage over 3 rounds.', [0.5, 0.5], [burn]),
           new DamageAndStatus(SkillIconType.ATTACK, 'Ice Blast', SkillTargetType.OTHER_ALIVE, 10, 2, 1,
             'Inflict 50% damage to the target and reduce the target attack and defense by 20% during one round.', [0.5], [attackMalus, defenseMalus], 1),
           new Damage(SkillIconType.ATTACK, 'Fireball', SkillTargetType.OTHER_ALIVE_TRIPLE, 10, 2, 3,

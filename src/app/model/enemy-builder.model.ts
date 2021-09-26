@@ -1,7 +1,8 @@
 import {DragonEnemy, Enemy, HealerEnemy, OldManEnemy, StrategicEnemy, StrategicMeleeEnemy} from "./enemy.model";
 import {CreatureType, SkillIconType, SkillTargetType} from "./common.model";
 import {SingleSkillStrategy, WeightedSkillStrategy} from "./enemy-strategy.model";
-import {DamageAndBleed, DamageAndHeal, DamageAndPoison, Strike} from "./skill.model";
+import {DamageAndDot, DamageAndHeal, Strike} from "./skill.model";
+import {bleed, poison} from "./status-type.model";
 
 export class EnemyBuilder {
 
@@ -18,8 +19,8 @@ export class EnemyBuilder {
     return new StrategicMeleeEnemy(CreatureType.BEAST, 'Bear', 34, 8,
       new WeightedSkillStrategy()
         .addSkill(new Strike('Bite'), 1)
-        .addSkill(new DamageAndBleed(SkillIconType.ATTACK, 'Maul',
-          SkillTargetType.OTHER_ALIVE, 20, 1, 0, '', [0.5, 0.4]), 1));
+        .addSkill(new DamageAndDot(SkillIconType.ATTACK, 'Maul',
+          SkillTargetType.OTHER_ALIVE, 20, 1, 0, '', [0.5, 0.4], [bleed]), 1));
   }
 
   static buildWolf(): Enemy {
@@ -58,8 +59,8 @@ export class EnemyBuilder {
 
   static buildZombie(): Enemy {
     return new StrategicMeleeEnemy(CreatureType.UNDEAD, 'Zombie', 28, 8,
-      new SingleSkillStrategy(new DamageAndPoison(SkillIconType.ATTACK, 'Infect',
-        SkillTargetType.OTHER_ALIVE, 20, 1, 0, '', [0.5, 0.4])));
+      new SingleSkillStrategy(new DamageAndDot(SkillIconType.ATTACK, 'Infect',
+        SkillTargetType.OTHER_ALIVE, 20, 1, 0, '', [0.5, 0.4], [poison])));
   }
 
   static buildVampire(): Enemy {

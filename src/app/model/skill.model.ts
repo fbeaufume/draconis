@@ -6,14 +6,11 @@ import {LifeChangeEfficiency, LifeChangeType, LogType, SkillIconType, SkillTarge
 import {
   attackBonus,
   attackMalus,
-  bleed,
-  burn,
   combo1,
   combo2,
   defend,
   defenseBonus,
   defenseMalus,
-  poison,
   regen,
   StatusType
 } from "./status-type.model";
@@ -401,7 +398,7 @@ export class DefendTech extends Defend {
 
   constructor() {
     super(SkillIconType.DEFENSE, 'Defend', SkillTargetType.NONE, -1000, 0, 1,
-      'Reduce received damage by 20% during one turn. Regain all TP.',[1],[], Constants.DEFEND_DURATION);
+      'Reduce received damage by 20% during one turn. Regain all TP.', [1], [], Constants.DEFEND_DURATION);
   }
 }
 
@@ -412,7 +409,7 @@ export class DefendMagic extends Defend {
 
   constructor() {
     super(SkillIconType.DEFENSE, 'Defend', SkillTargetType.NONE, 0, 0, 1,
-      'Reduce received damage by 20% during one turn.',[1],[], Constants.DEFEND_DURATION);
+      'Reduce received damage by 20% during one turn.', [1], [], Constants.DEFEND_DURATION);
   }
 }
 
@@ -595,9 +592,9 @@ export class DamageAndDamage extends Skill {
 }
 
 /**
- * A damaging skill that also adds a bleed damage over time.
+ * A damaging skill that also adds a damage over time.
  */
-export class DamageAndBleed extends Skill {
+export class DamageAndDot extends Skill {
 
   execute(fight: Fight): void {
     if (fight.activeCreature == null) {
@@ -616,63 +613,7 @@ export class DamageAndBleed extends Skill {
 
       // Damage over time part
       if (lifeChange.isSuccess()) {
-        targetCreature.applyStatus(new StatusApplication(bleed, this.powerLevels[1], fight.activeCreature, this.statusDuration));
-      }
-    });
-  }
-}
-
-/**
- * A damaging skill that also adds a poison damage over time.
- */
-export class DamageAndPoison extends Skill {
-
-  execute(fight: Fight): void {
-    if (fight.activeCreature == null) {
-      return;
-    }
-
-    const activeCreature: Creature = fight.activeCreature;
-
-    super.execute(fight);
-
-    fight.targetCreatures.forEach(targetCreature => {
-      const lifeChange: LifeChange = computeEffectiveDamage(activeCreature, targetCreature, this.powerLevels[0]);
-
-      // Direct damage part
-      logs.addCreatureLog(LogType.Damage, activeCreature, targetCreature, targetCreature.changeLife(lifeChange), null);
-
-      // Damage over time part
-      if (lifeChange.isSuccess()) {
-        targetCreature.applyStatus(new StatusApplication(poison, this.powerLevels[1], fight.activeCreature, this.statusDuration));
-      }
-    });
-  }
-}
-
-/**
- * A damaging skill that also adds a fire damage over time.
- */
-export class DamageAndBurn extends Skill {
-
-  execute(fight: Fight): void {
-    if (fight.activeCreature == null) {
-      return;
-    }
-
-    const activeCreature: Creature = fight.activeCreature;
-
-    super.execute(fight);
-
-    fight.targetCreatures.forEach(targetCreature => {
-      const lifeChange: LifeChange = computeEffectiveDamage(activeCreature, targetCreature, this.powerLevels[0]);
-
-      // Direct damage part
-      logs.addCreatureLog(LogType.Damage, activeCreature, targetCreature, targetCreature.changeLife(lifeChange), null);
-
-      // Damage over time part
-      if (lifeChange.isSuccess()) {
-        targetCreature.applyStatus(new StatusApplication(burn, this.powerLevels[1], fight.activeCreature, this.statusDuration));
+        targetCreature.applyStatus(new StatusApplication(this.statuses[0], this.powerLevels[1], fight.activeCreature, this.statusDuration));
       }
     });
   }

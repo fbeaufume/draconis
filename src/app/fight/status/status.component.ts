@@ -13,4 +13,11 @@ export class StatusComponent {
 
   constructor() {
   }
+
+  /**
+   * Angular ngFor does not know how to iterate over a number, so we give it an array.
+   */
+  getDurationArray(): any[] {
+    return new Array(this.statusApplication.remainingDuration);
+  }
 }

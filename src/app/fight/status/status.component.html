@@ -98,3 +98,8 @@
           style="stroke-width: 10; stroke-linecap: round;"/>
   </svg>
 </ng-container>
+<div class="flex justify-left space-x-1 pt-1">
+  <div *ngFor="let item of getDurationArray()"
+       [ngClass]="statusApplication.isImprovement() ? 'bg-green-500' : 'bg-red-500'"
+       style="width:2px;height:2px"></div>
+</div>

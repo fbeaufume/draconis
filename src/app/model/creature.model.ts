@@ -337,7 +337,7 @@ export abstract class Creature {
       const lifeChange = this.changeLife(new LifeChange(Math.abs(amount), LifeChangeEfficiency.NORMAL, amount >= 0 ? LifeChangeType.GAIN : LifeChangeType.LOSS));
 
       // Log the total amount of life lost of gained, but do not display the critical type
-      if (amount >= 0) {
+      if (amount > 0) {
         logs.addCreatureLog(LogType.Hot, this, null, lifeChange, null);
       } else if (amount < 0) {
         logs.addCreatureLog(LogType.Dot, this, null, lifeChange, null);

@@ -28,8 +28,8 @@ export class TestDungeon extends Dungeon {
     super('Test Dungeon', [
       new Opposition('some monsters', [
         // new OldManEnemy(CreatureType.HUMANOID, 'Old Man', 24, 14),
-        // new DragonEnemy(CreatureType.BEAST, 'Green Dragon', 120, 10, 2),
-        EnemyBuilder.buildGenericMonster(1, 8),
+        EnemyBuilder.buildGreenDragon(),
+        // EnemyBuilder.buildGenericMonster(1, 8),
         // EnemyBuilder.buildGenericMonster(20,8),
       ], [
         // EnemyBuilder.buildGenericMonster(50, 8),

@@ -472,8 +472,8 @@ export class Strike extends Damage {
  */
 export class StrikeSmall extends Damage {
 
-  constructor(name: string) {
-    super(SkillIconType.ATTACK, name, SkillTargetType.OTHER_ALIVE, 10, 1, 1, '', [0.7]);
+  constructor(name: string, targetType: SkillTargetType = SkillTargetType.OTHER_ALIVE) {
+    super(SkillIconType.ATTACK, name, targetType, 10, 1, 1, '', [0.7]);
   }
 }
 

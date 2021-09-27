@@ -1,7 +1,7 @@
-import {DragonEnemy, Enemy, HealerEnemy, OldManEnemy, StrategicEnemy, StrategicMeleeEnemy} from "./enemy.model";
+import {Enemy, HealerEnemy, OldManEnemy, StrategicEnemy, StrategicMeleeEnemy} from "./enemy.model";
 import {CreatureType, SkillIconType, SkillTargetType} from "./common.model";
-import {SingleSkillStrategy, WeightedSkillStrategy} from "./enemy-strategy.model";
-import {DamageAndDot, DamageAndHeal, Strike} from "./skill.model";
+import {SequentialSkillStrategy, SingleSkillStrategy, WeightedSkillStrategy} from "./enemy-strategy.model";
+import {DamageAndDot, DamageAndHeal, Strike, StrikeSmall} from "./skill.model";
 import {bleed, poison} from "./status-type.model";
 
 export class EnemyBuilder {
@@ -47,7 +47,12 @@ export class EnemyBuilder {
   }
 
   static buildGreenDragon(): Enemy {
-    return new DragonEnemy(CreatureType.BEAST, 'Green Dragon', 120, 10, 2);
+    return new StrategicMeleeEnemy(CreatureType.BEAST, 'Green Dragon', 120, 10,
+      new SequentialSkillStrategy([
+        new Strike('Left Claw'),
+        new Strike('Right Claw'),
+        new StrikeSmall('Fire Breath', SkillTargetType.OTHER_ALL)
+      ]), 2);
   }
 
   // Enemies from the forgotten graveyard

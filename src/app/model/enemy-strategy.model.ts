@@ -9,6 +9,11 @@ import {SkillTargetType} from "./common.model";
 export abstract class EnemyStrategy {
 
   /**
+   * Last resort skill used when something went wrong in the strategy.
+   */
+  defaultSkill: Skill = new Strike('Attack'); // TODO FBE use "wait" instead ?
+
+  /**
    * Choose the action for an active enemy, i.e. the chosen skill and the target creatures if any.
    */
   abstract chooseAction(fight: Fight): EnemyAction;
@@ -55,7 +60,7 @@ export class SingleSkillStrategy extends EnemyStrategy {
 }
 
 /**
- * Strategy using a several skills. Each skill has a weight.
+ * Strategy using several skills. Each skill has a weight.
  * To return an action, a skill is randomly selected using the weight.
  * The higher the weight, the more likely the skill to be selected.
  */
@@ -75,11 +80,6 @@ export class WeightedSkillStrategy extends EnemyStrategy {
    * The total weight of the skills.
    */
   totalWeight: number = 0;
-
-  /**
-   * Last resort skill used when something went wrong in this strategy.
-   */
-  defaultSkill: Skill = new Strike('Attack');
 
   constructor() {
     super();
@@ -119,5 +119,43 @@ export class WeightedSkillStrategy extends EnemyStrategy {
     }
     const lastSkill = this.skills[this.weights.length - 1];
     return new EnemyAction(lastSkill, this.chooseTargets(lastSkill, fight));
+  }
+}
+
+/**
+ * Strategy using several skills that are executed sequentially.
+ */
+export class SequentialSkillStrategy extends EnemyStrategy {
+
+  /**
+   * The skills.
+   */
+  skills: Skill[];
+
+  /**
+   * The index in the skills array of the next skill to use.
+   */
+  currentSkillIndex: number = 0;
+
+  constructor(skills: Skill[]) {
+    super();
+    this.skills = skills;
+  }
+
+  chooseAction(fight: Fight): EnemyAction {
+    // If this strategy is empty (i.e. no skill), use the default skill
+    if (this.skills.length <= 0) {
+      return new EnemyAction(this.defaultSkill, this.chooseTargets(this.defaultSkill, fight));
+    }
+
+    const skill = this.skills[this.currentSkillIndex];
+
+    // Increment the skill index
+    this.currentSkillIndex++;
+    if (this.currentSkillIndex >= this.skills.length) {
+      this.currentSkillIndex = 0;
+    }
+
+    return new EnemyAction(skill, this.chooseTargets(skill, fight));
   }
 }

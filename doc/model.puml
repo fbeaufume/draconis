@@ -61,6 +61,9 @@ class SingleSkillStrategy {
 class WeightedSkillStrategy {
 }
 
+class SequentialSkillStrategy {
+}
+
 class Skill {
   type: SkillIconType
   name: string
@@ -99,6 +102,8 @@ StrategicEnemy *-- EnemyStrategy
 EnemyStrategy <|-- SingleSkillStrategy
 SingleSkillStrategy *-right- Skill
 EnemyStrategy <|-- WeightedSkillStrategy
+EnemyStrategy <|-- SequentialSkillStrategy
 WeightedSkillStrategy *-right- "*" Skill
+SequentialSkillStrategy *-right- "*" Skill
 
 @enduml

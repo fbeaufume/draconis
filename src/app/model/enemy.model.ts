@@ -1,5 +1,5 @@
 import {Game} from "./game.model";
-import {Advance, Heal, Leave, Skill, Strike, StrikeSmall, Wait} from "./skill.model";
+import {Advance, Heal, Leave, Skill, Strike, Wait} from "./skill.model";
 import {CreatureClass, CreatureType, FactionType, LogType, SkillIconType, SkillTargetType} from "./common.model";
 import {LifeChange} from "./life-change.model";
 import {logs} from "./log.model";

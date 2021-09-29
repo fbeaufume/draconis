@@ -1,6 +1,15 @@
 // Common model classes such as enumerations and utility classes
 
 /**
+ * The faction types.
+ */
+export enum FactionType {
+  PARTY,
+  OPPOSITION,
+  OTHER,
+}
+
+/**
  * The types of creature.
  * Some characters, creatures or skills can be more or less efficient toward specific creature types.
  */
@@ -9,7 +18,7 @@ export enum CreatureType {
   BEAST,
   UNDEAD,
   ELEMENTAL,
-  OTHER
+  OTHER,
 }
 
 /**
@@ -27,13 +36,13 @@ export enum CreatureClass {
 
 export enum LifeChangeType {
   GAIN,
-  LOSS
+  LOSS,
 }
 
 export enum LifeChangeEfficiency {
   NORMAL,
   CRITICAL,
-  DODGE
+  DODGE,
 }
 
 /**
@@ -143,6 +152,11 @@ export enum SkillTargetType {
    * All creatures of the other faction.
    */
   OTHER_ALL,
+
+  /**
+   * An alive creature of any faction.
+   */
+  ALIVE,
 }
 
 /**
@@ -188,6 +202,11 @@ export enum GameState {
   SELECT_CHARACTER,
 
   /**
+   * Character turn, the player must select a character or an enemy.
+   */
+  SELECT_CHARACTER_OR_ENEMY,
+
+  /**
    * Executing the player skill.
    */
   EXECUTING_SKILL,
@@ -225,4 +244,5 @@ export enum LogType {
   PositiveStatus,
   NegativeStatus,
   DungeonCleared,
+  AlterTime,
 }

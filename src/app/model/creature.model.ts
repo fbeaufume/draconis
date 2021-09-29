@@ -4,6 +4,7 @@ import {Constants} from './constants.model';
 import {
   CreatureClass,
   CreatureType,
+  FactionType,
   LifeChangeEfficiency,
   LifeChangeType,
   LogType,
@@ -17,6 +18,11 @@ import {StatusApplication} from "./status-application.model";
  * Base class for enemies and characters.
  */
 export abstract class Creature {
+
+  /**
+   * The faction type of the creature.
+   */
+  factionType: FactionType;
 
   /**
    * The type of creature.
@@ -68,7 +74,7 @@ export abstract class Creature {
   energy: number;
 
   /**
-   * Max mana or tech points (depends on the character class) (currently only used by characters).
+   * The current energy percent.
    */
   energyPercent: number;
 
@@ -114,6 +120,7 @@ export abstract class Creature {
   statusApplications: StatusApplication[] = [];
 
   protected constructor(
+    factionType: FactionType,
     type: CreatureType,
     name: string,
     clazz: CreatureClass,
@@ -123,6 +130,7 @@ export abstract class Creature {
     skills: Skill[],
     specialties: CreatureType[] = []
   ) {
+    this.factionType = factionType;
     this.type = type;
     this.name = name;
     this.clazz = clazz;
@@ -141,6 +149,10 @@ export abstract class Creature {
   abstract isEnemy(): boolean;
 
   abstract isEndOfRound(): boolean;
+
+  isSameFactionThan(creature: Creature) {
+    return this.factionType === creature.factionType;
+  }
 
   isAlive(): boolean {
     return this.life > 0;
@@ -255,9 +267,6 @@ export abstract class Creature {
    * Add a status to the creature.
    */
   applyStatus(statusApplication: StatusApplication) {
-    // remaining duration of the current status, if applicable
-    let remainingDuration: number = 0; // TODO FBE
-
     // Do we have to add the new status
     let addStatus: boolean = true;
 
@@ -356,7 +365,7 @@ export abstract class Creature {
 export class EndOfRound extends Creature {
 
   constructor() {
-    super(CreatureType.OTHER, 'End of round', CreatureClass.END_OF_ROUND, 1, 1, 0, []);
+    super(FactionType.OTHER, CreatureType.OTHER, 'End of round', CreatureClass.END_OF_ROUND, 1, 1, 0, []);
   }
 
   isCharacter(): boolean {

@@ -1,14 +1,6 @@
 import {Game} from "./game.model";
-import {
-  Advance,
-  Heal,
-  Leave,
-  Skill,
-  Strike,
-  StrikeSmall,
-  Wait
-} from "./skill.model";
-import {CreatureClass, CreatureType, LogType, SkillIconType, SkillTargetType} from "./common.model";
+import {Advance, Heal, Leave, Skill, Strike, StrikeSmall, Wait} from "./skill.model";
+import {CreatureClass, CreatureType, FactionType, LogType, SkillIconType, SkillTargetType} from "./common.model";
 import {LifeChange} from "./life-change.model";
 import {logs} from "./log.model";
 import {Creature, EnemyAction} from "./creature.model";
@@ -53,7 +45,7 @@ export abstract class Enemy extends Creature {
     lifeMax: number,
     power: number,
     actions: number = Constants.DEFAULT_ATTACK_COUNT) {
-    super(type, name, CreatureClass.ENEMY, lifeMax, 100, power, []);
+    super(FactionType.OPPOSITION, type, name, CreatureClass.ENEMY, lifeMax, 100, power, []);
     this.baseName = name;
     this.actions = actions;
     this.customize();
@@ -207,26 +199,6 @@ export class HealerEnemy extends Enemy {
       return new EnemyAction(this.heal, [enemy]);
     } else {
       return new EnemyAction(this.mainAttack, game.party.targetOneAliveCharacter());
-    }
-  }
-}
-
-/**
- * Perform a claws attack on a character or a breath attack on all characters.
- */
-export class DragonEnemy extends Enemy {
-
-  strikeSmall: StrikeSmall = new StrikeSmall('Claw');
-
-  chooseAction(game: Game): EnemyAction {
-    switch (this.step % 3) {
-      case 0:
-      case 1:
-        // Claw attack on a character
-        return new EnemyAction(this.mainAttack, game.party.targetOneFrontRowAliveCharacter());
-      default:
-        // AOE on all characters
-        return new EnemyAction(this.strikeSmall, game.party.targetAllAliveCharacters());
     }
   }
 }

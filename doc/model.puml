@@ -30,6 +30,7 @@ class TurnOrder {
 }
 
 class Creature {
+  factionType: FactionType
   type : CreatureType
   name : string
   lifeMax : number

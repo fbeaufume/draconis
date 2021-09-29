@@ -20,7 +20,7 @@ export abstract class EnemyStrategy {
 
   /**
    * Choose the targets for a given skill based on its target type.
-   * The choice is currently random, but enemies could be smarter for exampel by focusing on the weaker party member.
+   * The choice is currently random, but enemies could be smarter for example by focusing on the weaker party member.
    */
   chooseTargets(skill: Skill, fight: Fight): Creature[] {
     switch (skill.targetType) {
@@ -31,7 +31,7 @@ export abstract class EnemyStrategy {
         return fight.party.targetAllAliveCharacters();
         break;
       default:
-        // Programming error
+        console.log('Error, skill target type ' + skill.targetType + ' is not supported');
         return [];
     }
 

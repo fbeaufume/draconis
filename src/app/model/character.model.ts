@@ -1,4 +1,4 @@
-import {CreatureClass, CreatureType} from "./common.model";
+import {CreatureClass, CreatureType, FactionType} from "./common.model";
 import {Skill} from "./skill.model";
 import {Creature} from "./creature.model";
 
@@ -30,7 +30,7 @@ export class Character extends Creature {
     skills: Skill[],
     specialities: CreatureType[]
   ) {
-    super(CreatureType.HUMANOID, name, clazz, lifeMax, energyMax, power, skills, specialities);
+    super(FactionType.PARTY, CreatureType.HUMANOID, name, clazz, lifeMax, energyMax, power, skills, specialities);
     this.level = level;
     this.useMana = useMana;
     this.restoreEnergy();

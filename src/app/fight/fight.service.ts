@@ -202,6 +202,11 @@ export class FightService {
       case SkillTargetType.SAME_DEAD:
         this.state = GameState.SELECT_CHARACTER;
         break;
+      case SkillTargetType.ALIVE:
+        this.state = GameState.SELECT_CHARACTER_OR_ENEMY;
+        break;
+      default:
+        console.log('Error, skill target type ' + skill.targetType + ' is not supported');
     }
   }
 
@@ -310,6 +315,8 @@ export class FightService {
           index -= row.enemies.length;
         }
         break;
+      default:
+        console.log('Error, state ' + this.state + ' is not supported');
     }
   }
 

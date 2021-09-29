@@ -156,7 +156,10 @@ export abstract class Skill {
       case SkillTargetType.OTHER_ALIVE_DOUBLE:
       case SkillTargetType.OTHER_ALIVE_TRIPLE:
         return creature.isEnemy() && creature.isAlive() && (this.range >= creature.distance);
+      case SkillTargetType.ALIVE:
+        return creature.isAlive() && (creature.isCharacter() || this.range >= creature.distance);
       default:
+        console.log('Error, target type ' + this.targetType + ' is not supported')
         return false;
     }
   }
@@ -170,6 +173,7 @@ export abstract class Skill {
 
     switch (this.targetType) {
       case SkillTargetType.OTHER_ALIVE:
+      case SkillTargetType.ALIVE:
         targets.push(enemy);
 
         break;
@@ -199,6 +203,8 @@ export abstract class Skill {
         }
 
         break;
+      default:
+        console.log('Error, target type ' + this.targetType + ' is not supported');
     }
 
     return targets;
@@ -214,6 +220,7 @@ export abstract class Skill {
     switch (this.targetType) {
       case SkillTargetType.SAME_ALIVE:
       case SkillTargetType.SAME_DEAD:
+      case SkillTargetType.ALIVE:
         targets.push(character);
 
         break;
@@ -224,6 +231,8 @@ export abstract class Skill {
         }
 
         break;
+      default:
+        console.log('Error, target type ' + this.targetType + ' is not supported');
     }
 
     return targets;
@@ -713,6 +722,22 @@ export class Revive extends Skill {
 
     fight.targetCreatures.forEach(targetCreature => {
       targetCreature.changeLife(new LifeGain(targetCreature.lifeMax / 2));
+      logs.addCreatureLog(LogType.Revive, fight.activeCreature, targetCreature, null, null);
+    });
+  }
+}
+
+/**
+ * The alter time skill reduces and increases statuses duration of the target.
+ */
+export class AlterTime extends Skill {
+
+  execute(fight: Fight): void {
+    super.execute(fight);
+
+    fight.targetCreatures.forEach(targetCreature => {
+      const increment: number = fight.activeCreature?.isSameFactionThan(targetCreature) ? 1 : -1;
+      targetCreature.statusApplications.forEach(statusApplication => statusApplication.remainingDuration += statusApplication.isImprovement() ? increment : -increment)
       logs.addCreatureLog(LogType.Revive, fight.activeCreature, targetCreature, null, null);
     });
   }

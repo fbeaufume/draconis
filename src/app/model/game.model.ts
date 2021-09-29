@@ -7,6 +7,7 @@ import {settings} from "./settings.model";
 import {Opposition} from "./opposition.model";
 import {attackMalus, bleed, burn, defenseMalus, poison} from "./status-type.model";
 import {
+  AlterTime,
   ApplyStatus,
   ComboDamage,
   Damage,
@@ -104,6 +105,8 @@ export class Game {
             'Reduce the target attack by 20% during 3 rounds.', [], [attackMalus]),
           new ApplyStatus(SkillIconType.DETERIORATION, 'Slow', SkillTargetType.OTHER_ALIVE, 10, 2, 1,
             'Reduce the target defense by 20% during 3 rounds.', [], [defenseMalus]),
+          new AlterTime(SkillIconType.IMPROVEMENT, 'Alter Time', SkillTargetType.ALIVE, 10, 2, 1,
+            'Modify the duration of all statuses of a target by one turn.')
         ],
         [CreatureType.ELEMENTAL])
     ]);

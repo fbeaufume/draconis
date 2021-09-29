@@ -51,7 +51,7 @@ export class FightComponent implements AfterViewInit {
   }
 
   getCharacterBorderClass(character: Character): string {
-    if (this.game.state == GameState.SELECT_CHARACTER) {
+    if (this.game.state == GameState.SELECT_CHARACTER || this.game.state == GameState.SELECT_CHARACTER_OR_ENEMY) {
       // Choosing a character
 
       if (character.name == this.fight.hoveredCharacter?.name) {
@@ -111,7 +111,7 @@ export class FightComponent implements AfterViewInit {
   }
 
   getEnemyBorderClass(enemy: Enemy): string {
-    if (this.game.state == GameState.SELECT_ENEMY) {
+    if (this.game.state == GameState.SELECT_ENEMY || this.game.state == GameState.SELECT_CHARACTER_OR_ENEMY) {
       // Choosing an enemy
 
       if (this.fight.hoveredEnemy != null) {

@@ -24,18 +24,16 @@ export abstract class EnemyStrategy {
    */
   chooseTargets(skill: Skill, fight: Fight): Creature[] {
     switch (skill.targetType) {
+      case SkillTargetType.SELF:
+        return fight.activeCreature != null ? [fight.activeCreature] : [];
       case SkillTargetType.OTHER_ALIVE:
         return fight.party.targetOneFrontRowAliveCharacter();
-        break;
       case SkillTargetType.OTHER_ALL:
         return fight.party.targetAllAliveCharacters();
-        break;
       default:
         console.log('Error, skill target type ' + skill.targetType + ' is not supported');
         return [];
     }
-
-    return [];
   }
 }
 

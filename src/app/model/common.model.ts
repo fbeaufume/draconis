@@ -109,6 +109,11 @@ export enum SkillTargetType {
   NONE,
 
   /**
+   * The same creature.
+   */
+  SELF,
+
+  /**
    * An alive creature from the same faction.
    */
   SAME_ALIVE,

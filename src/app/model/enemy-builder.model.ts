@@ -1,8 +1,8 @@
 import {Enemy, HealerEnemy, OldManEnemy, StrategicEnemy, StrategicMeleeEnemy} from "./enemy.model";
 import {CreatureType, SkillIconType, SkillTargetType} from "./common.model";
 import {SequentialSkillStrategy, SingleSkillStrategy, WeightedSkillStrategy} from "./enemy-strategy.model";
-import {DamageAndDot, DamageAndHeal, Strike, StrikeSmall} from "./skill.model";
-import {bleed, poison} from "./status-type.model";
+import {ApplyStatus, DamageAndDot, DamageAndHeal, Strike, StrikeSmall} from "./skill.model";
+import {attackMalus, bleed, poison} from "./status-type.model";
 
 export class EnemyBuilder {
 
@@ -19,8 +19,10 @@ export class EnemyBuilder {
     return new StrategicMeleeEnemy(CreatureType.BEAST, 'Bear', 34, 8,
       new WeightedSkillStrategy()
         .addSkill(new Strike('Bite'), 1)
-        .addSkill(new DamageAndDot(SkillIconType.ATTACK, 'Maul',
-          SkillTargetType.OTHER_ALIVE, 20, 1, 0, '', [0.5, 0.4], [bleed]), 1));
+        .addSkill(new DamageAndDot(SkillIconType.ATTACK, 'Maul', SkillTargetType.OTHER_ALIVE,          20, 1,
+          1, '', [0.5, 0.4], [bleed]), 1)
+        .addSkill(new ApplyStatus(SkillIconType.DETERIORATION, 'Roar', SkillTargetType.OTHER_ALIVE, 0, 1,
+          1, '', [], [attackMalus]), 1));
   }
 
   static buildWolf(): Enemy {

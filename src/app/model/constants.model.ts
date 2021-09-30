@@ -32,7 +32,7 @@ export class Constants {
   /**
    * The states when it is ok for the player to choose a character skill, possibly to change his mind.
    */
-  static readonly CAN_SELECT_SKILL_STATES = [GameState.SELECT_SKILL, GameState.SELECT_ENEMY, GameState.SELECT_CHARACTER];
+  static readonly CAN_SELECT_SKILL_STATES = [GameState.SELECT_SKILL, GameState.SELECT_ENEMY, GameState.SELECT_CHARACTER, GameState.SELECT_CHARACTER_OR_ENEMY];
 
   /**
    * A pause duration preset, in msec.

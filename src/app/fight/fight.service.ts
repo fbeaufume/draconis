@@ -166,7 +166,7 @@ export class FightService {
    * Return true if the selection is valid, false otherwise.
    */
   selectSkill(skill: Skill) {
-    // The player cannot change his mind and select a different skill
+    // Check that the player can change his mind and select a different skill
     if (!Constants.CAN_SELECT_SKILL_STATES.includes(this.state)) {
       return;
     }

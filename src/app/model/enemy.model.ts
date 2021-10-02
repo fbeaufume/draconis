@@ -123,15 +123,23 @@ export class StrategicMeleeEnemy extends StrategicEnemy {
         // The target row has some room, so advance
 
         // Leave the current row
+        let position: number = -1; // Enemy position in the row, used to choose what side to move to
         for (let i = 0; i < currentRow.enemies.length; i++) {
           const enemy = currentRow.enemies[i];
           if (enemy === this) {
+            position = i;
             currentRow.enemies.splice(i--, 1);
           }
         }
 
-        // Move to the new row
-        targetRow.enemies.push(this);
+        // Move to the left side or right side of the new row
+        if (position < (currentRow.enemies.length + 1) / 2) {
+          // Add to the left side
+          targetRow.enemies.unshift(this);
+        } else {
+          // Add to the right side
+          targetRow.enemies.push(this);
+        }
         this.distance--;
 
         game.opposition.removeEmptyRows();

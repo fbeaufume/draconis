@@ -107,9 +107,16 @@ export class ForgottenGraveyardDungeon extends Dungeon {
       new Opposition('undeads', [
         EnemyBuilder.buildSkeleton(),
         EnemyBuilder.buildSkeleton(),
-        EnemyBuilder.buildZombie(),
       ], [
+        EnemyBuilder.buildZombie(),
         EnemyBuilder.buildVampire(),
+      ]),
+      new Opposition('undeads', [
+        EnemyBuilder.buildSkeleton(),
+        EnemyBuilder.buildZombie(),
+        EnemyBuilder.buildSkeleton(),
+      ], [
+        EnemyBuilder.buildLich(),
       ]),
     ]);
   }

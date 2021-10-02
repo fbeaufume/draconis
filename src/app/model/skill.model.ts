@@ -478,6 +478,16 @@ export class StrikeSmall extends Damage {
 }
 
 /**
+ * A long range single target regular damaging skill.
+ */
+export class Shot extends Damage {
+
+  constructor(name: string) {
+    super(SkillIconType.ATTACK, name, SkillTargetType.OTHER_ALIVE, 10, 2, 1, 'Inflict 100% damage.');
+  }
+}
+
+/**
  * A damaging skill that does different damage to full life target creatures.
  */
 export class FullLifeDamage extends Skill {

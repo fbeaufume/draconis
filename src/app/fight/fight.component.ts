@@ -170,4 +170,11 @@ export class FightComponent implements AfterViewInit {
       event.preventDefault();
     }
   }
+
+  /**
+   * Return true if a skill name must be dimmed because it cannot be used by the active character.
+   */
+  mustDimSkill(skill: Skill) {
+    return !skill.isSelectableBy(this.fight.activeCreature) && this.fightService.state != GameState.EXECUTING_SKILL;
+  }
 }

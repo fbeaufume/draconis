@@ -70,8 +70,8 @@
            (mouseenter)="fightService.enterSkill(skill)"
            (mouseleave)="fightService.leaveSkill()"
            (click)="fightService.selectSkill(skill)">
-        <p>{{ skill.name }}</p>
-        <p>{{ skill.cost > 0 ? skill.cost : '' }}</p>
+        <p [ngClass]="{ 'text-gray-500': mustDimSkill(skill) }">{{ skill.name }}</p>
+        <p [ngClass]="{ 'text-gray-500': mustDimSkill(skill) }">{{ skill.cost > 0 ? skill.cost : '' }}</p>
       </div>
     </div>
 

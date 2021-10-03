@@ -30,7 +30,7 @@ export abstract class Skill {
   /**
    * The skill icon type. Only used in the UI and for character skills.
    */
-  iconType: SkillIconType;
+  iconTypes: SkillIconType[];
 
   /**
    * The skill name.
@@ -95,7 +95,7 @@ export abstract class Skill {
   statusDuration: number;
 
   constructor(
-    iconType: SkillIconType,
+    iconTypes: SkillIconType[],
     name: string,
     targetType: SkillTargetType,
     cost: number,
@@ -106,7 +106,7 @@ export abstract class Skill {
     statuses: StatusType[] = [],
     statusDuration: number = Constants.DEFAULT_STATUS_DURATION
   ) {
-    this.iconType = iconType;
+    this.iconTypes = iconTypes;
     this.name = name;
     this.targetType = targetType;
     this.cost = cost;
@@ -356,7 +356,7 @@ function randomizeAndRound(amount: number): number {
 export class Advance extends Skill {
 
   constructor() {
-    super(SkillIconType.DEFENSE, 'Advance', SkillTargetType.NONE, 0, 0, 1, '');
+    super([SkillIconType.DEFENSE], 'Advance', SkillTargetType.NONE, 0, 0, 1, '');
   }
 
   executeOnActiveCreature(activeCreature: Creature, fight: Fight) {
@@ -370,7 +370,7 @@ export class Advance extends Skill {
 export class Wait extends Skill {
 
   constructor() {
-    super(SkillIconType.DEFENSE, 'Wait', SkillTargetType.NONE, 0, 0, 1, '');
+    super([SkillIconType.DEFENSE], 'Wait', SkillTargetType.NONE, 0, 0, 1, '');
   }
 
   executeOnActiveCreature(activeCreature: Creature, fight: Fight) {
@@ -384,7 +384,7 @@ export class Wait extends Skill {
 export class Leave extends Skill {
 
   constructor() {
-    super(SkillIconType.DEFENSE, 'Leave', SkillTargetType.NONE, 0, 0, 1, '');
+    super([SkillIconType.DEFENSE], 'Leave', SkillTargetType.NONE, 0, 0, 1, '');
   }
 
   executeOnActiveCreature(activeCreature: Creature, fight: Fight) {
@@ -415,7 +415,7 @@ export class Defend extends Skill {
 export class DefendTech extends Defend {
 
   constructor() {
-    super(SkillIconType.DEFENSE, 'Defend', SkillTargetType.NONE, -1000, 0, 1,
+    super([SkillIconType.DEFENSE], 'Defend', SkillTargetType.NONE, -1000, 0, 1,
       'Reduce received damage by 20% during one turn. Regain all TP.', [1], [], Constants.DEFEND_DURATION);
   }
 }
@@ -426,7 +426,7 @@ export class DefendTech extends Defend {
 export class DefendMagic extends Defend {
 
   constructor() {
-    super(SkillIconType.DEFENSE, 'Defend', SkillTargetType.NONE, 0, 0, 1,
+    super([SkillIconType.DEFENSE], 'Defend', SkillTargetType.NONE, 0, 0, 1,
       'Reduce received damage by 20% during one turn.', [1], [], Constants.DEFEND_DURATION);
   }
 }
@@ -463,7 +463,7 @@ export class Damage extends Skill {
 export class Strike extends Damage {
 
   constructor(name: string) {
-    super(SkillIconType.ATTACK, name, SkillTargetType.OTHER_ALIVE, 10, 1, 1, 'Inflict 100% damage.');
+    super([SkillIconType.ATTACK], name, SkillTargetType.OTHER_ALIVE, 10, 1, 1, 'Inflict 100% damage.');
   }
 }
 
@@ -473,7 +473,7 @@ export class Strike extends Damage {
 export class StrikeSmall extends Damage {
 
   constructor(name: string, targetType: SkillTargetType = SkillTargetType.OTHER_ALIVE) {
-    super(SkillIconType.ATTACK, name, targetType, 10, 1, 1, '', [0.7]);
+    super([SkillIconType.ATTACK], name, targetType, 10, 1, 1, '', [0.7]);
   }
 }
 
@@ -483,7 +483,7 @@ export class StrikeSmall extends Damage {
 export class Shot extends Damage {
 
   constructor(name: string) {
-    super(SkillIconType.ATTACK, name, SkillTargetType.OTHER_ALIVE, 10, 2, 1, 'Inflict 100% damage.');
+    super([SkillIconType.ATTACK], name, SkillTargetType.OTHER_ALIVE, 10, 2, 1, 'Inflict 100% damage.');
   }
 }
 

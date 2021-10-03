@@ -1,5 +1,5 @@
 import {Component, Input} from '@angular/core';
-import {Skill} from '../../model/skill.model';
+import {SkillIconType} from "../../model/common.model";
 
 @Component({
   selector: 'app-skill-icon',
@@ -9,7 +9,7 @@ import {Skill} from '../../model/skill.model';
 export class SkillIconComponent {
 
   @Input()
-  skill: Skill;
+  iconType: SkillIconType;
 
   constructor() {
   }

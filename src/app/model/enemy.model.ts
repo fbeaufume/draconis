@@ -198,7 +198,7 @@ export class OldManEnemy extends Enemy {
  */
 export class HealerEnemy extends Enemy {
 
-  heal: Heal = new Heal(SkillIconType.HEAL, 'Heal', SkillTargetType.OTHER_ALIVE, 5, 0, 0, '');
+  heal: Heal = new Heal([SkillIconType.HEAL], 'Heal', SkillTargetType.OTHER_ALIVE, 5, 0, 0, '');
 
   chooseAction(game: Game): EnemyAction {
     const enemy: Enemy | null = game.opposition.targetOneDamagedEnemy();

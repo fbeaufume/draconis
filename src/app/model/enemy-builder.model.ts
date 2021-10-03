@@ -19,9 +19,9 @@ export class EnemyBuilder {
     return new StrategicMeleeEnemy(CreatureType.BEAST, 'Bear', 34, 8,
       new WeightedSkillStrategy()
         .addSkill(new Strike('Bite'), 1)
-        .addSkill(new DamageAndDot(SkillIconType.ATTACK, 'Maul', SkillTargetType.OTHER_ALIVE, 20, 1,
+        .addSkill(new DamageAndDot([SkillIconType.ATTACK, SkillIconType.DETERIORATION], 'Maul', SkillTargetType.OTHER_ALIVE, 20, 1,
           1, '', [0.5, 0.4], [bleed]), 1)
-        .addSkill(new ApplyStatus(SkillIconType.DETERIORATION, 'Roar', SkillTargetType.OTHER_ALIVE, 0, 1,
+        .addSkill(new ApplyStatus([SkillIconType.DETERIORATION], 'Roar', SkillTargetType.OTHER_ALIVE, 0, 1,
           1, '', [], [attackMalus]), 1));
   }
 
@@ -29,7 +29,7 @@ export class EnemyBuilder {
     return new StrategicMeleeEnemy(CreatureType.BEAST, 'Wolf', 22, 6,
       new WeightedSkillStrategy()
         .addSkill(new Strike('Bite'), 2)
-        .addSkill(new ApplyStatus(SkillIconType.IMPROVEMENT, 'Howl', SkillTargetType.SELF, 0, 0,
+        .addSkill(new ApplyStatus([SkillIconType.IMPROVEMENT], 'Howl', SkillTargetType.SELF, 0, 0,
           1, '', [], [attackBonus]), 1));
   }
 
@@ -69,13 +69,13 @@ export class EnemyBuilder {
 
   static buildZombie(): Enemy {
     return new StrategicMeleeEnemy(CreatureType.UNDEAD, 'Zombie', 28, 8,
-      new SingleSkillStrategy(new DamageAndDot(SkillIconType.ATTACK, 'Infect',
+      new SingleSkillStrategy(new DamageAndDot([SkillIconType.ATTACK, SkillIconType.DETERIORATION], 'Infect',
         SkillTargetType.OTHER_ALIVE, 20, 1, 0, '', [0.5, 0.4], [poison])));
   }
 
   static buildVampire(): Enemy {
     return new StrategicMeleeEnemy(CreatureType.UNDEAD, 'Vampire', 34, 8,
-      new SingleSkillStrategy(new DamageAndHeal(SkillIconType.ATTACK, 'Bite',
+      new SingleSkillStrategy(new DamageAndHeal([SkillIconType.ATTACK, SkillIconType.HEAL], 'Bite',
         SkillTargetType.OTHER_ALIVE, 20, 1, 0, '', [0.7, 0.7])));
   }
 

@@ -70,10 +70,7 @@
            (mouseenter)="fightService.enterSkill(skill)"
            (mouseleave)="fightService.leaveSkill()"
            (click)="fightService.selectSkill(skill)">
-        <p>
-          <app-skill-icon [skill]="skill"></app-skill-icon>
-          {{ skill.name }}
-        </p>
+        <p>{{ skill.name }}</p>
         <p>{{ skill.cost > 0 ? skill.cost : '' }}</p>
       </div>
     </div>
@@ -84,8 +81,8 @@
       <div *ngIf="fight.focusedSkill != null">
         <div class="flex justify-center">
           <p>
-            <app-skill-icon [skill]="fight.focusedSkill"></app-skill-icon>
-            {{ fight.focusedSkill.name }}
+            <span class="mr-1">{{ fight.focusedSkill.name }}</span>
+            <app-skill-icon *ngFor="let iconType of fight.focusedSkill.iconTypes" [iconType]="iconType" class="ml-1"></app-skill-icon>
           </p>
         </div>
 
@@ -103,7 +100,8 @@
         </div>
         <div class="flex">
           <p class="flex-1 text-gray-500">Cooldown</p>
-          <p class="flex-1" [ngClass]="{'text-red-500': fight.focusedSkill.cooldown > 0}">{{ fight.focusedSkill.cooldown }}
+          <p class="flex-1"
+             [ngClass]="{'text-red-500': fight.focusedSkill.cooldown > 0}">{{ fight.focusedSkill.cooldown }}
             / {{ fight.focusedSkill.cooldownMax }}</p>
         </div>
 

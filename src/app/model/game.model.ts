@@ -59,7 +59,7 @@ export class Game {
         [CreatureType.HUMANOID]),
       new Character('Arwin', CreatureClass.PALADIN, 4, 30, true, 50, 8, [
           new DefendMagic(),
-          new Damage([SkillIconType.ATTACK], 'Strike', SkillTargetType.OTHER_ALIVE, 0, 1, 1,
+          new Damage([SkillIconType.ATTACK], 'Holy Strike', SkillTargetType.OTHER_ALIVE, 5, 1, 1,
             'Inflict 100% damage.'),
           new Heal([SkillIconType.HEAL], 'Heal', SkillTargetType.SAME_ALIVE, 5, 0, 1,
             'Heal a character for 100% damage.'),

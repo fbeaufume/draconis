@@ -5,7 +5,7 @@ import {Character} from "./character.model";
 import {Party} from "./party.model";
 import {settings} from "./settings.model";
 import {Opposition} from "./opposition.model";
-import {attackMalus, bleed, burn, defenseMalus, poison} from "./status-type.model";
+import {attackMalus, bleed, burn, defend, defenseMalus, poison} from "./status-type.model";
 import {
   AlterTime,
   ApplyStatus,
@@ -14,6 +14,7 @@ import {
   DamageAndDamage,
   DamageAndDot,
   DamageAndHeal,
+  DamageAndSelfStatus,
   DamageAndStatus,
   DefendMagic,
   DefendTech,
@@ -47,6 +48,8 @@ export class Game {
       new Character('Melkan', CreatureClass.WARRIOR, 4, 30, false, 50, 8, [
           new DefendTech(),
           new Strike('Strike'),
+          new DamageAndSelfStatus([SkillIconType.ATTACK, SkillIconType.IMPROVEMENT], 'Guard Strike', SkillTargetType.OTHER_ALIVE, 10, 1, 1,
+            '', [0.5], [defend], 1),
           new DamageAndDamage([SkillIconType.ATTACK], 'Fury Strike', SkillTargetType.OTHER_ALIVE, 15, 1, 1,
             'Inflict 140% damage to the target and 30% damage to self.', [1.4, 0.3]),
           new DamageAndDot([SkillIconType.ATTACK, SkillIconType.DETERIORATION], 'Deep Wound', SkillTargetType.OTHER_ALIVE, 15, 1, 1,

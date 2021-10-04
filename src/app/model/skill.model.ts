@@ -599,6 +599,18 @@ export class DamageAndStatus extends Skill {
 }
 
 /**
+ * A damaging skill that also applies one or more statuses to the active creature.
+ */
+export class DamageAndSelfStatus extends Damage {
+
+  executeOnActiveCreature(activeCreature: Creature, fight: Fight) {
+    super.executeOnActiveCreature(activeCreature, fight);
+
+    this.statuses.forEach(status => activeCreature.applyStatus(new StatusApplication(status, 0, activeCreature, this.statusDuration)))
+  }
+}
+
+/**
  * A healing skill.
  */
 export class Heal extends Skill {

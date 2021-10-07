@@ -114,7 +114,7 @@ export class StrategicEnemy extends Enemy {
 export class StrategicMeleeEnemy extends StrategicEnemy {
 
   chooseAction(game: Game): EnemyAction {
-    if (this.distance > 1) {
+    if (!this.isInFrontRow()) {
       // Not in the front row, so try to advance
 
       const currentRow = game.opposition.rows[this.distance - 1];

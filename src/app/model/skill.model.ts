@@ -232,6 +232,16 @@ export abstract class Skill {
   }
 
   /**
+   * Return true if this skill can be used by an enemy. For example:
+   * - A melee skill can only be used by front line enemies
+   * - A heal can only be used if at least one allied creature is not full life
+   */
+  isUsableBy(creature: Creature, fight: Fight): boolean {
+    // Check the range
+    return !(this.range == 1 && !creature.isInFrontRow());
+  }
+
+  /**
    * Reduce the cooldown of this skills by one.
    */
   reduceCooldown() {
@@ -242,8 +252,7 @@ export abstract class Skill {
   }
 
   /**
-   * Main execution method of a skill. Should not be overridden by skills.
-   * Instead they should override:
+   * Main execution method of a skill. Should not be overridden by skills, instead they should override:
    * - Either execute(Creature, Fight) if they operate on no target (e.g. Advance, Wait, Defend, etc)
    * - Or execute(Creature, Creature, Fight) if they operate on one or more targets
    */
@@ -361,6 +370,10 @@ export class Advance extends Skill {
 
   executeOnActiveCreature(activeCreature: Creature, fight: Fight) {
     logs.addCreatureLog(LogType.Advance, activeCreature, null, null, null);
+  }
+
+  isUsableBy(creature: Creature, fight: Fight): boolean {
+    return !creature.isInFrontRow();
   }
 }
 
@@ -618,6 +631,12 @@ export class Heal extends Skill {
   executeOnTargetCreature(activeCreature: Creature, targetCreature: Creature, fight: Fight) {
     logs.addCreatureLog(LogType.Heal, activeCreature, targetCreature,
       targetCreature.changeLife(computeEffectiveHeal(activeCreature, targetCreature, this.powerLevels[0])), null);
+  }
+
+  isUsableBy(creature: Creature, fight: Fight): boolean {
+    // TODO FBE implement
+
+    return super.isUsableBy(creature, fight);
   }
 }
 

@@ -230,6 +230,13 @@ export abstract class Creature {
   }
 
   /**
+   * Return true is the creature is in the front row of its faction.
+   */
+  isInFrontRow(): boolean {
+    return this.distance == 1;
+  }
+
+  /**
    * Reduce the cooldown of all skills by one.
    */
   decreaseCooldowns() {

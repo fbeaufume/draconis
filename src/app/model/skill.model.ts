@@ -210,6 +210,7 @@ export abstract class Skill {
     return targets;
   }
 
+  // noinspection JSUnusedLocalSymbols
   /**
    * Some skills have an area of effect. This method returns the effective target characters for the skill based
    * on the currently aimed (i.e. hovered or selected) character.
@@ -307,6 +308,7 @@ export function computeEffectiveDamage(emitter: Creature, receiver: Creature, sk
   const afterCritical = isCritical ? baseAmount * emitter.criticalBonus : baseAmount;
 
   // Apply the defend bonus
+  // noinspection UnnecessaryLocalVariableJS
   const afterDefend = receiver.hasStatus(defend) ? afterCritical * (1 - Constants.DEFEND_BONUS) : afterCritical;
 
   // Apply the attack bonus or malus
@@ -634,7 +636,10 @@ export class Heal extends Skill {
   }
 
   isUsableBy(creature: Creature, fight: Fight): boolean {
-    // TODO FBE implement
+    // Ensure that at least one allied enemy is wounded
+    if (!fight.getAllEnemies().some(creature => creature.isDamaged())) {
+      return false;
+    }
 
     return super.isUsableBy(creature, fight);
   }

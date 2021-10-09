@@ -287,6 +287,14 @@ export abstract class Skill {
   executeOnTargetCreature(activeCreature: Creature, targetCreature: Creature, fight: Fight) {
     // Does nothing by default
   }
+
+  // TODO FBE solve the circular dependency (src\app\model\skill.model.ts -> src\app\model\enemy-strategy.model.ts -> src\app\model\creature.model.ts -> src\app\model\skill.model.ts) and use in enemy-builder.model.ts
+  /**
+   * Return a single skill strategy using this skill.
+   */
+  // toStrategy(): SingleSkillStrategy {
+  //   return new SingleSkillStrategy(this);
+  // }
 }
 
 /**

@@ -8,11 +8,13 @@ import {SkillTargetType} from "./common.model";
  */
 export abstract class EnemyStrategy {
 
+  // TODO FBE remove this attribute, make chooseSkill and chooseAction return a nullable type and handle the default action in the caller using a Wait action
   /**
    * Last resort skill used when something went wrong in the strategy.
    */
-  defaultSkill: Skill = new Strike('Attack'); // TODO FBE use "wait" instead ?
+  defaultSkill: Skill = new Strike('Attack');
 
+  // TODO FBE add an abstract chooseSkill method and implement this method using chooseSkill
   /**
    * Choose the action for an active enemy, i.e. the chosen skill and the target creatures if any.
    */

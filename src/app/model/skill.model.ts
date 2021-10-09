@@ -375,7 +375,15 @@ export class Advance extends Skill {
   }
 
   isUsableBy(creature: Creature, fight: Fight): boolean {
-    return !creature.isInFrontRow();
+    // Creature must be in back row
+    if (creature.isInFrontRow()) {
+      return false;
+    }
+
+    // There must be some free space in the front row
+    // TODO FBE check the free space
+
+    return true;
   }
 }
 

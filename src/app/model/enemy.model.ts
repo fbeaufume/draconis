@@ -107,6 +107,7 @@ export class StrategicEnemy extends Enemy {
   }
 }
 
+// TODO FBE refactor this class: move the advancement logic to the Advance skill (in executeOnActiveCreature and isUsableBy) and add a PrioritySkillStrategy where the first skill is Advance
 /**
  * An melee enemy class using a strategy to select its actions.
  * Uses a skill only when in the first row. If not it will try to advance.

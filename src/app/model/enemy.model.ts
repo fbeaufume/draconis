@@ -107,7 +107,7 @@ export class StrategicEnemy extends Enemy {
   }
 }
 
-// TODO FBE refactor this class: move the advancement logic to the Advance skill (in executeOnActiveCreature and isUsableBy) and add a PrioritySkillStrategy where the first skill is Advance
+// TODO FBE refactor this class: use a PrioritySkillStrategy where the first skill is Advance
 /**
  * An melee enemy class using a strategy to select its actions.
  * Uses a skill only when in the first row. If not it will try to advance.
@@ -120,7 +120,7 @@ export class StrategicMeleeEnemy extends StrategicEnemy {
 
       const currentRow = game.opposition.rows[this.distance - 1];
       const targetRow = game.opposition.rows[this.distance - 2];
-      if (targetRow.isNotFull()) {
+      if (!targetRow.isFull()) {
         // The target row has some room, so advance
 
         // Leave the current row

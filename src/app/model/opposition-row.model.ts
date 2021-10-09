@@ -15,7 +15,7 @@ export class OppositionRow {
     this.enemies = enemies;
   }
 
-  isNotFull(): boolean {
-    return this.enemies.length < Constants.OPPOSITION_ROW_SIZE;
+  isFull(): boolean {
+    return this.enemies.length >= Constants.OPPOSITION_ROW_SIZE;
   }
 }

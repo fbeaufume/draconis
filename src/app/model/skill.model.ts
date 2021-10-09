@@ -22,6 +22,7 @@ import {Enemy} from "./enemy.model";
 import {Constants} from "./constants.model";
 import {Fight} from "./fight.model";
 
+// TODO FBE add a toSingleSkillStrategySkill method ?
 /**
  * A character skill.
  */
@@ -371,7 +372,32 @@ export class Advance extends Skill {
   }
 
   executeOnActiveCreature(activeCreature: Creature, fight: Fight) {
-    logs.addCreatureLog(LogType.Advance, activeCreature, null, null, null);
+    const activeEnemy: Enemy = activeCreature as Enemy;
+
+    const currentRow = fight.opposition.rows[1];
+    const targetRow = fight.opposition.rows[0];
+
+    // Leave the current row
+    let position: number = -1; // Enemy position in the row, used to choose what side to move to
+    for (let i = 0; i < currentRow.enemies.length; i++) {
+      const enemy = currentRow.enemies[i];
+      if (enemy === activeEnemy) {
+        position = i;
+        currentRow.enemies.splice(i--, 1);
+      }
+    }
+
+    // Move to the left side or right side of the new row
+    if (position < (currentRow.enemies.length + 1) / 2) {
+      // Add to the left side
+      targetRow.enemies.unshift(activeEnemy);
+    } else {
+      // Add to the right side
+      targetRow.enemies.push(activeEnemy);
+    }
+    activeEnemy.distance--;
+
+    logs.addCreatureLog(LogType.Advance, activeEnemy, null, null, null);
   }
 
   isUsableBy(creature: Creature, fight: Fight): boolean {
@@ -381,7 +407,10 @@ export class Advance extends Skill {
     }
 
     // There must be some free space in the front row
-    // TODO FBE check the free space
+    // noinspection RedundantIfStatementJS
+    if (fight.opposition.rows[0].isFull()) {
+      return false;
+    }
 
     return true;
   }

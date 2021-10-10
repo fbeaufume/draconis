@@ -1,6 +1,6 @@
 import {Game} from "./game.model";
-import {Advance, Heal, Leave, Skill, Strike, Wait} from "./skill.model";
-import {CreatureClass, CreatureType, FactionType, LogType, SkillIconType, SkillTargetType} from "./common.model";
+import {Advance, Leave, Skill, Strike, Wait} from "./skill.model";
+import {CreatureClass, CreatureType, FactionType, LogType} from "./common.model";
 import {LifeChange} from "./life-change.model";
 import {logs} from "./log.model";
 import {Creature, defaultEnemyAction, EnemyAction} from "./creature.model";
@@ -32,12 +32,6 @@ export abstract class Enemy extends Creature {
    * Some enemies have phases with different abilities.
    */
   phase: number = 1;
-
-  /**
-   * Main damaging skill.
-   */
-    // TODO FBE remove this attribute when done migrating to strategy based enemies
-  mainAttack: Skill = new Strike('Strike');
 
   constructor(
     type: CreatureType,
@@ -130,6 +124,8 @@ export class StrategicMeleeEnemy extends StrategicEnemy {
  */
 export class OldManEnemy extends Enemy {
 
+  mainAttack: Skill = new Strike('Strike');
+
   changeLife(lifeChange: LifeChange): LifeChange {
     if (this.phase == 1) {
       // Turn into a druid
@@ -156,24 +152,6 @@ export class OldManEnemy extends Enemy {
       }
     } else {
       return new EnemyAction(this.mainAttack, game.party.targetOneFrontRowAliveCharacter());
-    }
-  }
-}
-
-/**
- * Default healer enemy class. Heal a damaged enemy, if any, otherwise hit a character.
- */
-export class HealerEnemy extends Enemy {
-
-  heal: Heal = new Heal([SkillIconType.HEAL], 'Heal', SkillTargetType.OTHER_ALIVE, 5, 0, 0, '');
-
-  chooseAction(game: Game): EnemyAction {
-    const enemy: Enemy | null = game.opposition.targetOneDamagedEnemy();
-
-    if (enemy != null) {
-      return new EnemyAction(this.heal, [enemy]);
-    } else {
-      return new EnemyAction(this.mainAttack, game.party.targetOneAliveCharacter());
     }
   }
 }

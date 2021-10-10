@@ -1,7 +1,12 @@
-import {Enemy, HealerEnemy, OldManEnemy, StrategicEnemy, StrategicMeleeEnemy} from "./enemy.model";
+import {Enemy, OldManEnemy, StrategicEnemy, StrategicMeleeEnemy} from "./enemy.model";
 import {CreatureType, SkillIconType, SkillTargetType} from "./common.model";
-import {SequentialSkillStrategy, SingleSkillStrategy, WeightedSkillStrategy} from "./enemy-strategy.model";
-import {ApplyStatus, DamageAndDot, DamageAndHeal, Shot, Strike, StrikeSmall} from "./skill.model";
+import {
+  PrioritySkillStrategy,
+  SequentialSkillStrategy,
+  SingleSkillStrategy,
+  WeightedSkillStrategy
+} from "./enemy-strategy.model";
+import {ApplyStatus, DamageAndDot, DamageAndHeal, Heal, Shot, Skill, Strike, StrikeSmall} from "./skill.model";
 import {attackBonus, attackMalus, bleed, poison} from "./status-type.model";
 
 export class EnemyBuilder {
@@ -48,7 +53,10 @@ export class EnemyBuilder {
   }
 
   static buildGoblinShaman(): Enemy {
-    return new HealerEnemy(CreatureType.HUMANOID, 'Goblin Shaman', 26, 7);
+    return new StrategicEnemy(CreatureType.HUMANOID, 'Goblin Shaman', 26, 7,
+      new PrioritySkillStrategy(
+        new Heal([SkillIconType.HEAL], 'Heal', SkillTargetType.OTHER_ALIVE, 5, 0, 0, ''),
+        new SingleSkillStrategy(new Strike('Lightning'))));
   }
 
   static buildGreenDragon(): Enemy {

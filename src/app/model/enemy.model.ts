@@ -4,7 +4,7 @@ import {CreatureClass, CreatureType, FactionType, LogType, SkillIconType, SkillT
 import {LifeChange} from "./life-change.model";
 import {logs} from "./log.model";
 import {Creature, defaultEnemyAction, EnemyAction} from "./creature.model";
-import {EnemyStrategy} from "./enemy-strategy.model";
+import {EnemyStrategy, PrioritySkillStrategy} from "./enemy-strategy.model";
 import {Constants} from "./constants.model";
 
 /**
@@ -107,55 +107,21 @@ export class StrategicEnemy extends Enemy {
   }
 }
 
-// TODO FBE refactor this class: use a PrioritySkillStrategy where the first skill is Advance
 /**
- * An melee enemy class using a strategy to select its actions.
- * Uses a skill only when in the first row. If not it will try to advance.
+ * An melee enemy class, i.e. an enemy class with skills only usable when in the first row.
+ * When not yet in the first row, this enemy will advance if possible.
+ * When in the first row, this enemy will use its strategy.
  */
 export class StrategicMeleeEnemy extends StrategicEnemy {
 
-  chooseAction(game: Game): EnemyAction {
-    if (!this.isInFrontRow()) {
-      // Not in the front row, so try to advance
-
-      const currentRow = game.opposition.rows[this.distance - 1];
-      const targetRow = game.opposition.rows[this.distance - 2];
-      if (!targetRow.isFull()) {
-        // The target row has some room, so advance
-
-        // Leave the current row
-        let position: number = -1; // Enemy position in the row, used to choose what side to move to
-        for (let i = 0; i < currentRow.enemies.length; i++) {
-          const enemy = currentRow.enemies[i];
-          if (enemy === this) {
-            position = i;
-            currentRow.enemies.splice(i--, 1);
-          }
-        }
-
-        // Move to the left side or right side of the new row
-        if (position < (currentRow.enemies.length + 1) / 2) {
-          // Add to the left side
-          targetRow.enemies.unshift(this);
-        } else {
-          // Add to the right side
-          targetRow.enemies.push(this);
-        }
-        this.distance--;
-
-        game.opposition.removeEmptyRows();
-
-        return new EnemyAction(new Advance(), []);
-      } else {
-        // The target row is full, so wait
-
-        return new EnemyAction(new Wait(), []);
-      }
-    } else {
-      // Already in the front row, so we can use the skill
-
-      return super.chooseAction(game);
-    }
+  constructor(
+    type: CreatureType,
+    name: string,
+    lifeMax: number,
+    power: number,
+    strategy: EnemyStrategy,
+    actions: number = Constants.DEFAULT_ATTACK_COUNT) {
+    super(type, name, lifeMax, power, new PrioritySkillStrategy(new Advance(), strategy), actions);
   }
 }
 

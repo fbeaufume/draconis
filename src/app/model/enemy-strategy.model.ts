@@ -163,3 +163,31 @@ export class SequentialSkillStrategy extends EnemyStrategy {
     return skill;
   }
 }
+
+/**
+ * Strategy using a skill or (if the skill cannot be used) a strategy.
+ */
+export class PrioritySkillStrategy extends EnemyStrategy {
+
+  skill: Skill;
+
+  strategy: EnemyStrategy;
+
+  constructor(skill: Skill, strategy: EnemyStrategy) {
+    super();
+    this.skill = skill;
+    this.strategy = strategy;
+  }
+
+  chooseSkill(fight: Fight): Skill | null {
+    if (fight.activeCreature == null) {
+      return null;
+    }
+
+    if (this.skill.isUsableBy(fight.activeCreature, fight)) {
+      return this.skill;
+    } else {
+      return this.strategy.chooseSkill(fight);
+    }
+  }
+}

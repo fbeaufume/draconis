@@ -3,7 +3,7 @@ import {Advance, Heal, Leave, Skill, Strike, Wait} from "./skill.model";
 import {CreatureClass, CreatureType, FactionType, LogType, SkillIconType, SkillTargetType} from "./common.model";
 import {LifeChange} from "./life-change.model";
 import {logs} from "./log.model";
-import {Creature, EnemyAction} from "./creature.model";
+import {Creature, defaultEnemyAction, EnemyAction} from "./creature.model";
 import {EnemyStrategy} from "./enemy-strategy.model";
 import {Constants} from "./constants.model";
 
@@ -103,7 +103,7 @@ export class StrategicEnemy extends Enemy {
   }
 
   chooseAction(game: Game): EnemyAction {
-    return this.strategy.chooseAction(game.fight);
+    return this.strategy.chooseAction(game.fight) || defaultEnemyAction;
   }
 }
 

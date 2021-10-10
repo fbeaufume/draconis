@@ -1,4 +1,4 @@
-import {computeEffectiveDamage, computeEffectiveHeal, Skill} from './skill.model';
+import {computeEffectiveDamage, computeEffectiveHeal, Skill, Wait} from './skill.model';
 import {logs} from './log.model';
 import {Constants} from './constants.model';
 import {
@@ -410,3 +410,8 @@ export class EnemyAction {
     this.targetCreatures = targetCreatures;
   }
 }
+
+/**
+ * Default action used when no other action can be used.
+ */
+export const defaultEnemyAction: EnemyAction = new EnemyAction(new Wait(), []);

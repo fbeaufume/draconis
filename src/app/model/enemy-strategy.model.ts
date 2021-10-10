@@ -1,6 +1,6 @@
 import {Fight} from "./fight.model";
 import {Creature, EnemyAction} from "./creature.model";
-import {Skill, Strike} from "./skill.model";
+import {Skill} from "./skill.model";
 import {SkillTargetType} from "./common.model";
 
 /**
@@ -8,17 +8,22 @@ import {SkillTargetType} from "./common.model";
  */
 export abstract class EnemyStrategy {
 
-  // TODO FBE remove this attribute, make chooseSkill and chooseAction return a nullable type and handle the default action in the caller using a Wait action
-  /**
-   * Last resort skill used when something went wrong in the strategy.
-   */
-  defaultSkill: Skill = new Strike('Attack');
-
-  // TODO FBE add an abstract chooseSkill method and implement this method using chooseSkill
   /**
    * Choose the action for an active enemy, i.e. the chosen skill and the target creatures if any.
    */
-  abstract chooseAction(fight: Fight): EnemyAction;
+  chooseAction(fight: Fight): EnemyAction | null {
+    const skill: Skill | null = this.chooseSkill(fight);
+    if (skill == null) {
+      return null;
+    } else {
+      return new EnemyAction(skill, this.chooseTargets(skill, fight));
+    }
+  }
+
+  /**
+   * Choose the skill used by the active enemy.
+   */
+  abstract chooseSkill(fight: Fight): Skill | null;
 
   /**
    * Choose the targets for a given skill based on its target type.
@@ -54,8 +59,8 @@ export class SingleSkillStrategy extends EnemyStrategy {
     this.skill = skill;
   }
 
-  chooseAction(fight: Fight): EnemyAction {
-    return new EnemyAction(this.skill, this.chooseTargets(this.skill, fight));
+  chooseSkill(fight: Fight): Skill {
+    return this.skill;
   }
 }
 
@@ -97,15 +102,15 @@ export class WeightedSkillStrategy extends EnemyStrategy {
     return this;
   }
 
-  chooseAction(fight: Fight): EnemyAction {
+  chooseSkill(fight: Fight): Skill | null {
     // If this strategy is empty (i.e. no skill), use the default skill
     if (this.skills.length <= 0) {
-      return new EnemyAction(this.defaultSkill, this.chooseTargets(this.defaultSkill, fight));
+      return null;
     }
 
     // If there is only one skill, use it
-    if (this.skills.length <= 1) {
-      return new EnemyAction(this.skills[0], this.chooseTargets(this.skills[0], fight));
+    if (this.skills.length == 1) {
+      return this.skills[0];
     }
 
     // Randomly select a skill
@@ -114,11 +119,10 @@ export class WeightedSkillStrategy extends EnemyStrategy {
     for (let i = 0; i < this.weights.length - 1; i++) {
       cumulativeWeight += this.weights[i];
       if (random < cumulativeWeight / this.totalWeight) {
-        return new EnemyAction(this.skills[i], this.chooseTargets(this.skills[i], fight));
+        return this.skills[i];
       }
     }
-    const lastSkill = this.skills[this.weights.length - 1];
-    return new EnemyAction(lastSkill, this.chooseTargets(lastSkill, fight));
+    return this.skills[this.weights.length - 1];
   }
 }
 
@@ -142,10 +146,10 @@ export class SequentialSkillStrategy extends EnemyStrategy {
     this.skills = skills;
   }
 
-  chooseAction(fight: Fight): EnemyAction {
+  chooseSkill(fight: Fight): Skill | null {
     // If this strategy is empty (i.e. no skill), use the default skill
     if (this.skills.length <= 0) {
-      return new EnemyAction(this.defaultSkill, this.chooseTargets(this.defaultSkill, fight));
+      return null;
     }
 
     const skill = this.skills[this.currentSkillIndex];
@@ -156,6 +160,6 @@ export class SequentialSkillStrategy extends EnemyStrategy {
       this.currentSkillIndex = 0;
     }
 
-    return new EnemyAction(skill, this.chooseTargets(skill, fight));
+    return skill;
   }
 }

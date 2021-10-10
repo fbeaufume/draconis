@@ -22,7 +22,6 @@ import {Enemy} from "./enemy.model";
 import {Constants} from "./constants.model";
 import {Fight} from "./fight.model";
 
-// TODO FBE add a toSingleSkillStrategySkill method ?
 /**
  * A character skill.
  */
@@ -233,6 +232,7 @@ export abstract class Skill {
     return targets;
   }
 
+  // TODO FBE use this method
   /**
    * Return true if this skill can be used by an enemy. For example:
    * - A melee skill can only be used by front line enemies

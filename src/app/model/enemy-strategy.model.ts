@@ -59,8 +59,12 @@ export class SingleSkillStrategy extends EnemyStrategy {
     this.skill = skill;
   }
 
-  chooseSkill(fight: Fight): Skill {
-    return this.skill;
+  chooseSkill(fight: Fight): Skill | null {
+    if (this.skill.isUsableByActiveCreature(fight)) {
+      return this.skill;
+    } else {
+      return null;
+    }
   }
 }
 
@@ -102,6 +106,7 @@ export class WeightedSkillStrategy extends EnemyStrategy {
     return this;
   }
 
+  // TODO FBE use isUsableByActiveCreature
   chooseSkill(fight: Fight): Skill | null {
     // If this strategy is empty (i.e. no skill), use the default skill
     if (this.skills.length <= 0) {
@@ -146,6 +151,7 @@ export class SequentialSkillStrategy extends EnemyStrategy {
     this.skills = skills;
   }
 
+  // TODO FBE use isUsableByActiveCreature
   chooseSkill(fight: Fight): Skill | null {
     // If this strategy is empty (i.e. no skill), use the default skill
     if (this.skills.length <= 0) {
@@ -180,11 +186,7 @@ export class PrioritySkillStrategy extends EnemyStrategy {
   }
 
   chooseSkill(fight: Fight): Skill | null {
-    if (fight.activeCreature == null) {
-      return null;
-    }
-
-    if (this.skill.isUsableBy(fight.activeCreature, fight)) {
+    if (this.skill.isUsableByActiveCreature(fight)) {
       return this.skill;
     } else {
       return this.strategy.chooseSkill(fight);

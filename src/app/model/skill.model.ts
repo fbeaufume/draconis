@@ -232,13 +232,20 @@ export abstract class Skill {
     return targets;
   }
 
-  // TODO FBE use this method
   /**
    * Return true if this skill can be used by an enemy. For example:
    * - A melee skill can only be used by front line enemies
    * - A heal can only be used if at least one allied creature is not full life
    */
-  isUsableBy(creature: Creature, fight: Fight): boolean {
+  isUsableByActiveCreature(fight: Fight): boolean {
+    if (fight.activeCreature == null) {
+      return false;
+    }
+
+    return this.isUsableByCreature(fight.activeCreature, fight);
+  }
+
+  isUsableByCreature(creature: Creature, fight: Fight): boolean {
     // Check the range
     return !(this.range == 1 && !creature.isInFrontRow());
   }
@@ -408,7 +415,7 @@ export class Advance extends Skill {
     logs.addCreatureLog(LogType.Advance, activeEnemy, null, null, null);
   }
 
-  isUsableBy(creature: Creature, fight: Fight): boolean {
+  isUsableByCreature(creature: Creature, fight: Fight): boolean {
     // Creature must be in back row
     if (creature.isInFrontRow()) {
       return false;
@@ -680,13 +687,13 @@ export class Heal extends Skill {
       targetCreature.changeLife(computeEffectiveHeal(activeCreature, targetCreature, this.powerLevels[0])), null);
   }
 
-  isUsableBy(creature: Creature, fight: Fight): boolean {
+  isUsableByCreature(creature: Creature, fight: Fight): boolean {
     // Ensure that at least one allied enemy is wounded
     if (!fight.getAllEnemies().some(creature => creature.isDamaged())) {
       return false;
     }
 
-    return super.isUsableBy(creature, fight);
+    return super.isUsableByCreature(creature, fight);
   }
 }
 

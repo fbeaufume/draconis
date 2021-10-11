@@ -106,28 +106,38 @@ export class WeightedSkillStrategy extends EnemyStrategy {
     return this;
   }
 
-  // TODO FBE use isUsableByActiveCreature
   chooseSkill(fight: Fight): Skill | null {
-    // If this strategy is empty (i.e. no skill), use the default skill
-    if (this.skills.length <= 0) {
+    const usableSkills: Skill[] = [];
+    const usableWeights: number[] = [];
+    let usableTotalWeight: number = 0;
+
+    // Keep only usable skills
+    this.skills.forEach((skill, index) => {
+      usableSkills.push(skill);
+      usableWeights.push(this.weights[index]);
+      usableTotalWeight += this.weights[index];
+    })
+
+    // If there is no usable skill, return null
+    if (usableSkills.length <= 0) {
       return null;
     }
 
     // If there is only one skill, use it
-    if (this.skills.length == 1) {
-      return this.skills[0];
+    if (usableSkills.length == 1) {
+      return usableSkills[0];
     }
 
     // Randomly select a skill
     const random = Math.random();
     let cumulativeWeight = 0;
-    for (let i = 0; i < this.weights.length - 1; i++) {
-      cumulativeWeight += this.weights[i];
-      if (random < cumulativeWeight / this.totalWeight) {
-        return this.skills[i];
+    for (let i = 0; i < usableWeights.length - 1; i++) {
+      cumulativeWeight += usableWeights[i];
+      if (random < cumulativeWeight / usableTotalWeight) {
+        return usableSkills[i];
       }
     }
-    return this.skills[this.weights.length - 1];
+    return usableSkills[usableWeights.length - 1];
   }
 }
 

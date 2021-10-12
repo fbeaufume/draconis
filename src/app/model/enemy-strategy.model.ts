@@ -161,22 +161,31 @@ export class SequentialSkillStrategy extends EnemyStrategy {
     this.skills = skills;
   }
 
-  // TODO FBE use isUsableByActiveCreature
   chooseSkill(fight: Fight): Skill | null {
-    // If this strategy is empty (i.e. no skill), use the default skill
+    // If this strategy is empty, return null
     if (this.skills.length <= 0) {
       return null;
     }
 
-    const skill = this.skills[this.currentSkillIndex];
+    // Find the next usable skill
+    for (let i = 0; i < this.skills.length; i++) {
+      const skill = this.skills[this.currentSkillIndex];
 
-    // Increment the skill index
+      this.incrementSkillIndex();
+
+      if (skill.isUsableByActiveCreature(fight)) {
+        return skill;
+      }
+    }
+
+    return null;
+  }
+
+  private incrementSkillIndex() {
     this.currentSkillIndex++;
     if (this.currentSkillIndex >= this.skills.length) {
       this.currentSkillIndex = 0;
     }
-
-    return skill;
   }
 }
 

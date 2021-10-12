@@ -245,7 +245,7 @@ export abstract class Skill {
     return this.isUsableByCreature(fight.activeCreature, fight);
   }
 
-  isUsableByCreature(creature: Creature, fight: Fight): boolean {
+  protected isUsableByCreature(creature: Creature, fight: Fight): boolean {
     // Check the range
     return !(this.range == 1 && !creature.isInFrontRow());
   }

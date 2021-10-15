@@ -114,7 +114,7 @@ export class WeightedSkillStrategy extends EnemyStrategy {
     let usableTotalWeight: number = 0;
 
     // Keep only usable skills
-    this.skills.forEach((skill, index) => {
+    this.skills.filter(skill => skill.isUsableByActiveCreature(fight)).forEach((skill, index) => {
       usableSkills.push(skill);
       usableWeights.push(this.weights[index]);
       usableTotalWeight += this.weights[index];

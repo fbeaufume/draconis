@@ -31,6 +31,8 @@ export abstract class EnemyStrategy {
    */
   chooseTargets(skill: Skill, fight: Fight): Creature[] {
     switch (skill.targetType) {
+      case SkillTargetType.NONE:
+        return [];
       case SkillTargetType.SELF:
         return fight.activeCreature != null ? [fight.activeCreature] : [];
       case SkillTargetType.OTHER_ALIVE:
@@ -38,7 +40,7 @@ export abstract class EnemyStrategy {
       case SkillTargetType.OTHER_ALL:
         return fight.party.targetAllAliveCharacters();
       default:
-        console.log('Error, skill target type ' + skill.targetType + ' is not supported');
+        console.log('Error in chooseTargets, skill target type ' + skill.targetType + ' is not supported');
         return [];
     }
   }
@@ -206,8 +208,10 @@ export class PrioritySkillStrategy extends EnemyStrategy {
 
   chooseSkill(fight: Fight): Skill | null {
     if (this.skill.isUsableByActiveCreature(fight)) {
+      console.log('Using first skill');
       return this.skill;
     } else {
+      console.log('Using second skill');
       return this.strategy.chooseSkill(fight);
     }
   }

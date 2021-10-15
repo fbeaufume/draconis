@@ -159,7 +159,7 @@ export abstract class Skill {
       case SkillTargetType.ALIVE:
         return creature.isAlive() && (creature.isCharacter() || this.range >= creature.distance);
       default:
-        console.log('Error, target type ' + this.targetType + ' is not supported')
+        console.log('Error in isUsableOn, target type ' + this.targetType + ' is not supported')
         return false;
     }
   }
@@ -204,7 +204,7 @@ export abstract class Skill {
 
         break;
       default:
-        console.log('Error, target type ' + this.targetType + ' is not supported');
+        console.log('Error in getTargetEnemies, target type ' + this.targetType + ' is not supported');
     }
 
     return targets;
@@ -226,7 +226,7 @@ export abstract class Skill {
         targets.push(character);
         break;
       default:
-        console.log('Error, target type ' + this.targetType + ' is not supported');
+        console.log('Error in getTargetCharacters, target type ' + this.targetType + ' is not supported');
     }
 
     return targets;

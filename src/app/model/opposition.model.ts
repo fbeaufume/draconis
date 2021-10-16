@@ -51,7 +51,7 @@ export class Opposition {
         let position = 0;
         this.forEachEnemy(enemy => {
           const letter = String.fromCharCode('A'.charCodeAt(0) + position);
-          enemy.name = enemy.baseName + ' ' +  letter;
+          enemy.name = enemy.baseName + ' ' + letter;
           position++;
         }, enemy => enemy.baseName === baseName);
       }
@@ -155,15 +155,15 @@ export class Opposition {
   /**
    * Target one damaged enemy, used for example by healer enemies.
    */
-  targetOneDamagedEnemy(): Enemy | null {
+  targetOneDamagedEnemy(): Enemy[] {
     const damagedEnemies: Enemy[] = [];
 
     this.forEachEnemy(e => damagedEnemies.push(e), e => e.isDamaged());
 
     if (damagedEnemies.length > 0) {
-      return damagedEnemies[Math.floor(Math.random() * damagedEnemies.length)];
+      return [damagedEnemies[Math.floor(Math.random() * damagedEnemies.length)]];
     } else {
-      return null;
+      return [];
     }
   }
 

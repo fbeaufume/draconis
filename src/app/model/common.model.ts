@@ -119,6 +119,11 @@ export enum SkillTargetType {
   SAME_ALIVE,
 
   /**
+   * A wounded (i.e. alive but not full life) creature from the same faction.
+   */
+  SAME_WOUNDED,
+
+  /**
    * An alive creature from the same faction and different than the current creature.
    */
   SAME_ALIVE_OTHER,

@@ -49,14 +49,14 @@ export class EnemyBuilder {
 
   static buildGoblinHunter(): Enemy {
     return new StrategicEnemy(CreatureType.HUMANOID, 'Goblin Hunter', 24, 7,
-      new SingleSkillStrategy(new Strike('Shot')));
+      new SingleSkillStrategy(new Shot('Shot')));
   }
 
   static buildGoblinShaman(): Enemy {
     return new StrategicEnemy(CreatureType.HUMANOID, 'Goblin Shaman', 26, 7,
       new PrioritySkillStrategy(
         new Heal([SkillIconType.HEAL], 'Heal', SkillTargetType.SAME_ALIVE, 5, 0, 0, ''),
-        new SingleSkillStrategy(new Strike('Lightning'))));
+        new SingleSkillStrategy(new Shot('Lightning'))));
   }
 
   static buildGreenDragon(): Enemy {

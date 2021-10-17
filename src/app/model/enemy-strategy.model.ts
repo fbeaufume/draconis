@@ -38,8 +38,7 @@ export abstract class EnemyStrategy {
       case SkillTargetType.SAME_WOUNDED:
          return fight.opposition.targetOneDamagedEnemy();
       case SkillTargetType.OTHER_ALIVE:
-        // TODO FBE rename targetOneFrontRowAliveCharacter() to targetOneAliveCharacter() and pass the skill range
-        return fight.party.targetOneFrontRowAliveCharacter();
+        return skill.range == 1 ? fight.party.targetOneFrontRowAliveCharacter() : fight.party.targetOneAliveCharacter();
       case SkillTargetType.OTHER_ALL:
         return fight.party.targetAllAliveCharacters();
       default:

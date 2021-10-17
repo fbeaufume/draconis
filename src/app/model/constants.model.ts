@@ -115,4 +115,14 @@ export class Constants {
    * Duration for combo statuses.
    */
   static readonly COMBO_DURATION = 2;
+
+  /**
+   * Lowest vengeance damage bonus (when full life).
+   */
+  static readonly VENGEANCE_LOW = 0.8;
+
+  /**
+   * Highest Vengeance damage bonus (when no life).
+   */
+  static readonly VENGEANCE_HIGH = 1.6;
 }

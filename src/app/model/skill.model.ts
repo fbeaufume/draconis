@@ -555,6 +555,26 @@ export class Shot extends Damage {
 }
 
 /**
+ * A damaging skill that does increased damage when the active creature has low life: 70-150 % damage for 100-0 % life.
+ */
+export class Vengeance extends Damage {
+
+  executeOnTargetCreature(activeCreature: Creature, targetCreature: Creature, fight: Fight) {
+    // Temporarily change the skill power
+    const initialPowerLevel: number = this.powerLevels[0];
+    this.powerLevels[0] *= Constants.VENGEANCE_HIGH - (Constants.VENGEANCE_HIGH - Constants.VENGEANCE_LOW) * activeCreature.lifePercent / 100;
+
+    super.executeOnTargetCreature(activeCreature, targetCreature, fight);
+
+    // Restore the skill power
+    this.powerLevels[0] = initialPowerLevel;
+  }
+}
+
+// TODO FBE add Final Shot to hunter, that does increased damage the lower life the enemy target is (such as 80-150% dmg for 100-0% life)
+
+// TODO FBE move to paladin instead of hunter, rename to Judgement, and do increased damages based on high enemy life (such as 70-130% dmg for 0-100% life)
+/**
  * A damaging skill that does different damage to full life target creatures.
  */
 export class FullLifeDamage extends Skill {

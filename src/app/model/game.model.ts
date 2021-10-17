@@ -23,7 +23,8 @@ import {
   Heal,
   Regenerate,
   Revive,
-  Strike
+  Strike,
+  Vengeance
 } from './skill.model';
 import {Dungeon, FangForestDungeon, ForgottenGraveyardDungeon, TestDungeon} from "./dungeon.model";
 import {Fight} from "./fight.model";
@@ -48,6 +49,8 @@ export class Game {
       new Character('Melkan', CreatureClass.WARRIOR, 4, 30, false, 50, 8, [
           new DefendTech(),
           new Strike('Strike'),
+          new Vengeance([SkillIconType.ATTACK], 'Vengeance', SkillTargetType.OTHER_ALIVE, 10, 1, 1,
+            'Inflict 80% to 160% based on how low the character life is.', [1]),
           new DamageAndSelfStatus([SkillIconType.ATTACK, SkillIconType.IMPROVEMENT], 'Guard Strike', SkillTargetType.OTHER_ALIVE, 10, 1, 1,
             'Inflict 50% damage to the target and reduce received damage by 20% during one turn.', [0.5], [defend], 1),
           new DamageAndDamage([SkillIconType.ATTACK], 'Fury Strike', SkillTargetType.OTHER_ALIVE, 15, 1, 1,

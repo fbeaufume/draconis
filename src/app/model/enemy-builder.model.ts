@@ -33,7 +33,7 @@ export class EnemyBuilder {
   static buildWolf(): Enemy {
     return new StrategicMeleeEnemy(CreatureType.BEAST, 'Wolf', 22, 6,
       new WeightedSkillStrategy()
-        .addSkill(new Strike('Bite'), 2)
+        .addSkill(new Strike('Bite'), 3)
         .addSkill(new ApplyStatus([SkillIconType.IMPROVEMENT], 'Howl', SkillTargetType.SELF, 0, 0,
           1, '', [], [attackBonus]), 1));
   }

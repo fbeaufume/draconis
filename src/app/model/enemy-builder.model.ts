@@ -6,7 +6,7 @@ import {
   SingleSkillStrategy,
   WeightedSkillStrategy
 } from "./enemy-strategy.model";
-import {ApplyStatus, DamageAndDot, DamageAndHeal, Heal, Shot, Skill, Strike, StrikeSmall} from "./skill.model";
+import {ApplyStatus, DamageAndDot, DamageAndHeal, Heal, Shot, Strike, StrikeSmall} from "./skill.model";
 import {attackBonus, attackMalus, bleed, poison} from "./status-type.model";
 
 export class EnemyBuilder {

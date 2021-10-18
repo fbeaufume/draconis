@@ -573,16 +573,20 @@ export class Vengeance extends Damage {
 
 // TODO FBE add Final Shot to hunter, that does increased damage the lower life the enemy target is (such as 80-150% dmg for 100-0% life)
 
-// TODO FBE move to paladin instead of hunter, rename to Judgement, and do increased damages based on high enemy life (such as 70-130% dmg for 0-100% life)
 /**
- * A damaging skill that does different damage to full life target creatures.
+ * A damaging skill that does increased damage when the target creature has high life: 40-120 % damage for 0-100 % life.
  */
-export class FullLifeDamage extends Skill {
+export class Judgement extends Damage {
 
   executeOnTargetCreature(activeCreature: Creature, targetCreature: Creature, fight: Fight) {
-    const isFullLife: boolean = targetCreature.isFullLife();
-    logs.addCreatureLog(LogType.Damage, activeCreature, targetCreature,
-      targetCreature.changeLife(computeEffectiveDamage(activeCreature, targetCreature, isFullLife ? this.powerLevels[1] : this.powerLevels[0])), null);
+    // Temporarily change the skill power
+    const initialPowerLevel: number = this.powerLevels[0];
+    this.powerLevels[0] *= Constants.JUDGEMENT_LOW + (Constants.JUDGEMENT_HIGH - Constants.JUDGEMENT_LOW) * activeCreature.lifePercent / 100;
+
+    super.executeOnTargetCreature(activeCreature, targetCreature, fight);
+
+    // Restore the skill power
+    this.powerLevels[0] = initialPowerLevel;
   }
 }
 

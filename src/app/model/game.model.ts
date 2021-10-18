@@ -19,8 +19,7 @@ import {
   DefendMagic,
   DefendTech,
   DualHeal,
-  FullLifeDamage,
-  Heal,
+  Heal, Judgement,
   Regenerate,
   Revive,
   Strike,
@@ -50,9 +49,10 @@ export class Game {
           new DefendTech(),
           new Strike('Strike'),
           new Vengeance([SkillIconType.ATTACK], 'Vengeance', SkillTargetType.OTHER_ALIVE, 10, 1, 1,
-            'Inflict 80% to 160% based on how low the character life is.', [1]),
+            'Inflict 80% to 160% damage to the target based on how low the character life is.'),
           new DamageAndSelfStatus([SkillIconType.ATTACK, SkillIconType.IMPROVEMENT], 'Guard Strike', SkillTargetType.OTHER_ALIVE, 10, 1, 1,
             'Inflict 50% damage to the target and reduce received damage by 20% during one turn.', [0.5], [defend], 1),
+          // TODO FBE remove this attack ?
           new DamageAndDamage([SkillIconType.ATTACK], 'Fury Strike', SkillTargetType.OTHER_ALIVE, 15, 1, 1,
             'Inflict 140% damage to the target and 30% damage to self.', [1.4, 0.3]),
           new DamageAndDot([SkillIconType.ATTACK, SkillIconType.DETERIORATION], 'Deep Wound', SkillTargetType.OTHER_ALIVE, 15, 1, 1,
@@ -65,6 +65,8 @@ export class Game {
         [CreatureType.HUMANOID]),
       new Character('Arwin', CreatureClass.PALADIN, 4, 30, true, 50, 8, [
           new DefendMagic(),
+          new Judgement([SkillIconType.ATTACK], 'Judgement', SkillTargetType.OTHER_ALIVE, 5, 1, 1,
+            'Inflict 40% to 120% damage to the target based on how high the target life is.'),
           new Damage([SkillIconType.ATTACK], 'Holy Strike', SkillTargetType.OTHER_ALIVE, 5, 1, 1,
             'Inflict 100% damage.'),
           new Heal([SkillIconType.HEAL], 'Heal', SkillTargetType.SAME_ALIVE, 5, 0, 1,
@@ -83,8 +85,7 @@ export class Game {
     [
       new Character('Faren', CreatureClass.ARCHER, 4, 30, false, 50, 8, [
           new DefendTech(),
-          new FullLifeDamage([SkillIconType.ATTACK], 'First Shot', SkillTargetType.OTHER_ALIVE, 10, 2, 1,
-            'Inflict 100% damage. Add 50% damage if the target is full life.', [1.0, 1.5]),
+          // TODO FBE add a regular shot
           new DamageAndDot([SkillIconType.ATTACK, SkillIconType.DETERIORATION], 'Viper Shot', SkillTargetType.OTHER_ALIVE, 15, 2, 1,
             'Inflict 50% damage to the target and 120% damage over 3 rounds.', [0.5, 0.4], [poison]),
           new ComboDamage([SkillIconType.ATTACK], 'Combo Shot', SkillTargetType.OTHER_ALIVE, 10, 1, 1,

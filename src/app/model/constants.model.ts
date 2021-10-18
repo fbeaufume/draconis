@@ -125,4 +125,14 @@ export class Constants {
    * Highest Vengeance damage bonus (when no life).
    */
   static readonly VENGEANCE_HIGH = 1.6;
+
+  /**
+   * Lowest judgement damage bonus (when no life).
+   */
+  static readonly JUDGEMENT_LOW = 0.4;
+
+  /**
+   * Highest judgement damage bonus (when full life).
+   */
+  static readonly JUDGEMENT_HIGH = 1.2;
 }

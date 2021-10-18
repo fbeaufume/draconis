@@ -11,7 +11,6 @@ import {
   ApplyStatus,
   ComboDamage,
   Damage,
-  DamageAndDamage,
   DamageAndDot,
   DamageAndHeal,
   DamageAndSelfStatus,
@@ -23,6 +22,7 @@ import {
   Judgement,
   Regenerate,
   Revive,
+  Shot,
   Strike,
   Vengeance
 } from './skill.model';
@@ -85,7 +85,7 @@ export class Game {
     [
       new Character('Faren', CreatureClass.ARCHER, 4, 30, false, 50, 8, [
           new DefendTech(),
-          // TODO FBE add a regular shot
+          new Shot('Shot'),
           new DamageAndDot([SkillIconType.ATTACK, SkillIconType.DETERIORATION], 'Viper Shot', SkillTargetType.OTHER_ALIVE, 15, 2, 1,
             'Inflict 50% damage to the target and 120% damage over 3 rounds.', [0.5, 0.4], [poison]),
           new ComboDamage([SkillIconType.ATTACK], 'Combo Shot', SkillTargetType.OTHER_ALIVE, 10, 1, 1,

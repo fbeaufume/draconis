@@ -530,7 +530,7 @@ export class Damage extends Skill {
 export class Strike extends Damage {
 
   constructor(name: string) {
-    super([SkillIconType.ATTACK], name, SkillTargetType.OTHER_ALIVE, 10, 1, 1, 'Inflict 100% damage.');
+    super([SkillIconType.ATTACK], name, SkillTargetType.OTHER_ALIVE, 10, 1, 1, 'Inflict 100% damage to the target.');
   }
 }
 
@@ -550,7 +550,7 @@ export class StrikeSmall extends Damage {
 export class Shot extends Damage {
 
   constructor(name: string) {
-    super([SkillIconType.ATTACK], name, SkillTargetType.OTHER_ALIVE, 10, 2, 1, 'Inflict 100% damage.');
+    super([SkillIconType.ATTACK], name, SkillTargetType.OTHER_ALIVE, 10, 2, 1, 'Inflict 100% damage to the target.');
   }
 }
 

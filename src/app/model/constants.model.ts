@@ -135,4 +135,14 @@ export class Constants {
    * Highest judgement damage bonus (when full life).
    */
   static readonly JUDGEMENT_HIGH = 1.2;
+
+  /**
+   * Lowest execution damage bonus (when full life).
+   */
+  static readonly EXECUTION_LOW = 0.6;
+
+  /**
+   * Highest execution damage bonus (when no life).
+   */
+  static readonly EXECUTION_HIGH = 1.4;
 }

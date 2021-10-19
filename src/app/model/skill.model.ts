@@ -554,6 +554,7 @@ export class Shot extends Damage {
   }
 }
 
+// TODO FBE implement isUsableByActiveCreature
 /**
  * A damaging skill that does increased damage when the active creature has low life: 70-150 % damage for 100-0 % life.
  */
@@ -571,8 +572,7 @@ export class Vengeance extends Damage {
   }
 }
 
-// TODO FBE add Final Shot to hunter, that does increased damage the lower life the enemy target is (such as 80-150% dmg for 100-0% life)
-
+// TODO FBE implement isUsableByActiveCreature
 /**
  * A damaging skill that does increased damage when the target creature has high life: 40-120 % damage for 0-100 % life.
  */
@@ -581,7 +581,25 @@ export class Judgement extends Damage {
   executeOnTargetCreature(activeCreature: Creature, targetCreature: Creature, fight: Fight) {
     // Temporarily change the skill power
     const initialPowerLevel: number = this.powerLevels[0];
-    this.powerLevels[0] *= Constants.JUDGEMENT_LOW + (Constants.JUDGEMENT_HIGH - Constants.JUDGEMENT_LOW) * activeCreature.lifePercent / 100;
+    this.powerLevels[0] *= Constants.JUDGEMENT_LOW + (Constants.JUDGEMENT_HIGH - Constants.JUDGEMENT_LOW) * targetCreature.lifePercent / 100;
+
+    super.executeOnTargetCreature(activeCreature, targetCreature, fight);
+
+    // Restore the skill power
+    this.powerLevels[0] = initialPowerLevel;
+  }
+}
+
+// TODO FBE implement isUsableByActiveCreature
+/**
+ * A damaging skill the does increased damage when the target has low life: 60-140 % damage for 100-0 % life.
+ */
+export class Execution extends Damage {
+
+  executeOnTargetCreature(activeCreature: Creature, targetCreature: Creature, fight: Fight) {
+    // Temporarily change the skill power
+    const initialPowerLevel: number = this.powerLevels[0];
+    this.powerLevels[0] *= Constants.EXECUTION_HIGH - (Constants.EXECUTION_HIGH - Constants.EXECUTION_LOW) * targetCreature.lifePercent / 100;
 
     super.executeOnTargetCreature(activeCreature, targetCreature, fight);
 
@@ -617,6 +635,7 @@ export class ComboDamage extends Skill {
   }
 }
 
+// TODO FBE rename to Drain
 /**
  * A skill that damages the target creatures and heals the origin creature.
  */
@@ -635,6 +654,7 @@ export class DamageAndHeal extends Skill {
   }
 }
 
+// TODO FBE rename to Sacrifice (also in game.model.ts)
 /**
  * A skill that damages the target creatures and the origin creature.
  */

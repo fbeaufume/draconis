@@ -635,11 +635,10 @@ export class ComboDamage extends Skill {
   }
 }
 
-// TODO FBE rename to Drain
 /**
  * A skill that damages the target creatures and heals the origin creature.
  */
-export class DamageAndHeal extends Skill {
+export class Drain extends Skill {
 
   executeOnTargetCreature(activeCreature: Creature, targetCreature: Creature, fight: Fight) {
     const lifeChange: LifeChange = computeEffectiveDamage(activeCreature, targetCreature, this.powerLevels[0]);
@@ -654,11 +653,10 @@ export class DamageAndHeal extends Skill {
   }
 }
 
-// TODO FBE rename to Sacrifice (also in game.model.ts)
 /**
  * A skill that damages the target creatures and the origin creature.
  */
-export class DamageAndDamage extends Skill {
+export class Sacrifice extends Skill {
 
   executeOnTargetCreature(activeCreature: Creature, targetCreature: Creature, fight: Fight) {
     const lifeChange: LifeChange = computeEffectiveDamage(activeCreature, targetCreature, this.powerLevels[0]);

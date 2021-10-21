@@ -6,7 +6,7 @@ import {
   SingleSkillStrategy,
   WeightedSkillStrategy
 } from "./enemy-strategy.model";
-import {ApplyStatus, DamageAndDot, DamageAndHeal, Heal, Shot, Strike, StrikeSmall} from "./skill.model";
+import {ApplyStatus, DamageAndDot, Drain, Heal, Shot, Strike, StrikeSmall} from "./skill.model";
 import {attackBonus, attackMalus, bleed, poison} from "./status-type.model";
 
 export class EnemyBuilder {
@@ -83,7 +83,7 @@ export class EnemyBuilder {
 
   static buildVampire(): Enemy {
     return new StrategicMeleeEnemy(CreatureType.UNDEAD, 'Vampire', 34, 8,
-      new SingleSkillStrategy(new DamageAndHeal([SkillIconType.ATTACK, SkillIconType.HEAL], 'Bite',
+      new SingleSkillStrategy(new Drain([SkillIconType.ATTACK, SkillIconType.HEAL], 'Bite',
         SkillTargetType.OTHER_ALIVE, 20, 1, 0, '', [0.7, 0.7])));
   }
 

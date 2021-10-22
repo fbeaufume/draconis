@@ -554,57 +554,56 @@ export class Shot extends Damage {
   }
 }
 
-// TODO FBE implement isUsableByActiveCreature
+/**
+ * A base damage class for skills that inflict variable damage based on active and/or target creature.
+ *
+ * If a sub skill does not override 'isUsableByCreature', then it could be used even if it does less damage than
+ * the regular attack.
+ */
+abstract class VariableDamage extends Damage {
+
+  abstract getEffectivePower(activeCreature: Creature, targetCreature: Creature): number;
+
+  executeOnTargetCreature(activeCreature: Creature, targetCreature: Creature, fight: Fight) {
+    // Temporarily change the skill power
+    const initialPowerLevel: number = this.powerLevels[0];
+    this.powerLevels[0] *= this.getEffectivePower(activeCreature, targetCreature);
+
+    super.executeOnTargetCreature(activeCreature, targetCreature, fight);
+
+    // Restore the skill power
+    this.powerLevels[0] = initialPowerLevel;
+  }
+
+}
+
 /**
  * A damaging skill that does increased damage when the active creature has low life: 70-150 % damage for 100-0 % life.
  */
-export class Vengeance extends Damage {
+export class Vengeance extends VariableDamage {
 
-  executeOnTargetCreature(activeCreature: Creature, targetCreature: Creature, fight: Fight) {
-    // Temporarily change the skill power
-    const initialPowerLevel: number = this.powerLevels[0];
-    this.powerLevels[0] *= Constants.VENGEANCE_HIGH - (Constants.VENGEANCE_HIGH - Constants.VENGEANCE_LOW) * activeCreature.lifePercent / 100;
-
-    super.executeOnTargetCreature(activeCreature, targetCreature, fight);
-
-    // Restore the skill power
-    this.powerLevels[0] = initialPowerLevel;
+  getEffectivePower(activeCreature: Creature, targetCreature: Creature): number {
+    return Constants.VENGEANCE_HIGH - (Constants.VENGEANCE_HIGH - Constants.VENGEANCE_LOW) * activeCreature.lifePercent / 100;
   }
 }
 
-// TODO FBE implement isUsableByActiveCreature
 /**
  * A damaging skill that does increased damage when the target creature has high life: 40-120 % damage for 0-100 % life.
  */
-export class Judgement extends Damage {
+export class Judgement extends VariableDamage {
 
-  executeOnTargetCreature(activeCreature: Creature, targetCreature: Creature, fight: Fight) {
-    // Temporarily change the skill power
-    const initialPowerLevel: number = this.powerLevels[0];
-    this.powerLevels[0] *= Constants.JUDGEMENT_LOW + (Constants.JUDGEMENT_HIGH - Constants.JUDGEMENT_LOW) * targetCreature.lifePercent / 100;
-
-    super.executeOnTargetCreature(activeCreature, targetCreature, fight);
-
-    // Restore the skill power
-    this.powerLevels[0] = initialPowerLevel;
+  getEffectivePower(activeCreature: Creature, targetCreature: Creature): number {
+    return Constants.JUDGEMENT_LOW + (Constants.JUDGEMENT_HIGH - Constants.JUDGEMENT_LOW) * targetCreature.lifePercent / 100;
   }
 }
 
-// TODO FBE implement isUsableByActiveCreature
 /**
  * A damaging skill the does increased damage when the target has low life: 60-140 % damage for 100-0 % life.
  */
-export class Execution extends Damage {
+export class Execution extends VariableDamage {
 
-  executeOnTargetCreature(activeCreature: Creature, targetCreature: Creature, fight: Fight) {
-    // Temporarily change the skill power
-    const initialPowerLevel: number = this.powerLevels[0];
-    this.powerLevels[0] *= Constants.EXECUTION_HIGH - (Constants.EXECUTION_HIGH - Constants.EXECUTION_LOW) * targetCreature.lifePercent / 100;
-
-    super.executeOnTargetCreature(activeCreature, targetCreature, fight);
-
-    // Restore the skill power
-    this.powerLevels[0] = initialPowerLevel;
+  getEffectivePower(activeCreature: Creature, targetCreature: Creature): number {
+    return Constants.EXECUTION_HIGH - (Constants.EXECUTION_HIGH - Constants.EXECUTION_LOW) * targetCreature.lifePercent / 100;
   }
 }
 

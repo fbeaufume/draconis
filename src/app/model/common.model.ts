@@ -170,6 +170,17 @@ export enum SkillTargetType {
 }
 
 /**
+ * The types of skill modifiers.
+ */
+export enum SkillModifierType {
+
+  /**
+   * The attack cannot be dodged.
+   */
+  CANNOT_BE_DODGED,
+}
+
+/**
  * The current state in the game workflow.
  * Used to enable or disable action buttons, the selection of a target skill, enemy or character, etc
  * When some numeric values are changed, update accordingly the calls to 'usePointerForState' in fight.component.html.

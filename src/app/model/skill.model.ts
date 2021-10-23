@@ -2,7 +2,14 @@
 
 import {Creature} from './creature.model';
 import {logs} from './log.model';
-import {LifeChangeEfficiency, LifeChangeType, LogType, SkillIconType, SkillTargetType} from "./common.model";
+import {
+  LifeChangeEfficiency,
+  LifeChangeType,
+  LogType,
+  SkillIconType,
+  SkillModifierType,
+  SkillTargetType
+} from "./common.model";
 import {
   attackBonus,
   attackMalus,
@@ -94,6 +101,11 @@ export abstract class Skill {
    */
   statusDuration: number;
 
+  /**
+   * Skill modifiers such as "cannot be dodged", etc.
+   */
+  modifiers: SkillModifierType[];
+
   constructor(
     name: string,
     targetType: SkillTargetType,
@@ -103,7 +115,8 @@ export abstract class Skill {
     description: string,
     powerLevels: number[] = [1],
     statuses: StatusType[] = [],
-    statusDuration: number = Constants.DEFAULT_STATUS_DURATION
+    statusDuration: number = Constants.DEFAULT_STATUS_DURATION,
+    modifiers: SkillModifierType[] = []
   ) {
     this.name = name;
     this.targetType = targetType;
@@ -115,6 +128,7 @@ export abstract class Skill {
     this.powerLevels = powerLevels;
     this.statuses = statuses;
     this.statusDuration = statusDuration;
+    this.modifiers = modifiers;
   }
 
   /**
@@ -249,6 +263,13 @@ export abstract class Skill {
   }
 
   /**
+   * Return true if this skill has a particular skill modifier.
+   */
+  hasModifier(modifier: SkillModifierType): boolean {
+    return this.modifiers.includes(modifier);
+  }
+
+  /**
    * Reduce the cooldown of this skills by one.
    */
   reduceCooldown() {
@@ -306,11 +327,15 @@ export abstract class Skill {
  * Compute the effective amount for a damaging attack from a creature to a creature using their characteristics
  * and a small random modification. The result is rounded.
  */
-export function computeEffectiveDamage(emitter: Creature, receiver: Creature, skillPower: number, canBeDodged: boolean = true): LifeChange {
-  // Check if dodge, critical or normal hit
+export function computeEffectiveDamage(skill: Skill | null, emitter: Creature, receiver: Creature, skillPower: number, isDamageOrHealOverTime: boolean): LifeChange {
   const random = Math.random();
-  const isDodge = canBeDodged && random < receiver.dodgeChance;
-  if (isDodge) {
+
+  // Check if dodge, critical or normal hit
+  let dodgeable: boolean = !isDamageOrHealOverTime;
+  if (dodgeable && skill != null) {
+    dodgeable = !skill.hasModifier(SkillModifierType.CANNOT_BE_DODGED);
+  }
+  if (dodgeable && (random < receiver.dodgeChance)) {
     return new LifeLoss(0, LifeChangeEfficiency.DODGE);
   }
 
@@ -554,7 +579,7 @@ export class Damage extends Skill {
 
   executeOnTargetCreature(activeCreature: Creature, targetCreature: Creature, fight: Fight) {
     logs.addCreatureLog(LogType.Damage, activeCreature, targetCreature,
-      targetCreature.changeLife(computeEffectiveDamage(activeCreature, targetCreature, this.powerLevels[0])), null);
+      targetCreature.changeLife(computeEffectiveDamage(this, activeCreature, targetCreature, this.powerLevels[0], false)), null);
   }
 
   get iconTypes(): SkillIconType[] {
@@ -662,7 +687,7 @@ export class ComboDamage extends Skill {
       power = this.powerLevels[2];
     }
 
-    const lifeChange = targetCreature.changeLife(computeEffectiveDamage(activeCreature, targetCreature, power))
+    const lifeChange = targetCreature.changeLife(computeEffectiveDamage(this, activeCreature, targetCreature, power, false))
     logs.addCreatureLog(LogType.Damage, activeCreature, targetCreature, lifeChange, null);
 
     // Add the buff if the attack succeeded
@@ -682,7 +707,7 @@ export class ComboDamage extends Skill {
 export class Drain extends Skill {
 
   executeOnTargetCreature(activeCreature: Creature, targetCreature: Creature, fight: Fight) {
-    const lifeChange: LifeChange = computeEffectiveDamage(activeCreature, targetCreature, this.powerLevels[0]);
+    const lifeChange: LifeChange = computeEffectiveDamage(this, activeCreature, targetCreature, this.powerLevels[0], false);
 
     if (lifeChange.isSuccess()) {
       logs.addCreatureLog(LogType.DamageAndHeal, activeCreature, targetCreature,
@@ -704,11 +729,11 @@ export class Drain extends Skill {
 export class Sacrifice extends Skill {
 
   executeOnTargetCreature(activeCreature: Creature, targetCreature: Creature, fight: Fight) {
-    const lifeChange: LifeChange = computeEffectiveDamage(activeCreature, targetCreature, this.powerLevels[0]);
+    const lifeChange: LifeChange = computeEffectiveDamage(this, activeCreature, targetCreature, this.powerLevels[0], false);
 
     if (lifeChange.isSuccess()) {
       logs.addCreatureLog(LogType.DamageAndDamage, activeCreature, targetCreature,
-        targetCreature.changeLife(computeEffectiveDamage(activeCreature, targetCreature, this.powerLevels[0])),
+        targetCreature.changeLife(computeEffectiveDamage(this, activeCreature, targetCreature, this.powerLevels[0], false)),
         activeCreature.changeLife(new LifeChange(Math.round(lifeChange.amount * this.powerLevels[1]), lifeChange.efficiency, LifeChangeType.LOSS)));
     } else {
       logs.addCreatureLog(LogType.Damage, activeCreature, targetCreature, targetCreature.changeLife(lifeChange), null);
@@ -726,7 +751,7 @@ export class Sacrifice extends Skill {
 export class DamageAndDot extends Skill {
 
   executeOnTargetCreature(activeCreature: Creature, targetCreature: Creature, fight: Fight) {
-    const lifeChange: LifeChange = computeEffectiveDamage(activeCreature, targetCreature, this.powerLevels[0]);
+    const lifeChange: LifeChange = computeEffectiveDamage(this, activeCreature, targetCreature, this.powerLevels[0], false);
 
     // Direct damage part
     logs.addCreatureLog(LogType.Damage, activeCreature, targetCreature, targetCreature.changeLife(lifeChange), null);
@@ -748,7 +773,7 @@ export class DamageAndDot extends Skill {
 export class DamageAndStatus extends Skill {
 
   executeOnTargetCreature(activeCreature: Creature, targetCreature: Creature, fight: Fight) {
-    const lifeChange: LifeChange = computeEffectiveDamage(activeCreature, targetCreature, this.powerLevels[0]);
+    const lifeChange: LifeChange = computeEffectiveDamage(this, activeCreature, targetCreature, this.powerLevels[0], false);
 
     // Damage part
     logs.addCreatureLog(LogType.Damage, activeCreature, targetCreature, targetCreature.changeLife(lifeChange), null);

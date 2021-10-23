@@ -1,6 +1,6 @@
 // Classes for the whole game and fights
 
-import {CreatureClass, CreatureType, GameState, SkillTargetType} from "./common.model";
+import {CreatureClass, CreatureType, GameState, SkillModifierType, SkillTargetType} from "./common.model";
 import {Character} from "./character.model";
 import {Party} from "./party.model";
 import {settings} from "./settings.model";
@@ -90,7 +90,8 @@ export class Game {
           new DamageAndDot('Viper Shot', SkillTargetType.OTHER_ALIVE, 15, 2, 1,
             'Inflict 50% damage to the target and 120% damage over 3 rounds.', [0.5, 0.4], [poison]),
           new ComboDamage('Combo Shot', SkillTargetType.OTHER_ALIVE, 10, 1, 1,
-            'Inflict 80% damage then 120% then 160% when used on the same target during consecutive turns.', [0.8, 1.2, 1.6], [], Constants.COMBO_DURATION),
+            'Inflict 80% damage then 120% then 160% when used on the same target during consecutive turns. Cannot be dodged.', [0.8, 1.2, 1.6], [],
+            Constants.COMBO_DURATION, [SkillModifierType.CANNOT_BE_DODGED]),
           new Execution('Final Shot', SkillTargetType.OTHER_ALIVE, 10, 1, 1,
             'Inflict 60% to 140% damage to the target based on how low the target life is.'),
           new Damage('Explosive Shot', SkillTargetType.OTHER_ALIVE_TRIPLE, 20, 2, 1,

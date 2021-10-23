@@ -341,7 +341,7 @@ export abstract class Creature {
       if (statusApplication.originCreature != null) {
         if (statusApplication.isDot()) {
           hasAtLeastOneDotOrHot = true;
-          amount -= computeEffectiveDamage(statusApplication.originCreature, this, statusApplication.power, false).amount;
+          amount -= computeEffectiveDamage(null, statusApplication.originCreature, this, statusApplication.power, true).amount;
         } else if (statusApplication.isHot()) {
           hasAtLeastOneDotOrHot = true;
           amount += computeEffectiveHeal(statusApplication.originCreature, this, statusApplication.power).amount;

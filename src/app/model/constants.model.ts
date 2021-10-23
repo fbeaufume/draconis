@@ -97,7 +97,7 @@ export class Constants {
   static readonly SPECIALTY_DEFENSE_BONUS = 0.1;
 
   /**
-   * Percentage of mana gained by the characters after an enemy died.
+   * Percentage of mana gained by the characters after an enemy died. 0.2 means a 20% gain.
    */
   static readonly MANA_GAIN_PER_DEAD_ENEMY = 0.2;
 

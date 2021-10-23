@@ -30,6 +30,7 @@ export abstract class Skill {
   /**
    * The skill icon type. Only used in the UI and for character skills.
    */
+  // TODO FBE find a way to set the icon types outside the skill constructor
   iconTypes: SkillIconType[];
 
   /**

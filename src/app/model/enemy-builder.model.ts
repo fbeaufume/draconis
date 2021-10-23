@@ -6,7 +6,7 @@ import {
   SingleSkillStrategy,
   WeightedSkillStrategy
 } from "./enemy-strategy.model";
-import {ApplyStatus, DamageAndDot, Drain, Heal, Shot, Strike, StrikeSmall} from "./skill.model";
+import {ApplyStatus, DamageAndDot, Drain, Heal, Shot, Strike, StrikeSmall, Vengeance} from "./skill.model";
 import {attackBonus, attackMalus, bleed, poison} from "./status-type.model";
 
 export class EnemyBuilder {
@@ -44,7 +44,8 @@ export class EnemyBuilder {
 
   static buildGoblinSoldier(): Enemy {
     return new StrategicMeleeEnemy(CreatureType.HUMANOID, 'Goblin Solder', 22, 6,
-      new SingleSkillStrategy(new Strike('Strike')));
+      new SingleSkillStrategy(new Vengeance([SkillIconType.ATTACK], 'Strike', SkillTargetType.OTHER_ALIVE, 0, 1,
+        1, '')));
   }
 
   static buildGoblinHunter(): Enemy {
@@ -55,7 +56,7 @@ export class EnemyBuilder {
   static buildGoblinShaman(): Enemy {
     return new StrategicEnemy(CreatureType.HUMANOID, 'Goblin Shaman', 26, 7,
       new PrioritySkillStrategy(
-        new Heal([SkillIconType.HEAL], 'Heal', SkillTargetType.SAME_WOUNDED, 5, 0, 0, ''),
+        new Heal([SkillIconType.HEAL], 'Heal', SkillTargetType.SAME_WOUNDED, 5, 0, 1, ''),
         new SingleSkillStrategy(new Shot('Lightning'))));
   }
 
@@ -78,13 +79,13 @@ export class EnemyBuilder {
   static buildZombie(): Enemy {
     return new StrategicMeleeEnemy(CreatureType.UNDEAD, 'Zombie', 28, 8,
       new SingleSkillStrategy(new DamageAndDot([SkillIconType.ATTACK, SkillIconType.DETERIORATION], 'Infect',
-        SkillTargetType.OTHER_ALIVE, 20, 1, 0, '', [0.5, 0.4], [poison])));
+        SkillTargetType.OTHER_ALIVE, 20, 1, 1, '', [0.5, 0.4], [poison])));
   }
 
   static buildVampire(): Enemy {
     return new StrategicMeleeEnemy(CreatureType.UNDEAD, 'Vampire', 34, 8,
       new SingleSkillStrategy(new Drain([SkillIconType.ATTACK, SkillIconType.HEAL], 'Bite',
-        SkillTargetType.OTHER_ALIVE, 20, 1, 0, '', [0.7, 0.7])));
+        SkillTargetType.OTHER_ALIVE, 20, 1, 1, '', [0.7, 0.7])));
   }
 
   static buildLich(): Enemy {

@@ -30,8 +30,7 @@ export abstract class Skill {
   /**
    * The skill icon type. Only used in the UI and for character skills.
    */
-  // TODO FBE find a way to set the icon types outside the skill constructor
-  iconTypes: SkillIconType[];
+  abstract get iconTypes(): SkillIconType[];
 
   /**
    * The skill name.
@@ -96,7 +95,6 @@ export abstract class Skill {
   statusDuration: number;
 
   constructor(
-    iconTypes: SkillIconType[],
     name: string,
     targetType: SkillTargetType,
     cost: number,
@@ -107,7 +105,6 @@ export abstract class Skill {
     statuses: StatusType[] = [],
     statusDuration: number = Constants.DEFAULT_STATUS_DURATION
   ) {
-    this.iconTypes = iconTypes;
     this.name = name;
     this.targetType = targetType;
     this.cost = cost;
@@ -384,7 +381,11 @@ function randomizeAndRound(amount: number): number {
 export class Advance extends Skill {
 
   constructor() {
-    super([SkillIconType.DEFENSE], 'Advance', SkillTargetType.NONE, 0, 0, 1, '');
+    super('Advance', SkillTargetType.NONE, 0, 0, 1, '');
+  }
+
+  get iconTypes(): SkillIconType[] {
+    return [SkillIconType.DEFENSE];
   }
 
   executeOnActiveCreature(activeCreature: Creature, fight: Fight) {
@@ -438,7 +439,11 @@ export class Advance extends Skill {
 export class Wait extends Skill {
 
   constructor() {
-    super([SkillIconType.DEFENSE], 'Wait', SkillTargetType.NONE, 0, 0, 1, '');
+    super('Wait', SkillTargetType.NONE, 0, 0, 1, '');
+  }
+
+  get iconTypes(): SkillIconType[] {
+    return [SkillIconType.DEFENSE];
   }
 
   executeOnActiveCreature(activeCreature: Creature, fight: Fight) {
@@ -452,7 +457,11 @@ export class Wait extends Skill {
 export class Leave extends Skill {
 
   constructor() {
-    super([SkillIconType.DEFENSE], 'Leave', SkillTargetType.NONE, 0, 0, 1, '');
+    super('Leave', SkillTargetType.NONE, 0, 0, 1, '');
+  }
+
+  get iconTypes(): SkillIconType[] {
+    return [SkillIconType.DEFENSE];
   }
 
   executeOnActiveCreature(activeCreature: Creature, fight: Fight) {
@@ -475,6 +484,10 @@ export class Defend extends Skill {
 
     logs.addCreatureLog(LogType.Defend, activeCreature, null, null, null);
   }
+
+  get iconTypes(): SkillIconType[] {
+    return [SkillIconType.DEFENSE];
+  }
 }
 
 /**
@@ -483,7 +496,7 @@ export class Defend extends Skill {
 export class DefendTech extends Defend {
 
   constructor() {
-    super([SkillIconType.DEFENSE], 'Defend', SkillTargetType.NONE, -1000, 0, 1,
+    super('Defend', SkillTargetType.NONE, -1000, 0, 1,
       'Reduce received damage by 20% during one turn. Regain all TP.', [1], [], Constants.DEFEND_DURATION);
   }
 }
@@ -494,7 +507,7 @@ export class DefendTech extends Defend {
 export class DefendMagic extends Defend {
 
   constructor() {
-    super([SkillIconType.DEFENSE], 'Defend', SkillTargetType.NONE, 0, 0, 1,
+    super('Defend', SkillTargetType.NONE, 0, 0, 1,
       'Reduce received damage by 20% during one turn.', [1], [], Constants.DEFEND_DURATION);
   }
 }
@@ -502,7 +515,7 @@ export class DefendMagic extends Defend {
 /**
  * Apply one or more statuses.
  */
-export class ApplyStatus extends Skill {
+abstract class ApplyStatus extends Skill {
 
   executeOnTargetCreature(activeCreature: Creature, targetCreature: Creature, fight: Fight) {
     this.statuses.forEach(status => {
@@ -515,6 +528,26 @@ export class ApplyStatus extends Skill {
 }
 
 /**
+ * Apply one or more improvements.
+ */
+export class ApplyImprovement extends ApplyStatus {
+
+  get iconTypes(): SkillIconType[] {
+    return [SkillIconType.IMPROVEMENT];
+  }
+}
+
+/**
+ * Apply one or more deteriorations.
+ */
+export class ApplyDeterioration extends ApplyStatus {
+
+  get iconTypes(): SkillIconType[] {
+    return [SkillIconType.DETERIORATION];
+  }
+}
+
+/**
  * A damaging skill.
  */
 export class Damage extends Skill {
@@ -522,6 +555,10 @@ export class Damage extends Skill {
   executeOnTargetCreature(activeCreature: Creature, targetCreature: Creature, fight: Fight) {
     logs.addCreatureLog(LogType.Damage, activeCreature, targetCreature,
       targetCreature.changeLife(computeEffectiveDamage(activeCreature, targetCreature, this.powerLevels[0])), null);
+  }
+
+  get iconTypes(): SkillIconType[] {
+    return [SkillIconType.ATTACK];
   }
 }
 
@@ -531,7 +568,7 @@ export class Damage extends Skill {
 export class Strike extends Damage {
 
   constructor(name: string) {
-    super([SkillIconType.ATTACK], name, SkillTargetType.OTHER_ALIVE, 10, 1, 1, 'Inflict 100% damage to the target.');
+    super(name, SkillTargetType.OTHER_ALIVE, 10, 1, 1, 'Inflict 100% damage to the target.');
   }
 }
 
@@ -541,7 +578,7 @@ export class Strike extends Damage {
 export class StrikeSmall extends Damage {
 
   constructor(name: string, targetType: SkillTargetType = SkillTargetType.OTHER_ALIVE) {
-    super([SkillIconType.ATTACK], name, targetType, 10, 1, 1, '', [0.7]);
+    super(name, targetType, 10, 1, 1, '', [0.7]);
   }
 }
 
@@ -551,7 +588,7 @@ export class StrikeSmall extends Damage {
 export class Shot extends Damage {
 
   constructor(name: string) {
-    super([SkillIconType.ATTACK], name, SkillTargetType.OTHER_ALIVE, 10, 2, 1, 'Inflict 100% damage to the target.');
+    super(name, SkillTargetType.OTHER_ALIVE, 10, 2, 1, 'Inflict 100% damage to the target.');
   }
 }
 
@@ -633,6 +670,10 @@ export class ComboDamage extends Skill {
       targetCreature.applyStatus(new StatusApplication(comboStep == 1 ? combo1 : combo2, 0, activeCreature, this.statusDuration));
     }
   }
+
+  get iconTypes(): SkillIconType[] {
+    return [SkillIconType.ATTACK];
+  }
 }
 
 /**
@@ -650,6 +691,10 @@ export class Drain extends Skill {
     } else {
       logs.addCreatureLog(LogType.Damage, activeCreature, targetCreature, targetCreature.changeLife(lifeChange), null);
     }
+  }
+
+  get iconTypes(): SkillIconType[] {
+    return [SkillIconType.ATTACK, SkillIconType.HEAL];
   }
 }
 
@@ -669,6 +714,10 @@ export class Sacrifice extends Skill {
       logs.addCreatureLog(LogType.Damage, activeCreature, targetCreature, targetCreature.changeLife(lifeChange), null);
     }
   }
+
+  get iconTypes(): SkillIconType[] {
+    return [SkillIconType.ATTACK];
+  }
 }
 
 /**
@@ -686,6 +735,10 @@ export class DamageAndDot extends Skill {
     if (lifeChange.isSuccess()) {
       targetCreature.applyStatus(new StatusApplication(this.statuses[0], this.powerLevels[1], activeCreature, this.statusDuration));
     }
+  }
+
+  get iconTypes(): SkillIconType[] {
+    return [SkillIconType.ATTACK, SkillIconType.DETERIORATION];
   }
 }
 
@@ -705,6 +758,11 @@ export class DamageAndStatus extends Skill {
       this.statuses.forEach(status => targetCreature.applyStatus(new StatusApplication(status, 0, activeCreature, this.statusDuration)))
     }
   }
+
+  get iconTypes(): SkillIconType[] {
+    return [SkillIconType.ATTACK, SkillIconType.DETERIORATION];
+  }
+
 }
 
 /**
@@ -717,6 +775,10 @@ export class DamageAndSelfStatus extends Damage {
 
     this.statuses.forEach(status => activeCreature.applyStatus(new StatusApplication(status, 0, activeCreature, this.statusDuration)))
   }
+
+  get iconTypes(): SkillIconType[] {
+    return [SkillIconType.ATTACK, SkillIconType.IMPROVEMENT];
+  }
 }
 
 /**
@@ -728,6 +790,11 @@ export class Heal extends Skill {
     logs.addCreatureLog(LogType.Heal, activeCreature, targetCreature,
       targetCreature.changeLife(computeEffectiveHeal(activeCreature, targetCreature, this.powerLevels[0])), null);
   }
+
+  get iconTypes(): SkillIconType[] {
+    return [SkillIconType.HEAL];
+  }
+
 
   isUsableByCreature(creature: Creature, fight: Fight): boolean {
     // Ensure that at least one allied enemy is wounded
@@ -751,6 +818,10 @@ export class DualHeal extends Skill {
     logs.addCreatureLog(LogType.Heal, activeCreature, activeCreature,
       activeCreature.changeLife(computeEffectiveHeal(activeCreature, activeCreature, this.powerLevels[1])), null);
   }
+
+  get iconTypes(): SkillIconType[] {
+    return [SkillIconType.HEAL];
+  }
 }
 
 /**
@@ -760,6 +831,10 @@ export class Regenerate extends Heal {
 
   executeOnTargetCreature(activeCreature: Creature, targetCreature: Creature, fight: Fight) {
     targetCreature.applyStatus(new StatusApplication(regen, this.powerLevels[1], activeCreature, this.statusDuration));
+  }
+
+  get iconTypes(): SkillIconType[] {
+    return [SkillIconType.HEAL, SkillIconType.IMPROVEMENT];
   }
 }
 
@@ -772,6 +847,10 @@ export class Revive extends Skill {
     targetCreature.changeLife(new LifeGain(targetCreature.lifeMax / 2));
     logs.addCreatureLog(LogType.Revive, activeCreature, targetCreature, null, null);
   }
+
+  get iconTypes(): SkillIconType[] {
+    return [SkillIconType.HEAL];
+  }
 }
 
 /**
@@ -783,5 +862,9 @@ export class AlterTime extends Skill {
     const increment: number = activeCreature?.isSameFactionThan(targetCreature) ? 1 : -1;
     targetCreature.statusApplications.forEach(statusApplication => statusApplication.remainingDuration += statusApplication.isImprovement() ? increment : -increment)
     logs.addCreatureLog(LogType.Revive, activeCreature, targetCreature, null, null);
+  }
+
+  get iconTypes(): SkillIconType[] {
+    return [SkillIconType.IMPROVEMENT, SkillIconType.DETERIORATION];
   }
 }

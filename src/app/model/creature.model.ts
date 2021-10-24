@@ -13,6 +13,7 @@ import {
 import {StatusType} from "./status-type.model";
 import {LifeChange} from "./life-change.model";
 import {StatusApplication} from "./status-application.model";
+import {Passive, Regeneration} from "./passive.model";
 
 /**
  * Base class for enemies and characters.
@@ -94,6 +95,11 @@ export abstract class Creature {
   specialties: CreatureType[];
 
   /**
+   * Passive skills of the creature.
+   */
+  passives: Passive[];
+
+  /**
    * The distance between the enemy and the party, i.e. 1 means the opposition front row, 2 means the middle row, 3 the back row
    * Not in the Enemy class to prevent circular dependency issues.
    */
@@ -141,6 +147,7 @@ export abstract class Creature {
     this.power = power;
     this.skills = skills;
     this.specialties = specialties;
+    this.passives = [];
     this.updateLifePercent();
   }
 
@@ -250,6 +257,12 @@ export abstract class Creature {
     return this.specialties.includes(creature.type);
   }
 
+  addPassive(passive: Passive) {
+    this.passives.push(passive);
+  }
+
+  // TODO FBE find a way to get all the passives of a given type, and use it in applyDotsAndHots()
+
   getPositiveStatuses(): StatusApplication[] {
     return this.statusApplications.filter(sa => sa.isImprovement());
   }
@@ -346,6 +359,12 @@ export abstract class Creature {
           hasAtLeastOneDotOrHot = true;
           amount += computeEffectiveHeal(statusApplication.originCreature, this, statusApplication.power).amount;
         }
+      }
+    });
+    this.passives.forEach(passive => {
+      if (passive instanceof Regeneration) {
+        hasAtLeastOneDotOrHot = true;
+        amount += computeEffectiveHeal(this, this, passive.powerLevel).amount;
       }
     });
 

@@ -69,6 +69,10 @@ export class FangForestDungeon extends Dungeon {
       new Opposition('a mysterious old man', [
         EnemyBuilder.buildOldMan()
       ]),
+      new Opposition('trolls', [
+        EnemyBuilder.buildTroll(),
+        EnemyBuilder.buildTroll(),
+      ]),
       new Opposition('a band of goblins', [
         EnemyBuilder.buildGoblinSoldier(),
         EnemyBuilder.buildGoblinSoldier(),

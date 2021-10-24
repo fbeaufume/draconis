@@ -6,6 +6,7 @@ import {logs} from "./log.model";
 import {Creature, defaultEnemyAction, EnemyAction} from "./creature.model";
 import {EnemyStrategy, PrioritySkillStrategy} from "./enemy-strategy.model";
 import {Constants} from "./constants.model";
+import {Passive} from "./passive.model";
 
 /**
  * Base class for enemy classes.
@@ -42,13 +43,11 @@ export abstract class Enemy extends Creature {
     super(FactionType.OPPOSITION, type, name, CreatureClass.ENEMY, lifeMax, 100, power, []);
     this.baseName = name;
     this.actions = actions;
-    this.customize();
   }
 
-  /**
-   * Called after the constructor. Used to customize the behavior of the enemy, for example to use a specific skill for attacks.
-   */
-  customize(): void {
+  withPassive(passive: Passive): Enemy {
+    this.addPassive(passive);
+    return this;
   }
 
   isCharacter(): boolean {

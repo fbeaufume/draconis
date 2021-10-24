@@ -18,6 +18,7 @@ import {
   Vengeance
 } from "./skill.model";
 import {attackBonus, attackMalus, bleed, poison} from "./status-type.model";
+import {Regeneration} from "./passive.model";
 
 export class EnemyBuilder {
 
@@ -50,6 +51,12 @@ export class EnemyBuilder {
 
   static buildOldMan(): Enemy {
     return new OldManEnemy(CreatureType.HUMANOID, 'Old Man', 28, 10, 2);
+  }
+
+  static buildTroll(): Enemy {
+    return new StrategicMeleeEnemy(CreatureType.HUMANOID, 'Troll', 46, 8,
+      new SingleSkillStrategy(new Strike('Attack')))
+      .withPassive(new Regeneration(1));
   }
 
   static buildGoblinSoldier(): Enemy {

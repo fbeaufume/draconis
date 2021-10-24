@@ -2,6 +2,7 @@ import {computeEffectiveDamage, computeEffectiveHeal, Skill, Wait} from './skill
 import {logs} from './log.model';
 import {Constants} from './constants.model';
 import {
+  Class,
   CreatureClass,
   CreatureType,
   FactionType,
@@ -261,7 +262,18 @@ export abstract class Creature {
     this.passives.push(passive);
   }
 
-  // TODO FBE find a way to get all the passives of a given type, and use it in applyDotsAndHots()
+  /**
+   * Get all passives of a certain type.
+   */
+  getPassivesOfType<T extends Passive>(type: Class<T>): T[] {
+    let passives:T[] = [];
+    this.passives.forEach(passive => {
+      if (passive instanceof type) {
+        passives.push(passive);
+      }
+    });
+    return passives;
+  }
 
   getPositiveStatuses(): StatusApplication[] {
     return this.statusApplications.filter(sa => sa.isImprovement());
@@ -305,8 +317,7 @@ export abstract class Creature {
       if (statusApplication.remainingDuration >= s.remainingDuration) {
         // The new status has the same duration or is longer, so we use it instead of the current one
         return false;
-      }
-      else {
+      } else {
         // The new status has a shorter duration, so we keep the current status
         addStatus = false;
         return true;
@@ -361,11 +372,9 @@ export abstract class Creature {
         }
       }
     });
-    this.passives.forEach(passive => {
-      if (passive instanceof Regeneration) {
-        hasAtLeastOneDotOrHot = true;
-        amount += computeEffectiveHeal(this, this, passive.powerLevel).amount;
-      }
+    this.getPassivesOfType(Regeneration).forEach(passive => {
+      hasAtLeastOneDotOrHot = true;
+      amount += computeEffectiveHeal(this, this, passive.powerLevel).amount;
     });
 
     if (hasAtLeastOneDotOrHot) {

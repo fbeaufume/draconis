@@ -1,6 +1,11 @@
 // Common model classes such as enumerations and utility classes
 
 /**
+ * A generic class type.
+ */
+export type Class<T> = new (...args: any[]) => T;
+
+/**
  * The faction types.
  */
 export enum FactionType {

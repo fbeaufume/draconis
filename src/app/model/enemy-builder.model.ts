@@ -18,7 +18,7 @@ import {
   Vengeance
 } from "./skill.model";
 import {attackBonus, attackMalus, bleed, poison} from "./status-type.model";
-import {Regeneration} from "./passive.model";
+import {Regeneration, Thorn} from "./passive.model";
 
 export class EnemyBuilder {
 
@@ -47,6 +47,12 @@ export class EnemyBuilder {
         .addSkill(new Strike('Bite'), 3)
         .addSkill(new ApplyImprovement('Howl', SkillTargetType.SELF, 0, 0,
           1, '', [], [attackBonus]), 1));
+  }
+
+  static buildBrambleSpirit(): Enemy {
+    return new StrategicMeleeEnemy(CreatureType.ELEMENTAL, 'Bramble Spirit', 24, 6,
+      new SingleSkillStrategy(new Strike('Scratch')))
+      .withPassive(new Thorn(0.7));
   }
 
   static buildOldMan(): Enemy {

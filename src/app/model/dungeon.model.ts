@@ -66,6 +66,11 @@ export class FangForestDungeon extends Dungeon {
         EnemyBuilder.buildWolf(),
         EnemyBuilder.buildWolf(),
       ]),
+      new Opposition('several bramble spirits', [
+        EnemyBuilder.buildBrambleSpirit(),
+        EnemyBuilder.buildBrambleSpirit(),
+        EnemyBuilder.buildBrambleSpirit(),
+      ]),
       new Opposition('a mysterious old man', [
         EnemyBuilder.buildOldMan()
       ]),

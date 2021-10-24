@@ -18,3 +18,13 @@ export class Regeneration extends Passive {
     this.powerLevel = powerLevel;
   }
 }
+
+export class Thorn extends Passive {
+
+  powerLevel: number;
+
+  constructor(powerLevel: number) {
+    super();
+    this.powerLevel = powerLevel;
+  }
+}

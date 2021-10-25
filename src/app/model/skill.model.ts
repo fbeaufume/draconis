@@ -28,6 +28,7 @@ import {StatusApplication} from "./status-application.model";
 import {Enemy} from "./enemy.model";
 import {Constants} from "./constants.model";
 import {Fight} from "./fight.model";
+import {Thorn} from "./passive.model";
 
 /**
  * A character skill.
@@ -371,6 +372,15 @@ export function computeEffectiveDamage(skill: Skill | null, emitter: Creature, r
   // Apply the specialty
   const afterSpecialtyAttack = emitter.hasSpecialtyOfCreature(receiver) ? afterDefense * (1 + Constants.SPECIALTY_ATTACK_BONUS) : afterDefense;
   const afterSpecialtyDefense = receiver.hasSpecialtyOfCreature(emitter) ? afterSpecialtyAttack * (1 - Constants.SPECIALTY_DEFENSE_BONUS) : afterSpecialtyAttack;
+
+  // Apply thorn damage if needed
+  if (skill != null && skill.range == 1) {
+    // Sum all the thorn passives
+    let thornDamage: number = 0;
+    receiver.getPassivesOfType(Thorn).forEach(passive => thornDamage += afterSpecialtyDefense * passive.powerLevel)
+
+    emitter.addSelfLifeChangeAmount(-thornDamage);
+  }
 
   return new LifeLoss(randomizeAndRound(afterSpecialtyDefense), isCritical ? LifeChangeEfficiency.CRITICAL : LifeChangeEfficiency.NORMAL);
 }

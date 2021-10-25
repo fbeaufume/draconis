@@ -4,12 +4,20 @@ import {Creature, EnemyAction} from '../model/creature.model';
 import {Skill} from '../model/skill.model';
 import {Log, logs} from '../model/log.model';
 import {Constants} from '../model/constants.model';
-import {GameState, LogType, SkillTargetType, StatusExpirationType} from "../model/common.model";
+import {
+  GameState,
+  LifeChangeEfficiency,
+  LifeChangeType,
+  LogType,
+  SkillTargetType,
+  StatusExpirationType
+} from "../model/common.model";
 import {Character} from "../model/character.model";
 import {Party} from "../model/party.model";
 import {settings} from "../model/settings.model";
 import {Enemy} from "../model/enemy.model";
 import {Fight} from "../model/fight.model";
+import {LifeChange} from "../model/life-change.model";
 
 @Injectable({
   providedIn: 'root'
@@ -186,7 +194,7 @@ export class FightService {
           this.fight.targetCreatures.push(...this.party.targetAllAliveCharacters());
         }
 
-        skill.execute(this.fight);
+        this.executeSkill(skill);
 
         this.state = GameState.EXECUTING_SKILL;
 
@@ -235,7 +243,7 @@ export class FightService {
     // Get the effective target creatures
     this.fight.targetCreatures.push(...this.fight.selectedSkill.getTargetEnemies(enemy, this.fight));
 
-    this.fight.selectedSkill.execute(this.fight);
+    this.executeSkill(this.fight.selectedSkill);
 
     this.state = GameState.EXECUTING_SKILL;
 
@@ -281,7 +289,7 @@ export class FightService {
     this.fight.targetCreatures.push(...this.fight.selectedSkill.getTargetCharacters(character, this.fight));
 
     // Execute the skill and log the output
-    this.fight.selectedSkill.execute(this.fight);
+    this.executeSkill(this.fight.selectedSkill);
 
     this.state = GameState.EXECUTING_SKILL;
 
@@ -347,12 +355,28 @@ export class FightService {
    */
   processEnemyTurnStep2(action: EnemyAction) {
     // Execute the skill
-    action.skill.execute(this.fight);
+    this.executeSkill(action.skill);
 
     // Execute the next turn
     if (!this.processEndOfFight()) {
       this.processNextTurn(true);
     }
+  }
+
+  /**
+   * Execute a skill and its after effects such as thorn damage, etc.
+   */
+  executeSkill(skill: Skill) {
+    skill.execute(this.fight);
+
+    // Use life change after effects such as thorn damage
+    this.getAllCreatures().forEach(creature => {
+      if (creature.selfLifeChangeAmount != 0) {
+        const roundedAmount = Math.abs(Math.round(creature.selfLifeChangeAmount));
+        creature.changeLife(new LifeChange(roundedAmount, LifeChangeEfficiency.NORMAL,
+          creature.selfLifeChangeAmount > 0 ? LifeChangeType.GAIN : LifeChangeType.LOSS));
+      }
+    });
   }
 
   /**
@@ -396,6 +420,7 @@ export class FightService {
    * Process the next turn immediately or after some pauses.
    */
   processNextTurn(pause: boolean) {
+    // Decrease some status durations
     this.getAllCreatures().forEach(creature => {
       creature.decreaseStatusesDuration(StatusExpirationType.ORIGIN_CREATURE_TURN_END, this.fight.activeCreature);
     });

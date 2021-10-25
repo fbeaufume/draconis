@@ -6,10 +6,10 @@ import {LifeChangeEfficiency, LifeChangeType} from "./common.model";
 export class LifeChange {
 
     constructor(
-        // The amount of life change, always positive
+        // The amount of life change, always positive, rounded
         public amount: number,
         public efficiency: LifeChangeEfficiency = LifeChangeEfficiency.NORMAL,
-        public type: LifeChangeType
+        public type: LifeChangeType // TODO FBE use a default value ?
     ) {
     }
 

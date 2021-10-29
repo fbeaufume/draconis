@@ -210,10 +210,8 @@ export class PrioritySkillStrategy extends EnemyStrategy {
 
   chooseSkill(fight: Fight): Skill | null {
     if (this.skill.isUsableByActiveCreature(fight)) {
-      console.log('Using first skill');
       return this.skill;
     } else {
-      console.log('Using second skill');
       return this.strategy.chooseSkill(fight);
     }
   }

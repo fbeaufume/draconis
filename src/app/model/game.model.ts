@@ -5,10 +5,11 @@ import {Character} from "./character.model";
 import {Party} from "./party.model";
 import {settings} from "./settings.model";
 import {Opposition} from "./opposition.model";
-import {attackMalus, bleed, burn, defend, defenseMalus, poison} from "./status-type.model";
+import {attackBonus, attackMalus, bleed, burn, defend, defenseMalus, poison} from "./status-type.model";
 import {
   AlterTime,
   ApplyDeterioration,
+  ApplyImprovement,
   ComboDamage,
   Damage,
   DamageAndDot,
@@ -60,6 +61,8 @@ export class Game {
             'Inflict 50% damage to the target and 120% damage over 3 rounds.', [0.5, 0.4], [bleed]),
           new Damage('Slash', SkillTargetType.OTHER_ALIVE_DOUBLE, 10, 1, 2,
             'Inflict 80% damage to two adjacent targets.', [0.8]),
+          new ApplyImprovement('War Cry', SkillTargetType.SAME_ALIVE_ALL, 10, 0, 3,
+            'Increase the party attack by 20% during 2 rounds.', [], [attackBonus], 2),
           new ApplyDeterioration('Intimidate', SkillTargetType.OTHER_ALIVE, 20, 1, 1,
             'Reduce the target attack by 20% during 3 rounds.', [], [attackMalus]),
         ],
@@ -96,6 +99,9 @@ export class Game {
             'Inflict 60% to 140% damage to the target based on how low the target life is.'),
           new Damage('Explosive Shot', SkillTargetType.OTHER_ALIVE_TRIPLE, 20, 2, 1,
             'Inflict 60% damage to three adjacent targets.', [0.6]),
+          // TODO FBE implement Fire Trap
+          // new ApplyImprovement('Fire Trap', SkillTargetType.SAME_ALIVE, 10, 0, 2,
+          //   'Protect the target with a trap that reflects 50% received damage for 3 rounds.', [], [thornBonus]),
           new ApplyDeterioration('Crippling Shot', SkillTargetType.OTHER_ALIVE, 10, 2, 1,
             'Reduce the target defense by 20% during 3 rounds.', [], [defenseMalus]),
         ],

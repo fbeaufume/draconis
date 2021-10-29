@@ -5,7 +5,7 @@ import {Character} from "./character.model";
 import {Party} from "./party.model";
 import {settings} from "./settings.model";
 import {Opposition} from "./opposition.model";
-import {attackBonus, attackMalus, bleed, burn, defend, defenseMalus, poison} from "./status-type.model";
+import {attackBonus, attackMalus, bleed, burn, defend, defenseBonus, defenseMalus, poison} from "./status-type.model";
 import {
   AlterTime,
   ApplyDeterioration,
@@ -81,6 +81,8 @@ export class Game {
             'Heal a character for 50% damage and 120% damage over 3 rounds.', [0.5, 0.4]),
           new Heal('Heal All', SkillTargetType.SAME_ALIVE_ALL, 15, 0, 3,
             'Heal all characters for 50% damage.', [0.5]),
+          new ApplyImprovement('Protection', SkillTargetType.SAME_ALIVE_ALL, 10, 0, 3,
+            'Increase the party defense by 20% during 2 rounds.', [], [defenseBonus], 2),
           new Revive('Revive', SkillTargetType.SAME_DEAD, 15, 0, 2,
             'Revive a character with 50% life.'),
         ],

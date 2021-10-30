@@ -29,6 +29,21 @@
     <circle cx="70" cy="45" r="15" fill="#262626"/>
     <circle cx="30" cy="65" r="20" fill="#262626"/>
   </svg>
+  <svg *ngSwitchCase="'Burn'" class="inline-block" width="24" height="24" viewBox="0 0 100 100">
+    <!-- Burn -->
+    <title>Burn, inflicted by {{ statusApplication.getOriginCreatureName() }},
+      {{ statusApplication.remainingDuration }} round{{ statusApplication.remainingDuration > 1 ? 's' : '' }}
+      left</title>
+    <rect width="100" height="100" style="fill:#EF4444;"/>
+    <path d="M 35 20 C 45 30 45 40 35 50" fill="none" stroke="#262626"
+          style="stroke-width: 10; stroke-linecap: round;"/>
+    <path d="M 35 50 C 25 60 25 70 35 80" fill="none" stroke="#262626"
+          style="stroke-width: 10; stroke-linecap: round;"/>
+    <path d="M 65 20 C 75 30 75 40 65 50" fill="none" stroke="#262626"
+          style="stroke-width: 10; stroke-linecap: round;"/>
+    <path d="M 65 50 C 55 60 55 70 65 80" fill="none" stroke="#262626"
+          style="stroke-width: 10; stroke-linecap: round;"/>
+  </svg>
   <svg *ngSwitchCase="'Regen'" class="inline-block" width="24" height="24" viewBox="0 0 100 100">
     <!-- Regen -->
     <title>Regeneration, granted by {{ statusApplication.getOriginCreatureName() }},
@@ -82,20 +97,17 @@
           style="stroke-width: 10; stroke-linecap: round;"/>
     <path d="M 35 30 A 15 35 0 1 0 65 30 Z" fill="#262626"/>
   </svg>
-  <svg *ngSwitchCase="'Burn'" class="inline-block" width="24" height="24" viewBox="0 0 100 100">
-    <!-- Burn -->
-    <title>Burn, inflicted by {{ statusApplication.getOriginCreatureName() }},
+  <svg *ngSwitchCase="'Fire Trap'" class="inline-block" width="24" height="24" viewBox="0 0 100 100">
+    <!-- Fore Trap -->
+    <title>Fire Trap, granted by {{ statusApplication.getOriginCreatureName() }},
       {{ statusApplication.remainingDuration }} round{{ statusApplication.remainingDuration > 1 ? 's' : '' }}
       left</title>
-    <rect width="100" height="100" style="fill:#EF4444;"/>
-    <path d="M 35 20 C 45 30 45 40 35 50" fill="none" stroke="#262626"
-          style="stroke-width: 10; stroke-linecap: round;"/>
-    <path d="M 35 50 C 25 60 25 70 35 80" fill="none" stroke="#262626"
-          style="stroke-width: 10; stroke-linecap: round;"/>
-    <path d="M 65 20 C 75 30 75 40 65 50" fill="none" stroke="#262626"
-          style="stroke-width: 10; stroke-linecap: round;"/>
-    <path d="M 65 50 C 55 60 55 70 65 80" fill="none" stroke="#262626"
-          style="stroke-width: 10; stroke-linecap: round;"/>
+    <rect width="100" height="100" style="fill:#10B981;" />
+    <path d="M 37 20 C 44 27 44 33 37 40" fill ="none" stroke ="#262626" style="stroke-width: 10; stroke-linecap: round;" />
+    <path d="M 37 40 C 29 47 29 53 37 60" fill ="none" stroke ="#262626" style="stroke-width: 10; stroke-linecap: round;" />
+    <path d="M 63 20 C 69 27 70 33 63 40" fill ="none" stroke ="#262626" style="stroke-width: 10; stroke-linecap: round;" />
+    <path d="M 63 40 C 55 47 55 53 63 60" fill ="none" stroke ="#262626" style="stroke-width: 10; stroke-linecap: round;" />
+    <line x1="25" y1="80" x2="75" y2="80" stroke="#262626" style="stroke-width: 10; stroke-linecap: round;" />
   </svg>
 </ng-container>
 <div class="flex justify-left space-x-1 pt-1">

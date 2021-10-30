@@ -54,6 +54,7 @@ export class StatusType {
 }
 
 // The supported statuses
+// When a new status is added, update status.component.html
 export const defend = new StatusType('Defend', true, StatusExpirationType.ORIGIN_CREATURE_TURN_START, false, false, false);
 export const bleed = new StatusType('Bleed', false, StatusExpirationType.END_OF_ROUND, true, false, true);
 export const poison = new StatusType('Poison', false, StatusExpirationType.END_OF_ROUND, true, false, true);
@@ -65,3 +66,4 @@ export const attackBonus = new StatusType('Attack', true, StatusExpirationType.O
 export const attackMalus = new StatusType('Attack', false, StatusExpirationType.ORIGIN_CREATURE_TURN_START, false, false, false);
 export const defenseBonus = new StatusType('Defense', true, StatusExpirationType.ORIGIN_CREATURE_TURN_START, false, false, false);
 export const defenseMalus = new StatusType('Defense', false, StatusExpirationType.ORIGIN_CREATURE_TURN_START, false, false, false);
+export const fireTrapBonus = new StatusType('Fire Trap', true, StatusExpirationType.ORIGIN_CREATURE_TURN_START, false, false, false);

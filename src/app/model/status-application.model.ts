@@ -50,6 +50,10 @@ export class StatusApplication {
     return this.statusType.isHot;
   }
 
+  isReflectedDamage(): boolean {
+    return this.statusType.isReflectedDamage;
+  }
+
   decreaseDuration() {
     this.remainingDuration--;
   }

@@ -19,8 +19,14 @@ export class Regeneration extends Passive {
   }
 }
 
-export class Thorn extends Passive {
+/**
+ * A passive that reflects part of damages received from a melee attack.
+ */
+export class DamageReflection extends Passive {
 
+  /**
+   * The percentage of reflected damages, e.g. 0.5 means that 50% of received damages are reflected.
+   */
   powerLevel: number;
 
   constructor(powerLevel: number) {

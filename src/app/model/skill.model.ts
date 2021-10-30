@@ -28,7 +28,7 @@ import {StatusApplication} from "./status-application.model";
 import {Enemy} from "./enemy.model";
 import {Constants} from "./constants.model";
 import {Fight} from "./fight.model";
-import {Thorn} from "./passive.model";
+import {DamageReflection} from "./passive.model";
 
 /**
  * A character skill.
@@ -373,13 +373,18 @@ export function computeEffectiveDamage(skill: Skill | null, emitter: Creature, r
   const afterSpecialtyAttack = emitter.hasSpecialtyOfCreature(receiver) ? afterDefense * (1 + Constants.SPECIALTY_ATTACK_BONUS) : afterDefense;
   const afterSpecialtyDefense = receiver.hasSpecialtyOfCreature(emitter) ? afterSpecialtyAttack * (1 - Constants.SPECIALTY_DEFENSE_BONUS) : afterSpecialtyAttack;
 
-  // Apply thorn damage if needed
+  // Apply reflected damages if needed
   if (skill != null && skill.range == 1) {
-    // Sum all the thorn passives
-    let thornDamage: number = 0;
-    receiver.getPassivesOfType(Thorn).forEach(passive => thornDamage += afterSpecialtyDefense * passive.powerLevel)
+    let reflectedDamages = 0;
 
-    emitter.addSelfLifeChangeAmount(-thornDamage);
+    // Use reflected damages from passives
+    receiver.getPassivesOfType(DamageReflection).forEach(passive => reflectedDamages += afterSpecialtyDefense * passive.powerLevel);
+
+    // Use reflected damages from statuses
+    receiver.statusApplications.filter(statusApplication => statusApplication.isReflectedDamage())
+      .forEach(statusApplication => reflectedDamages += afterSpecialtyDefense * statusApplication.power);
+
+    emitter.addSelfLifeChangeAmount(-reflectedDamages);
   }
 
   return new LifeLoss(randomizeAndRound(afterSpecialtyDefense), isCritical ? LifeChangeEfficiency.CRITICAL : LifeChangeEfficiency.NORMAL);
@@ -554,7 +559,7 @@ abstract class ApplyStatus extends Skill {
 
   executeOnTargetCreature(activeCreature: Creature, targetCreature: Creature, fight: Fight) {
     this.statuses.forEach(status => {
-      const statusApplication = new StatusApplication(status, 0, activeCreature, this.statusDuration);
+      const statusApplication = new StatusApplication(status, this.powerLevels[0], activeCreature, this.statusDuration);
       targetCreature.applyStatus(statusApplication);
 
       logs.addCreatureLog(status.improvement ? LogType.PositiveStatus : LogType.NegativeStatus, activeCreature, targetCreature, null, null, statusApplication);

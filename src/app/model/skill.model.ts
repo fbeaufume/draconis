@@ -8,7 +8,8 @@ import {
   LogType,
   SkillIconType,
   SkillModifierType,
-  SkillTargetType
+  SkillTargetType,
+  StatusTypeTagType
 } from "./common.model";
 import {
   attackBonus,
@@ -381,7 +382,7 @@ export function computeEffectiveDamage(skill: Skill | null, emitter: Creature, r
     receiver.getPassivesOfType(DamageReflection).forEach(passive => reflectedDamages += afterSpecialtyDefense * passive.powerLevel);
 
     // Use reflected damages from statuses
-    receiver.statusApplications.filter(statusApplication => statusApplication.isReflectedDamage())
+    receiver.getStatusApplicationsByTag(StatusTypeTagType.REFLECTED_DAMAGE)
       .forEach(statusApplication => reflectedDamages += afterSpecialtyDefense * statusApplication.power);
 
     emitter.addSelfLifeChangeAmount(-reflectedDamages);

@@ -72,6 +72,27 @@ export enum StatusExpirationType {
 }
 
 /**
+ * Types of tags for the status types.
+ */
+export enum StatusTypeTagType {
+
+  /**
+   * The status type has a damage over time part.
+   */
+  DOT,
+
+  /**
+   * The status type has a heal over time part.
+   */
+  HOT,
+
+  /**
+   * The status type has a reflected damage part.
+   */
+  REFLECTED_DAMAGE
+}
+
+/**
  * The icon type used by a skill.
  * When any numeric value is changed, update skill-icon.component.html.
  */

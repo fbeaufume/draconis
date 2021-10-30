@@ -37,6 +37,19 @@ class Creature {
   life : number
 }
 
+class StatusApplication {
+  power: number
+  remainingDuration: number
+}
+
+class StatusType {
+  name: String
+  improvement: boolean
+  expirationType: StatusExpirationType
+  cumulative: boolean
+  tagTypes: StatusTypeTagType[]
+}
+
 class Character {
   level: number
   useMana: boolean
@@ -94,6 +107,8 @@ Party *-- "*" PartyRow
 PartyRow *-- "*" Character
 Opposition *-- "*" OppositionRow
 OppositionRow *-- "*" Enemy
+Creature *-- "*" StatusApplication
+StatusApplication -- StatusType
 Creature <|-- Character
 Character *-- "*" Skill
 Creature <|-- Enemy

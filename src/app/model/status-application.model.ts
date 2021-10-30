@@ -1,5 +1,6 @@
 import {Creature} from "./creature.model";
 import {StatusType} from "./status-type.model";
+import {StatusTypeTagType} from "./common.model";
 
 /**
  * A status applied to a creature, such as a life change over time, an attack or defense modification, etc.
@@ -42,16 +43,8 @@ export class StatusApplication {
     return this.statusType.improvement;
   }
 
-  isDot(): boolean {
-    return this.statusType.isDot;
-  }
-
-  isHot(): boolean {
-    return this.statusType.isHot;
-  }
-
-  isReflectedDamage(): boolean {
-    return this.statusType.isReflectedDamage;
+  hasTagType(tagType: StatusTypeTagType): boolean {
+    return this.statusType.hasTagType(tagType);
   }
 
   decreaseDuration() {

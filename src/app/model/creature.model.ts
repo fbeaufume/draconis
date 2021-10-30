@@ -9,7 +9,8 @@ import {
   LifeChangeEfficiency,
   LifeChangeType,
   LogType,
-  StatusExpirationType
+  StatusExpirationType,
+  StatusTypeTagType
 } from "./common.model";
 import {StatusType} from "./status-type.model";
 import {LifeChange} from "./life-change.model";
@@ -295,6 +296,13 @@ export abstract class Creature {
     return this.statusApplications.filter(sa => !sa.isImprovement());
   }
 
+  /**
+   * Return all status applications from status types using a given tag.
+   */
+  getStatusApplicationsByTag(tagType: StatusTypeTagType): StatusApplication[] {
+    return this.statusApplications.filter(statusApplication => statusApplication.hasTagType(tagType));
+  }
+
   hasStatus(status: StatusType): boolean {
     return this.statusApplications.map(s => s.statusType.name).includes(status.name);
   }
@@ -369,27 +377,34 @@ export abstract class Creature {
    * Apply all DOT and HOT to the creature and log a single message.
    */
   applyDotsAndHots() {
-    let hasAtLeastOneDotOrHot: boolean = false;
+    let foundSomething: boolean = false;
 
-    // Compute the total amount of damage and heal
+    // The total amount of damage and heal
     let amount: number = 0;
-    this.statusApplications.forEach(statusApplication => {
+
+    // Use the DOT statuses
+    this.getStatusApplicationsByTag(StatusTypeTagType.DOT).forEach(statusApplication => {
       if (statusApplication.originCreature != null) {
-        if (statusApplication.isDot()) {
-          hasAtLeastOneDotOrHot = true;
-          amount -= computeEffectiveDamage(null, statusApplication.originCreature, this, statusApplication.power, true).amount;
-        } else if (statusApplication.isHot()) {
-          hasAtLeastOneDotOrHot = true;
-          amount += computeEffectiveHeal(statusApplication.originCreature, this, statusApplication.power).amount;
-        }
+        foundSomething = true;
+        amount -= computeEffectiveDamage(null, statusApplication.originCreature, this, statusApplication.power, true).amount;
       }
-    });
+    })
+
+    // Use the HOT statuses
+    this.getStatusApplicationsByTag(StatusTypeTagType.HOT).forEach(statusApplication => {
+      if (statusApplication.originCreature != null) {
+        foundSomething = true;
+        amount += computeEffectiveHeal(statusApplication.originCreature, this, statusApplication.power).amount;
+      }
+    })
+
+    // Use the regeneration passives
     this.getPassivesOfType(Regeneration).forEach(passive => {
-      hasAtLeastOneDotOrHot = true;
+      foundSomething = true;
       amount += computeEffectiveHeal(this, this, passive.powerLevel).amount;
     });
 
-    if (hasAtLeastOneDotOrHot) {
+    if (foundSomething) {
       const lifeChange = this.changeLife(new LifeChange(Math.abs(amount), LifeChangeEfficiency.NORMAL, amount >= 0 ? LifeChangeType.GAIN : LifeChangeType.LOSS));
 
       // Log the total amount of life lost of gained, but do not display the critical type

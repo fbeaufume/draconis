@@ -98,7 +98,7 @@
     <path d="M 35 30 A 15 35 0 1 0 65 30 Z" fill="#262626"/>
   </svg>
   <svg *ngSwitchCase="'Fire Trap'" class="inline-block" width="24" height="24" viewBox="0 0 100 100">
-    <!-- Fore Trap -->
+    <!-- Fire Trap -->
     <title>Fire Trap, granted by {{ statusApplication.getOriginCreatureName() }},
       {{ statusApplication.remainingDuration }} round{{ statusApplication.remainingDuration > 1 ? 's' : '' }}
       left</title>
@@ -108,6 +108,17 @@
     <path d="M 63 20 C 69 27 70 33 63 40" fill ="none" stroke ="#262626" style="stroke-width: 10; stroke-linecap: round;" />
     <path d="M 63 40 C 55 47 55 53 63 60" fill ="none" stroke ="#262626" style="stroke-width: 10; stroke-linecap: round;" />
     <line x1="25" y1="80" x2="75" y2="80" stroke="#262626" style="stroke-width: 10; stroke-linecap: round;" />
+  </svg>
+  <svg *ngSwitchCase="'Blade Shield'" class="inline-block" width="24" height="24" viewBox="0 0 100 100">
+    <!-- Blade Shield -->
+    <title>Thorns, granted by {{ statusApplication.getOriginCreatureName() }},
+      {{ statusApplication.remainingDuration }} round{{ statusApplication.remainingDuration > 1 ? 's' : '' }}
+      left</title>
+    <rect width="100" height="100" style="fill:#10B981;" />
+    <path d="M 25 70 C 40 55 60 55 75 70" fill ="none" stroke ="#262626" style="stroke-width: 10; stroke-linecap: round;" />
+    <polygon points="42 47 50 20 58 47" style="fill: #262626;" />
+    <polygon points="42 47 50 20 58 47" style="fill: #262626;" transform="rotate(-30 50 90)"/>
+    <polygon points="42 47 50 20 58 47" style="fill: #262626;" transform="rotate(30 50 90)"/>
   </svg>
 </ng-container>
 <div class="flex justify-left space-x-1 pt-1">

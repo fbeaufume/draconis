@@ -8,6 +8,7 @@ import {Opposition} from "./opposition.model";
 import {
   attackBonus,
   attackMalus,
+  bladeShieldBonus,
   bleed,
   burn,
   defend,
@@ -133,6 +134,8 @@ export class Game {
           //   'Reduce the target attack by 20% during 3 rounds.', [], [attackMalus]),
           // new ApplyStatus([SkillIconType.DETERIORATION], 'Slow', SkillTargetType.OTHER_ALIVE, 10, 2, 1,
           //   'Reduce the target defense by 20% during 3 rounds.', [], [defenseMalus]),
+          new ApplyImprovement('Blade Shield', SkillTargetType.SAME_ALIVE, 10, 0, 2,
+            'Protect the target with blades that reflects 50% received damage for 3 rounds.', [0.5], [bladeShieldBonus]),
           new AlterTime('Alter Time', SkillTargetType.ALIVE, 10, 2, 1,
             'Modify the duration of all statuses of a target by one turn.')
         ],

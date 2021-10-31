@@ -67,3 +67,4 @@ export const attackMalus = new StatusType('Attack', false, StatusExpirationType.
 export const defenseBonus = new StatusType('Defense', true, StatusExpirationType.ORIGIN_CREATURE_TURN_START, false,);
 export const defenseMalus = new StatusType('Defense', false, StatusExpirationType.ORIGIN_CREATURE_TURN_START, false,);
 export const fireTrapBonus = new StatusType('Fire Trap', true, StatusExpirationType.ORIGIN_CREATURE_TURN_START, false, [StatusTypeTagType.REFLECTED_DAMAGE]);
+export const bladeShieldBonus = new StatusType('Blade Shield', true, StatusExpirationType.ORIGIN_CREATURE_TURN_START, false, [StatusTypeTagType.REFLECTED_DAMAGE]);

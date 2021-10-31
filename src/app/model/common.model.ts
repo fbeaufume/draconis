@@ -87,9 +87,14 @@ export enum StatusTypeTagType {
   HOT,
 
   /**
-   * The status type has a reflected damage part.
+   * This status type applies a damage over time.
    */
-  REFLECTED_DAMAGE
+  APPLY_DOT,
+
+  /**
+   * This status type reflects damages.
+   */
+  REFLECT_DAMAGE
 }
 
 /**

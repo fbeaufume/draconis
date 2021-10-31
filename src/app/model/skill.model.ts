@@ -13,7 +13,7 @@ import {
 } from "./common.model";
 import {
   attackBonus,
-  attackMalus,
+  attackMalus, burn,
   combo1,
   combo2,
   defend,
@@ -341,6 +341,17 @@ export function computeEffectiveDamage(skill: Skill | null, emitter: Creature, r
     return new LifeLoss(0, LifeChangeEfficiency.DODGE);
   }
 
+  // Apply status to attacker if needed
+  // TODO FBE make it generic instead of using a hard coded 'burn' and a fixed duration
+  if (skill != null && skill.range == 1) {
+    // Apply a damage over time to the emitter if needed
+    receiver.getStatusApplicationsByTag(StatusTypeTagType.APPLY_DOT)
+      .forEach(statusApplication => {
+        const dot = new StatusApplication(burn, statusApplication.power, emitter, 3);
+        emitter.applyStatus(dot);
+      })
+  }
+
   // Use the attacker power and skill power
   const baseAmount = emitter.power * skillPower;
 
@@ -382,7 +393,7 @@ export function computeEffectiveDamage(skill: Skill | null, emitter: Creature, r
     receiver.getPassivesOfType(DamageReflection).forEach(passive => reflectedDamages += afterSpecialtyDefense * passive.powerLevel);
 
     // Use reflected damages from statuses
-    receiver.getStatusApplicationsByTag(StatusTypeTagType.REFLECTED_DAMAGE)
+    receiver.getStatusApplicationsByTag(StatusTypeTagType.REFLECT_DAMAGE)
       .forEach(statusApplication => reflectedDamages += afterSpecialtyDefense * statusApplication.power);
 
     emitter.addSelfLifeChangeAmount(-reflectedDamages);

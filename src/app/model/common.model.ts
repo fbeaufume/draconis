@@ -296,5 +296,7 @@ export enum LogType {
   PositiveStatus,
   NegativeStatus,
   DungeonCleared,
+  // TODO FBE use this
   AlterTime,
+  GenericMessage,
 }

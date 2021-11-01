@@ -12,13 +12,14 @@ import {
   DamageAndDot,
   Drain,
   Heal,
+  LogMessage,
   Shot,
   Strike,
   StrikeSmall,
   Vengeance
 } from "./skill.model";
 import {attackBonus, attackMalus, bleed, poison} from "./status-type.model";
-import {Regeneration, DamageReflection} from "./passive.model";
+import {DamageReflection, Regeneration} from "./passive.model";
 
 export class EnemyBuilder {
 
@@ -88,6 +89,7 @@ export class EnemyBuilder {
       new SequentialSkillStrategy([
         new Strike('Left Claw'),
         new Strike('Right Claw'),
+        new LogMessage('The dragon takes a deep breath.'),
         new StrikeSmall('Fire Breath', SkillTargetType.OTHER_ALL)
       ]), 2);
   }

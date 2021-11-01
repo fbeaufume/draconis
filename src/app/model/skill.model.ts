@@ -13,7 +13,8 @@ import {
 } from "./common.model";
 import {
   attackBonus,
-  attackMalus, burn,
+  attackMalus,
+  burn,
   combo1,
   combo2,
   defend,
@@ -500,6 +501,27 @@ export class Wait extends Skill {
 
   executeOnActiveCreature(activeCreature: Creature, fight: Fight) {
     logs.addCreatureLog(LogType.Wait, activeCreature, null, null, null);
+  }
+}
+
+/**
+ * Log a message.
+ */
+export class LogMessage extends Skill {
+
+  message: string;
+
+  constructor(message: string) {
+    super('Log Message', SkillTargetType.NONE, 0, 0, 1, '');
+    this.message = message;
+  }
+
+  get iconTypes(): SkillIconType[] {
+    return [SkillIconType.DEFENSE];
+  }
+
+  executeOnActiveCreature(activeCreature: Creature, fight: Fight) {
+    logs.addStringLog(LogType.GenericMessage, this.message);
   }
 }
 

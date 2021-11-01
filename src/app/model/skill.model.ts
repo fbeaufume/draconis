@@ -935,7 +935,7 @@ export class AlterTime extends Skill {
   executeOnTargetCreature(activeCreature: Creature, targetCreature: Creature, fight: Fight) {
     const increment: number = activeCreature?.isSameFactionThan(targetCreature) ? 1 : -1;
     targetCreature.statusApplications.forEach(statusApplication => statusApplication.remainingDuration += statusApplication.isImprovement() ? increment : -increment)
-    logs.addCreatureLog(LogType.Revive, activeCreature, targetCreature, null, null);
+    logs.addCreatureLog(LogType.AlterTime, activeCreature, targetCreature, null, null);
   }
 
   get iconTypes(): SkillIconType[] {

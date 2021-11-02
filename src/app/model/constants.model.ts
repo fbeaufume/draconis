@@ -99,7 +99,7 @@ export class Constants {
   /**
    * Percentage of mana gained by the characters after an enemy died. 0.2 means a 20% gain.
    */
-  static readonly MANA_GAIN_PER_DEAD_ENEMY = 0.2;
+  static readonly MANA_GAIN_PER_DEAD_ENEMY = 0.4;
 
   /**
    * Default duration for statuses.

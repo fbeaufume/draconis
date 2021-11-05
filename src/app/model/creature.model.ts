@@ -324,13 +324,18 @@ export abstract class Creature {
 
     // Remove the current status if necessary
     this.statusApplications = this.statusApplications.filter(s => {
+      // Keep statuses with a different name
       if (s.statusType.name != statusApplication.statusType.name) {
-        // Keep other statuses
         return true;
       }
 
+      // Keep statuses with the same name but with a different improvement flag
+      if (s.statusType.improvement != statusApplication.statusType.improvement) {
+        return true;
+      }
+
+      // Keep cumulative statuses from other creatures
       if (statusApplication.statusType.cumulative && s.getOriginCreatureName() != statusApplication.getOriginCreatureName()) {
-        // Keep cumulative statuses from other creatures
         return true;
       }
 

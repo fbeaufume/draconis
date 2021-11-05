@@ -82,9 +82,9 @@
       {{ statusApplication.remainingDuration }} round{{ statusApplication.remainingDuration > 1 ? 's' : '' }}
       left</title>
     <rect width="100" height="100" [ngStyle]="{ 'fill': statusApplication.isImprovement() ? '#10B981' : '#EF4444' }"/>
-    <polygon points="40 55 50 10 60 55" style="fill: #262626;"/>
-    <line x1="30" y1="60" x2="70" y2="60" stroke="#262626" style="stroke-width: 10; stroke-linecap: round;"/>
-    <line x1="50" y1="60" x2="50" y2="80" stroke="#262626" style="stroke-width: 10; stroke-linecap: round;"/>
+    <polygon points="42 55 42 18 50 10 58 18 58 55" style="fill: #262626;" />
+    <line x1="30" y1="60" x2="70" y2="60" stroke="#262626" style="stroke-width: 10; stroke-linecap: round;" />
+    <line x1="50" y1="60" x2="50" y2="80" stroke="#262626" style="stroke-width: 10; stroke-linecap: round;" />
   </svg>
   <svg *ngSwitchCase="'Defense'" class="inline-block" width="24" height="24" viewBox="0 0 100 100">
     <!-- Defense -->

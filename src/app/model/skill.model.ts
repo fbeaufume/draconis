@@ -283,6 +283,13 @@ export abstract class Skill {
   }
 
   /**
+   * Reset the cooldown of this skill to it maximum value.
+   */
+  resetCooldown() {
+    this.cooldown = this.cooldownMax;
+  }
+
+  /**
    * Main execution method of a skill. Should not be overridden by skills, instead they should override:
    * - Either execute(Creature, Fight) if they operate on no target (e.g. Advance, Wait, Defend, etc)
    * - Or execute(Creature, Creature, Fight) if they operate on one or more targets
@@ -293,11 +300,11 @@ export abstract class Skill {
     }
     const activeCreature: Creature = fight.activeCreature;
 
-    // Apply the energy cost to the creature
-    activeCreature.spendEnergy(this.cost);
+    // Do not apply the energy cost of the skill to the creature here but later, otherwise the focused skill panel
+    // may display the skill cost in red, confusing the player
 
-    // Update the cooldown
-    this.cooldown = this.cooldownMax;
+    // Do not update the cooldown of the skill here but later, otherwise the focused skill panel may display the skill
+    // cooldown in red, confusing the player
 
     this.executeOnActiveCreature(activeCreature, fight);
   }

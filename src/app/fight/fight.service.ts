@@ -448,6 +448,16 @@ export class FightService {
   endOfTurnCleanup() {
     this.clearLifeChanges();
 
+    // We did not apply earlier the skill cost to the creature because of side effects in the UI, but it's ok now
+    if (this.fight.activeCreature != null && this.fight.selectedSkill != null) {
+      this.fight.activeCreature.spendEnergy(this.fight.selectedSkill.cost);
+    }
+
+    // We did not reset the skill cooldown because of side effects in the UI, but it's ok now
+    if (this.fight.selectedSkill != null) {
+      this.fight.selectedSkill.resetCooldown();
+    }
+
     this.fight.activeCreature = null;
     this.fight.focusedSkill = null;
     this.fight.selectedSkill = null;

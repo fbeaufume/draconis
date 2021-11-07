@@ -109,6 +109,15 @@
     <path d="M 63 43 C 56 50 56 59 63 66" fill ="none" stroke ="#262626" style="stroke-width: 10; stroke-linecap: round;" />
     <line x1="25" y1="85" x2="75" y2="85" stroke="#262626" style="stroke-width: 10; stroke-linecap: round;" />
   </svg>
+  <svg *ngSwitchCase="'Ice Trap'" class="inline-block" width="24" height="24" viewBox="0 0 100 100">
+    <!-- Ice Trap -->
+    <title>Ice Trap, granted by {{ statusApplication.getOriginCreatureName() }},
+      {{ statusApplication.remainingDuration }} round{{ statusApplication.remainingDuration > 1 ? 's' : '' }}
+      left</title>
+    <rect width="100" height="100" style="fill:#10B981;" />
+    <polyline points="50 15 65 42 50 68 35 42 50 15" fill="none" stroke="#262626" style="stroke-width: 10; stroke-linecap: round; stroke-linejoin: round"/>
+    <line x1="25" y1="85" x2="75" y2="85" stroke="#262626" style="stroke-width: 10; stroke-linecap: round;" />
+  </svg>
   <svg *ngSwitchCase="'Blade Shield'" class="inline-block" width="24" height="24" viewBox="0 0 100 100">
     <!-- Blade Shield -->
     <title>Thorns, granted by {{ statusApplication.getOriginCreatureName() }},

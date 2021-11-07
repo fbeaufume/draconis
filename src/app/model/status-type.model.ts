@@ -67,4 +67,5 @@ export const attackMalus = new StatusType('Attack', false, StatusExpirationType.
 export const defenseBonus = new StatusType('Defense', true, StatusExpirationType.ORIGIN_CREATURE_TURN_START, false);
 export const defenseMalus = new StatusType('Defense', false, StatusExpirationType.ORIGIN_CREATURE_TURN_START, false);
 export const fireTrapBonus = new StatusType('Fire Trap', true, StatusExpirationType.ORIGIN_CREATURE_TURN_START, false, [StatusTypeTagType.APPLY_DOT]);
+export const iceTrapBonus = new StatusType('Ice Trap', true, StatusExpirationType.ORIGIN_CREATURE_TURN_START, false, [StatusTypeTagType.APPLY_DOT]); // TODO FBE implement
 export const bladeShieldBonus = new StatusType('Blade Shield', true, StatusExpirationType.ORIGIN_CREATURE_TURN_START, false, [StatusTypeTagType.REFLECT_DAMAGE]);

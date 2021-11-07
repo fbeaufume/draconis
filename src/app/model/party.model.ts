@@ -33,6 +33,7 @@ import {
   defenseBonus,
   defenseMalus,
   fireTrapBonus,
+  iceTrapBonus,
   poison
 } from "./status-type.model";
 import {Constants} from "./constants.model";
@@ -193,7 +194,9 @@ export class StandardParty extends Party {
             new Damage('Explosive Shot', SkillTargetType.OTHER_ALIVE_TRIPLE, 20, 2, 1,
               'Inflict 60% damage to three adjacent targets.', [0.6]),
             new ApplyImprovement('Fire Trap', SkillTargetType.SAME_ALIVE, 10, 0, 2,
-              'Protect the target with a fire trap that deals 75% damage over 3 rounds to melee attackers.', [0.25], [fireTrapBonus]),
+              'Protect the target with a fire trap that deals 75% damage to melee attackers over 3 rounds.', [0.25], [fireTrapBonus]),
+            new ApplyImprovement('Ice Trap', SkillTargetType.SAME_ALIVE, 10, 0, 2,
+              'Protect the target with an ice trap that reduces the attack and defense of melee attackers by 20% during 3 rounds.', [], [iceTrapBonus]),
             new ApplyDeterioration('Crippling Shot', SkillTargetType.OTHER_ALIVE, 10, 2, 1,
               'Reduce the target defense by 20% during 3 rounds.', [], [defenseMalus]),
           ],

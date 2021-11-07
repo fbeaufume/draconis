@@ -453,7 +453,7 @@ export class FightService {
       this.fight.activeCreature.spendEnergy(this.fight.selectedSkill.cost);
     }
 
-    // We did not reset the skill cooldown because of side effects in the UI, but it's ok now
+    // We did not reset earlier the skill cooldown because of side effects in the UI, but it's ok now
     if (this.fight.selectedSkill != null) {
       this.fight.selectedSkill.resetCooldown();
     }
@@ -518,6 +518,9 @@ export class FightService {
 
     // Handle party victory
     if (this.fight.opposition.isWiped()) {
+      // Apply the skill cost
+      this.endOfTurnCleanup();
+
       this.pause(() => {
         logs.addLog(LogType.PartyVictory);
 

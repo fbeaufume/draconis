@@ -67,7 +67,7 @@ export class EnemyBuilder {
   }
 
   static buildGoblinSoldier(): Enemy {
-    return new StrategicMeleeEnemy(CreatureType.HUMANOID, 'Goblin Solder', 22, 6,
+    return new StrategicMeleeEnemy(CreatureType.HUMANOID, 'Goblin Soldier', 22, 6,
       new SingleSkillStrategy(new Vengeance('Strike', SkillTargetType.OTHER_ALIVE, 0, 1,
         1, '')));
   }

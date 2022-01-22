@@ -3,32 +3,29 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <meta http-equiv="X-UA-Compatible" content="ie=edge">
-  <title>Draconis</title>
-  <!-- Font Awesome if you need it -->
-  <!--<link rel="stylesheet" href="https://use.fontawesome.com/releases/v5.10.2/css/all.css">-->
-  <!-- Replace with your tailwind.css once created -->
-  <link href="https://unpkg.com/tailwindcss@2.2.19/dist/tailwind.min.css" rel="stylesheet">
-  <!-- Tailwind Custom Forms - use to standardise form fields - https://github.com/tailwindcss/custom-forms -->
-  <!--<link href="https://unpkg.com/@tailwindcss/custom-forms/dist/custom-forms.min.css" rel="stylesheet">-->
-  <!-- To use true gray colors -->
-  <style type="text/css">
-    .border-gray-700 {
-      border-color: #404040;
-    }
-
-    .border-gray-800 {
-      border-color: #262626;
-    }
-
-    .bg-gray-800 {
-      background-color: #262626;
-    }
-
-    .bg-gray-900 {
-      background-color: #171717;
-    }
-  </style>
+  <title>Draconis - Fight</title>
+  <script src="https://cdn.tailwindcss.com"></script>
+  <script>
+    // tailwind.config = {
+    //   theme: {
+    //     colors: {
+    //       transparent: 'transparent',
+    //       current: 'currentColor',
+    //       mygray: colors.neutral,
+    //       red: colors.red,
+    //       green: colors.green,
+    //       blue: colors.blue,
+    //       yellow: colors.yellow,
+    //       purple: colors.purple,
+    //     },
+    //     extend: {
+    //       colors: {
+    //         mygray: colors.neutral,
+    //       }
+    //     }
+    //   }
+    // }
+  </script>
 </head>
 <body class="font-sans bg-gray-900 text-gray-200">
 <div class="container mx-auto">
@@ -208,11 +205,15 @@
               </div>
               <div>
                 <svg class="inline-block" width="24" height="24" viewBox="0 0 100 100">
-                  <rect width="100" height="100" style="fill:#EF4444;" />
-                  <path d="M 35 20 C 45 30 45 40 35 50" fill ="none" stroke ="#262626" style="stroke-width: 10; stroke-linecap: round;" />
-                  <path d="M 35 50 C 25 60 25 70 35 80" fill ="none" stroke ="#262626" style="stroke-width: 10; stroke-linecap: round;" />
-                  <path d="M 65 20 C 75 30 75 40 65 50" fill ="none" stroke ="#262626" style="stroke-width: 10; stroke-linecap: round;" />
-                  <path d="M 65 50 C 55 60 55 70 65 80" fill ="none" stroke ="#262626" style="stroke-width: 10; stroke-linecap: round;" />
+                  <rect width="100" height="100" style="fill:#EF4444;"/>
+                  <path d="M 35 20 C 45 30 45 40 35 50" fill="none" stroke="#262626"
+                        style="stroke-width: 10; stroke-linecap: round;"/>
+                  <path d="M 35 50 C 25 60 25 70 35 80" fill="none" stroke="#262626"
+                        style="stroke-width: 10; stroke-linecap: round;"/>
+                  <path d="M 65 20 C 75 30 75 40 65 50" fill="none" stroke="#262626"
+                        style="stroke-width: 10; stroke-linecap: round;"/>
+                  <path d="M 65 50 C 55 60 55 70 65 80" fill="none" stroke="#262626"
+                        style="stroke-width: 10; stroke-linecap: round;"/>
                 </svg>
                 <div class="flex justify-left space-x-1 pt-1">
                   <div class="bg-red-500" style="width:2px;height:2px"></div>

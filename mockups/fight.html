@@ -6,25 +6,32 @@
   <title>Draconis - Fight</title>
   <script src="https://cdn.tailwindcss.com"></script>
   <script>
-    // tailwind.config = {
-    //   theme: {
-    //     colors: {
-    //       transparent: 'transparent',
-    //       current: 'currentColor',
-    //       mygray: colors.neutral,
-    //       red: colors.red,
-    //       green: colors.green,
-    //       blue: colors.blue,
-    //       yellow: colors.yellow,
-    //       purple: colors.purple,
-    //     },
-    //     extend: {
-    //       colors: {
-    //         mygray: colors.neutral,
-    //       }
-    //     }
-    //   }
-    // }
+    const colors = require('tailwindcss/colors');
+    tailwind.config = {
+      theme: {
+        // Does not work, issue with "colors" ?
+        // colors: {
+        //   transparent: 'transparent',
+        //   current: 'currentColor',
+        //   mygray: colors.neutral,
+        //   red: colors.red,
+        //   green: colors.green,
+        //   blue: colors.blue,
+        //   yellow: colors.yellow,
+        //   purple: colors.purple,
+        // },
+        extend: {
+          colors: {
+            // Works fine
+            myred: '#ff0000',
+            // Works fine
+            myblue: '#0000ff',
+            // Does not work, issue with "colors" ?
+            // mygray: colors.neutral,
+          }
+        }
+      }
+    }
   </script>
 </head>
 <body class="font-sans bg-gray-900 text-gray-200">

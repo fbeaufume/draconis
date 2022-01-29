@@ -6,28 +6,19 @@
   <title>Draconis - Fight</title>
   <script src="https://cdn.tailwindcss.com"></script>
   <script>
-    const colors = require('tailwindcss/colors');
+    // Opened a StackOverflow issue, see https://stackoverflow.com/questions/70904117/using-color-aliasing-with-tailwind-play-cdn
+
+    // Fails with Play CDN ("Uncaught ReferenceError: require is not defined")
+    //const colors = require('tailwindcss/colors');
+
     tailwind.config = {
       theme: {
-        // Does not work, issue with "colors" ?
-        // colors: {
-        //   transparent: 'transparent',
-        //   current: 'currentColor',
-        //   mygray: colors.neutral,
-        //   red: colors.red,
-        //   green: colors.green,
-        //   blue: colors.blue,
-        //   yellow: colors.yellow,
-        //   purple: colors.purple,
-        // },
         extend: {
           colors: {
-            // Works fine
-            myred: '#ff0000',
-            // Works fine
+            // Works fine with Play CDN
             myblue: '#0000ff',
-            // Does not work, issue with "colors" ?
-            // mygray: colors.neutral,
+            // Fails with Play CDN ("Uncaught ReferenceError: colors is not defined")
+            gray: colors.neutral,
           }
         }
       }

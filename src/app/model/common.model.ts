@@ -185,6 +185,11 @@ export enum SkillTargetType {
   OTHER_ALIVE_TRIPLE,
 
   /**
+   * All alive creatures of the other faction.
+   */
+  OTHER_ALIVE_ALL,
+
+  /**
    * An entire row of the other faction.
    */
   OTHER_ROW,

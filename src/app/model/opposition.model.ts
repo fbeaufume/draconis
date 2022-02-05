@@ -168,6 +168,17 @@ export class Opposition {
   }
 
   /**
+   * Target all enemies.
+   */
+  targetAllEnemies(): Enemy[] {
+    const enemies: Enemy[] = [];
+
+    this.forEachEnemy(e => enemies.push(e));
+
+    return enemies;
+  }
+
+  /**
    * Get the enemy at the left of a given enemy.
    */
   getLeftEnemy(enemy: Enemy): Enemy | null {

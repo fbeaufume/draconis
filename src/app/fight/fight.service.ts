@@ -190,8 +190,13 @@ export class FightService {
     switch (skill.targetType) {
       case SkillTargetType.NONE:
       case SkillTargetType.SAME_ALIVE_ALL:
+      case SkillTargetType.OTHER_ALIVE_ALL:
         if (skill.targetType == SkillTargetType.SAME_ALIVE_ALL) {
           this.fight.targetCreatures.push(...this.party.targetAllAliveCharacters());
+        }
+
+        if (skill.targetType == SkillTargetType.OTHER_ALIVE_ALL) {
+          this.fight.targetCreatures.push(...this.fight.opposition.targetAllEnemies());
         }
 
         this.executeSkill(skill);

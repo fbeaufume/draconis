@@ -28,37 +28,43 @@ The current design choices and objectives are:
 
 The major application systems and their progress are:
 
-| System     | Description                                        | Progress |
-|------------|----------------------------------------------------|----------|
-| Combat     | Turns, actions, targets, rows, outcomes, statuses  | 25 %     |
-| Characters | Classes, skills, attributes, levels                | 10 %     |
-| Enemies    | Classes, skills, A.I.                              | 10 %     |
-| World      | Dungeons, cities, quests                           | 5 %      |
-| Items      | Equipment slots, consumables, affixes, rarities    | 0 %      |
-| Crafting   | Creation, alteration and upgrade of items          | 0 %      |
+| System     | Description                                           | Progress |
+|------------|-------------------------------------------------------|----------|
+| Combat     | Turns, actions, targets, rows, outcomes, statuses     | 30 %     |
+| Characters | Classes, skills, attributes, levels                   | 15 %     |
+| Enemies    | Classes, skills, A.I.                                 | 15 %     |
+| World      | Dungeons, cities, quests                              | 5 %      |
+| Items      | Equipment slots, consumables, affixes, rarities, loot | 0 %      |
+| Crafting   | Creation, alteration and upgrade of items             | 0 %      |
 
 ### 2.1 Combat system
 
-Features of the combat system :
+Features of the combat system:
 
 - [x] Group based, i.e. multiple characters vs multiple enemies
 - [x] Turn based
 - [x] Turn order is randomly generated for each fight and evenly interleaves characters and enemies
-- [x] Some creatures (e.g. bosses) can have multiple actions per turn
 - [x] Row based, i.e. creatures are front row or back row
+- [x] Some creatures (e.g. bosses) can have multiple actions per turn
 - [x] Skill ranges, i.e. melee attacks can only reach front row opponents while distance attacks can reach any opponent
 - [x] Single target skills and area of effect skills
 - [x] Damaging skills and healing skills
-- [x] Initial impact damage and heals and over time damage and heals
+- [x] Basic damage computation
+- [x] Hit time damage and heals and over time damage and heals
 - [x] Bonus effects (a.k.a buffs) and malus effects (a.k.a debuffs)
-- [ ] State enabled skills (e.g. when full life or wounded, etc)
-- [x] Several skill outcomes (success, miss, dodge, resist, critical)
-- [ ] Skill modifiers, e.g. cannot be dodged 
-- [ ] Counter-attacks and/or thorns
+- [x] State enabled skills (e.g. damage is also based on creatures life)
+- [x] Several skill outcomes (success, dodge, critical)
+- [x] Skill modifiers, e.g. cannot be dodged 
+- [x] Counter-attacks and/or thorns
 - [x] Skills cooldown
-- [ ] Multiple effect skills, e.g. a damage and an effect
-- [ ] Multiple element damages, e.g. physical damage plus poison damage
+- [x] Multiple effect skills, e.g. a damage and an effect
 - [x] Chained attacks, i.e. consecutively using  the same attack changes its result
+- [x] Specialties, i.e. per class benefits against specific creature types (such as beasts, undeads, etc)
+
+Not yet implemented:
+- [ ] Advanced damage computation using armor, elemental resistances, etc
+- [ ] Crows controls (e.g. stun, silence, etc)
+- [ ] Multiple element damages, e.g. physical damage plus poison damage
 - [ ] Taunts
 - [ ] Interceptions, e.g. intercept the next attack that would kill an allied creature
-- [x] Specialties, i.e. per class benefits against specific creature types (such as beasts, undeads, etc)
+- [ ] Other features

@@ -190,6 +190,11 @@ export enum SkillTargetType {
   OTHER_ALIVE_ALL,
 
   /**
+   * The first row of the other faction.
+   */
+  OTHER_FIRST_ROW,
+
+  /**
    * An entire row of the other faction.
    */
   OTHER_ROW,

@@ -193,6 +193,8 @@ export class StandardParty extends Party {
               'Inflict 60% to 140% damage to the target based on how low the target life is.'),
             new Damage('Explosive Shot', SkillTargetType.OTHER_ALIVE_TRIPLE, 20, 2, 1,
               'Inflict 60% damage to three adjacent targets.', [0.6]),
+            new Damage('Barrage', SkillTargetType.OTHER_FIRST_ROW, 20, 1, 2,
+              'Inflict 50% damage to first row enemies.', [0.5]),
             new ApplyImprovement('Fire Trap', SkillTargetType.SAME_ALIVE, 10, 0, 2,
               'Protect the target with a fire trap that deals 75% damage to melee attackers over 3 rounds.', [0.25], [fireTrapBonus]),
             new ApplyImprovement('Ice Trap', SkillTargetType.SAME_ALIVE, 10, 0, 2,

@@ -191,12 +191,17 @@ export class FightService {
       case SkillTargetType.NONE:
       case SkillTargetType.SAME_ALIVE_ALL:
       case SkillTargetType.OTHER_ALIVE_ALL:
+      case SkillTargetType.OTHER_FIRST_ROW:
         if (skill.targetType == SkillTargetType.SAME_ALIVE_ALL) {
           this.fight.targetCreatures.push(...this.party.targetAllAliveCharacters());
         }
 
         if (skill.targetType == SkillTargetType.OTHER_ALIVE_ALL) {
           this.fight.targetCreatures.push(...this.fight.opposition.targetAllEnemies());
+        }
+
+        if (skill.targetType == SkillTargetType.OTHER_FIRST_ROW) {
+          this.fight.targetCreatures.push(...this.fight.opposition.targetFirstRowEnemies());
         }
 
         this.executeSkill(skill);

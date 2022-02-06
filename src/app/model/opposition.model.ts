@@ -179,6 +179,17 @@ export class Opposition {
   }
 
   /**
+   * Target first row enemies.
+   */
+  targetFirstRowEnemies(): Enemy[] {
+    const enemies: Enemy[] = [];
+
+    this.rows[0].enemies.forEach(e => enemies.push(e));
+
+    return enemies;
+  }
+
+  /**
    * Get the enemy at the left of a given enemy.
    */
   getLeftEnemy(enemy: Enemy): Enemy | null {

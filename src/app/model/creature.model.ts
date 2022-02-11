@@ -149,15 +149,22 @@ export abstract class Creature {
     this.type = type;
     this.name = name;
     this.clazz = clazz;
-    this.lifeMax = lifeMax;
-    this.life = lifeMax;
+    this.lifeMax = Creature.ensurePositiveAndRounded(lifeMax);
+    this.life = this.lifeMax;
     this.energyMax = energyMax;
-    this.energy = energyMax;
-    this.power = power;
+    this.energy = this.energyMax;
+    this.power = Creature.ensurePositiveAndRounded(power);
     this.skills = skills;
     this.specialties = specialties;
     this.passives = [];
     this.updateLifePercent();
+  }
+
+  /**
+   * Return an integer with a minimum valuer of 1.
+   */
+  private static ensurePositiveAndRounded(amount: number): number {
+    return Math.max(Math.ceil(amount), 1);
   }
 
   abstract isCharacter(): boolean;

@@ -7,6 +7,7 @@ import {Creature, defaultEnemyAction, EnemyAction} from "./creature.model";
 import {EnemyStrategy, PrioritySkillStrategy} from "./enemy-strategy.model";
 import {Constants} from "./constants.model";
 import {Passive} from "./passive.model";
+import {settings} from "./settings.model";
 
 /**
  * Base class for enemy classes.
@@ -40,7 +41,8 @@ export abstract class Enemy extends Creature {
     lifeMax: number,
     power: number,
     actions: number = Constants.DEFAULT_ATTACK_COUNT) {
-    super(FactionType.OPPOSITION, type, name, CreatureClass.ENEMY, lifeMax, 100, power, []);
+    super(FactionType.OPPOSITION, type, name, CreatureClass.ENEMY, lifeMax * settings.enemyHealthAndPowerCoefficient,
+      100, power * settings.enemyHealthAndPowerCoefficient, []);
     this.baseName = name;
     this.actions = actions;
   }

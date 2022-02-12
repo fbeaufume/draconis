@@ -144,7 +144,7 @@ export class FightService {
     } else if (creature.isEnemy()) {
       this.state = GameState.ENEMY_TURN;
 
-      this.pause(() => {
+      this.pauseAndExecute(() => {
         this.processEnemyTurnStep1(creature as Enemy);
       });
     } else if (creature.isEndOfRound()) {
@@ -259,7 +259,7 @@ export class FightService {
 
     // If there are dead enemies, remove them after a pause
     if (this.fight.opposition.hasDeadEnemies()) {
-      this.pause(() => {
+      this.pauseAndExecute(() => {
         this.processDeadEnemies();
 
         // Execute the next turn
@@ -354,7 +354,7 @@ export class FightService {
       this.fight.targetCreatures = action.targetCreatures;
 
       // Process the next step
-      this.pause(() => {
+      this.pauseAndExecute(() => {
         this.processEnemyTurnStep2(action);
       });
     }
@@ -404,7 +404,7 @@ export class FightService {
 
     // If there are dead enemies, remove them after a pause
     if (this.fight.opposition.hasDeadEnemies()) {
-      this.pause(() => {
+      this.pauseAndExecute(() => {
         this.processDeadEnemies();
 
         // Start the next round
@@ -437,10 +437,10 @@ export class FightService {
 
     if (pause) {
       // Give some time to the player to see the skill result
-      this.pause(() => {
+      this.pauseAndExecute(() => {
         this.endOfTurnCleanup();
 
-        this.pause(() => {
+        this.pauseAndExecute(() => {
           this.fight.turnOrder.nextCreature();
           this.processTurn();
         });
@@ -516,7 +516,7 @@ export class FightService {
   processEndOfFight(): boolean {
     // Handle party defeat
     if (this.party.isWiped()) {
-      this.pause(() => {
+      this.pauseAndExecute(() => {
         logs.addLog(LogType.PartyDefeat);
 
         // The dungeon is over
@@ -531,7 +531,7 @@ export class FightService {
       // Apply the skill cost
       this.endOfTurnCleanup();
 
-      this.pause(() => {
+      this.pauseAndExecute(() => {
         logs.addLog(LogType.PartyVictory);
 
         if (this.game.hasNextEncounter()) {
@@ -553,9 +553,27 @@ export class FightService {
   /**
    * Execute a function after a pause.
    */
-  pause(process: Function) {
+  pauseAndExecute(process: Function) {
     window.setTimeout(() => {
       process.call(this);
     }, settings.pauseDuration);
+  }
+
+  /**
+   * Pause for some time if a condition is met.
+   */
+  pauseIf(condition: boolean): Promise<void> {
+    if (condition) {
+      return this.pause();
+    } else {
+      return Promise.resolve();
+    }
+  }
+
+  /**
+   * Pause for some time.
+   */
+  pause(): Promise<void> {
+    return new Promise((resolve) => setTimeout(resolve, settings.pauseDuration))
   }
 }

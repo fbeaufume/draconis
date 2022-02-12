@@ -92,6 +92,11 @@ export enum StatusTypeTagType {
   APPLY_DOT,
 
   /**
+   * This status type applies a deterioration.
+   */
+  APPLY_DETERIORATION,
+
+  /**
    * This status type reflects damages.
    */
   REFLECT_DAMAGE

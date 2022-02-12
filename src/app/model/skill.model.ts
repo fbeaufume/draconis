@@ -349,14 +349,21 @@ export function computeEffectiveDamage(skill: Skill | null, emitter: Creature, r
     return new LifeLoss(0, LifeChangeEfficiency.DODGE);
   }
 
-  // Apply status to attacker if needed
-  // TODO FBE make it generic instead of using a hard coded 'burn' and a fixed duration
+  // TODO FBE make the status application more generic instead of a hard values (range check, status type, duration), see also fireTrapBonus and iceTrapBonus and bladeShieldBonus in status-type.model.ts
+  // Some receivers, when successfully attacked, may apply some statuses back to the emitter
+  // (for example when protected by a fire trap), so here we apply such statuses
   if (skill != null && skill.range == 1) {
     // Apply a damage over time to the emitter if needed
     receiver.getStatusApplicationsByTag(StatusTypeTagType.APPLY_DOT)
       .forEach(statusApplication => {
-        const dot = new StatusApplication(burn, statusApplication.power, emitter, 3);
-        emitter.applyStatus(dot);
+        emitter.applyStatus(new StatusApplication(burn, statusApplication.power, emitter, 3));
+      })
+
+    // Apply a deterioration to the emitter if needed
+    receiver.getStatusApplicationsByTag(StatusTypeTagType.APPLY_DETERIORATION)
+      .forEach(statusApplication => {
+        emitter.applyStatus(new StatusApplication(attackMalus, statusApplication.power, emitter, 2));
+        emitter.applyStatus(new StatusApplication(defenseMalus, statusApplication.power, emitter, 2));
       })
   }
 

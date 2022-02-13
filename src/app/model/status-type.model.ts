@@ -31,6 +31,11 @@ export class StatusType {
    */
   tagTypes: StatusTypeTagType[];
 
+  /**
+   * TODO FBE implement
+   */
+  //statusesForAttackers: TODO[];
+
   constructor(
     name: string,
     improvement: boolean,

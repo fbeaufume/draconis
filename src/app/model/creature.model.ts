@@ -286,7 +286,7 @@ export abstract class Creature {
    * Get all passives of a certain type.
    */
   getPassivesOfType<T extends Passive>(type: Class<T>): T[] {
-    let passives:T[] = [];
+    let passives: T[] = [];
     this.passives.forEach(passive => {
       if (passive instanceof type) {
         passives.push(passive);
@@ -325,7 +325,11 @@ export abstract class Creature {
   /**
    * Add a status to the creature.
    */
-  applyStatus(statusApplication: StatusApplication) {
+  applyStatus(statusApplication: StatusApplication | null) {
+    if (statusApplication == null) {
+      return;
+    }
+
     // Do we have to add the new status
     let addStatus: boolean = true;
 

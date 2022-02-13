@@ -350,6 +350,8 @@ export function computeEffectiveDamage(skill: Skill | null, emitter: Creature, r
   }
 
   // TODO FBE make the status application more generic instead of a hard values (range check, status type, duration), see also fireTrapBonus and iceTrapBonus and bladeShieldBonus in status-type.model.ts
+
+  // TODO FBE remove this bloc
   // Some receivers, when successfully attacked, may apply some statuses back to the emitter
   // (for example when protected by a fire trap), so here we apply such statuses
   if (skill != null && skill.range == 1) {
@@ -357,15 +359,23 @@ export function computeEffectiveDamage(skill: Skill | null, emitter: Creature, r
     receiver.getStatusApplicationsByTag(StatusTypeTagType.APPLY_DOT)
       .forEach(statusApplication => {
         emitter.applyStatus(new StatusApplication(burn, statusApplication.power, emitter, 3));
-      })
+      });
 
     // Apply a deterioration to the emitter if needed
     receiver.getStatusApplicationsByTag(StatusTypeTagType.APPLY_DETERIORATION)
       .forEach(statusApplication => {
         emitter.applyStatus(new StatusApplication(attackMalus, statusApplication.power, emitter, 2));
         emitter.applyStatus(new StatusApplication(defenseMalus, statusApplication.power, emitter, 2));
-      })
+      });
   }
+
+  // Some receivers, when successfully attacked, may apply some statuses back to the emitter
+  // (for example when protected by a fire trap), so here we apply such statuses
+  receiver.getStatusApplicationsByTag(StatusTypeTagType.APPLY_STATUS_TO_ATTACKER)
+    .forEach(statusApplication => {
+      // TODO FBE implement
+      //emitter.applyStatus(statusApplication.createStatusApplicationForAttacker(skill));
+    });
 
   // Use the attacker power and skill power
   const baseAmount = emitter.power * skillPower;

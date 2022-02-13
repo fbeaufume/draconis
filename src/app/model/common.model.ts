@@ -86,15 +86,23 @@ export enum StatusTypeTagType {
    */
   HOT,
 
+  // TODO FBE remove this
   /**
    * This status type applies a damage over time.
    */
   APPLY_DOT,
 
+  // TODO FBE remove this
   /**
    * This status type applies a deterioration.
    */
   APPLY_DETERIORATION,
+
+  /**
+   * This status applies a status (such as a DOT or a deterioration) to the others creatures when they attack the
+   * current creature .
+   */
+  APPLY_STATUS_TO_ATTACKER,
 
   /**
    * This status type reflects damages.

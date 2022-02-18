@@ -32,22 +32,24 @@ export class StatusType {
   tagTypes: StatusTypeTagType[];
 
   /**
-   * TODO FBE implement
+   * The effects triggered by this status.
    */
-  //statusesForAttackers: TODO[];
+  statusEffect: StatusEffect[];
 
   constructor(
     name: string,
     improvement: boolean,
     expirationType: StatusExpirationType,
     cumulative: boolean,
-    tagTypes: StatusTypeTagType[] = []
+    tagTypes: StatusTypeTagType[] = [],
+    executionEffects: StatusEffect[] = []
   ) {
     this.name = name;
     this.improvement = improvement;
     this.expirationType = expirationType;
     this.cumulative = cumulative;
     this.tagTypes = tagTypes;
+    this.statusEffect = executionEffects;
   }
 
   /**
@@ -74,3 +76,12 @@ export const defenseMalus = new StatusType('Defense', false, StatusExpirationTyp
 export const fireTrapBonus = new StatusType('Fire Trap', true, StatusExpirationType.ORIGIN_CREATURE_TURN_START, false, [StatusTypeTagType.APPLY_DOT]);
 export const iceTrapBonus = new StatusType('Ice Trap', true, StatusExpirationType.ORIGIN_CREATURE_TURN_START, false, [StatusTypeTagType.APPLY_DETERIORATION]);
 export const bladeShieldBonus = new StatusType('Blade Shield', true, StatusExpirationType.ORIGIN_CREATURE_TURN_START, false, [StatusTypeTagType.REFLECT_DAMAGE]);
+
+/**
+ * This class describes an effects that can be applied when a creature (that has the status of this effect) is involved
+ * by a skill execution. For example, it may reflect part of the received damage back to the attacker.
+ */
+export class StatusEffect {
+
+  // TODO FBE
+}

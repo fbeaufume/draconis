@@ -88,12 +88,6 @@ export enum StatusTypeTagType {
 
   // TODO FBE remove this
   /**
-   * This status type applies a deterioration.
-   */
-  APPLY_DETERIORATION,
-
-  // TODO FBE remove this
-  /**
    * This status type reflects damages.
    */
   REFLECT_DAMAGE

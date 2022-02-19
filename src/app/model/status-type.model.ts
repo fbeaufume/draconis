@@ -52,7 +52,21 @@ export class ApplyDotStatusEffect extends StatusEffect {
  */
 export class ApplyStatusStatusEffect extends StatusEffect {
 
-  // TODO FBE
+  /**
+   * The type of status to apply.
+   */
+  statusType: StatusType;
+
+  /**
+   * The duration, in rounds, of the applied status.
+   */
+  duration: number;
+
+  constructor(attackRange: number, statusType: StatusType, duration: number) {
+    super(attackRange);
+    this.statusType = statusType;
+    this.duration = duration;
+  }
 }
 
 /**
@@ -143,6 +157,6 @@ export const defenseMalus = new StatusType('Defense', false, StatusExpirationTyp
 export const fireTrapBonus = new StatusType('Fire Trap', true, StatusExpirationType.ORIGIN_CREATURE_TURN_START, false,
   [], [new ApplyDotStatusEffect(1, burn, 0.25, 3)]);
 export const iceTrapBonus = new StatusType('Ice Trap', true, StatusExpirationType.ORIGIN_CREATURE_TURN_START, false,
-  [StatusTypeTagType.APPLY_DETERIORATION]);
+  [], [new ApplyStatusStatusEffect(1, attackMalus, 2), new ApplyStatusStatusEffect(1, defenseMalus, 2)]);
 export const bladeShieldBonus = new StatusType('Blade Shield', true, StatusExpirationType.ORIGIN_CREATURE_TURN_START, false,
   [StatusTypeTagType.REFLECT_DAMAGE]);

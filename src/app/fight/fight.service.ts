@@ -167,6 +167,9 @@ export class FightService {
    */
   leaveSkill() {
     this.fight.hoveredSkill = null;
+    if (this.fight.selectedSkill != null) {
+      this.fight.focusedSkill = this.fight.selectedSkill;
+    }
   }
 
   /**

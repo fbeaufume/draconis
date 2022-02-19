@@ -9,7 +9,7 @@ export class LifeChange {
         // The amount of life change, always positive, rounded
         public amount: number,
         public efficiency: LifeChangeEfficiency = LifeChangeEfficiency.NORMAL,
-        public type: LifeChangeType // TODO FBE use a default value ?
+        public type: LifeChangeType
     ) {
     }
 

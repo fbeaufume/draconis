@@ -196,7 +196,7 @@ export class StandardParty extends Party {
             new Damage('Barrage', SkillTargetType.OTHER_FIRST_ROW, 20, 1, 2,
               'Inflict 50% damage to first row enemies.', [0.5]),
             new ApplyImprovement('Fire Trap', SkillTargetType.SAME_ALIVE, 10, 0, 2,
-              'Protect the target with a fire trap that deals 75% damage to melee attackers over 3 rounds.', [0.25], [fireTrapBonus]),
+              'Protect the target with a fire trap that deals 75% damage to melee attackers over 3 rounds.', [], [fireTrapBonus]),
             new ApplyImprovement('Ice Trap', SkillTargetType.SAME_ALIVE, 10, 0, 2,
               'Protect the target with an ice trap that reduces the attack and defense of melee attackers by 20% during 3 rounds.', [], [iceTrapBonus]),
             new ApplyDeterioration('Crippling Shot', SkillTargetType.OTHER_ALIVE, 10, 2, 1,

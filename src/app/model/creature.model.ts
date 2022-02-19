@@ -12,7 +12,7 @@ import {
   StatusExpirationType,
   StatusTypeTagType
 } from "./common.model";
-import {StatusType} from "./status-type.model";
+import {StatusEffect, StatusType} from "./status-type.model";
 import {LifeChange} from "./life-change.model";
 import {StatusApplication} from "./status-application.model";
 import {Passive, Regeneration} from "./passive.model";

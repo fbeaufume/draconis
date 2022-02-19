@@ -12,6 +12,7 @@ import {
   StatusTypeTagType
 } from "./common.model";
 import {
+  ApplyDotStatusEffect,
   attackBonus,
   attackMalus,
   burn,
@@ -349,18 +350,10 @@ export function computeEffectiveDamage(skill: Skill | null, emitter: Creature, r
     return new LifeLoss(0, LifeChangeEfficiency.DODGE);
   }
 
-  // TODO FBE make the status application more generic instead of a hard values (range check, status type, duration), see also fireTrapBonus and iceTrapBonus and bladeShieldBonus in status-type.model.ts
-
-  // TODO FBE remove this bloc
+  // TODO FBE make this status application more generic instead of a hard values (range check, status type, duration), see also fireTrapBonus and iceTrapBonus and bladeShieldBonus in status-type.model.ts
   // Some receivers, when successfully attacked, may apply some statuses back to the emitter
   // (for example when protected by a fire trap), so here we apply such statuses
   if (skill != null && skill.range == 1) {
-    // Apply a damage over time to the emitter if needed
-    receiver.getStatusApplicationsByTag(StatusTypeTagType.APPLY_DOT)
-      .forEach(statusApplication => {
-        emitter.applyStatus(new StatusApplication(burn, statusApplication.power, emitter, 3));
-      });
-
     // Apply a deterioration to the emitter if needed
     receiver.getStatusApplicationsByTag(StatusTypeTagType.APPLY_DETERIORATION)
       .forEach(statusApplication => {
@@ -369,13 +362,22 @@ export function computeEffectiveDamage(skill: Skill | null, emitter: Creature, r
       });
   }
 
-  // Some receivers, when successfully attacked, may apply some statuses back to the emitter
-  // (for example when protected by a fire trap), so here we apply such statuses
-  receiver.getStatusApplicationsByTag(StatusTypeTagType.APPLY_STATUS_TO_ATTACKER)
-    .forEach(statusApplication => {
-      // TODO FBE implement
-      //emitter.applyStatus(statusApplication.createStatusApplicationForAttacker(skill));
-    });
+  // Apply status effects if needed, for example a creature protected by a fire trap, when melee attacked
+  // will apply a fire damage-over-time to the attacker
+  receiver.statusApplications.forEach(statusApplication => {
+    statusApplication.statusType.statusEffects.forEach(statusEffect => {
+      // Check the status effect range
+      const attackRange = statusEffect.attackRange;
+      if (attackRange == 0 && skill != null && skill.range == 2) {
+        // The status effect requires a melee attack, but it was a distance attack
+        return;
+      }
+
+      if (statusEffect instanceof ApplyDotStatusEffect) {
+        emitter.applyStatus(new StatusApplication(statusEffect.dotType, statusEffect.power, statusApplication.originCreature, statusEffect.duration));
+      }
+    })
+  })
 
   // Use the attacker power and skill power
   const baseAmount = emitter.power * skillPower;
@@ -417,6 +419,7 @@ export function computeEffectiveDamage(skill: Skill | null, emitter: Creature, r
     // Use reflected damages from passives
     receiver.getPassivesOfType(DamageReflection).forEach(passive => reflectedDamages += afterSpecialtyDefense * passive.powerLevel);
 
+    // TODO FBE replace this by the generic status effect management
     // Use reflected damages from statuses
     receiver.getStatusApplicationsByTag(StatusTypeTagType.REFLECT_DAMAGE)
       .forEach(statusApplication => reflectedDamages += afterSpecialtyDefense * statusApplication.power);

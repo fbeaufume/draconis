@@ -382,6 +382,7 @@ export class FightService {
   executeSkill(skill: Skill) {
     skill.execute(this.fight);
 
+    // TODO FBE replace this by e generic mechanism in 'computeEffectiveDamage' method in skill.model.ts ?
     // Use life change after effects such as thorn damage
     this.getAllCreatures().forEach(creature => {
       if (creature.selfLifeChangeAmount != 0) {

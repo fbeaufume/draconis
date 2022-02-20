@@ -74,7 +74,16 @@ export class ApplyStatusStatusEffect extends StatusEffect {
  */
 export class ReflectDamageStatusEffect extends StatusEffect {
 
-  // TODO FBE
+  /**
+   * The percentage of the reflected damage. 0.5 means 50%.
+   */
+  percentage: number;
+
+
+  constructor(attackRange: number, percentage: number) {
+    super(attackRange);
+    this.percentage = percentage;
+  }
 }
 
 /**
@@ -159,4 +168,4 @@ export const fireTrapBonus = new StatusType('Fire Trap', true, StatusExpirationT
 export const iceTrapBonus = new StatusType('Ice Trap', true, StatusExpirationType.ORIGIN_CREATURE_TURN_START, false,
   [], [new ApplyStatusStatusEffect(1, attackMalus, 2), new ApplyStatusStatusEffect(1, defenseMalus, 2)]);
 export const bladeShieldBonus = new StatusType('Blade Shield', true, StatusExpirationType.ORIGIN_CREATURE_TURN_START, false,
-  [StatusTypeTagType.REFLECT_DAMAGE]);
+  [], [new ReflectDamageStatusEffect(1, 0.5)]);

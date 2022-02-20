@@ -85,12 +85,6 @@ export enum StatusTypeTagType {
    * The status type has a heal over time part.
    */
   HOT,
-
-  // TODO FBE remove this
-  /**
-   * This status type reflects damages.
-   */
-  REFLECT_DAMAGE
 }
 
 /**

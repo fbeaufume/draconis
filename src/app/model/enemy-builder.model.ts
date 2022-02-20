@@ -50,6 +50,7 @@ export class EnemyBuilder {
           1, '', [], [attackBonus]), 1));
   }
 
+  // TODO FBE the damage reflection passive does not work anymore ?
   static buildBrambleSpirit(): Enemy {
     return new StrategicMeleeEnemy(CreatureType.ELEMENTAL, 'Bramble Spirit', 24, 6,
       new SingleSkillStrategy(new Strike('Scratch')))

@@ -1,5 +1,6 @@
 // Passive skill related classes
 
+// TODO FBE replace the passives by statuses that are hidden and never (or after a very long time) expire
 /**
  * Base class for passives.
  */

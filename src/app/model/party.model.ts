@@ -222,7 +222,7 @@ export class StandardParty extends Party {
             new Damage('Inferno', SkillTargetType.OTHER_ALIVE_ALL, 10, 2, 3,
               'Inflict 30% damage to all enemies.', [0.3]),
             new ApplyImprovement('Blade Shield', SkillTargetType.SAME_ALIVE, 10, 0, 2,
-              'Protect the target with blades that reflects 50% received damage for 3 rounds.', [0.5], [bladeShieldBonus]),
+              'Protect the target with blades that reflects 50% received melee damage for 3 rounds.', [0.5], [bladeShieldBonus]),
             new AlterTime('Alter Time', SkillTargetType.ALIVE, 10, 2, 1,
               'Modify the duration of all statuses of a target by one turn.')
           ],

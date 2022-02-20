@@ -8,19 +8,17 @@ import {
   LogType,
   SkillIconType,
   SkillModifierType,
-  SkillTargetType,
-  StatusTypeTagType
+  SkillTargetType
 } from "./common.model";
 import {
   ApplyDotStatusEffect, ApplyStatusStatusEffect,
   attackBonus,
   attackMalus,
-  burn,
   combo1,
   combo2,
   defend,
   defenseBonus,
-  defenseMalus,
+  defenseMalus, ReflectDamageStatusEffect,
   regen,
   StatusType
 } from "./status-type.model";
@@ -350,27 +348,6 @@ export function computeEffectiveDamage(skill: Skill | null, emitter: Creature, r
     return new LifeLoss(0, LifeChangeEfficiency.DODGE);
   }
 
-  // Apply status effects if needed, for example a creature protected by a fire trap, when melee attacked
-  // will apply a fire damage-over-time to the attacker
-  receiver.statusApplications.forEach(statusApplication => {
-    statusApplication.statusType.statusEffects.forEach(statusEffect => {
-      // Check the status effect range
-      const attackRange = statusEffect.attackRange;
-      if (attackRange == 0 && skill != null && skill.range == 2) {
-        // The status effect requires a melee attack, but it was a distance attack
-        return;
-      }
-
-      if (statusEffect instanceof ApplyDotStatusEffect) {
-        emitter.applyStatus(new StatusApplication(statusEffect.dotType, statusEffect.power, statusApplication.originCreature, statusEffect.duration));
-      }
-
-      if (statusEffect instanceof ApplyStatusStatusEffect) {
-        emitter.applyStatus(new StatusApplication(statusEffect.statusType, 0, statusApplication.originCreature, statusEffect.duration))
-      }
-    })
-  })
-
   // Use the attacker power and skill power
   const baseAmount = emitter.power * skillPower;
 
@@ -400,22 +377,49 @@ export function computeEffectiveDamage(skill: Skill | null, emitter: Creature, r
     afterDefense = afterDefense * (1 + Constants.DEFENSE_BONUS);
   }
 
+  // TODO FBE display each reflected damage independently rather than a single aggregated damage
+  // The total amount of reflected damages
+  let reflectedDamages = 0;
+
   // Apply the specialty
   const afterSpecialtyAttack = emitter.hasSpecialtyOfCreature(receiver) ? afterDefense * (1 + Constants.SPECIALTY_ATTACK_BONUS) : afterDefense;
   const afterSpecialtyDefense = receiver.hasSpecialtyOfCreature(emitter) ? afterSpecialtyAttack * (1 - Constants.SPECIALTY_DEFENSE_BONUS) : afterSpecialtyAttack;
 
-  // Apply reflected damages if needed
+  // Apply status effects if needed, for example a creature protected by a fire trap, when melee attacked
+  // will apply a fire damage-over-time to the attacker
+  receiver.statusApplications.forEach(statusApplication => {
+    statusApplication.statusType.statusEffects.forEach(statusEffect => {
+      // Check the status effect range
+      const attackRange = statusEffect.attackRange;
+      if (attackRange == 0 && skill != null && skill.range == 2) {
+        // The status effect requires a melee attack, but it was a distance attack
+        return;
+      }
+
+      if (statusEffect instanceof ApplyDotStatusEffect) {
+        emitter.applyStatus(new StatusApplication(statusEffect.dotType, statusEffect.power, statusApplication.originCreature, statusEffect.duration));
+      }
+
+      if (statusEffect instanceof ApplyStatusStatusEffect) {
+        emitter.applyStatus(new StatusApplication(statusEffect.statusType, 0, statusApplication.originCreature, statusEffect.duration))
+      }
+
+      if (statusEffect instanceof ReflectDamageStatusEffect) {
+        reflectedDamages += afterSpecialtyDefense * statusEffect.percentage;
+      }
+    })
+  })
+
+  // USe the reflected damages from passives
   if (skill != null && skill.range == 1) {
     let reflectedDamages = 0;
 
     // Use reflected damages from passives
     receiver.getPassivesOfType(DamageReflection).forEach(passive => reflectedDamages += afterSpecialtyDefense * passive.powerLevel);
+  }
 
-    // TODO FBE replace this by the generic status effect management
-    // Use reflected damages from statuses
-    receiver.getStatusApplicationsByTag(StatusTypeTagType.REFLECT_DAMAGE)
-      .forEach(statusApplication => reflectedDamages += afterSpecialtyDefense * statusApplication.power);
-
+  // Apply the reflected damages
+  if (reflectedDamages > 0) {
     emitter.addSelfLifeChangeAmount(-reflectedDamages);
   }
 

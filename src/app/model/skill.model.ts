@@ -410,12 +410,12 @@ export function computeEffectiveDamage(skill: Skill | null, emitter: Creature, r
     })
   })
 
-  // USe the reflected damages from passives
+  // Use the reflected damages from passives
   if (skill != null && skill.range == 1) {
-    let reflectedDamages = 0;
-
     // Use reflected damages from passives
-    receiver.getPassivesOfType(DamageReflection).forEach(passive => reflectedDamages += afterSpecialtyDefense * passive.powerLevel);
+    receiver.getPassivesOfType(DamageReflection).forEach(passive => {
+      reflectedDamages += afterSpecialtyDefense * passive.powerLevel
+    });
   }
 
   // Apply the reflected damages

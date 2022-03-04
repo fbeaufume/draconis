@@ -49,30 +49,6 @@ export abstract class EnemyStrategy {
 }
 
 /**
- * Simple strategy using a single skill.
- */
-export class SingleSkillStrategy extends EnemyStrategy {
-
-  /**
-   * The unique skill used by this strategy.
-   */
-  skill: Skill;
-
-  constructor(skill: Skill) {
-    super();
-    this.skill = skill;
-  }
-
-  chooseSkill(fight: Fight): Skill | null {
-    if (this.skill.isUsableByActiveCreature(fight)) {
-      return this.skill;
-    } else {
-      return null;
-    }
-  }
-}
-
-/**
  * Strategy using several skills. Each skill has a weight.
  * To return an action, a skill is randomly selected using the weight.
  * The higher the weight, the more likely the skill to be selected.

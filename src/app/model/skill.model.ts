@@ -11,14 +11,16 @@ import {
   SkillTargetType
 } from "./common.model";
 import {
-  ApplyDotStatusEffect, ApplyStatusStatusEffect,
+  ApplyDotStatusEffect,
+  ApplyStatusStatusEffect,
   attackBonus,
   attackMalus,
   combo1,
   combo2,
   defend,
   defenseBonus,
-  defenseMalus, ReflectDamageStatusEffect,
+  defenseMalus,
+  ReflectDamageStatusEffect,
   regen,
   StatusType
 } from "./status-type.model";
@@ -30,11 +32,12 @@ import {Enemy} from "./enemy.model";
 import {Constants} from "./constants.model";
 import {Fight} from "./fight.model";
 import {DamageReflection} from "./passive.model";
+import {EnemyStrategy} from "./enemy-strategy.model";
 
 /**
  * A character skill.
  */
-export abstract class Skill {
+export abstract class Skill extends EnemyStrategy {
 
   /**
    * The skill icon type. Only used in the UI and for character skills.
@@ -120,6 +123,7 @@ export abstract class Skill {
     statusDuration: number = Constants.DEFAULT_STATUS_DURATION,
     modifiers: SkillModifierType[] = []
   ) {
+    super();
     this.name = name;
     this.targetType = targetType;
     this.cost = cost;
@@ -131,6 +135,14 @@ export abstract class Skill {
     this.statuses = statuses;
     this.statusDuration = statusDuration;
     this.modifiers = modifiers;
+  }
+
+  chooseSkill(fight: Fight): Skill | null {
+    if (this.isUsableByActiveCreature(fight)) {
+      return this;
+    } else {
+      return null;
+    }
   }
 
   /**
@@ -322,14 +334,6 @@ export abstract class Skill {
   executeOnTargetCreature(activeCreature: Creature, targetCreature: Creature, fight: Fight) {
     // Does nothing by default
   }
-
-  // TODO FBE solve the circular dependency (src\app\model\skill.model.ts -> src\app\model\enemy-strategy.model.ts -> src\app\model\creature.model.ts -> src\app\model\skill.model.ts) and use in enemy-builder.model.ts
-  /**
-   * Return a single skill strategy using this skill.
-   */
-  // toStrategy(): SingleSkillStrategy {
-  //   return new SingleSkillStrategy(this);
-  // }
 }
 
 /**

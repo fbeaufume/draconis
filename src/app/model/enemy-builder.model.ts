@@ -1,11 +1,6 @@
 import {Enemy, OldManEnemy, StrategicEnemy, StrategicMeleeEnemy} from "./enemy.model";
 import {CreatureType, SkillTargetType} from "./common.model";
-import {
-  PrioritySkillStrategy,
-  SequentialSkillStrategy,
-  SingleSkillStrategy,
-  WeightedSkillStrategy
-} from "./enemy-strategy.model";
+import {PrioritySkillStrategy, SequentialSkillStrategy, WeightedSkillStrategy} from "./enemy-strategy.model";
 import {
   ApplyDeterioration,
   ApplyImprovement,
@@ -27,7 +22,7 @@ export class EnemyBuilder {
 
   static buildGenericMonster(life: number, power: number): Enemy {
     return new StrategicMeleeEnemy(CreatureType.OTHER, 'Monster', life, power,
-      new SingleSkillStrategy(new Strike('Attack')));
+      new Strike('Attack'));
   }
 
   // Enemies from the fang forest
@@ -52,7 +47,7 @@ export class EnemyBuilder {
 
   static buildBrambleSpirit(): Enemy {
     return new StrategicMeleeEnemy(CreatureType.ELEMENTAL, 'Bramble Spirit', 24, 6,
-      new SingleSkillStrategy(new Strike('Scratch')))
+      new Strike('Scratch'))
       .withPassive(new DamageReflection(0.6));
   }
 
@@ -62,26 +57,25 @@ export class EnemyBuilder {
 
   static buildTroll(): Enemy {
     return new StrategicMeleeEnemy(CreatureType.HUMANOID, 'Troll', 46, 8,
-      new SingleSkillStrategy(new Strike('Attack')))
+      new Strike('Attack'))
       .withPassive(new Regeneration(1));
   }
 
   static buildGoblinSoldier(): Enemy {
     return new StrategicMeleeEnemy(CreatureType.HUMANOID, 'Goblin Soldier', 22, 6,
-      new SingleSkillStrategy(new Vengeance('Strike', SkillTargetType.OTHER_ALIVE, 0, 1,
-        1, '')));
+      new Vengeance('Strike', SkillTargetType.OTHER_ALIVE, 0, 1, 1, ''));
   }
 
   static buildGoblinHunter(): Enemy {
     return new StrategicEnemy(CreatureType.HUMANOID, 'Goblin Hunter', 24, 7,
-      new SingleSkillStrategy(new Shot('Shot')));
+      new Shot('Shot'));
   }
 
   static buildGoblinShaman(): Enemy {
     return new StrategicEnemy(CreatureType.HUMANOID, 'Goblin Shaman', 26, 7,
       new PrioritySkillStrategy(
         new Heal('Heal', SkillTargetType.SAME_WOUNDED, 5, 0, 1, ''),
-        new SingleSkillStrategy(new Shot('Lightning'))));
+        new Shot('Lightning')));
   }
 
   static buildGreenDragon(): Enemy {
@@ -98,23 +92,21 @@ export class EnemyBuilder {
 
   static buildSkeleton(): Enemy {
     return new StrategicMeleeEnemy(CreatureType.UNDEAD, 'Skeleton', 18, 7,
-      new SingleSkillStrategy(new Strike('Strike')));
+      new Strike('Strike'));
   }
 
   static buildZombie(): Enemy {
     return new StrategicMeleeEnemy(CreatureType.UNDEAD, 'Zombie', 28, 8,
-      new SingleSkillStrategy(new DamageAndDot('Infect',
-        SkillTargetType.OTHER_ALIVE, 20, 1, 1, '', [0.5, 0.4], [poison])));
+      new DamageAndDot('Infect', SkillTargetType.OTHER_ALIVE, 20, 1, 1, '', [0.5, 0.4], [poison]));
   }
 
   static buildVampire(): Enemy {
     return new StrategicMeleeEnemy(CreatureType.UNDEAD, 'Vampire', 34, 8,
-      new SingleSkillStrategy(new Drain('Bite',
-        SkillTargetType.OTHER_ALIVE, 20, 1, 1, '', [0.7, 0.7])));
+      new Drain('Bite', SkillTargetType.OTHER_ALIVE, 20, 1, 1, '', [0.7, 0.7]));
   }
 
   static buildLich(): Enemy {
     return new StrategicMeleeEnemy(CreatureType.UNDEAD, 'Lich', 38, 8,
-      new SingleSkillStrategy(new Shot('Dark Bolt')));
+      new Shot('Dark Bolt'));
   }
 }

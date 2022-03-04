@@ -382,12 +382,12 @@ export class FightService {
   executeSkill(skill: Skill) {
     skill.execute(this.fight);
 
-    // TODO FBE replace this by e generic mechanism in 'computeEffectiveDamage' method in skill.model.ts ?
-    // Use life change after effects such as thorn damage
+    // TODO FBE replace this by a generic mechanism in 'computeEffectiveDamage' method in skill.model.ts ?
+    // Apply life change triggered by effects such as thorn damage
     this.getAllCreatures().forEach(creature => {
       if (creature.selfLifeChangeAmount != 0) {
         const roundedAmount = Math.abs(Math.round(creature.selfLifeChangeAmount));
-        creature.changeLife(new LifeChange(roundedAmount, LifeChangeEfficiency.NORMAL,
+        creature.addLifeChange(new LifeChange(roundedAmount, LifeChangeEfficiency.NORMAL,
           creature.selfLifeChangeAmount > 0 ? LifeChangeType.GAIN : LifeChangeType.LOSS));
       }
     });

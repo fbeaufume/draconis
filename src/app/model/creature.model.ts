@@ -61,7 +61,7 @@ export abstract class Creature {
   lifePercent: number;
 
   /**
-   * Damages or heals received this turn as a result or other creatures actions and displayed in a popup.
+   * Damages or heals received this turn as a result of other creatures actions and displayed in a popup.
    */
   lifeChange: LifeChange | null = null;
 
@@ -196,9 +196,10 @@ export abstract class Creature {
   /**
    * Inflict some damage to the creature.
    */
-  changeLife(lifeChange: LifeChange): LifeChange {
+  addLifeChange(lifeChange: LifeChange): LifeChange {
     this.life += lifeChange.getSignedAmount();
 
+    // TODO FBE make this attribute an array of LifeChange to support multiple life changes each turn
     this.lifeChange = lifeChange;
 
     // Enforce min and max values
@@ -421,7 +422,7 @@ export abstract class Creature {
     });
 
     if (foundSomething) {
-      const lifeChange = this.changeLife(new LifeChange(Math.abs(amount), LifeChangeEfficiency.NORMAL, amount >= 0 ? LifeChangeType.GAIN : LifeChangeType.LOSS));
+      const lifeChange = this.addLifeChange(new LifeChange(Math.abs(amount), LifeChangeEfficiency.NORMAL, amount >= 0 ? LifeChangeType.GAIN : LifeChangeType.LOSS));
 
       // Log the total amount of life lost of gained, but do not display the critical type
       if (amount > 0) {

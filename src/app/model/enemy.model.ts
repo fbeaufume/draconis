@@ -127,7 +127,7 @@ export class OldManEnemy extends Enemy {
 
   mainAttack: Skill = new Strike('Strike');
 
-  changeLife(lifeChange: LifeChange): LifeChange {
+  addLifeChange(lifeChange: LifeChange): LifeChange {
     if (this.phase == 1) {
       // Turn into a druid
       logs.addLog(LogType.OldManTransformation);
@@ -140,7 +140,7 @@ export class OldManEnemy extends Enemy {
       this.updateLifePercent();
     }
 
-    return super.changeLife(lifeChange);
+    return super.addLifeChange(lifeChange);
   }
 
   chooseAction(game: Game): EnemyAction {

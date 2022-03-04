@@ -655,7 +655,7 @@ export class Damage extends Skill {
 
   executeOnTargetCreature(activeCreature: Creature, targetCreature: Creature, fight: Fight) {
     logs.addCreatureLog(LogType.Damage, activeCreature, targetCreature,
-      targetCreature.changeLife(computeEffectiveDamage(this, activeCreature, targetCreature, this.powerLevels[0], false)), null);
+      targetCreature.addLifeChange(computeEffectiveDamage(this, activeCreature, targetCreature, this.powerLevels[0], false)), null);
   }
 
   get iconTypes(): SkillIconType[] {
@@ -763,7 +763,7 @@ export class ComboDamage extends Skill {
       power = this.powerLevels[2];
     }
 
-    const lifeChange = targetCreature.changeLife(computeEffectiveDamage(this, activeCreature, targetCreature, power, false))
+    const lifeChange = targetCreature.addLifeChange(computeEffectiveDamage(this, activeCreature, targetCreature, power, false))
     logs.addCreatureLog(LogType.Damage, activeCreature, targetCreature, lifeChange, null);
 
     // Add the buff if the attack succeeded
@@ -787,10 +787,10 @@ export class Drain extends Skill {
 
     if (lifeChange.isSuccess()) {
       logs.addCreatureLog(LogType.DamageAndHeal, activeCreature, targetCreature,
-        targetCreature.changeLife(lifeChange),
-        activeCreature.changeLife(new LifeChange(Math.round(lifeChange.amount * this.powerLevels[1]), lifeChange.efficiency, LifeChangeType.GAIN)));
+        targetCreature.addLifeChange(lifeChange),
+        activeCreature.addLifeChange(new LifeChange(Math.round(lifeChange.amount * this.powerLevels[1]), lifeChange.efficiency, LifeChangeType.GAIN)));
     } else {
-      logs.addCreatureLog(LogType.Damage, activeCreature, targetCreature, targetCreature.changeLife(lifeChange), null);
+      logs.addCreatureLog(LogType.Damage, activeCreature, targetCreature, targetCreature.addLifeChange(lifeChange), null);
     }
   }
 
@@ -809,10 +809,10 @@ export class Sacrifice extends Skill {
 
     if (lifeChange.isSuccess()) {
       logs.addCreatureLog(LogType.DamageAndDamage, activeCreature, targetCreature,
-        targetCreature.changeLife(computeEffectiveDamage(this, activeCreature, targetCreature, this.powerLevels[0], false)),
-        activeCreature.changeLife(new LifeChange(Math.round(lifeChange.amount * this.powerLevels[1]), lifeChange.efficiency, LifeChangeType.LOSS)));
+        targetCreature.addLifeChange(computeEffectiveDamage(this, activeCreature, targetCreature, this.powerLevels[0], false)),
+        activeCreature.addLifeChange(new LifeChange(Math.round(lifeChange.amount * this.powerLevels[1]), lifeChange.efficiency, LifeChangeType.LOSS)));
     } else {
-      logs.addCreatureLog(LogType.Damage, activeCreature, targetCreature, targetCreature.changeLife(lifeChange), null);
+      logs.addCreatureLog(LogType.Damage, activeCreature, targetCreature, targetCreature.addLifeChange(lifeChange), null);
     }
   }
 
@@ -830,7 +830,7 @@ export class DamageAndDot extends Skill {
     const lifeChange: LifeChange = computeEffectiveDamage(this, activeCreature, targetCreature, this.powerLevels[0], false);
 
     // Direct damage part
-    logs.addCreatureLog(LogType.Damage, activeCreature, targetCreature, targetCreature.changeLife(lifeChange), null);
+    logs.addCreatureLog(LogType.Damage, activeCreature, targetCreature, targetCreature.addLifeChange(lifeChange), null);
 
     // Damage over time part
     if (lifeChange.isSuccess()) {
@@ -852,7 +852,7 @@ export class DamageAndStatus extends Skill {
     const lifeChange: LifeChange = computeEffectiveDamage(this, activeCreature, targetCreature, this.powerLevels[0], false);
 
     // Damage part
-    logs.addCreatureLog(LogType.Damage, activeCreature, targetCreature, targetCreature.changeLife(lifeChange), null);
+    logs.addCreatureLog(LogType.Damage, activeCreature, targetCreature, targetCreature.addLifeChange(lifeChange), null);
 
     // Statuses part
     if (lifeChange.isSuccess()) {
@@ -889,7 +889,7 @@ export class Heal extends Skill {
 
   executeOnTargetCreature(activeCreature: Creature, targetCreature: Creature, fight: Fight) {
     logs.addCreatureLog(LogType.Heal, activeCreature, targetCreature,
-      targetCreature.changeLife(computeEffectiveHeal(activeCreature, targetCreature, this.powerLevels[0])), null);
+      targetCreature.addLifeChange(computeEffectiveHeal(activeCreature, targetCreature, this.powerLevels[0])), null);
   }
 
   get iconTypes(): SkillIconType[] {
@@ -914,10 +914,10 @@ export class DualHeal extends Skill {
 
   executeOnTargetCreature(activeCreature: Creature, targetCreature: Creature, fight: Fight) {
     logs.addCreatureLog(LogType.Heal, activeCreature, targetCreature,
-      targetCreature.changeLife(computeEffectiveHeal(activeCreature, targetCreature, this.powerLevels[0])), null);
+      targetCreature.addLifeChange(computeEffectiveHeal(activeCreature, targetCreature, this.powerLevels[0])), null);
 
     logs.addCreatureLog(LogType.Heal, activeCreature, activeCreature,
-      activeCreature.changeLife(computeEffectiveHeal(activeCreature, activeCreature, this.powerLevels[1])), null);
+      activeCreature.addLifeChange(computeEffectiveHeal(activeCreature, activeCreature, this.powerLevels[1])), null);
   }
 
   get iconTypes(): SkillIconType[] {
@@ -945,7 +945,7 @@ export class Regenerate extends Heal {
 export class Revive extends Skill {
 
   executeOnTargetCreature(activeCreature: Creature, targetCreature: Creature, fight: Fight) {
-    targetCreature.changeLife(new LifeGain(targetCreature.lifeMax / 2));
+    targetCreature.addLifeChange(new LifeGain(targetCreature.lifeMax / 2));
     logs.addCreatureLog(LogType.Revive, activeCreature, targetCreature, null, null);
   }
 

@@ -1,15 +1,17 @@
 <p class="text-yellow-200">{{ enemy.name }}</p>
 <div class="flex flex-col items-center">
   <p class="pr-2 text-red-500">HP <span class="font-bold">{{ enemy.life}}/{{ enemy.lifeMax }}</span></p>
-  <app-life-change-popup *ngFor="let lifeChange of enemy.lifeChanges"
-                         class="absolute z-10 flex justify-center space-x-2 appear"
-                         [lifeChange]="lifeChange">
-  </app-life-change-popup>
+  <div class="absolute z-10 flex justify-center space-x-2">
+    <app-life-change-popup *ngFor="let lifeChange of enemy.lifeChanges" class="appear" [lifeChange]="lifeChange">
+    </app-life-change-popup>
+  </div>
   <div class="w-32 bg-red-900">
     <div class="h-1 bg-red-500" [style]="'width: ' + enemy.lifePercent + '%'"></div>
   </div>
 </div>
 <div class="flex justify-center space-x-1 pt-3">
-  <app-status *ngFor="let statusApplication of enemy.getPositiveStatuses()" [statusApplication]="statusApplication"></app-status>
-  <app-status *ngFor="let statusApplication of enemy.getNegativeStatuses()" [statusApplication]="statusApplication"></app-status>
+  <app-status *ngFor="let statusApplication of enemy.getPositiveStatuses()"
+              [statusApplication]="statusApplication"></app-status>
+  <app-status *ngFor="let statusApplication of enemy.getNegativeStatuses()"
+              [statusApplication]="statusApplication"></app-status>
 </div>

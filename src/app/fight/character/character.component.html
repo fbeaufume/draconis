@@ -12,10 +12,10 @@
     <div class="w-28 bg-green-900">
       <div class="h-1 bg-green-500" [style]="'width: ' + character.lifePercent + '%'"></div>
     </div>
-    <app-life-change-popup *ngFor="let lifeChange of character.lifeChanges"
-                           class="absolute z-10 flex justify-center space-x-2 appear"
-                           [lifeChange]="lifeChange">
-    </app-life-change-popup>
+    <div class="absolute z-10 flex justify-center space-x-2">
+      <app-life-change-popup *ngFor="let lifeChange of character.lifeChanges" class="appear" [lifeChange]="lifeChange">
+      </app-life-change-popup>
+    </div>
   </div>
   <div *ngIf="!character.useMana" class="flex flex-col items-center">
     <p class="pl-2" [ngClass]="character.isAlive() ? 'text-purple-400' : 'text-purple-900'">
@@ -37,6 +37,8 @@
   </div>
 </div>
 <div class="flex justify-center space-x-1 pt-4">
-  <app-status *ngFor="let statusApplication of character.getPositiveStatuses()" [statusApplication]="statusApplication"></app-status>
-  <app-status *ngFor="let statusApplication of character.getNegativeStatuses()" [statusApplication]="statusApplication"></app-status>
+  <app-status *ngFor="let statusApplication of character.getPositiveStatuses()"
+              [statusApplication]="statusApplication"></app-status>
+  <app-status *ngFor="let statusApplication of character.getNegativeStatuses()"
+              [statusApplication]="statusApplication"></app-status>
 </div>

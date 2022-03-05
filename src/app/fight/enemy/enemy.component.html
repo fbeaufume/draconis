@@ -1,9 +1,9 @@
 <p class="text-yellow-200">{{ enemy.name }}</p>
 <div class="flex flex-col items-center">
   <p class="pr-2 text-red-500">HP <span class="font-bold">{{ enemy.life}}/{{ enemy.lifeMax }}</span></p>
-  <app-life-change-popup *ngIf="enemy.lifeChange != null"
+  <app-life-change-popup *ngFor="let lifeChange of enemy.lifeChanges"
                          class="absolute z-10 flex justify-center space-x-2 appear"
-                         [lifeChange]="enemy.lifeChange">
+                         [lifeChange]="lifeChange">
   </app-life-change-popup>
   <div class="w-32 bg-red-900">
     <div class="h-1 bg-red-500" [style]="'width: ' + enemy.lifePercent + '%'"></div>

@@ -61,9 +61,9 @@ export abstract class Creature {
   lifePercent: number;
 
   /**
-   * Damages or heals received this turn as a result of other creatures actions and displayed in a popup.
+   * Damages and heals received this turn and displayed in a popup.
    */
-  lifeChange: LifeChange | null = null;
+  lifeChanges: LifeChange[] = [];
 
   /**
    * Damages or heals received this turn as a result of the action of this creature,
@@ -106,7 +106,7 @@ export abstract class Creature {
   /**
    * Passive skills of the creature.
    */
-  passives: Passive[];
+  passives: Passive[] = [];
 
   /**
    * The distance between the enemy and the party, i.e. 1 means the opposition front row, 2 means the middle row, 3 the back row
@@ -156,7 +156,6 @@ export abstract class Creature {
     this.power = Creature.ensurePositiveAndRounded(power);
     this.skills = skills;
     this.specialties = specialties;
-    this.passives = [];
     this.updateLifePercent();
   }
 
@@ -199,8 +198,7 @@ export abstract class Creature {
   addLifeChange(lifeChange: LifeChange): LifeChange {
     this.life += lifeChange.getSignedAmount();
 
-    // TODO FBE make this attribute an array of LifeChange to support multiple life changes each turn
-    this.lifeChange = lifeChange;
+    this.lifeChanges.push(lifeChange);
 
     // Enforce min and max values
     this.life = this.checkMinAndMax(this.life, this.lifeMax);
@@ -220,7 +218,7 @@ export abstract class Creature {
   }
 
   clearLifeChange() {
-    this.lifeChange = null;
+    this.lifeChanges = [];
     this.selfLifeChangeAmount = 0;
   }
 

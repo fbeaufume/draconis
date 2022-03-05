@@ -357,6 +357,7 @@ export function computeEffectiveDamage(skill: Skill | null, emitter: Creature, r
 
   // Apply the critical bonus
   const isCritical = random >= receiver.dodgeChance && random < receiver.dodgeChance + emitter.criticalChance;
+  const efficiency: LifeChangeEfficiency = isCritical ? LifeChangeEfficiency.CRITICAL : LifeChangeEfficiency.NORMAL;
   const afterCritical = isCritical ? baseAmount * emitter.criticalBonus : baseAmount;
 
   // Apply the defend bonus
@@ -381,16 +382,12 @@ export function computeEffectiveDamage(skill: Skill | null, emitter: Creature, r
     afterDefense = afterDefense * (1 + Constants.DEFENSE_BONUS);
   }
 
-  // TODO FBE display each reflected damage independently rather than a single aggregated damage
-  // The total amount of reflected damages
-  let reflectedDamages = 0;
-
   // Apply the specialty
   const afterSpecialtyAttack = emitter.hasSpecialtyOfCreature(receiver) ? afterDefense * (1 + Constants.SPECIALTY_ATTACK_BONUS) : afterDefense;
   const afterSpecialtyDefense = receiver.hasSpecialtyOfCreature(emitter) ? afterSpecialtyAttack * (1 - Constants.SPECIALTY_DEFENSE_BONUS) : afterSpecialtyAttack;
 
-  // Apply status effects if needed, for example a creature protected by a fire trap, when melee attacked
-  // will apply a fire damage-over-time to the attacker
+  // Apply status effects if needed, for example a creature protected by a fire trap
+  // will apply a fire damage-over-time back to the attacker when melee attacked
   receiver.statusApplications.forEach(statusApplication => {
     statusApplication.statusType.statusEffects.forEach(statusEffect => {
       // Check the status effect range
@@ -409,7 +406,7 @@ export function computeEffectiveDamage(skill: Skill | null, emitter: Creature, r
       }
 
       if (statusEffect instanceof ReflectDamageStatusEffect) {
-        reflectedDamages += afterSpecialtyDefense * statusEffect.percentage;
+        emitter.addLifeChange(new LifeLoss(round(afterSpecialtyDefense * statusEffect.percentage), efficiency));
       }
     })
   })
@@ -418,13 +415,8 @@ export function computeEffectiveDamage(skill: Skill | null, emitter: Creature, r
   if (skill != null && skill.range == 1) {
     // Use reflected damages from passives
     receiver.getPassivesOfType(DamageReflection).forEach(passive => {
-      reflectedDamages += afterSpecialtyDefense * passive.powerLevel
+      emitter.addLifeChange(new LifeLoss(round(afterSpecialtyDefense * passive.powerLevel), efficiency));
     });
-  }
-
-  // Apply the reflected damages
-  if (reflectedDamages > 0) {
-    emitter.addSelfLifeChangeAmount(-reflectedDamages);
   }
 
   return new LifeLoss(randomizeAndRound(afterSpecialtyDefense), isCritical ? LifeChangeEfficiency.CRITICAL : LifeChangeEfficiency.NORMAL);
@@ -452,7 +444,14 @@ export function computeEffectiveHeal(emitter: Creature, receiver: Creature, skil
  */
 function randomizeAndRound(amount: number): number {
   const randomizedDamage = settings.useRandom ? (Constants.RANDOMIZE_BASE + Math.random() * Constants.RANDOMIZE_RANGE) * amount : amount;
-  return Math.round(randomizedDamage);
+  return round(randomizedDamage);
+}
+
+/**
+ * Return a rounded amount.
+ */
+function round(amount: number): number {
+  return Math.round(amount);
 }
 
 /**

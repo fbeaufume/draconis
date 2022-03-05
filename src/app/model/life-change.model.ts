@@ -41,6 +41,7 @@ export class LifeChange {
     }
 }
 
+// TODO FBE are the next two classes really needed ?
 /**
  * A life gain due to a heal.
  */

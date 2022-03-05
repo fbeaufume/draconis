@@ -71,6 +71,7 @@ export abstract class Creature {
    * Is converted into lifeChange at the end of the creature turn.
    * Note that contrary to other life or energy amount, this amount is not round.
    */
+  // TODO FBE remove this and use "lifeChanges" instead ?
   selfLifeChangeAmount: number = 0;
 
   /**

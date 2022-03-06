@@ -4,20 +4,12 @@ import {Creature, EnemyAction} from '../model/creature.model';
 import {Skill} from '../model/skill.model';
 import {Log, logs} from '../model/log.model';
 import {Constants} from '../model/constants.model';
-import {
-  GameState,
-  LifeChangeEfficiency,
-  LifeChangeType,
-  LogType,
-  SkillTargetType,
-  StatusExpirationType
-} from "../model/common.model";
+import {GameState, LogType, SkillTargetType, StatusExpirationType} from "../model/common.model";
 import {Character} from "../model/character.model";
 import {Party} from "../model/party.model";
 import {settings} from "../model/settings.model";
 import {Enemy} from "../model/enemy.model";
 import {Fight} from "../model/fight.model";
-import {LifeChange} from "../model/life-change.model";
 
 @Injectable({
   providedIn: 'root'
@@ -381,16 +373,6 @@ export class FightService {
    */
   executeSkill(skill: Skill) {
     skill.execute(this.fight);
-
-    // TODO FBE replace this by a generic mechanism in 'computeEffectiveDamage' method in skill.model.ts ?
-    // Apply life change triggered by effects such as thorn damage
-    this.getAllCreatures().forEach(creature => {
-      if (creature.selfLifeChangeAmount != 0) {
-        const roundedAmount = Math.abs(Math.round(creature.selfLifeChangeAmount));
-        creature.addLifeChange(new LifeChange(roundedAmount, LifeChangeEfficiency.NORMAL,
-          creature.selfLifeChangeAmount > 0 ? LifeChangeType.GAIN : LifeChangeType.LOSS));
-      }
-    });
   }
 
   /**

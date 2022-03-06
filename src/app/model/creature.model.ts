@@ -66,15 +66,6 @@ export abstract class Creature {
   lifeChanges: LifeChange[] = [];
 
   /**
-   * Damages or heals received this turn as a result of the action of this creature,
-   * e.g. damage received while attacking creatures with a thorn passive.
-   * Is converted into lifeChange at the end of the creature turn.
-   * Note that contrary to other life or energy amount, this amount is not round.
-   */
-  // TODO FBE remove this and use "lifeChanges" instead ?
-  selfLifeChangeAmount: number = 0;
-
-  /**
    * Maximum mana or tech points (depends on the character class) (currently only used by characters).
    */
   energyMax: number;
@@ -220,11 +211,6 @@ export abstract class Creature {
 
   clearLifeChange() {
     this.lifeChanges = [];
-    this.selfLifeChangeAmount = 0;
-  }
-
-  addSelfLifeChangeAmount(amount: number) {
-    this.selfLifeChangeAmount += amount;
   }
 
   /**

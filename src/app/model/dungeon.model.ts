@@ -1,6 +1,5 @@
 import {Opposition} from "./opposition.model";
 import {EnemyBuilder} from "./enemy-builder.model";
-import {DamageReflection} from "./passive.model";
 
 /**
  * Dungeon base class. A dungeon is where the fights happen. It is a succession of encounters.
@@ -28,9 +27,9 @@ export class TestDungeon extends Dungeon {
   constructor() {
     super('Test Dungeon', [
       new Opposition('some monsters', [
-        EnemyBuilder.buildGenericMonster(30, 5).withPassive(new DamageReflection(0.6)).withPassive(new DamageReflection(0.6)),
-        EnemyBuilder.buildGenericMonster(30, 5).withPassive(new DamageReflection(0.6)).withPassive(new DamageReflection(0.6)),
-        EnemyBuilder.buildGenericMonster(30, 5).withPassive(new DamageReflection(0.6)).withPassive(new DamageReflection(0.6)),
+        EnemyBuilder.buildGenericMonster(30, 5),
+        EnemyBuilder.buildGenericMonster(30, 5),
+        EnemyBuilder.buildGenericMonster(30, 5),
         // EnemyBuilder.buildBrambleSpirit(),
         // EnemyBuilder.buildBrambleSpirit(),
         // EnemyBuilder.buildBrambleSpirit(),

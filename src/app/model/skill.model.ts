@@ -2,14 +2,7 @@
 
 import {Creature} from './creature.model';
 import {logs} from './log.model';
-import {
-  LifeChangeEfficiency,
-  LifeChangeType,
-  LogType,
-  SkillIconType,
-  SkillModifierType,
-  SkillTargetType
-} from "./common.model";
+import {LifeChangeEfficiency, LogType, SkillIconType, SkillModifierType, SkillTargetType} from "./common.model";
 import {
   ApplyDotStatusEffect,
   ApplyStatusStatusEffect,
@@ -406,7 +399,7 @@ export function computeEffectiveDamage(skill: Skill | null, emitter: Creature, r
       }
 
       if (statusEffect instanceof ReflectDamageStatusEffect) {
-        emitter.addLifeChange(new LifeLoss(round(afterSpecialtyDefense * statusEffect.percentage), efficiency));
+        emitter.addLifeChange(new LifeLoss(afterSpecialtyDefense * statusEffect.percentage, efficiency));
       }
     })
   })
@@ -415,11 +408,11 @@ export function computeEffectiveDamage(skill: Skill | null, emitter: Creature, r
   if (skill != null && skill.range == 1) {
     // Use reflected damages from passives
     receiver.getPassivesOfType(DamageReflection).forEach(passive => {
-      emitter.addLifeChange(new LifeLoss(round(afterSpecialtyDefense * passive.powerLevel), efficiency));
+      emitter.addLifeChange(new LifeLoss(afterSpecialtyDefense * passive.powerLevel, efficiency));
     });
   }
 
-  return new LifeLoss(randomizeAndRound(afterSpecialtyDefense), isCritical ? LifeChangeEfficiency.CRITICAL : LifeChangeEfficiency.NORMAL);
+  return new LifeLoss(randomize(afterSpecialtyDefense), isCritical ? LifeChangeEfficiency.CRITICAL : LifeChangeEfficiency.NORMAL);
 }
 
 /**
@@ -436,22 +429,14 @@ export function computeEffectiveHeal(emitter: Creature, receiver: Creature, skil
   const isCritical = random < emitter.criticalChance;
   const afterCritical = isCritical ? baseAmount * emitter.criticalBonus : baseAmount;
 
-  return new LifeGain(randomizeAndRound(afterCritical), isCritical ? LifeChangeEfficiency.CRITICAL : LifeChangeEfficiency.NORMAL);
+  return new LifeGain(randomize(afterCritical), isCritical ? LifeChangeEfficiency.CRITICAL : LifeChangeEfficiency.NORMAL);
 }
 
 /**
  * Modify a number by adding or removing a small random value, then round the result
  */
-function randomizeAndRound(amount: number): number {
-  const randomizedDamage = settings.useRandom ? (Constants.RANDOMIZE_BASE + Math.random() * Constants.RANDOMIZE_RANGE) * amount : amount;
-  return round(randomizedDamage);
-}
-
-/**
- * Return a rounded amount.
- */
-function round(amount: number): number {
-  return Math.round(amount);
+function randomize(amount: number): number {
+  return settings.useRandom ? (Constants.RANDOMIZE_BASE + Math.random() * Constants.RANDOMIZE_RANGE) * amount : amount;
 }
 
 /**
@@ -787,7 +772,7 @@ export class Drain extends Skill {
     if (lifeChange.isSuccess()) {
       logs.addCreatureLog(LogType.DamageAndHeal, activeCreature, targetCreature,
         targetCreature.addLifeChange(lifeChange),
-        activeCreature.addLifeChange(new LifeChange(Math.round(lifeChange.amount * this.powerLevels[1]), lifeChange.efficiency, LifeChangeType.GAIN)));
+        activeCreature.addLifeChange(new LifeGain(lifeChange.amount * this.powerLevels[1], lifeChange.efficiency)));
     } else {
       logs.addCreatureLog(LogType.Damage, activeCreature, targetCreature, targetCreature.addLifeChange(lifeChange), null);
     }
@@ -799,7 +784,7 @@ export class Drain extends Skill {
 }
 
 /**
- * A skill that damages the target creatures and the origin creature.
+ * A skill that damages the target creatures but also the origin creature.
  */
 export class Sacrifice extends Skill {
 
@@ -809,7 +794,7 @@ export class Sacrifice extends Skill {
     if (lifeChange.isSuccess()) {
       logs.addCreatureLog(LogType.DamageAndDamage, activeCreature, targetCreature,
         targetCreature.addLifeChange(computeEffectiveDamage(this, activeCreature, targetCreature, this.powerLevels[0], false)),
-        activeCreature.addLifeChange(new LifeChange(Math.round(lifeChange.amount * this.powerLevels[1]), lifeChange.efficiency, LifeChangeType.LOSS)));
+        activeCreature.addLifeChange(new LifeLoss(lifeChange.amount * this.powerLevels[1], lifeChange.efficiency)));
     } else {
       logs.addCreatureLog(LogType.Damage, activeCreature, targetCreature, targetCreature.addLifeChange(lifeChange), null);
     }

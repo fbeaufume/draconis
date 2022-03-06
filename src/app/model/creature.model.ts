@@ -381,6 +381,7 @@ export abstract class Creature {
   applyDotsAndHots() {
     let foundSomething: boolean = false;
 
+    // TODO FBE use a life change for each DOT and HOT rather than a single life change using the total amount
     // The total amount of damage and heal
     let amount: number = 0;
 
@@ -407,7 +408,7 @@ export abstract class Creature {
     });
 
     if (foundSomething) {
-      const lifeChange = this.addLifeChange(new LifeChange(Math.abs(amount), LifeChangeEfficiency.NORMAL, amount >= 0 ? LifeChangeType.GAIN : LifeChangeType.LOSS));
+      const lifeChange = this.addLifeChange(new LifeChange(amount >= 0 ? LifeChangeType.GAIN : LifeChangeType.LOSS, Math.abs(amount), LifeChangeEfficiency.NORMAL));
 
       // Log the total amount of life lost of gained, but do not display the critical type
       if (amount > 0) {

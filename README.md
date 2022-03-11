@@ -63,7 +63,7 @@ Features of the combat system:
 
 Not yet implemented:
 - [ ] Advanced damage computation using armor, elemental resistances, etc
-- [ ] Crows controls (e.g. stun, silence, etc)
+- [ ] Crowd controls (e.g. stun, silence, etc)
 - [ ] Multiple element damages, e.g. physical damage plus poison damage
 - [ ] Taunts
 - [ ] Interceptions, e.g. intercept the next attack that would kill an allied creature

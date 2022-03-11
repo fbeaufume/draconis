@@ -6,8 +6,6 @@ import {
   CreatureClass,
   CreatureType,
   FactionType,
-  LifeChangeEfficiency,
-  LifeChangeType,
   LogType,
   StatusExpirationType,
   StatusTypeTagType
@@ -379,44 +377,30 @@ export abstract class Creature {
    * Apply all DOT and HOT to the creature and log a single message.
    */
   applyDotsAndHots() {
-    let foundSomething: boolean = false;
-
-    // TODO FBE use a life change for each DOT and HOT rather than a single life change using the total amount
-    // The total amount of damage and heal
-    let amount: number = 0;
-
     // Use the DOT statuses
     this.getStatusApplicationsByTag(StatusTypeTagType.DOT).forEach(statusApplication => {
       if (statusApplication.originCreature != null) {
-        foundSomething = true;
-        amount -= computeEffectiveDamage(null, statusApplication.originCreature, this, statusApplication.power, true).amount;
+        const lifeChange = computeEffectiveDamage(null, statusApplication.originCreature, this, statusApplication.power, true);
+        this.addLifeChange(lifeChange);
+        logs.addCreatureLog(LogType.Dot, this, null, lifeChange, null);
       }
     })
 
     // Use the HOT statuses
     this.getStatusApplicationsByTag(StatusTypeTagType.HOT).forEach(statusApplication => {
       if (statusApplication.originCreature != null) {
-        foundSomething = true;
-        amount += computeEffectiveHeal(statusApplication.originCreature, this, statusApplication.power).amount;
+        const lifeChange = computeEffectiveHeal(statusApplication.originCreature, this, statusApplication.power);
+        this.addLifeChange(lifeChange);
+        logs.addCreatureLog(LogType.Hot, this, null, lifeChange, null);
       }
     })
 
     // Use the regeneration passives
     this.getPassivesOfType(Regeneration).forEach(passive => {
-      foundSomething = true;
-      amount += computeEffectiveHeal(this, this, passive.powerLevel).amount;
+      const lifeChange = computeEffectiveHeal(this, this, passive.powerLevel);
+      this.addLifeChange(lifeChange);
+      logs.addCreatureLog(LogType.Hot, this, null, lifeChange, null);
     });
-
-    if (foundSomething) {
-      const lifeChange = this.addLifeChange(new LifeChange(amount >= 0 ? LifeChangeType.GAIN : LifeChangeType.LOSS, Math.abs(amount), LifeChangeEfficiency.NORMAL));
-
-      // Log the total amount of life lost of gained, but do not display the critical type
-      if (amount > 0) {
-        logs.addCreatureLog(LogType.Hot, this, null, lifeChange, null);
-      } else if (amount < 0) {
-        logs.addCreatureLog(LogType.Dot, this, null, lifeChange, null);
-      }
-    }
   }
 
   clearStatusApplications() {

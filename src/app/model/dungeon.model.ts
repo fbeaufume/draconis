@@ -27,9 +27,9 @@ export class TestDungeon extends Dungeon {
   constructor() {
     super('Test Dungeon', [
       new Opposition('some monsters', [
-        EnemyBuilder.buildGenericMonster(30, 5),
-        EnemyBuilder.buildGenericMonster(30, 5),
-        EnemyBuilder.buildGenericMonster(30, 5),
+        EnemyBuilder.buildGenericMonster(1, 50),
+        EnemyBuilder.buildGenericMonster(1, 50),
+        // EnemyBuilder.buildGenericMonster(30, 5),
         // EnemyBuilder.buildBrambleSpirit(),
         // EnemyBuilder.buildBrambleSpirit(),
         // EnemyBuilder.buildBrambleSpirit(),
@@ -47,17 +47,17 @@ export class TestDungeon extends Dungeon {
         // EnemyBuilder.buildGenericMonster(50, 8),
         // EnemyBuilder.buildGenericMonster(50, 8),
       ]),
-      new Opposition('some monsters', [
-        EnemyBuilder.buildGoblinSoldier(),
-        EnemyBuilder.buildGoblinSoldier(),
-      ], [
-        EnemyBuilder.buildGoblinShaman(),
-      ]),
-      new Opposition('some monsters', [
-        EnemyBuilder.buildGenericMonster(1, 1),
-        // EnemyBuilder.buildGenericMonster(1, 8),
-        // EnemyBuilder.buildGenericMonster(1, 8),
-      ], []),
+      // new Opposition('some monsters', [
+      //   EnemyBuilder.buildGoblinSoldier(),
+      //   EnemyBuilder.buildGoblinSoldier(),
+      // ], [
+      //   EnemyBuilder.buildGoblinShaman(),
+      // ]),
+      // new Opposition('some monsters', [
+      //   EnemyBuilder.buildGenericMonster(1, 1),
+      //   EnemyBuilder.buildGenericMonster(1, 8),
+      //   EnemyBuilder.buildGenericMonster(1, 8),
+      // ], []),
     ]);
   }
 }

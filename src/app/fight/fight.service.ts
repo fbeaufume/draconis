@@ -18,10 +18,6 @@ export class FightService {
 
   game: Game;
 
-  sandboxStep: number = 0;
-
-  sandboxCounter: number = 0;
-
   constructor() {
     this.restart();
   }
@@ -67,12 +63,12 @@ export class FightService {
   /**
    * Start the fight, i.e. execute the first turn.
    */
-  startFight() {
+  async startFight() {
     this.game.state = GameState.END_OF_TURN;
 
     logs.addNumberLog(LogType.StartRound, this.fight.round);
 
-    this.processTurn();
+    await this.processTurn();
   }
 
   /**
@@ -88,11 +84,11 @@ export class FightService {
   /**
    * Called after a click on the main action button to proceed to the next fight state.
    */
-  proceed() {
+  async proceed() {
     if (this.game.state == GameState.START_NEXT_ENCOUNTER) {
       this.startNextEncounter();
     } else if (this.game.state == GameState.START_FIGHT) {
-      this.startFight();
+      await this.startFight();
     } else if (this.game.state == GameState.DUNGEON_END) {
       this.restart();
     }
@@ -118,7 +114,7 @@ export class FightService {
   /**
    * Process a character or enemy turn.
    */
-  processTurn() {
+  async processTurn() {
     const creature = this.fight.turnOrder.currentOrder[0];
     this.fight.activeCreature = creature;
 
@@ -132,7 +128,7 @@ export class FightService {
 
     // Skip dead characters
     if (creature.isDead()) {
-      this.processNextTurn(false);
+      await this.processNextTurn(false);
     }
 
     if (creature.isCharacter()) {
@@ -140,11 +136,11 @@ export class FightService {
     } else if (creature.isEnemy()) {
       this.state = GameState.ENEMY_TURN;
 
-      this.pauseAndExecute(() => {
-        this.processEnemyTurnStep1(creature as Enemy);
-      });
+      await this.pause();
+
+      await this.processEnemyTurnStep1(creature as Enemy);
     } else if (creature.isEndOfRound()) {
-      this.processEndOfRound();
+      await this.processEndOfRound();
     } else {
       console.log('Invalid creature type', creature);
     }
@@ -172,7 +168,7 @@ export class FightService {
    * Select a character skill.
    * Return true if the selection is valid, false otherwise.
    */
-  selectSkill(skill: Skill) {
+  async selectSkill(skill: Skill) {
     // Check that the player can change his mind and select a different skill
     if (!Constants.CAN_SELECT_SKILL_STATES.includes(this.state)) {
       return;
@@ -207,7 +203,7 @@ export class FightService {
 
         this.state = GameState.EXECUTING_SKILL;
 
-        this.processNextTurn(true);
+        await this.processNextTurn(true);
         break;
       case SkillTargetType.OTHER_ALIVE:
       case SkillTargetType.OTHER_ALIVE_DOUBLE:
@@ -244,7 +240,7 @@ export class FightService {
   /**
    * Select an enemy target for a skill.
    */
-  selectEnemy(enemy: Enemy) {
+  async selectEnemy(enemy: Enemy) {
     if (this.fight.selectedSkill == null || !this.fight.selectedSkill.isUsableOn(enemy, this.fight)) {
       return;
     }
@@ -258,16 +254,16 @@ export class FightService {
 
     // If there are dead enemies, remove them after a pause
     if (this.fight.opposition.hasDeadEnemies()) {
-      this.pauseAndExecute(() => {
-        this.processDeadEnemies();
+      await this.pause();
 
-        // Execute the next turn
-        if (!this.processEndOfFight()) {
-          this.processNextTurn(true);
-        }
-      });
+      this.processDeadEnemies();
+
+      // Execute the next turn
+      if (!await this.processEndOfFight()) {
+        await this.processNextTurn(true);
+      }
     } else {
-      this.processNextTurn(true);
+      await this.processNextTurn(true);
     }
   }
 
@@ -289,7 +285,7 @@ export class FightService {
   /**
    * Select a character target for a skill.
    */
-  selectCharacter(character: Character) {
+  async selectCharacter(character: Character) {
     if (this.fight.selectedSkill == null || !this.fight.selectedSkill.isUsableOn(character, this.fight)) {
       return;
     }
@@ -302,31 +298,31 @@ export class FightService {
 
     this.state = GameState.EXECUTING_SKILL;
 
-    this.processNextTurn(true);
+    await this.processNextTurn(true);
   }
 
   /**
    * Select a skill or enemy or character from a zero based index.
    */
-  selectFromKey(index: number) {
+  async selectFromKey(index: number) {
     switch (this.state) {
       case GameState.SELECT_SKILL:
         if (this.fight.activeCreature != null && this.fight.activeCreature.skills.length > index) {
-          this.selectSkill(this.fight.activeCreature.skills[index]);
+          await this.selectSkill(this.fight.activeCreature.skills[index]);
         }
         break;
       case GameState.SELECT_CHARACTER:
         if (index < Constants.PARTY_ROW_SIZE) {
-          this.selectCharacter(this.party.rows[1].characters[index]);
+          await this.selectCharacter(this.party.rows[1].characters[index]);
         } else if (index < Constants.PARTY_SIZE) {
-          this.selectCharacter(this.party.rows[0].characters[index - Constants.PARTY_ROW_SIZE]);
+          await this.selectCharacter(this.party.rows[0].characters[index - Constants.PARTY_ROW_SIZE]);
         }
         break;
       case GameState.SELECT_ENEMY:
         for (let i = 0; i < this.fight.opposition.rows.length; i++) {
           const row = this.fight.opposition.rows[i];
           if (index < row.enemies.length) {
-            this.selectEnemy(row.enemies[index]);
+            await this.selectEnemy(row.enemies[index]);
             return;
           }
           index -= row.enemies.length;
@@ -338,51 +334,54 @@ export class FightService {
   /**
    * Process the first step of an enemy turn: highlight the selected targets if any.
    */
-  processEnemyTurnStep1(enemy: Enemy) {
+  async processEnemyTurnStep1(enemy: Enemy) {
     // Execute the enemy strategy
     const action = enemy.handleTurn(this.game);
 
     if (action.skill.targetType == SkillTargetType.NONE) {
       // Actions without target are executed immediately
 
-      this.processEnemyTurnStep2(action);
+      await this.processEnemyTurnStep2(action);
     } else {
       // Actions with a target are executed after a pause
 
       // Select the targets
       this.fight.targetCreatures = action.targetCreatures;
 
+      // TODO FBE do not pause if the selected target is the current creature
+      await this.pause();
+
       // Process the next step
-      this.pauseAndExecute(() => {
-        this.processEnemyTurnStep2(action);
-      });
+      await this.processEnemyTurnStep2(action);
     }
   }
 
   /**
    * Process the second step of an enemy turn: execute the skill and log the result.
    */
-  processEnemyTurnStep2(action: EnemyAction) {
+  async processEnemyTurnStep2(action: EnemyAction) {
     // Execute the skill
     this.executeSkill(action.skill);
 
     // Execute the next turn
-    if (!this.processEndOfFight()) {
-      this.processNextTurn(true);
+    if (!await this.processEndOfFight()) {
+      await this.processNextTurn(true);
     }
   }
 
   /**
-   * Execute a skill and its after effects such as thorn damage, etc.
+   * Execute a skill.
    */
   executeSkill(skill: Skill) {
     skill.execute(this.fight);
+
+    // TODO FBE process here (instead of in 'processEndOfRound') the DOT and HOT caused by this creature to all creatures
   }
 
   /**
    * Process the end of round, e.g. apply DOTs or HOTs.
    */
-  processEndOfRound() {
+  async processEndOfRound() {
     // Execute and update end of round statuses
     this.getAllCreatures().forEach(creature => {
       // Apply the life changes from DOTs and HOTs
@@ -394,24 +393,24 @@ export class FightService {
 
     // If there are dead enemies, remove them after a pause
     if (this.fight.opposition.hasDeadEnemies()) {
-      this.pauseAndExecute(() => {
-        this.processDeadEnemies();
+      await this.pause();
 
-        // Start the next round
-        if (!this.processEndOfFight()) {
-          this.fight.round++;
-          logs.addNumberLog(LogType.StartRound, this.fight.round);
+      this.processDeadEnemies();
 
-          this.processNextTurn(true);
-        }
-      });
-    } else {
       // Start the next round
-      if (!this.processEndOfFight()) {
+      if (!await this.processEndOfFight()) {
         this.fight.round++;
         logs.addNumberLog(LogType.StartRound, this.fight.round);
 
-        this.processNextTurn(true);
+        await this.processNextTurn(true);
+      }
+    } else {
+      // Start the next round
+      if (!await this.processEndOfFight()) {
+        this.fight.round++;
+        logs.addNumberLog(LogType.StartRound, this.fight.round);
+
+        await this.processNextTurn(true);
       }
     }
   }
@@ -419,27 +418,21 @@ export class FightService {
   /**
    * Process the next turn immediately or after some pauses.
    */
-  processNextTurn(pause: boolean) {
+  async processNextTurn(pause: boolean) {
     // Decrease some status durations
     this.getAllCreatures().forEach(creature => {
       creature.decreaseStatusesDuration(StatusExpirationType.ORIGIN_CREATURE_TURN_END, this.fight.activeCreature);
     });
 
-    if (pause) {
-      // Give some time to the player to see the skill result
-      this.pauseAndExecute(() => {
-        this.endOfTurnCleanup();
+    // Give some time to the player to see the skill result
+    await this.pauseIf(pause);
 
-        this.pauseAndExecute(() => {
-          this.fight.turnOrder.nextCreature();
-          this.processTurn();
-        });
-      });
-    } else {
-      this.endOfTurnCleanup();
-      this.fight.turnOrder.nextCreature();
-      this.processTurn();
-    }
+    this.endOfTurnCleanup();
+
+    await this.pause();
+
+    this.fight.turnOrder.nextCreature();
+    await this.processTurn();
   }
 
   /**
@@ -503,15 +496,15 @@ export class FightService {
    * If the fight is over (party victory or party defeat), process it and return true.
    * Return false otherwise.
    */
-  processEndOfFight(): boolean {
+  async processEndOfFight(): Promise<boolean> {
     // Handle party defeat
     if (this.party.isWiped()) {
-      this.pauseAndExecute(() => {
-        logs.addBasicLog(LogType.PartyDefeat);
+      await this.pause();
 
-        // The dungeon is over
-        this.state = GameState.DUNGEON_END;
-      });
+      logs.addBasicLog(LogType.PartyDefeat);
+
+      // The dungeon is over
+      this.state = GameState.DUNGEON_END; // TODO FBE the 'Quit dungeon' button is not displayed anymore
 
       return true;
     }
@@ -521,51 +514,23 @@ export class FightService {
       // Apply the skill cost
       this.endOfTurnCleanup();
 
-      this.pauseAndExecute(() => {
-        logs.addBasicLog(LogType.PartyVictory);
+      await this.pause();
 
-        if (this.game.hasNextEncounter()) {
-          // Moving on to the next encounter
-          this.state = GameState.START_NEXT_ENCOUNTER;
-        } else {
-          // The dungeon is over
-          logs.addBasicLog(LogType.DungeonCleared);
-          this.state = GameState.DUNGEON_END;
-        }
-      });
+      logs.addBasicLog(LogType.PartyVictory);
+
+      if (this.game.hasNextEncounter()) {
+        // Moving on to the next encounter
+        this.state = GameState.START_NEXT_ENCOUNTER;
+      } else {
+        // The dungeon is over
+        logs.addBasicLog(LogType.DungeonCleared);
+        this.state = GameState.DUNGEON_END;
+      }
 
       return true;
     }
 
     return false;
-  }
-
-  /**
-   * Sandbox for technical tests, currently about async/await.
-   */
-  async executeSandbox() {
-    this.sandboxStep++;
-
-    console.log('Step ' + this.sandboxStep + ' start');
-
-    const counter = await this.executeInnerSandbox();
-
-    console.log('Step ' + this.sandboxStep + ' end, counter is ' + counter);
-  }
-
-  async executeInnerSandbox(): Promise<number> {
-    await this.pause();
-    return ++this.sandboxCounter;
-  }
-
-
-  /**
-   * Execute a function after a pause.
-   */
-  pauseAndExecute(process: Function) {
-    window.setTimeout(() => {
-      process.call(this);
-    }, settings.pauseDuration);
   }
 
   /**

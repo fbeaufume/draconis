@@ -503,7 +503,7 @@ export class FightService {
     // Handle party defeat
     if (this.party.isWiped()) {
       this.pauseAndExecute(() => {
-        logs.addLog(LogType.PartyDefeat);
+        logs.addBasicLog(LogType.PartyDefeat);
 
         // The dungeon is over
         this.state = GameState.DUNGEON_END;
@@ -518,14 +518,14 @@ export class FightService {
       this.endOfTurnCleanup();
 
       this.pauseAndExecute(() => {
-        logs.addLog(LogType.PartyVictory);
+        logs.addBasicLog(LogType.PartyVictory);
 
         if (this.game.hasNextEncounter()) {
           // Moving on to the next encounter
           this.state = GameState.START_NEXT_ENCOUNTER;
         } else {
           // The dungeon is over
-          logs.addLog(LogType.DungeonCleared);
+          logs.addBasicLog(LogType.DungeonCleared);
           this.state = GameState.DUNGEON_END;
         }
       });

@@ -5,6 +5,21 @@ import {GameState} from "./common.model";
 export class Constants {
 
   /**
+   * The maximum number of displayed log messages.
+   */
+  static readonly LOG_MAX = 20;
+
+  /**
+   * A pause duration preset, in msec.
+   */
+  static readonly PAUSE_SHORT = 100;
+
+  /**
+   * A pause duration preset, in msec.
+   */
+  static readonly PAUSE_LONG = 1000;
+
+  /**
    * Number of character rows.
    */
   static readonly PARTY_ROWS = 2;
@@ -33,16 +48,6 @@ export class Constants {
    * The states when it is ok for the player to choose a character skill, possibly to change his mind.
    */
   static readonly CAN_SELECT_SKILL_STATES = [GameState.SELECT_SKILL, GameState.SELECT_ENEMY, GameState.SELECT_CHARACTER, GameState.SELECT_CHARACTER_OR_ENEMY];
-
-  /**
-   * A pause duration preset, in msec.
-   */
-  static readonly PAUSE_SHORT = 100;
-
-  /**
-   * A pause duration preset, in msec.
-   */
-  static readonly PAUSE_LONG = 1000;
 
   /**
    * The default number of attacks per round for enemies.

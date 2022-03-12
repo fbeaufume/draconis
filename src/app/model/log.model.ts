@@ -4,6 +4,7 @@ import {Creature} from './creature.model';
 import {LogType} from "./common.model";
 import {LifeChange} from "./life-change.model";
 import {StatusApplication} from "./status-application.model";
+import {Constants} from "./constants.model";
 
 /**
  * A log message.
@@ -29,20 +30,27 @@ export class Logs {
 
   logs: Log[] = [];
 
-  addLog(type: LogType) {
-    this.logs.push(new Log(type, null, null, null, null, null, null, null));
+  addBasicLog(type: LogType) {
+    this.addLogInternal(new Log(type, null, null, null, null, null, null, null));
   }
 
   addStringLog(type: LogType, string: string) {
-    this.logs.push(new Log(type, string, null, null, null, null, null, null));
+    this.addLogInternal(new Log(type, string, null, null, null, null, null, null));
   }
 
   addNumberLog(type: LogType, number: number) {
-    this.logs.push(new Log(type, null, number, null, null, null, null, null));
+    this.addLogInternal(new Log(type, null, number, null, null, null, null, null));
   }
 
   addCreatureLog(type: LogType, creature1: Creature | null, creature2: Creature | null, lifeChange1: LifeChange | null, lifeChange2: LifeChange | null, statusApplication: StatusApplication | null = null) {
-    this.logs.push(new Log(type, null, null, creature1, creature2, lifeChange1, lifeChange2, statusApplication));
+    this.addLogInternal(new Log(type, null, null, creature1, creature2, lifeChange1, lifeChange2, statusApplication));
+  }
+
+  private addLogInternal(log: Log) {
+    this.logs.push(log);
+    if (this.logs.length > Constants.LOG_MAX) {
+      this.logs.shift();
+    }
   }
 
   clear() {

@@ -18,6 +18,10 @@ export class FightService {
 
   game: Game;
 
+  sandboxStep: number = 0;
+
+  sandboxCounter: number = 0;
+
   constructor() {
     this.restart();
   }
@@ -535,6 +539,25 @@ export class FightService {
 
     return false;
   }
+
+  /**
+   * Sandbox for technical tests, currently about async/await.
+   */
+  async executeSandbox() {
+    this.sandboxStep++;
+
+    console.log('Step ' + this.sandboxStep + ' start');
+
+    const counter = await this.executeInnerSandbox();
+
+    console.log('Step ' + this.sandboxStep + ' end, counter is ' + counter);
+  }
+
+  async executeInnerSandbox(): Promise<number> {
+    await this.pause();
+    return ++this.sandboxCounter;
+  }
+
 
   /**
    * Execute a function after a pause.

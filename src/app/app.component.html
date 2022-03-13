@@ -5,7 +5,7 @@
     </div>
     <div class="flex-1 flex justify-center">
       <div *ngIf="fightService.getProceedMessage() != null">
-        <button class="text-white bg-blue-500 font-bold px-4 py-2 rounded" (click)="fightService.proceed()">
+        <button class="text-white bg-blue-500 font-bold px-4 py-2 rounded" (click)="fightService.onProceed()">
           {{fightService.getProceedMessage()}}
         </button>
       </div>

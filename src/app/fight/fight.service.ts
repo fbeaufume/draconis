@@ -19,7 +19,7 @@ export class FightService {
   game: Game;
 
   constructor() {
-    this.restart();
+    this.game = new Game();
   }
 
   get logs(): Log[] {
@@ -49,52 +49,6 @@ export class FightService {
   }
 
   /**
-   * Start the next encounter, i.e. display the opposition.
-   */
-  startNextEncounter() {
-    this.endOfTurnCleanup();
-
-    this.game.startNextEncounter();
-
-    logs.clear();
-    logs.addStringLog(LogType.OppositionAppear, this.fight.opposition.description);
-  }
-
-  /**
-   * Start the fight, i.e. execute the first turn.
-   */
-  async startFight() {
-    this.game.state = GameState.END_OF_TURN;
-
-    logs.addNumberLog(LogType.StartRound, this.fight.round);
-
-    await this.processTurn();
-  }
-
-  /**
-   * Restart the dungeon.
-   */
-  restart() {
-    this.game = new Game();
-
-    logs.clear();
-    logs.addStringLog(LogType.EnterZone, this.game.region);
-  }
-
-  /**
-   * Called after a click on the main action button to proceed to the next fight state.
-   */
-  async proceed() {
-    if (this.game.state == GameState.START_NEXT_ENCOUNTER) {
-      this.startNextEncounter();
-    } else if (this.game.state == GameState.START_FIGHT) {
-      await this.startFight();
-    } else if (this.game.state == GameState.DUNGEON_END) {
-      this.restart();
-    }
-  }
-
-  /**
    * Return the message displayed in the main action button to proceed to the next fight state.
    */
   getProceedMessage(): string | null {
@@ -109,6 +63,30 @@ export class FightService {
     } else if (this.game.state == GameState.DUNGEON_END) {
       return 'Quit dungeon';
     } else return null;
+  }
+
+  /**
+   * Called after a click on the main action button to proceed to the next fight state.
+   */
+  async onProceed() {
+    if (this.game.state == GameState.START_NEXT_ENCOUNTER) {
+      this.endOfTurnCleanup();
+
+      // Initialize the next fight
+      this.game.startNextEncounter();
+
+      logs.clear();
+      logs.addStringLog(LogType.OppositionAppear, this.fight.opposition.description);
+    } else if (this.game.state == GameState.START_FIGHT) {
+      this.game.state = GameState.END_OF_TURN;
+
+      logs.addNumberLog(LogType.StartRound, this.fight.round);
+
+      // Execute the turn of the first creature
+      await this.processTurn();
+    } else if (this.game.state == GameState.DUNGEON_END) {
+      this.game = new Game();
+    }
   }
 
   /**

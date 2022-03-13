@@ -1,11 +1,12 @@
 // Classes for the whole game and fights
 
-import {GameState} from "./common.model";
+import {GameState, LogType} from "./common.model";
 import {Party, StandardParty} from "./party.model";
 import {settings} from "./settings.model";
 import {Opposition} from "./opposition.model";
 import {Dungeon, FangForestDungeon, ForgottenGraveyardDungeon, TestDungeon} from "./dungeon.model";
 import {Fight} from "./fight.model";
+import {logs} from "./log.model";
 
 /**
  * Main model class. Contains the party, the dungeons, the current fight, etc.
@@ -31,6 +32,9 @@ export class Game {
 
   constructor() {
     this.region = this.dungeon.name;
+
+    logs.clear();
+    logs.addStringLog(LogType.EnterZone, this.region);
   }
 
   get opposition(): Opposition {

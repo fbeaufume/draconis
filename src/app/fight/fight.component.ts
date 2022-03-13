@@ -163,7 +163,7 @@ export class FightComponent implements AfterViewInit {
       this.fightService.selectFromKey(index);
       event.preventDefault();
     } else if (event.key == ' ') {
-      this.fightService.proceed();
+      this.fightService.onProceed();
       event.preventDefault();
     } else if (event.key == 'p') {
       settings.togglePauseDuration();

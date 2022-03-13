@@ -326,8 +326,9 @@ export class FightService {
       // Select the targets
       this.fight.targetCreatures = action.targetCreatures;
 
-      // TODO FBE do not pause if the selected target is the current creature
-      await this.pause();
+      // Pause, but only if the selected target is not the current target
+      const isTargetingSelf = this.fight.targetCreatures.length === 1 && this.fight.targetCreatures[0].name === this.fight.activeCreature?.name;
+      await this.pauseIf(!isTargetingSelf);
 
       // Process the next step
       await this.processEnemyTurnStep2(action);

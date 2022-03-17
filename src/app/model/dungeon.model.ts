@@ -27,8 +27,10 @@ export class TestDungeon extends Dungeon {
   constructor() {
     super('Test Dungeon', [
       new Opposition('some monsters', [
-        EnemyBuilder.buildGenericMonster(1, 50),
-        EnemyBuilder.buildGenericMonster(1, 50),
+        EnemyBuilder.buildRedMage(),
+        EnemyBuilder.buildRedMage(),
+        // EnemyBuilder.buildGenericMonster(1, 50),
+        // EnemyBuilder.buildGenericMonster(1, 50),
         // EnemyBuilder.buildGenericMonster(30, 5),
         // EnemyBuilder.buildBrambleSpirit(),
         // EnemyBuilder.buildBrambleSpirit(),

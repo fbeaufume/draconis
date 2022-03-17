@@ -4,6 +4,7 @@ import {PrioritySkillStrategy, SequentialSkillStrategy, WeightedSkillStrategy} f
 import {
   ApplyDeterioration,
   ApplyImprovement,
+  Damage,
   DamageAndDot,
   Drain,
   Heal,
@@ -13,19 +14,19 @@ import {
   StrikeSmall,
   Vengeance
 } from "./skill.model";
-import {attackBonus, attackMalus, bleed, poison} from "./status-type.model";
+import {attackBonus, attackMalus, bleed, burn, poison} from "./status-type.model";
 import {DamageReflection, Regeneration} from "./passive.model";
 
 export class EnemyBuilder {
 
-  // Enemies from the test dungeon
+  // Enemies for the test dungeon
 
   static buildGenericMonster(life: number, power: number): Enemy {
     return new StrategicMeleeEnemy(CreatureType.OTHER, 'Monster', life, power,
       new Strike('Attack'));
   }
 
-  // Enemies from the fang forest
+  // Enemies for the fang forest
 
   static buildBear(): Enemy {
     return new StrategicMeleeEnemy(CreatureType.BEAST, 'Bear', 34, 8,
@@ -88,7 +89,7 @@ export class EnemyBuilder {
       ]), 2);
   }
 
-  // Enemies from the forgotten graveyard
+  // Enemies for the forgotten graveyard
 
   static buildSkeleton(): Enemy {
     return new StrategicMeleeEnemy(CreatureType.UNDEAD, 'Skeleton', 18, 7,
@@ -108,5 +109,15 @@ export class EnemyBuilder {
   static buildLich(): Enemy {
     return new StrategicMeleeEnemy(CreatureType.UNDEAD, 'Lich', 38, 8,
       new Shot('Dark Bolt'));
+  }
+
+  // Enemies for the mage tower
+
+  static buildRedMage(): Enemy {
+    return new StrategicEnemy(CreatureType.HUMANOID, 'Red Mage', 26, 7,
+      new WeightedSkillStrategy()
+        .addSkill(new Shot('Fire Blast'), 100)
+        .addSkill(new DamageAndDot('Burn', SkillTargetType.OTHER_ALIVE, 10, 2, 1, '', [0.5, 0.5], [burn]), 0) // TODO FBE when the targeting is implemented use a weight of 1
+        .addSkill(new Damage('Fireball', SkillTargetType.OTHER_ALIVE_TRIPLE, 10, 2, 1, '', [0.8]), 1));
   }
 }

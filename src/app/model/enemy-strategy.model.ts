@@ -39,6 +39,8 @@ export abstract class EnemyStrategy {
          return fight.opposition.targetOneDamagedEnemy();
       case SkillTargetType.OTHER_ALIVE:
         return skill.range == 1 ? fight.party.targetOneFrontRowAliveCharacter() : fight.party.targetOneAliveCharacter();
+      case SkillTargetType.OTHER_ALIVE_TRIPLE:
+        // TODO FBE needed by red mages
       case SkillTargetType.OTHER_ALL:
         return fight.party.targetAllAliveCharacters();
       default:

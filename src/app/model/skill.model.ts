@@ -210,7 +210,7 @@ export abstract class Skill extends EnemyStrategy {
         // Add the enemy at the left, if any
         const enemy2 = fight.opposition.getLeftEnemy(enemy);
         if (enemy2 != null) {
-          targets.push(enemy2);
+          targets.unshift(enemy2);
         }
 
         targets.push(enemy);

@@ -12,7 +12,7 @@ export class Opposition {
   description: string;
 
   /**
-   * The enemies rows. The first row in the array is the front row.
+   * The enemy rows. The first row in the array is the front row.
    */
   rows: OppositionRow[] = [];
 
@@ -31,6 +31,8 @@ export class Opposition {
     this.description = description;
     this.rows.push(new OppositionRow(row1Enemies));
     this.rows.push(new OppositionRow(row2Enemies));
+
+    this.updateDistances();
 
     this.computeEffectiveNames();
   }
@@ -123,9 +125,8 @@ export class Opposition {
 
   /**
    * Give each enemy his distance to the party.
-   * Used to check skills range, advance toward characters, etc.
    */
-  updateDistances() {
+  private updateDistances() {
     for (let i = 0; i < this.rows.length; i++) {
       const row = this.rows[i];
       row.enemies.forEach(enemy => {
@@ -193,10 +194,9 @@ export class Opposition {
    * Get the enemy at the left of a given enemy.
    */
   getLeftEnemy(enemy: Enemy): Enemy | null {
-    // Row of the enemy
-    const row = this.rows[enemy.distance - 1];
+    const row = this.getRowOfEnemy(enemy);
 
-    // Position of the enemy in its row
+    // Position of the creature in its row
     const position: number = row.enemies.indexOf(enemy);
 
     if (position > 0) {
@@ -210,10 +210,9 @@ export class Opposition {
    * Get the enemy at the right of a given enemy.
    */
   getRightEnemy(enemy: Enemy): Enemy | null {
-    // Row of the enemy
-    const row = this.rows[enemy.distance - 1];
+    const row = this.getRowOfEnemy(enemy);
 
-    // Position of the enemy in its row
+    // Position of the creature in its row
     const position: number = row.enemies.indexOf(enemy);
 
     if (position >= 0 && row.enemies.length > position + 1) {
@@ -221,5 +220,9 @@ export class Opposition {
     } else {
       return null;
     }
+  }
+
+  getRowOfEnemy(enemy: Enemy): OppositionRow {
+    return this.rows[enemy.distance - 1];
   }
 }

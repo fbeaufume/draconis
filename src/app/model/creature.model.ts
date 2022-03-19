@@ -99,8 +99,8 @@ export abstract class Creature {
   passives: Passive[] = [];
 
   /**
-   * The distance between the enemy and the party, i.e. 1 means the opposition front row, 2 means the middle row, 3 the back row
-   * Not in the Enemy class to prevent circular dependency issues.
+   * The distance between the creature and the other faction, i.e. 1 means the creature is in the front row, 2 is the back row.
+   * Used to check if skill can reach the creature.
    */
   distance: number = 1;
 

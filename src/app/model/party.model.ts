@@ -55,6 +55,20 @@ export class Party {
     row2Characters: Character[]) {
     this.rows.push(new PartyRow(row1Characters));
     this.rows.push(new PartyRow(row2Characters));
+
+    this.updateDistances();
+  }
+
+  /**
+   * Give each character his distance to the opposition.
+   */
+  private updateDistances() {
+    for (let i = 0; i < this.rows.length; i++) {
+      const row = this.rows[i];
+      row.characters.forEach(character => {
+        character.distance = i + 1;
+      });
+    }
   }
 
   /**
@@ -130,6 +144,42 @@ export class Party {
     this.forEachCharacter(c => characters.push(c), c => c.isAlive());
 
     return characters;
+  }
+
+  /**
+   * Get the character at the left of a given character.
+   */
+  getLeftCharacter(character: Character): Character | null {
+    const row = this.getRowOfCharacter(character);
+
+    // Position of the creature in its row
+    const position: number = row.characters.indexOf(character);
+
+    if (position > 0) {
+      return row.characters[position - 1];
+    } else {
+      return null;
+    }
+  }
+
+  /**
+   * Get the character at the right of a given character.
+   */
+  getRightCharacter(character: Character): Character | null {
+    const row = this.getRowOfCharacter(character);
+
+    // Position of the creature in its row
+    const position: number = row.characters.indexOf(character);
+
+    if (position >= 0 && row.characters.length > position + 1) {
+      return row.characters[position + 1];
+    } else {
+      return null;
+    }
+  }
+
+  getRowOfCharacter(character: Character): PartyRow {
+    return this.rows[character.distance - 1];
   }
 }
 

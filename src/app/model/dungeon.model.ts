@@ -29,6 +29,7 @@ export class TestDungeon extends Dungeon {
       new Opposition('some monsters', [
         EnemyBuilder.buildRedMage(),
         EnemyBuilder.buildRedMage(),
+        EnemyBuilder.buildRedMage(),
         // EnemyBuilder.buildGenericMonster(1, 50),
         // EnemyBuilder.buildGenericMonster(1, 50),
         // EnemyBuilder.buildGenericMonster(30, 5),

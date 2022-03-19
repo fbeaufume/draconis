@@ -36,11 +36,29 @@ export abstract class EnemyStrategy {
       case SkillTargetType.SELF:
         return fight.activeCreature != null ? [fight.activeCreature] : [];
       case SkillTargetType.SAME_WOUNDED:
-         return fight.opposition.targetOneDamagedEnemy();
+        return fight.opposition.targetOneDamagedEnemy();
       case SkillTargetType.OTHER_ALIVE:
         return skill.range == 1 ? fight.party.targetOneFrontRowAliveCharacter() : fight.party.targetOneAliveCharacter();
       case SkillTargetType.OTHER_ALIVE_TRIPLE:
-        // TODO FBE needed by red mages
+        // First target one creature
+        const characters = skill.range == 1 ? fight.party.targetOneFrontRowAliveCharacter() : fight.party.targetOneAliveCharacter()
+
+        // Then add the left one and the right one
+        if (characters.length > 0) {
+          const character = characters[0];
+
+          const character1 = fight.party.getLeftCharacter(character);
+          if (character1 != null) {
+            characters.unshift(character1);
+          }
+
+          const character2 = fight.party.getRightCharacter(character);
+          if (character2 != null) {
+            characters.push(character2);
+          }
+        }
+
+        return characters;
       case SkillTargetType.OTHER_ALL:
         return fight.party.targetAllAliveCharacters();
       default:

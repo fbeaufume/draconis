@@ -63,7 +63,6 @@ export class Fight {
   ) {
     this.party = party;
     this.opposition = opposition;
-    this.opposition.updateDistances();
     this.turnOrder = new TurnOrder(party, this.opposition);
     this.activeCreature = null;
     this.hoveredSkill = null;

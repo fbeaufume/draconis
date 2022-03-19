@@ -116,8 +116,8 @@ export class EnemyBuilder {
   static buildRedMage(): Enemy {
     return new StrategicEnemy(CreatureType.HUMANOID, 'Red Mage', 26, 7,
       new WeightedSkillStrategy()
-        .addSkill(new Shot('Fire Blast'), 100)
-        .addSkill(new DamageAndDot('Burn', SkillTargetType.OTHER_ALIVE, 10, 2, 1, '', [0.5, 0.5], [burn]), 0) // TODO FBE when the targeting is implemented use a weight of 1
+        .addSkill(new Shot('Fire Blast'), 1)
+        .addSkill(new DamageAndDot('Burn', SkillTargetType.OTHER_ALIVE, 10, 2, 1, '', [0.5, 0.5], [burn]), 1)
         .addSkill(new Damage('Fireball', SkillTargetType.OTHER_ALIVE_TRIPLE, 10, 2, 1, '', [0.8]), 1));
   }
 

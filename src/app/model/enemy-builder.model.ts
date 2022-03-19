@@ -113,6 +113,11 @@ export class EnemyBuilder {
 
   // Enemies for the mage tower
 
+  static buildStoneGolem(): Enemy {
+    return new StrategicMeleeEnemy(CreatureType.ELEMENTAL, 'Stone Golem', 40, 5,
+      new Strike('Bash'));
+  }
+
   static buildRedMage(): Enemy {
     return new StrategicEnemy(CreatureType.HUMANOID, 'Red Mage', 26, 7,
       new WeightedSkillStrategy()
@@ -126,10 +131,5 @@ export class EnemyBuilder {
       new PrioritySkillStrategy(
         new Heal('Heal', SkillTargetType.SAME_WOUNDED, 5, 0, 1, ''),
         new Shot('Light Blast')));
-  }
-
-  static buildStoneGolem(): Enemy {
-    return new StrategicMeleeEnemy(CreatureType.ELEMENTAL, 'Stone Golem', 40, 5,
-      new Strike('Bash'));
   }
 }

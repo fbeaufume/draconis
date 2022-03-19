@@ -63,7 +63,7 @@ export class TestDungeon extends Dungeon {
 }
 
 /**
- * A forest themed dungeon.
+ * A forest with various beasts.
  */
 export class FangForestDungeon extends Dungeon {
 
@@ -108,7 +108,7 @@ export class FangForestDungeon extends Dungeon {
 }
 
 /**
- * An undead themed dungeon.
+ * A graveyard with undead creatures.
  */
 export class ForgottenGraveyardDungeon extends Dungeon {
 
@@ -143,6 +143,32 @@ export class ForgottenGraveyardDungeon extends Dungeon {
         EnemyBuilder.buildSkeleton(),
       ], [
         EnemyBuilder.buildLich(),
+      ]),
+    ]);
+  }
+}
+
+/**
+ * A mage tower with mages and elemental creatures.
+ */
+export class MageTowerDungeon extends Dungeon {
+
+  constructor() {
+    super('Mage Tower', [
+      new Opposition('skeletons', [
+        EnemyBuilder.buildStoneGolem(),
+        EnemyBuilder.buildStoneGolem(),
+      ]),
+      new Opposition('zombies', [
+        EnemyBuilder.buildRedMage(),
+        EnemyBuilder.buildRedMage(),
+        EnemyBuilder.buildRedMage(),
+      ]),
+      new Opposition('vampires', [
+        EnemyBuilder.buildStoneGolem(),
+      ],[
+        EnemyBuilder.buildWhiteMage(),
+        EnemyBuilder.buildWhiteMage(),
       ]),
     ]);
   }

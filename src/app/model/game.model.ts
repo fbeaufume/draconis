@@ -4,7 +4,7 @@ import {GameState, LogType} from "./common.model";
 import {Party, StandardParty} from "./party.model";
 import {settings} from "./settings.model";
 import {Opposition} from "./opposition.model";
-import {Dungeon, FangForestDungeon, ForgottenGraveyardDungeon, TestDungeon} from "./dungeon.model";
+import {Dungeon, FangForestDungeon, ForgottenGraveyardDungeon, MageTowerDungeon, TestDungeon} from "./dungeon.model";
 import {Fight} from "./fight.model";
 import {logs} from "./log.model";
 
@@ -25,7 +25,11 @@ export class Game {
 
   party: Party = new StandardParty();
 
-  dungeons: Dungeon[] = [new TestDungeon(), new FangForestDungeon(), new ForgottenGraveyardDungeon()];
+  dungeons: Dungeon[] = [
+    new TestDungeon(),
+    new FangForestDungeon(),
+    new ForgottenGraveyardDungeon(),
+    new MageTowerDungeon()];
   dungeon: Dungeon = this.dungeons[settings.dungeon] || this.dungeons[1] || this.dungeons[0];
 
   fight: Fight = new Fight(this.party, new Opposition(''));

@@ -132,4 +132,10 @@ export class EnemyBuilder {
         new Heal('Heal', SkillTargetType.SAME_WOUNDED, 5, 0, 1, ''),
         new Shot('Light Blast')));
   }
+
+  static buildBlackMage(): Enemy {
+    return new StrategicEnemy(CreatureType.HUMANOID, 'Black Mage', 26, 7,
+      new WeightedSkillStrategy()
+        .addSkill(new Drain('Drain Life', SkillTargetType.OTHER_ALIVE, 10, 2, 1, '', [0.5, 1]), 1));
+  }
 }

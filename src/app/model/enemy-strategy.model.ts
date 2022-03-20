@@ -59,6 +59,7 @@ export abstract class EnemyStrategy {
         }
 
         return characters;
+      case SkillTargetType.OTHER_ALIVE_ALL:
       case SkillTargetType.OTHER_ALL:
         return fight.party.targetAllAliveCharacters();
       default:

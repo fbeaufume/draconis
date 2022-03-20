@@ -73,9 +73,11 @@ export class Fight {
   }
 
   getAllEnemies(): Creature[] {
-    const creatures: Creature[] = [];
-    this.opposition.rows.forEach(row => creatures.push(...row.enemies));
-    return creatures;
+    return this.opposition.targetAllEnemies();
+  }
+
+  getAllAliveCharacters(): Creature[] {
+    return this.party.targetAllAliveCharacters();
   }
 
   /**

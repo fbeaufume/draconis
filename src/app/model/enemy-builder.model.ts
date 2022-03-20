@@ -9,6 +9,7 @@ import {
   Drain,
   Heal,
   LogMessage,
+  MassAlterTime,
   Shot,
   Strike,
   StrikeSmall,
@@ -136,6 +137,7 @@ export class EnemyBuilder {
   static buildBlackMage(): Enemy {
     return new StrategicEnemy(CreatureType.HUMANOID, 'Black Mage', 26, 7,
       new WeightedSkillStrategy()
-        .addSkill(new Drain('Drain Life', SkillTargetType.OTHER_ALIVE, 10, 2, 1, '', [0.5, 1]), 1));
+        .addSkill(new Drain('Drain Life', SkillTargetType.OTHER_ALIVE, 10, 2, 1, '', [0.5, 1]), 1)
+        .addSkill(new MassAlterTime('Mass Alter Time', SkillTargetType.OTHER_ALL, 10, 2, 1, ''), 1));
   }
 }

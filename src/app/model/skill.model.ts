@@ -880,9 +880,8 @@ export class Heal extends Skill {
     return [SkillIconType.HEAL];
   }
 
-
   isUsableByCreature(creature: Creature, fight: Fight): boolean {
-    // Ensure that at least one allied enemy is wounded
+    // Ensure that at least one allied creature is wounded
     if (!fight.getAllEnemies().some(creature => creature.isDamaged())) {
       return false;
     }
@@ -943,6 +942,7 @@ export class Revive extends Skill {
  */
 export class AlterTime extends Skill {
 
+  // TODO FBE when used by a black mage, status with a 0 duration are not yet removed
   executeOnTargetCreature(activeCreature: Creature, targetCreature: Creature, fight: Fight) {
     const increment: number = activeCreature?.isSameFactionThan(targetCreature) ? 1 : -1;
     targetCreature.statusApplications.forEach(statusApplication => statusApplication.remainingDuration += statusApplication.isImprovement() ? increment : -increment)
@@ -951,5 +951,25 @@ export class AlterTime extends Skill {
 
   get iconTypes(): SkillIconType[] {
     return [SkillIconType.IMPROVEMENT, SkillIconType.DETERIORATION];
+  }
+}
+
+/**
+ * Similar to alter time, but is used by enemies only if some specific condition is met.
+ */
+export class MassAlterTime extends AlterTime {
+
+  protected isUsableByCreature(creature: Creature, fight: Fight): boolean {
+    // Can be used only if at least 2 opposing creature have at least 1 status each
+    const count: number = fight.getAllAliveCharacters()
+      .filter(creature => creature.statusApplications.length >= 1)
+      .map(() => 1)
+      .reduce((currentSum, a) => currentSum + a, 0);
+    console.log('Count', count);
+    if (count < 2) {
+      return false;
+    }
+
+    return super.isUsableByCreature(creature, fight);
   }
 }

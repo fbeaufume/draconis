@@ -365,12 +365,10 @@ export abstract class Creature {
       }
 
       statusApplication.decreaseDuration();
-
-      if (statusApplication.isOver()) {
-        // Remove the status
-        this.statusApplications.splice(i--, 1);
-      }
     }
+
+    // Remove all expired statuses
+    this.statusApplications = this.statusApplications.filter(statusApplication => !statusApplication.isOver());
   }
 
   /**

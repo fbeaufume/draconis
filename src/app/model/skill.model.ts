@@ -942,7 +942,6 @@ export class Revive extends Skill {
  */
 export class AlterTime extends Skill {
 
-  // TODO FBE when used by a black mage, status with a 0 duration are not yet removed
   executeOnTargetCreature(activeCreature: Creature, targetCreature: Creature, fight: Fight) {
     const increment: number = activeCreature?.isSameFactionThan(targetCreature) ? 1 : -1;
     targetCreature.statusApplications.forEach(statusApplication => statusApplication.remainingDuration += statusApplication.isImprovement() ? increment : -increment)

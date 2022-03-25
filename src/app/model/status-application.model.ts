@@ -3,7 +3,7 @@ import {StatusType} from "./status-type.model";
 import {StatusTypeTagType} from "./common.model";
 
 /**
- * A status applied to a creature, such as a life change over time, an attack or defense modification, etc.
+ * A status applied to a creature, such as damage over time, an attack bonus, etc.
  */
 export class StatusApplication {
 

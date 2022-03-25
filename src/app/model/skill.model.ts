@@ -381,8 +381,8 @@ export function computeEffectiveDamage(skill: Skill | null, emitter: Creature, r
 
   // Apply status effects if needed, for example a creature protected by a fire trap
   // will apply a fire damage-over-time back to the attacker when melee attacked
-  receiver.statusApplications.forEach(statusApplication => {
-    statusApplication.statusType.statusEffects.forEach(statusEffect => {
+  receiver.activeStatusApplications.forEach(sa => {
+    sa.statusType.statusEffects.forEach(statusEffect => {
       // Check the status effect range
       const attackRange = statusEffect.attackRange;
       if (attackRange == 0 && skill != null && skill.range == 2) {
@@ -391,11 +391,11 @@ export function computeEffectiveDamage(skill: Skill | null, emitter: Creature, r
       }
 
       if (statusEffect instanceof ApplyDotStatusEffect) {
-        emitter.applyStatus(new StatusApplication(statusEffect.dotType, statusEffect.power, statusApplication.originCreature, statusEffect.duration));
+        emitter.applyStatus(new StatusApplication(statusEffect.dotType, statusEffect.power, sa.originCreature, statusEffect.duration));
       }
 
       if (statusEffect instanceof ApplyStatusStatusEffect) {
-        emitter.applyStatus(new StatusApplication(statusEffect.statusType, 0, statusApplication.originCreature, statusEffect.duration))
+        emitter.applyStatus(new StatusApplication(statusEffect.statusType, 0, sa.originCreature, statusEffect.duration))
       }
 
       if (statusEffect instanceof ReflectDamageStatusEffect) {
@@ -944,7 +944,7 @@ export class AlterTime extends Skill {
 
   executeOnTargetCreature(activeCreature: Creature, targetCreature: Creature, fight: Fight) {
     const increment: number = activeCreature?.isSameFactionThan(targetCreature) ? 1 : -1;
-    targetCreature.statusApplications.forEach(statusApplication => statusApplication.remainingDuration += statusApplication.isImprovement() ? increment : -increment)
+    targetCreature.activeStatusApplications.forEach(sa => sa.remainingDuration += sa.isImprovement() ? increment : -increment)
     logs.addCreatureLog(LogType.AlterTime, activeCreature, targetCreature, null, null);
   }
 
@@ -961,7 +961,7 @@ export class MassAlterTime extends AlterTime {
   protected isUsableByCreature(creature: Creature, fight: Fight): boolean {
     // Can be used only if at least 2 opposing creature have at least 1 status each
     const count: number = fight.getAllAliveCharacters()
-      .filter(creature => creature.statusApplications.length >= 1)
+      .filter(creature => creature.activeStatusApplications.length >= 1)
       .map(() => 1)
       .reduce((currentSum, a) => currentSum + a, 0);
     console.log('Count', count);

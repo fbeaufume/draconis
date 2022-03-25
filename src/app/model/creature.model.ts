@@ -84,21 +84,6 @@ export abstract class Creature {
   power: number;
 
   /**
-   * Creature skills (currently only used by characters).
-   */
-  skills: Skill[];
-
-  /**
-   * The specialties are the creature types this creature is strong against (deals extra damage and receive less damage).
-   */
-  specialties: CreatureType[];
-
-  /**
-   * Passive skills of the creature.
-   */
-  passives: Passive[] = [];
-
-  /**
    * The distance between the creature and the other faction, i.e. 1 means the creature is in the front row, 2 is the back row.
    * Used to check if skill can reach the creature.
    */
@@ -120,9 +105,25 @@ export abstract class Creature {
   criticalBonus: number = Constants.CRITICAL_BONUS;
 
   /**
-   * Applied statuses.
+   * Creature skills (currently only used by characters).
    */
-  statusApplications: StatusApplication[] = [];
+  skills: Skill[];
+
+  /**
+   * The specialties are the creature types this creature is strong against (deals extra damage and receive less damage).
+   */
+  specialties: CreatureType[];
+
+  // TODO FBE use StatusApplication instead of Passive then remove the passive.model.ts file
+  /**
+   * Passive status applications of the creature do not expired.
+   */
+  passives: Passive[] = [];
+
+  /**
+   * Active status applications have a duration and eventually expire and get removed.
+   */
+  activeStatusApplications: StatusApplication[] = [];
 
   protected constructor(
     factionType: FactionType,
@@ -280,30 +281,30 @@ export abstract class Creature {
   }
 
   getPositiveStatuses(): StatusApplication[] {
-    return this.statusApplications.filter(sa => sa.isImprovement());
+    return this.activeStatusApplications.filter(sa => sa.isImprovement());
   }
 
   getNegativeStatuses(): StatusApplication[] {
-    return this.statusApplications.filter(sa => !sa.isImprovement());
+    return this.activeStatusApplications.filter(sa => !sa.isImprovement());
   }
 
   /**
    * Return all status applications from status types using a given tag.
    */
   getStatusApplicationsByTag(tagType: StatusTypeTagType): StatusApplication[] {
-    return this.statusApplications.filter(statusApplication => statusApplication.hasTagType(tagType));
+    return this.activeStatusApplications.filter(sa => sa.hasTagType(tagType));
   }
 
   hasStatus(status: StatusType): boolean {
-    return this.statusApplications.map(s => s.statusType.name).includes(status.name);
+    return this.activeStatusApplications.map(sa => sa.statusType.name).includes(status.name);
   }
 
   hasPositiveStatus(status: StatusType): boolean {
-    return this.getPositiveStatuses().map(s => s.statusType.name).includes(status.name);
+    return this.getPositiveStatuses().map(sa => sa.statusType.name).includes(status.name);
   }
 
   hasNegativeStatus(status: StatusType): boolean {
-    return this.getNegativeStatuses().map(s => s.statusType.name).includes(status.name);
+    return this.getNegativeStatuses().map(sa => sa.statusType.name).includes(status.name);
   }
 
   /**
@@ -315,37 +316,37 @@ export abstract class Creature {
     }
 
     // Do we have to add the new status
-    let addStatus: boolean = true;
+    let mustAdd: boolean = true;
 
     // Remove the current status if necessary
-    this.statusApplications = this.statusApplications.filter(s => {
+    this.activeStatusApplications = this.activeStatusApplications.filter(sa => {
       // Keep statuses with a different name
-      if (s.statusType.name != statusApplication.statusType.name) {
+      if (sa.statusType.name != statusApplication.statusType.name) {
         return true;
       }
 
       // Keep statuses with the same name but with a different improvement flag
-      if (s.statusType.improvement != statusApplication.statusType.improvement) {
+      if (sa.statusType.improvement != statusApplication.statusType.improvement) {
         return true;
       }
 
       // Keep cumulative statuses from other creatures
-      if (statusApplication.statusType.cumulative && s.getOriginCreatureName() != statusApplication.getOriginCreatureName()) {
+      if (statusApplication.statusType.cumulative && sa.getOriginCreatureName() != statusApplication.getOriginCreatureName()) {
         return true;
       }
 
-      if (statusApplication.remainingDuration >= s.remainingDuration) {
+      if (statusApplication.remainingDuration >= sa.remainingDuration) {
         // The new status has the same duration or is longer, so we use it instead of the current one
         return false;
       } else {
         // The new status has a shorter duration, so we keep the current status
-        addStatus = false;
+        mustAdd = false;
         return true;
       }
     });
 
-    if (addStatus) {
-      this.statusApplications.push(statusApplication);
+    if (mustAdd) {
+      this.activeStatusApplications.push(statusApplication);
     }
   }
 
@@ -353,8 +354,8 @@ export abstract class Creature {
    * Reduce the remaining duration of all statuses that use a given expiration type and remove the expired ones.
    */
   decreaseStatusesDuration(expirationType: StatusExpirationType, originCreature: Creature | null = null) {
-    for (let i = 0; i < this.statusApplications.length; i++) {
-      const statusApplication = this.statusApplications[i];
+    for (let i = 0; i < this.activeStatusApplications.length; i++) {
+      const statusApplication = this.activeStatusApplications[i];
 
       if (statusApplication.statusType.expirationType != expirationType) {
         continue;
@@ -368,7 +369,7 @@ export abstract class Creature {
     }
 
     // Remove all expired statuses
-    this.statusApplications = this.statusApplications.filter(statusApplication => !statusApplication.isOver());
+    this.activeStatusApplications = this.activeStatusApplications.filter(sa => !sa.isOver());
   }
 
   /**
@@ -402,7 +403,7 @@ export abstract class Creature {
   }
 
   clearStatusApplications() {
-    this.statusApplications = [];
+    this.activeStatusApplications = [];
   }
 }
 

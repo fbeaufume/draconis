@@ -280,31 +280,31 @@ export abstract class Creature {
     return passives;
   }
 
-  getPositiveStatuses(): StatusApplication[] {
+  getPositiveActiveStatuses(): StatusApplication[] {
     return this.activeStatusApplications.filter(sa => sa.isImprovement());
   }
 
-  getNegativeStatuses(): StatusApplication[] {
+  getNegativeActiveStatuses(): StatusApplication[] {
     return this.activeStatusApplications.filter(sa => !sa.isImprovement());
   }
 
   /**
    * Return all status applications from status types using a given tag.
    */
-  getStatusApplicationsByTag(tagType: StatusTypeTagType): StatusApplication[] {
+  getActiveStatusApplicationsByTag(tagType: StatusTypeTagType): StatusApplication[] {
     return this.activeStatusApplications.filter(sa => sa.hasTagType(tagType));
   }
 
-  hasStatus(status: StatusType): boolean {
+  hasActiveStatus(status: StatusType): boolean {
     return this.activeStatusApplications.map(sa => sa.statusType.name).includes(status.name);
   }
 
-  hasPositiveStatus(status: StatusType): boolean {
-    return this.getPositiveStatuses().map(sa => sa.statusType.name).includes(status.name);
+  hasPositiveActiveStatus(status: StatusType): boolean {
+    return this.getPositiveActiveStatuses().map(sa => sa.statusType.name).includes(status.name);
   }
 
-  hasNegativeStatus(status: StatusType): boolean {
-    return this.getNegativeStatuses().map(sa => sa.statusType.name).includes(status.name);
+  hasNegativeActiveStatus(status: StatusType): boolean {
+    return this.getNegativeActiveStatuses().map(sa => sa.statusType.name).includes(status.name);
   }
 
   /**
@@ -377,18 +377,18 @@ export abstract class Creature {
    */
   applyDotsAndHots() {
     // Use the DOT statuses
-    this.getStatusApplicationsByTag(StatusTypeTagType.DOT).forEach(statusApplication => {
-      if (statusApplication.originCreature != null) {
-        const lifeChange = computeEffectiveDamage(null, statusApplication.originCreature, this, statusApplication.power, true);
+    this.getActiveStatusApplicationsByTag(StatusTypeTagType.DOT).forEach(sa => {
+      if (sa.originCreature != null) {
+        const lifeChange = computeEffectiveDamage(null, sa.originCreature, this, sa.power, true);
         this.addLifeChange(lifeChange);
         logs.addCreatureLog(LogType.Dot, this, null, lifeChange, null);
       }
     })
 
     // Use the HOT statuses
-    this.getStatusApplicationsByTag(StatusTypeTagType.HOT).forEach(statusApplication => {
-      if (statusApplication.originCreature != null) {
-        const lifeChange = computeEffectiveHeal(statusApplication.originCreature, this, statusApplication.power);
+    this.getActiveStatusApplicationsByTag(StatusTypeTagType.HOT).forEach(sa => {
+      if (sa.originCreature != null) {
+        const lifeChange = computeEffectiveHeal(sa.originCreature, this, sa.power);
         this.addLifeChange(lifeChange);
         logs.addCreatureLog(LogType.Hot, this, null, lifeChange, null);
       }

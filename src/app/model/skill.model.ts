@@ -355,23 +355,23 @@ export function computeEffectiveDamage(skill: Skill | null, emitter: Creature, r
 
   // Apply the defend bonus
   // noinspection UnnecessaryLocalVariableJS
-  const afterDefend = receiver.hasStatus(defend) ? afterCritical * (1 - Constants.DEFEND_BONUS) : afterCritical;
+  const afterDefend = receiver.hasActiveStatus(defend) ? afterCritical * (1 - Constants.DEFEND_BONUS) : afterCritical;
 
   // Apply the attack bonus or malus
   let afterAttack = afterDefend;
-  if (emitter.hasPositiveStatus(attackBonus)) {
+  if (emitter.hasPositiveActiveStatus(attackBonus)) {
     afterAttack = afterAttack * (1 + Constants.ATTACK_BONUS);
   }
-  if (emitter.hasNegativeStatus(attackMalus)) {
+  if (emitter.hasNegativeActiveStatus(attackMalus)) {
     afterAttack = afterAttack * (1 - Constants.ATTACK_BONUS);
   }
 
   // Apply the defense bonus or malus
   let afterDefense = afterAttack;
-  if (receiver.hasPositiveStatus(defenseBonus)) {
+  if (receiver.hasPositiveActiveStatus(defenseBonus)) {
     afterDefense = afterDefense * (1 - Constants.DEFENSE_BONUS);
   }
-  if (receiver.hasNegativeStatus(defenseMalus)) {
+  if (receiver.hasNegativeActiveStatus(defenseMalus)) {
     afterDefense = afterDefense * (1 + Constants.DEFENSE_BONUS);
   }
 
@@ -739,10 +739,10 @@ export class ComboDamage extends Skill {
     // Get the current step and power of the combo
     let comboStep = 1;
     let power: number = this.powerLevels[0];
-    if (targetCreature.hasStatus(combo1)) {
+    if (targetCreature.hasActiveStatus(combo1)) {
       comboStep = 2;
       power = this.powerLevels[1];
-    } else if (targetCreature.hasStatus(combo2)) {
+    } else if (targetCreature.hasActiveStatus(combo2)) {
       comboStep = 3;
       power = this.powerLevels[2];
     }

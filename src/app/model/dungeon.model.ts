@@ -28,35 +28,27 @@ export class TestDungeon extends Dungeon {
     super('Test Dungeon', [
       new Opposition('some monsters', [
         // EnemyBuilder.buildRedMage(),
-        // EnemyBuilder.buildRedMage(),
-        EnemyBuilder.buildBlackMage(),
-        EnemyBuilder.buildBlackMage(),
-        // EnemyBuilder.buildGenericMonster(1, 50),
-        // EnemyBuilder.buildGenericMonster(1, 50),
+        // EnemyBuilder.buildBlackMage(),
+        // EnemyBuilder.buildGenericMonster(30, 6),
+        // EnemyBuilder.buildGenericMonster(30, 6),
         // EnemyBuilder.buildGenericMonster(30, 5),
         // EnemyBuilder.buildBrambleSpirit(),
-        // EnemyBuilder.buildBrambleSpirit(),
-        // EnemyBuilder.buildBrambleSpirit(),
-        // EnemyBuilder.buildWolf(),
+        EnemyBuilder.buildTroll(),
+        EnemyBuilder.buildTroll(),
+        EnemyBuilder.buildTroll(),
         // EnemyBuilder.buildWolf(),
         // EnemyBuilder.buildGenericMonster(1, 1),
-        // EnemyBuilder.buildGenericMonster(30,5),
-        // EnemyBuilder.buildGenericMonster(30,5),
         // EnemyBuilder.buildGenericMonster(30,5),
       ], [
         // EnemyBuilder.buildGenericMonster(1, 1),
-        // EnemyBuilder.buildGenericMonster(1, 1),
-        // EnemyBuilder.buildGenericMonster(1, 1),
-        // EnemyBuilder.buildGenericMonster(50, 8),
-        // EnemyBuilder.buildGenericMonster(50, 8),
         // EnemyBuilder.buildGenericMonster(50, 8),
       ]),
       new Opposition('some monsters', [
         EnemyBuilder.buildGoblinShaman(),
+        EnemyBuilder.buildGenericMonster(1, 1),
       ], []),
       // new Opposition('some monsters', [
       //   EnemyBuilder.buildGenericMonster(1, 1),
-      //   EnemyBuilder.buildGenericMonster(1, 8),
       //   EnemyBuilder.buildGenericMonster(1, 8),
       // ], []),
     ]);
@@ -167,7 +159,7 @@ export class MageTowerDungeon extends Dungeon {
       ]),
       new Opposition('white mages', [
         EnemyBuilder.buildStoneGolem(),
-      ],[
+      ], [
         EnemyBuilder.buildWhiteMage(),
         EnemyBuilder.buildWhiteMage(),
       ]),

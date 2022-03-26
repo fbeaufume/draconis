@@ -15,8 +15,7 @@ import {
   StrikeSmall,
   Vengeance
 } from "./skill.model";
-import {attackBonus, attackMalus, bleed, burn, poison} from "./status-type.model";
-import {DamageReflection, Regeneration} from "./passive.model";
+import {attackBonus, attackMalus, bleed, burn, poison, reflectMeleeDamage, regeneration} from "./status-type.model";
 
 export class EnemyBuilder {
 
@@ -50,7 +49,7 @@ export class EnemyBuilder {
   static buildBrambleSpirit(): Enemy {
     return new StrategicMeleeEnemy(CreatureType.ELEMENTAL, 'Bramble Spirit', 24, 6,
       new Strike('Scratch'))
-      .withPassive(new DamageReflection(0.6));
+      .withPassiveStatus(reflectMeleeDamage, 0);
   }
 
   static buildOldMan(): Enemy {
@@ -60,7 +59,7 @@ export class EnemyBuilder {
   static buildTroll(): Enemy {
     return new StrategicMeleeEnemy(CreatureType.HUMANOID, 'Troll', 46, 8,
       new Strike('Attack'))
-      .withPassive(new Regeneration(1));
+      .withPassiveStatus(regeneration, 1);
   }
 
   static buildGoblinSoldier(): Enemy {

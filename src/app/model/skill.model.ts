@@ -14,7 +14,7 @@ import {
   defenseBonus,
   defenseMalus,
   ReflectDamageStatusEffect,
-  regen,
+  regeneration,
   StatusType
 } from "./status-type.model";
 import {Character} from "./character.model";
@@ -24,7 +24,6 @@ import {StatusApplication} from "./status-application.model";
 import {Enemy} from "./enemy.model";
 import {Constants} from "./constants.model";
 import {Fight} from "./fight.model";
-import {DamageReflection} from "./passive.model";
 import {EnemyStrategy} from "./enemy-strategy.model";
 
 /**
@@ -355,23 +354,23 @@ export function computeEffectiveDamage(skill: Skill | null, emitter: Creature, r
 
   // Apply the defend bonus
   // noinspection UnnecessaryLocalVariableJS
-  const afterDefend = receiver.hasActiveStatus(defend) ? afterCritical * (1 - Constants.DEFEND_BONUS) : afterCritical;
+  const afterDefend = receiver.hasStatusType(defend) ? afterCritical * (1 - Constants.DEFEND_BONUS) : afterCritical;
 
   // Apply the attack bonus or malus
   let afterAttack = afterDefend;
-  if (emitter.hasPositiveActiveStatus(attackBonus)) {
+  if (emitter.hasPositiveStatusType(attackBonus)) {
     afterAttack = afterAttack * (1 + Constants.ATTACK_BONUS);
   }
-  if (emitter.hasNegativeActiveStatus(attackMalus)) {
+  if (emitter.hasNegativeStatusType(attackMalus)) {
     afterAttack = afterAttack * (1 - Constants.ATTACK_BONUS);
   }
 
   // Apply the defense bonus or malus
   let afterDefense = afterAttack;
-  if (receiver.hasPositiveActiveStatus(defenseBonus)) {
+  if (receiver.hasPositiveStatusType(defenseBonus)) {
     afterDefense = afterDefense * (1 - Constants.DEFENSE_BONUS);
   }
-  if (receiver.hasNegativeActiveStatus(defenseMalus)) {
+  if (receiver.hasNegativeStatusType(defenseMalus)) {
     afterDefense = afterDefense * (1 + Constants.DEFENSE_BONUS);
   }
 
@@ -381,34 +380,27 @@ export function computeEffectiveDamage(skill: Skill | null, emitter: Creature, r
 
   // Apply status effects if needed, for example a creature protected by a fire trap
   // will apply a fire damage-over-time back to the attacker when melee attacked
-  receiver.activeStatusApplications.forEach(sa => {
-    sa.statusType.statusEffects.forEach(statusEffect => {
-      // Check the status effect range
-      const attackRange = statusEffect.attackRange;
-      if (attackRange == 0 && skill != null && skill.range == 2) {
-        // The status effect requires a melee attack, but it was a distance attack
-        return;
-      }
+  if (skill != null) {
+    receiver.getAllStatusApplications().forEach(sa => {
+      sa.statusType.statusEffects.forEach(statusEffect => {
+        // Check the status effect range
+        if (statusEffect.attackRange == 1 && skill.range != 1) {
+          // The status effect requires a melee skill, but it was a distance skill
+          return;
+        }
 
-      if (statusEffect instanceof ApplyDotStatusEffect) {
-        emitter.applyStatus(new StatusApplication(statusEffect.dotType, statusEffect.power, sa.originCreature, statusEffect.duration));
-      }
+        if (statusEffect instanceof ApplyDotStatusEffect) {
+          emitter.applyStatus(new StatusApplication(statusEffect.dotType, statusEffect.power, sa.originCreature, statusEffect.duration));
+        }
 
-      if (statusEffect instanceof ApplyStatusStatusEffect) {
-        emitter.applyStatus(new StatusApplication(statusEffect.statusType, 0, sa.originCreature, statusEffect.duration))
-      }
+        if (statusEffect instanceof ApplyStatusStatusEffect) {
+          emitter.applyStatus(new StatusApplication(statusEffect.statusType, 0, sa.originCreature, statusEffect.duration))
+        }
 
-      if (statusEffect instanceof ReflectDamageStatusEffect) {
-        emitter.addLifeChange(new LifeLoss(afterSpecialtyDefense * statusEffect.percentage, efficiency));
-      }
-    })
-  })
-
-  // Use the reflected damages from passives
-  if (skill != null && skill.range == 1) {
-    // Use reflected damages from passives
-    receiver.getPassivesOfType(DamageReflection).forEach(passive => {
-      emitter.addLifeChange(new LifeLoss(afterSpecialtyDefense * passive.powerLevel, efficiency));
+        if (statusEffect instanceof ReflectDamageStatusEffect) {
+          emitter.addLifeChange(new LifeLoss(afterSpecialtyDefense * statusEffect.percentage, efficiency));
+        }
+      });
     });
   }
 
@@ -739,10 +731,10 @@ export class ComboDamage extends Skill {
     // Get the current step and power of the combo
     let comboStep = 1;
     let power: number = this.powerLevels[0];
-    if (targetCreature.hasActiveStatus(combo1)) {
+    if (targetCreature.hasStatusType(combo1)) {
       comboStep = 2;
       power = this.powerLevels[1];
-    } else if (targetCreature.hasActiveStatus(combo2)) {
+    } else if (targetCreature.hasStatusType(combo2)) {
       comboStep = 3;
       power = this.powerLevels[2];
     }
@@ -914,7 +906,7 @@ export class DualHeal extends Skill {
 export class Regenerate extends Heal {
 
   executeOnTargetCreature(activeCreature: Creature, targetCreature: Creature, fight: Fight) {
-    targetCreature.applyStatus(new StatusApplication(regen, this.powerLevels[1], activeCreature, this.statusDuration));
+    targetCreature.applyStatus(new StatusApplication(regeneration, this.powerLevels[1], activeCreature, this.statusDuration));
   }
 
   get iconTypes(): SkillIconType[] {

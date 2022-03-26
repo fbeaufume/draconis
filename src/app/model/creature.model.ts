@@ -2,7 +2,6 @@ import {computeEffectiveDamage, computeEffectiveHeal, Skill, Wait} from './skill
 import {logs} from './log.model';
 import {Constants} from './constants.model';
 import {
-  Class,
   CreatureClass,
   CreatureType,
   FactionType,
@@ -13,7 +12,6 @@ import {
 import {StatusType} from "./status-type.model";
 import {LifeChange} from "./life-change.model";
 import {StatusApplication} from "./status-application.model";
-import {Passive, Regeneration} from "./passive.model";
 
 /**
  * Base class for enemies and characters.
@@ -114,11 +112,10 @@ export abstract class Creature {
    */
   specialties: CreatureType[];
 
-  // TODO FBE use StatusApplication instead of Passive then remove the passive.model.ts file
   /**
    * Passive status applications of the creature do not expired.
    */
-  passives: Passive[] = [];
+  passiveStatusApplications: StatusApplication[] = [];
 
   /**
    * Active status applications have a duration and eventually expire and get removed.
@@ -263,48 +260,61 @@ export abstract class Creature {
     return this.specialties.includes(creature.type);
   }
 
-  addPassive(passive: Passive) {
-    this.passives.push(passive);
+  addPassiveStatusApplication(statusApplication: StatusApplication) {
+    this.passiveStatusApplications.push(statusApplication);
   }
 
+  // TODO FBE regeneration granted by paladin is not correctly displayed (the three dots are displayed but not the icon)
   /**
-   * Get all passives of a certain type.
+   * Used by the UI to display the positive active statuses.
    */
-  getPassivesOfType<T extends Passive>(type: Class<T>): T[] {
-    let passives: T[] = [];
-    this.passives.forEach(passive => {
-      if (passive instanceof type) {
-        passives.push(passive);
-      }
-    });
-    return passives;
-  }
-
-  getPositiveActiveStatuses(): StatusApplication[] {
+  getPositiveStatusApplications(): StatusApplication[] {
     return this.activeStatusApplications.filter(sa => sa.isImprovement());
   }
 
-  getNegativeActiveStatuses(): StatusApplication[] {
+  /**
+   * Used by the UI to display the negative active statuses.
+   */
+  getNegativeStatusApplications(): StatusApplication[] {
     return this.activeStatusApplications.filter(sa => !sa.isImprovement());
+  }
+
+  /**
+   * Return all status application of the creature, i.e. passive ones and active ones.
+   */
+  getAllStatusApplications(): StatusApplication[] {
+    const statusApplications: StatusApplication[] = [];
+    statusApplications.push(...this.passiveStatusApplications);
+    statusApplications.push(...this.activeStatusApplications);
+    return statusApplications;
   }
 
   /**
    * Return all status applications from status types using a given tag.
    */
-  getActiveStatusApplicationsByTag(tagType: StatusTypeTagType): StatusApplication[] {
-    return this.activeStatusApplications.filter(sa => sa.hasTagType(tagType));
+  getStatusApplicationsByTag(tagType: StatusTypeTagType): StatusApplication[] {
+    return this.getAllStatusApplications().filter(sa => sa.hasTagType(tagType));
   }
 
-  hasActiveStatus(status: StatusType): boolean {
-    return this.activeStatusApplications.map(sa => sa.statusType.name).includes(status.name);
+  /**
+   * Used to check the presence of a status type that is neither positive nor negative, e.g. combo or defend.
+   */
+  hasStatusType(status: StatusType): boolean {
+    return this.getAllStatusApplications().map(sa => sa.statusType.name).includes(status.name);
   }
 
-  hasPositiveActiveStatus(status: StatusType): boolean {
-    return this.getPositiveActiveStatuses().map(sa => sa.statusType.name).includes(status.name);
+  /**
+   * Used to check the presence of a status type that is positive, e.g. attack bonus or defense bonus.
+   */
+  hasPositiveStatusType(status: StatusType): boolean {
+    return this.getAllStatusApplications().filter(sa => sa.isImprovement()).map(sa => sa.statusType.name).includes(status.name);
   }
 
-  hasNegativeActiveStatus(status: StatusType): boolean {
-    return this.getNegativeActiveStatuses().map(sa => sa.statusType.name).includes(status.name);
+  /**
+   * Used to check the presence of a status type that is negative, e.g. attack malus or defense malus.
+   */
+  hasNegativeStatusType(status: StatusType): boolean {
+    return this.getAllStatusApplications().filter(sa => !sa.isImprovement()).map(sa => sa.statusType.name).includes(status.name);
   }
 
   /**
@@ -377,7 +387,7 @@ export abstract class Creature {
    */
   applyDotsAndHots() {
     // Use the DOT statuses
-    this.getActiveStatusApplicationsByTag(StatusTypeTagType.DOT).forEach(sa => {
+    this.getStatusApplicationsByTag(StatusTypeTagType.DOT).forEach(sa => {
       if (sa.originCreature != null) {
         const lifeChange = computeEffectiveDamage(null, sa.originCreature, this, sa.power, true);
         this.addLifeChange(lifeChange);
@@ -386,20 +396,13 @@ export abstract class Creature {
     })
 
     // Use the HOT statuses
-    this.getActiveStatusApplicationsByTag(StatusTypeTagType.HOT).forEach(sa => {
+    this.getStatusApplicationsByTag(StatusTypeTagType.HOT).forEach(sa => {
       if (sa.originCreature != null) {
         const lifeChange = computeEffectiveHeal(sa.originCreature, this, sa.power);
         this.addLifeChange(lifeChange);
         logs.addCreatureLog(LogType.Hot, this, null, lifeChange, null);
       }
     })
-
-    // Use the regeneration passives
-    this.getPassivesOfType(Regeneration).forEach(passive => {
-      const lifeChange = computeEffectiveHeal(this, this, passive.powerLevel);
-      this.addLifeChange(lifeChange);
-      logs.addCreatureLog(LogType.Hot, this, null, lifeChange, null);
-    });
   }
 
   clearStatusApplications() {

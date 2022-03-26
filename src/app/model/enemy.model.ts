@@ -6,8 +6,9 @@ import {logs} from "./log.model";
 import {Creature, defaultEnemyAction, EnemyAction} from "./creature.model";
 import {EnemyStrategy, PrioritySkillStrategy} from "./enemy-strategy.model";
 import {Constants} from "./constants.model";
-import {Passive} from "./passive.model";
 import {settings} from "./settings.model";
+import {StatusApplication} from "./status-application.model";
+import {StatusType} from "./status-type.model";
 
 /**
  * Base class for enemy classes.
@@ -47,8 +48,9 @@ export abstract class Enemy extends Creature {
     this.actions = actions;
   }
 
-  withPassive(passive: Passive): Enemy {
-    this.addPassive(passive);
+  withPassiveStatus(statusType: StatusType, power: number) {
+    const statusApplication = new StatusApplication(statusType, power, this, 0);
+    this.addPassiveStatusApplication(statusApplication);
     return this;
   }
 

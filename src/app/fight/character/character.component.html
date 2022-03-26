@@ -37,8 +37,8 @@
   </div>
 </div>
 <div class="flex justify-center space-x-1 pt-4">
-  <app-status *ngFor="let statusApplication of character.getPositiveActiveStatuses()"
+  <app-status *ngFor="let statusApplication of character.getPositiveStatusApplications()"
               [statusApplication]="statusApplication"></app-status>
-  <app-status *ngFor="let statusApplication of character.getNegativeActiveStatuses()"
+  <app-status *ngFor="let statusApplication of character.getNegativeStatusApplications()"
               [statusApplication]="statusApplication"></app-status>
 </div>

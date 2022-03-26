@@ -26,14 +26,14 @@ import {
 import {
   attackBonus,
   attackMalus,
-  bladeShieldBonus,
+  reflectMeleeDamage,
   bleed,
   burn,
   defend,
   defenseBonus,
   defenseMalus,
-  fireTrapBonus,
-  iceTrapBonus,
+  fireTrap,
+  iceTrap,
   poison
 } from "./status-type.model";
 import {Constants} from "./constants.model";
@@ -246,9 +246,9 @@ export class StandardParty extends Party {
             new Damage('Barrage', SkillTargetType.OTHER_FIRST_ROW, 20, 1, 2,
               'Inflict 50% damage to first row enemies.', [0.5]),
             new ApplyImprovement('Fire Trap', SkillTargetType.SAME_ALIVE, 10, 0, 2,
-              'Protect the target with a fire trap that deals 75% damage to melee attackers over 3 rounds.', [], [fireTrapBonus]),
+              'Protect the target with a fire trap that deals 75% damage to melee attackers over 3 rounds.', [], [fireTrap]),
             new ApplyImprovement('Ice Trap', SkillTargetType.SAME_ALIVE, 10, 0, 2,
-              'Protect the target with an ice trap that reduces the attack and defense of melee attackers by 20% during 3 rounds.', [], [iceTrapBonus]),
+              'Protect the target with an ice trap that reduces the attack and defense of melee attackers by 20% during 3 rounds.', [], [iceTrap]),
             new ApplyDeterioration('Crippling Shot', SkillTargetType.OTHER_ALIVE, 10, 2, 1,
               'Reduce the target defense by 20% during 3 rounds.', [], [defenseMalus]),
           ],
@@ -272,7 +272,7 @@ export class StandardParty extends Party {
             new Damage('Inferno', SkillTargetType.OTHER_ALIVE_ALL, 10, 2, 3,
               'Inflict 30% damage to all enemies.', [0.3]),
             new ApplyImprovement('Blade Shield', SkillTargetType.SAME_ALIVE, 10, 0, 2,
-              'Protect the target with blades that reflects 50% received melee damage for 3 rounds.', [0.5], [bladeShieldBonus]),
+              'Protect the target with blades that reflects 50% received melee damage for 3 rounds.', [], [reflectMeleeDamage]),
             new AlterTime('Alter Time', SkillTargetType.ALIVE, 10, 2, 1,
               'Modify the duration of all statuses of a target by one turn.')
           ],

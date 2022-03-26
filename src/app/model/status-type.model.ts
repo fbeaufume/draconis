@@ -155,7 +155,7 @@ export const poison = new StatusType('Poison', false, StatusExpirationType.END_O
   [StatusTypeTagType.DOT]);
 export const burn = new StatusType('Burn', false, StatusExpirationType.END_OF_ROUND, true,
   [StatusTypeTagType.DOT]);
-export const regen = new StatusType('Regen', true, StatusExpirationType.END_OF_ROUND, true,
+export const regeneration = new StatusType('Regeneration', true, StatusExpirationType.END_OF_ROUND, true,
   [StatusTypeTagType.HOT]);
 export const combo1 = new StatusType('Combo1', false, StatusExpirationType.ORIGIN_CREATURE_TURN_END, true);
 export const combo2 = new StatusType('Combo2', false, StatusExpirationType.ORIGIN_CREATURE_TURN_END, true);
@@ -163,9 +163,9 @@ export const attackBonus = new StatusType('Attack', true, StatusExpirationType.O
 export const attackMalus = new StatusType('Attack', false, StatusExpirationType.ORIGIN_CREATURE_TURN_START, false);
 export const defenseBonus = new StatusType('Defense', true, StatusExpirationType.ORIGIN_CREATURE_TURN_START, false);
 export const defenseMalus = new StatusType('Defense', false, StatusExpirationType.ORIGIN_CREATURE_TURN_START, false);
-export const fireTrapBonus = new StatusType('Fire Trap', true, StatusExpirationType.ORIGIN_CREATURE_TURN_START, false,
+export const fireTrap = new StatusType('Fire Trap', true, StatusExpirationType.ORIGIN_CREATURE_TURN_START, false,
   [], [new ApplyDotStatusEffect(1, burn, 0.25, 3)]);
-export const iceTrapBonus = new StatusType('Ice Trap', true, StatusExpirationType.ORIGIN_CREATURE_TURN_START, false,
+export const iceTrap = new StatusType('Ice Trap', true, StatusExpirationType.ORIGIN_CREATURE_TURN_START, false,
   [], [new ApplyStatusStatusEffect(1, attackMalus, 2), new ApplyStatusStatusEffect(1, defenseMalus, 2)]);
-export const bladeShieldBonus = new StatusType('Blade Shield', true, StatusExpirationType.ORIGIN_CREATURE_TURN_START, false,
+export const reflectMeleeDamage = new StatusType('Blade Shield', true, StatusExpirationType.ORIGIN_CREATURE_TURN_START, false,
   [], [new ReflectDamageStatusEffect(1, 0.5)]);

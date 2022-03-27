@@ -353,8 +353,6 @@ export class FightService {
    */
   executeSkill(skill: Skill) {
     skill.execute(this.fight);
-
-    // TODO FBE process here (instead of in 'processEndOfRound') the DOT and HOT caused by this creature to all creatures
   }
 
   /**
@@ -478,19 +476,19 @@ export class FightService {
   async processEndOfFight(): Promise<boolean> {
     // Handle party defeat
     if (this.party.isWiped()) {
+      this.endOfTurnCleanup();
+
       await this.pause();
 
-      logs.addBasicLog(LogType.PartyDefeat);
-
       // The dungeon is over
-      this.state = GameState.DUNGEON_END; // TODO FBE the 'Quit dungeon' button is not displayed anymore
+      logs.addBasicLog(LogType.PartyDefeat);
+      this.state = GameState.DUNGEON_END;
 
       return true;
     }
 
     // Handle party victory
     if (this.fight.opposition.isWiped()) {
-      // Apply the skill cost
       this.endOfTurnCleanup();
 
       await this.pause();

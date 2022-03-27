@@ -29,13 +29,12 @@ export class TestDungeon extends Dungeon {
       new Opposition('some monsters', [
         // EnemyBuilder.buildRedMage(),
         // EnemyBuilder.buildBlackMage(),
+        EnemyBuilder.buildGenericMonster(1, 100),
+        EnemyBuilder.buildGenericMonster(1, 100),
+        EnemyBuilder.buildGenericMonster(1, 100),
         // EnemyBuilder.buildGenericMonster(30, 6),
-        // EnemyBuilder.buildGenericMonster(30, 6),
-        // EnemyBuilder.buildGenericMonster(30, 5),
         // EnemyBuilder.buildBrambleSpirit(),
-        EnemyBuilder.buildTroll(),
-        EnemyBuilder.buildTroll(),
-        EnemyBuilder.buildTroll(),
+        // EnemyBuilder.buildTroll(),
         // EnemyBuilder.buildWolf(),
         // EnemyBuilder.buildGenericMonster(1, 1),
         // EnemyBuilder.buildGenericMonster(30,5),
@@ -44,7 +43,7 @@ export class TestDungeon extends Dungeon {
         // EnemyBuilder.buildGenericMonster(50, 8),
       ]),
       new Opposition('some monsters', [
-        EnemyBuilder.buildGoblinShaman(),
+        // EnemyBuilder.buildGoblinShaman(),
         EnemyBuilder.buildGenericMonster(1, 1),
       ], []),
       // new Opposition('some monsters', [

@@ -264,7 +264,6 @@ export abstract class Creature {
     this.passiveStatusApplications.push(statusApplication);
   }
 
-  // TODO FBE regeneration granted by paladin is not correctly displayed (the three dots are displayed but not the icon)
   /**
    * Used by the UI to display the positive active statuses.
    */

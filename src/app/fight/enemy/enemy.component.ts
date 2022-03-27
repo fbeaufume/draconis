@@ -3,8 +3,7 @@ import {Enemy} from "../../model/enemy.model";
 
 @Component({
   selector: 'app-enemy',
-  templateUrl: './enemy.component.html',
-  styleUrls: ['./enemy.component.css']
+  templateUrl: './enemy.component.html'
 })
 export class EnemyComponent {
 

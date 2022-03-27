@@ -3,8 +3,7 @@ import {LifeChange} from "../../../model/life-change.model";
 
 @Component({
   selector: 'app-life-change-log',
-  templateUrl: './life-change-log.component.html',
-  styleUrls: ['./life-change-log.component.css']
+  templateUrl: './life-change-log.component.html'
 })
 export class LifeChangeLogComponent {
 

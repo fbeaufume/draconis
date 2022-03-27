@@ -11,8 +11,7 @@ import {Fight} from "../model/fight.model";
 
 @Component({
   selector: 'app-fight',
-  templateUrl: './fight.component.html',
-  styleUrls: ['./fight.component.css']
+  templateUrl: './fight.component.html'
 })
 export class FightComponent implements AfterViewInit {
 

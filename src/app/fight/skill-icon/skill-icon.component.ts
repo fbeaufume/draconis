@@ -3,8 +3,7 @@ import {SkillIconType} from "../../model/common.model";
 
 @Component({
   selector: 'app-skill-icon',
-  templateUrl: './skill-icon.component.html',
-  styleUrls: ['./skill-icon.component.css']
+  templateUrl: './skill-icon.component.html'
 })
 export class SkillIconComponent {
 

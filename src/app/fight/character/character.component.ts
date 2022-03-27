@@ -3,8 +3,7 @@ import {Character} from '../../model/character.model';
 
 @Component({
   selector: 'app-character',
-  templateUrl: './character.component.html',
-  styleUrls: ['./character.component.css']
+  templateUrl: './character.component.html'
 })
 export class CharacterComponent {
 

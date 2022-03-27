@@ -3,8 +3,7 @@ import {Creature} from '../../../model/creature.model';
 
 @Component({
   selector: 'app-creature-log',
-  templateUrl: './creature-log.component.html',
-  styleUrls: ['./creature-log.component.css']
+  templateUrl: './creature-log.component.html'
 })
 export class CreatureLogComponent {
 

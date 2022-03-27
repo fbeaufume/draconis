@@ -3,8 +3,7 @@ import {StatusApplication} from "../../../model/status-application.model";
 
 @Component({
   selector: 'app-status-log',
-  templateUrl: './status-log.component.html',
-  styleUrls: ['./status-log.component.css']
+  templateUrl: './status-log.component.html'
 })
 export class StatusLogComponent {
 

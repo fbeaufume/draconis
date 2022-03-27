@@ -3,8 +3,7 @@ import {Creature} from '../../model/creature.model';
 
 @Component({
   selector: 'app-class-icon',
-  templateUrl: './class-icon.component.html',
-  styleUrls: ['./class-icon.component.css']
+  templateUrl: './class-icon.component.html'
 })
 export class ClassIconComponent {
 

@@ -15,7 +15,16 @@ import {
   StrikeSmall,
   Vengeance
 } from "./skill.model";
-import {attackBonus, attackMalus, bleed, burn, poison, reflectMeleeDamage, regeneration} from "./status-type.model";
+import {
+  attackBonus,
+  attackMalus,
+  bleed,
+  burn,
+  fireTrap,
+  poison,
+  reflectMeleeDamage,
+  regeneration
+} from "./status-type.model";
 
 export class EnemyBuilder {
 
@@ -116,6 +125,12 @@ export class EnemyBuilder {
   static buildStoneGolem(): Enemy {
     return new StrategicMeleeEnemy(CreatureType.ELEMENTAL, 'Stone Golem', 40, 5,
       new Strike('Bash'));
+  }
+
+  static buildFireElemental(): Enemy {
+    return new StrategicMeleeEnemy(CreatureType.ELEMENTAL, 'Fire Elemental', 30, 7,
+      new Strike('Strike'))
+      .withPassiveStatus(fireTrap, 0);
   }
 
   static buildRedMage(): Enemy {

@@ -42,9 +42,9 @@ export class EnemyBuilder {
     return new StrategicMeleeEnemy(CreatureType.BEAST, 'Bear', 34, 8,
       new WeightedSkillStrategy()
         .addSkill(new Strike('Bite'), 1)
-        .addSkill(new DamageAndDot('Maul', SkillTargetType.OTHER_ALIVE, 20, 1,
+        .addSkill(new DamageAndDot('Maul', SkillTargetType.OTHER_ALIVE, 20, true, 1,
           1, '', [0.5, 0.4], [bleed]), 1)
-        .addSkill(new ApplyDeterioration('Roar', SkillTargetType.OTHER_ALIVE, 0, 1,
+        .addSkill(new ApplyDeterioration('Roar', SkillTargetType.OTHER_ALIVE, 0, false, 1,
           1, '', [], [attackMalus]), 1));
   }
 
@@ -52,7 +52,7 @@ export class EnemyBuilder {
     return new StrategicMeleeEnemy(CreatureType.BEAST, 'Wolf', 22, 6,
       new WeightedSkillStrategy()
         .addSkill(new Strike('Bite'), 3)
-        .addSkill(new ApplyImprovement('Howl', SkillTargetType.SELF, 0, 0,
+        .addSkill(new ApplyImprovement('Howl', SkillTargetType.SELF, 0, false, 0,
           1, '', [], [attackBonus]), 1));
   }
 
@@ -74,7 +74,7 @@ export class EnemyBuilder {
 
   static buildGoblinSoldier(): Enemy {
     return new StrategicMeleeEnemy(CreatureType.HUMANOID, 'Goblin Soldier', 22, 6,
-      new Vengeance('Strike', SkillTargetType.OTHER_ALIVE, 0, 1, 1, ''));
+      new Vengeance('Strike', SkillTargetType.OTHER_ALIVE, 0, true, 1, 1, ''));
   }
 
   static buildGoblinHunter(): Enemy {
@@ -85,7 +85,7 @@ export class EnemyBuilder {
   static buildGoblinShaman(): Enemy {
     return new StrategicEnemy(CreatureType.HUMANOID, 'Goblin Shaman', 26, 7,
       new PrioritySkillStrategy(
-        new Heal('Heal', SkillTargetType.SAME_WOUNDED, 5, 0, 1, ''),
+        new Heal('Heal', SkillTargetType.SAME_WOUNDED, 5, false, 0, 1, ''),
         new Shot('Lightning')));
   }
 
@@ -108,12 +108,12 @@ export class EnemyBuilder {
 
   static buildZombie(): Enemy {
     return new StrategicMeleeEnemy(CreatureType.UNDEAD, 'Zombie', 28, 8,
-      new DamageAndDot('Infect', SkillTargetType.OTHER_ALIVE, 20, 1, 1, '', [0.5, 0.4], [poison]));
+      new DamageAndDot('Infect', SkillTargetType.OTHER_ALIVE, 20, true, 1, 1, '', [0.5, 0.4], [poison]));
   }
 
   static buildVampire(): Enemy {
     return new StrategicMeleeEnemy(CreatureType.UNDEAD, 'Vampire', 34, 8,
-      new Drain('Bite', SkillTargetType.OTHER_ALIVE, 20, 1, 1, '', [0.7, 0.7]));
+      new Drain('Bite', SkillTargetType.OTHER_ALIVE, 20, true, 1, 1, '', [0.7, 0.7]));
   }
 
   static buildLich(): Enemy {
@@ -144,21 +144,21 @@ export class EnemyBuilder {
     return new StrategicEnemy(CreatureType.HUMANOID, 'Red Mage', 26, 7,
       new WeightedSkillStrategy()
         .addSkill(new Shot('Fire Blast'), 1)
-        .addSkill(new DamageAndDot('Burn', SkillTargetType.OTHER_ALIVE, 10, 2, 1, '', [0.5, 0.5], [burn]), 1)
-        .addSkill(new Damage('Fireball', SkillTargetType.OTHER_ALIVE_TRIPLE, 10, 2, 1, '', [0.8]), 1));
+        .addSkill(new DamageAndDot('Burn', SkillTargetType.OTHER_ALIVE, 10, false, 2, 1, '', [0.5, 0.5], [burn]), 1)
+        .addSkill(new Damage('Fireball', SkillTargetType.OTHER_ALIVE_TRIPLE, 10, false, 2, 1, '', [0.8]), 1));
   }
 
   static buildWhiteMage(): Enemy {
     return new StrategicEnemy(CreatureType.HUMANOID, 'White Mage', 26, 7,
       new PrioritySkillStrategy(
-        new Heal('Heal', SkillTargetType.SAME_WOUNDED, 5, 0, 1, ''),
+        new Heal('Heal', SkillTargetType.SAME_WOUNDED, 5, false, 0, 1, ''),
         new Shot('Light Blast')));
   }
 
   static buildBlackMage(): Enemy {
     return new StrategicEnemy(CreatureType.HUMANOID, 'Black Mage', 26, 7,
       new WeightedSkillStrategy()
-        .addSkill(new Drain('Drain Life', SkillTargetType.OTHER_ALIVE, 10, 2, 1, '', [0.5, 1]), 1)
-        .addSkill(new MassAlterTime('Mass Alter Time', SkillTargetType.OTHER_ALL, 10, 2, 1, ''), 1));
+        .addSkill(new Drain('Drain Life', SkillTargetType.OTHER_ALIVE, 10, false, 2, 1, '', [0.5, 1]), 1)
+        .addSkill(new MassAlterTime('Mass Alter Time', SkillTargetType.OTHER_ALL, 10, false, 2, 1, ''), 1));
   }
 }

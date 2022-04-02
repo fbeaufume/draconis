@@ -52,6 +52,15 @@ export abstract class Skill extends EnemyStrategy {
   cost: number;
 
   /**
+   * True if this is a melee skill.
+   * This is used to check if this skill triggers or not an attack effect. For example using a melee attack on a fire
+   * enchanted creature can burn the attacker.
+   * Checking if this is a melee skill using the range is incorrect since some skills (such as the hunter barrage)
+   * have a range of 1 but are not melee attacks.
+   */
+  melee: boolean;
+
+  /**
    * The range of the skill:
    * - 0 means it can target only creatures of the same faction
    * - 1+ is the number of rows of the other faction it can reach
@@ -107,6 +116,7 @@ export abstract class Skill extends EnemyStrategy {
     name: string,
     targetType: SkillTargetType,
     cost: number,
+    melee: boolean,
     range: number,
     coolDownMax: number,
     description: string,
@@ -119,6 +129,7 @@ export abstract class Skill extends EnemyStrategy {
     this.name = name;
     this.targetType = targetType;
     this.cost = cost;
+    this.melee = melee;
     this.range = range;
     this.cooldownMax = coolDownMax;
     this.cooldown = 0;
@@ -384,8 +395,8 @@ export function computeEffectiveDamage(skill: Skill | null, emitter: Creature, r
     receiver.getAllStatusApplications().forEach(sa => {
       sa.statusType.statusEffects.forEach(statusEffect => {
         // Check the status effect range
-        if (statusEffect.attackRange == 1 && skill.range != 1) {
-          // The status effect requires a melee skill, but it was a distance skill
+        if (statusEffect.melee && !skill.melee) {
+          // The status effect requires a melee skill, but the skill os not a melee one
           return;
         }
 
@@ -437,7 +448,7 @@ function randomize(amount: number): number {
 export class Advance extends Skill {
 
   constructor() {
-    super('Advance', SkillTargetType.NONE, 0, 0, 1, '');
+    super('Advance', SkillTargetType.NONE, 0, false, 0, 1, '');
   }
 
   get iconTypes(): SkillIconType[] {
@@ -495,7 +506,7 @@ export class Advance extends Skill {
 export class Wait extends Skill {
 
   constructor() {
-    super('Wait', SkillTargetType.NONE, 0, 0, 1, '');
+    super('Wait', SkillTargetType.NONE, 0, false, 0, 1, '');
   }
 
   get iconTypes(): SkillIconType[] {
@@ -515,7 +526,7 @@ export class LogMessage extends Skill {
   message: string;
 
   constructor(message: string) {
-    super('Log Message', SkillTargetType.NONE, 0, 0, 1, '');
+    super('Log Message', SkillTargetType.NONE, 0, false, 0, 1, '');
     this.message = message;
   }
 
@@ -534,7 +545,7 @@ export class LogMessage extends Skill {
 export class Leave extends Skill {
 
   constructor() {
-    super('Leave', SkillTargetType.NONE, 0, 0, 1, '');
+    super('Leave', SkillTargetType.NONE, 0, false, 0, 1, '');
   }
 
   get iconTypes(): SkillIconType[] {
@@ -573,7 +584,7 @@ export class Defend extends Skill {
 export class DefendTech extends Defend {
 
   constructor() {
-    super('Defend', SkillTargetType.NONE, -1000, 0, 1,
+    super('Defend', SkillTargetType.NONE, -1000, false, 0, 1,
       'Reduce received damage by 20% during one turn. Regain all TP.', [1], [], Constants.DEFEND_DURATION);
   }
 }
@@ -584,7 +595,7 @@ export class DefendTech extends Defend {
 export class DefendMagic extends Defend {
 
   constructor() {
-    super('Defend', SkillTargetType.NONE, 0, 0, 1,
+    super('Defend', SkillTargetType.NONE, 0, false, 0, 1,
       'Reduce received damage by 20% during one turn.', [1], [], Constants.DEFEND_DURATION);
   }
 }
@@ -645,7 +656,7 @@ export class Damage extends Skill {
 export class Strike extends Damage {
 
   constructor(name: string) {
-    super(name, SkillTargetType.OTHER_ALIVE, 10, 1, 1, 'Inflict 100% damage to the target.');
+    super(name, SkillTargetType.OTHER_ALIVE, 10, true, 1, 1, 'Inflict 100% damage to the target.');
   }
 }
 
@@ -655,7 +666,7 @@ export class Strike extends Damage {
 export class StrikeSmall extends Damage {
 
   constructor(name: string, targetType: SkillTargetType = SkillTargetType.OTHER_ALIVE) {
-    super(name, targetType, 10, 1, 1, '', [0.7]);
+    super(name, targetType, 10, true, 1, 1, '', [0.7]);
   }
 }
 
@@ -665,7 +676,7 @@ export class StrikeSmall extends Damage {
 export class Shot extends Damage {
 
   constructor(name: string) {
-    super(name, SkillTargetType.OTHER_ALIVE, 10, 2, 1, 'Inflict 100% damage to the target.');
+    super(name, SkillTargetType.OTHER_ALIVE, 10, false, 2, 1, 'Inflict 100% damage to the target.');
   }
 }
 

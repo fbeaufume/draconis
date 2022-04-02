@@ -7,15 +7,12 @@ import {StatusExpirationType, StatusTypeTagType} from "./common.model";
 export abstract class StatusEffect {
 
   /**
-   * The range of the attacks that trigger this effect:
-   * - 0 is the range is not used
-   * - 1 for melee attacks only
-   * - 2 for melee or distance attacks
+   * Is this status effect only triggered by melee attacks.
    */
-  attackRange: number;
+  melee: boolean;
 
-  constructor(attackRange: number) {
-    this.attackRange = attackRange;
+  protected constructor(melee: boolean) {
+    this.melee = melee;
   }
 }
 
@@ -39,8 +36,8 @@ export class ApplyDotStatusEffect extends StatusEffect {
    */
   duration: number;
 
-  constructor(attackRange: number, dotType: StatusType, power: number, duration: number) {
-    super(attackRange);
+  constructor(melee: boolean, dotType: StatusType, power: number, duration: number) {
+    super(melee);
     this.dotType = dotType;
     this.power = power;
     this.duration = duration;
@@ -62,8 +59,8 @@ export class ApplyStatusStatusEffect extends StatusEffect {
    */
   duration: number;
 
-  constructor(attackRange: number, statusType: StatusType, duration: number) {
-    super(attackRange);
+  constructor(melee: boolean, statusType: StatusType, duration: number) {
+    super(melee);
     this.statusType = statusType;
     this.duration = duration;
   }
@@ -80,8 +77,8 @@ export class ReflectDamageStatusEffect extends StatusEffect {
   percentage: number;
 
 
-  constructor(attackRange: number, percentage: number) {
-    super(attackRange);
+  constructor(melee: boolean, percentage: number) {
+    super(melee);
     this.percentage = percentage;
   }
 }
@@ -164,8 +161,8 @@ export const attackMalus = new StatusType('Attack', false, StatusExpirationType.
 export const defenseBonus = new StatusType('Defense', true, StatusExpirationType.ORIGIN_CREATURE_TURN_START, false);
 export const defenseMalus = new StatusType('Defense', false, StatusExpirationType.ORIGIN_CREATURE_TURN_START, false);
 export const fireTrap = new StatusType('Fire Trap', true, StatusExpirationType.ORIGIN_CREATURE_TURN_START, false,
-  [], [new ApplyDotStatusEffect(1, burn, 0.25, 3)]);
+  [], [new ApplyDotStatusEffect(true, burn, 0.25, 3)]);
 export const iceTrap = new StatusType('Ice Trap', true, StatusExpirationType.ORIGIN_CREATURE_TURN_START, false,
-  [], [new ApplyStatusStatusEffect(1, attackMalus, 2), new ApplyStatusStatusEffect(1, defenseMalus, 2)]);
+  [], [new ApplyStatusStatusEffect(true, attackMalus, 2), new ApplyStatusStatusEffect(true, defenseMalus, 2)]);
 export const reflectMeleeDamage = new StatusType('Blade Shield', true, StatusExpirationType.ORIGIN_CREATURE_TURN_START, false,
-  [], [new ReflectDamageStatusEffect(1, 0.5)]);
+  [], [new ReflectDamageStatusEffect(true, 0.5)]);

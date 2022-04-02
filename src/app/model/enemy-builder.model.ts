@@ -21,6 +21,7 @@ import {
   bleed,
   burn,
   fireTrap,
+  iceTrap,
   poison,
   reflectMeleeDamage,
   regeneration
@@ -131,6 +132,12 @@ export class EnemyBuilder {
     return new StrategicMeleeEnemy(CreatureType.ELEMENTAL, 'Fire Elemental', 30, 7,
       new Strike('Strike'))
       .withPassiveStatus(fireTrap, 0);
+  }
+
+  static buildIceElemental(): Enemy {
+    return new StrategicMeleeEnemy(CreatureType.ELEMENTAL, 'Ice Elemental', 30, 7,
+      new Strike('Strike'))
+      .withPassiveStatus(iceTrap, 0);
   }
 
   static buildRedMage(): Enemy {

@@ -261,7 +261,7 @@ export class StandardParty extends Party {
               'Inflict 50% damage to the target and 150% damage over 3 rounds.', [0.5, 0.5], [burn]),
             new DamageAndStatus('Ice Blast', SkillTargetType.OTHER_ALIVE, 10, 2, 1,
               'Inflict 50% damage to the target and reduce the target attack and defense by 20% during one round.', [0.5], [attackMalus, defenseMalus], 1),
-            new Drain('Drain Life', SkillTargetType.OTHER_ALIVE, 10, 1, 1,
+            new Drain('Drain Life', SkillTargetType.OTHER_ALIVE, 10, 2, 1,
               'Inflict 50% damage to the target and heal self for 50% damage.', [0.5, 1]),
             new Damage('Fireball', SkillTargetType.OTHER_ALIVE_TRIPLE, 10, 2, 3,
               'Inflict 80% damage to three adjacent targets.', [0.8]),

@@ -213,7 +213,6 @@ export enum SkillModifierType {
 /**
  * The current state in the game workflow.
  * Used to enable or disable action buttons, the selection of a target skill, enemy or character, etc
- * When some numeric values are changed, update accordingly the calls to 'usePointerForState' in fight.component.html.
  */
 export enum GameState {
 

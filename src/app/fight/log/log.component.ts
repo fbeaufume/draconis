@@ -1,6 +1,6 @@
 import {Component, Input} from '@angular/core';
 import {Log} from '../../model/log.model';
-import {LogType} from "../../model/common.model";
+import {LogType} from '../../model/common.model';
 
 @Component({
   selector: 'app-log',

@@ -2,18 +2,21 @@ import {AfterViewInit, Component, ElementRef, HostListener, QueryList, ViewChild
 import {Game} from '../model/game.model';
 import {Skill} from '../model/skill.model';
 import {FightService} from './fight.service';
-import {GameState} from "../model/common.model";
-import {Constants} from "../model/constants.model";
-import {Character} from "../model/character.model";
-import {settings} from "../model/settings.model";
-import {Enemy} from "../model/enemy.model";
-import {Fight} from "../model/fight.model";
+import {GameState} from '../model/common.model';
+import {Constants} from '../model/constants.model';
+import {Character} from '../model/character.model';
+import {settings} from '../model/settings.model';
+import {Enemy} from '../model/enemy.model';
+import {Fight} from '../model/fight.model';
 
 @Component({
   selector: 'app-fight',
   templateUrl: './fight.component.html'
 })
 export class FightComponent implements AfterViewInit {
+
+  // Needed to be able to use the GameState enum in the template
+  gameState: typeof GameState;
 
   // These are used to scroll the log panels to the bottom when a log is added,
   // inspired by https://pumpingco.de/blog/automatic-scrolling-only-if-a-user-already-scrolled-the-bottom-of-a-page-in-angular/
@@ -22,6 +25,7 @@ export class FightComponent implements AfterViewInit {
   private logFrameElement: any;
 
   constructor(public fightService: FightService) {
+    this.gameState = GameState;
   }
 
   ngAfterViewInit(): void {

@@ -2,7 +2,7 @@
 
 import {Creature} from './creature.model';
 import {logs} from './log.model';
-import {LifeChangeEfficiency, LogType, SkillIconType, SkillModifierType, SkillTargetType} from "./common.model";
+import {LifeChangeEfficiency, LogType, SkillIconType, SkillModifierType, SkillTargetType} from './common.model';
 import {
   ApplyDotStatusEffect,
   ApplyStatusStatusEffect,
@@ -16,15 +16,15 @@ import {
   ReflectDamageStatusEffect,
   regeneration,
   StatusType
-} from "./status-type.model";
-import {Character} from "./character.model";
-import {settings} from "./settings.model";
-import {LifeChange, LifeGain, LifeLoss} from "./life-change.model";
-import {StatusApplication} from "./status-application.model";
-import {Enemy} from "./enemy.model";
-import {Constants} from "./constants.model";
-import {Fight} from "./fight.model";
-import {EnemyStrategy} from "./enemy-strategy.model";
+} from './status-type.model';
+import {Character} from './character.model';
+import {settings} from './settings.model';
+import {LifeChange, LifeGain, LifeLoss} from './life-change.model';
+import {StatusApplication} from './status-application.model';
+import {Enemy} from './enemy.model';
+import {Constants} from './constants.model';
+import {Fight} from './fight.model';
+import {EnemyStrategy} from './enemy-strategy.model';
 
 /**
  * A character skill.

@@ -1,12 +1,10 @@
 <ng-container [ngSwitch]="iconType">
-  <svg *ngSwitchCase="0" class="inline-block" width="20" height="20" viewBox="0 0 100 100">
-    <!-- Defense -->
+  <svg *ngSwitchCase="this.skillIconType.DEFENSE" class="inline-block" width="20" height="20" viewBox="0 0 100 100">
     <title>Defense</title>
     <circle cx="50" cy="50" r="50" fill="#E5E7EB"/>
     <path d="M 25 30 A 20 40 0 1 0 75 30 Z" fill="none" stroke="#262626" style="stroke-width: 10; stroke-linecap: round;"/>
   </svg>
-  <svg *ngSwitchCase="1" class="inline-block" width="20" height="20" viewBox="0 0 100 100">
-    <!-- Attack -->
+  <svg *ngSwitchCase="this.skillIconType.ATTACK" class="inline-block" width="20" height="20" viewBox="0 0 100 100">
     <title>Attack</title>
     <circle cx="50" cy="50" r="50" fill="#EF4444" />
     <line x1="25" y1="25" x2="40" y2="40" stroke="#262626" style="stroke-width: 10; stroke-linecap: round;" />
@@ -14,21 +12,18 @@
     <line x1="25" y1="75" x2="40" y2="60" stroke="#262626" style="stroke-width: 10; stroke-linecap: round;" />
     <line x1="60" y1="40" x2="75" y2="25" stroke="#262626" style="stroke-width: 10; stroke-linecap: round;" />
   </svg>
-  <svg *ngSwitchCase="2" class="inline-block" width="20" height="20" viewBox="0 0 100 100">
-    <!-- Heal -->
+  <svg *ngSwitchCase="this.skillIconType.HEAL" class="inline-block" width="20" height="20" viewBox="0 0 100 100">
     <title>Heal</title>
     <circle cx="50" cy="50" r="50" fill="#10B981" />
     <line x1="50" y1="20" x2="50" y2="80" stroke="#262626" style="stroke-width: 10; stroke-linecap: round;" />
     <line x1="20" y1="50" x2="80" y2="50" stroke="#262626" style="stroke-width: 10; stroke-linecap: round;" />
   </svg>
-  <svg *ngSwitchCase="3" class="inline-block" width="20" height="20" viewBox="0 0 100 100">
-    <!-- Improvement -->
+  <svg *ngSwitchCase="this.skillIconType.IMPROVEMENT" class="inline-block" width="20" height="20" viewBox="0 0 100 100">
     <title>Bonus</title>
     <circle cx="50" cy="50" r="50" fill="#3B82F6" />
     <polyline points="25 65 50 25 75 65" stroke="#262626" style="stroke-width: 10; stroke-linecap: round; fill: none;" />
   </svg>
-  <svg *ngSwitchCase="4" class="inline-block" width="20" height="20" viewBox="0 0 100 100">
-    <!-- Deterioration -->
+  <svg *ngSwitchCase="this.skillIconType.DETERIORATION" class="inline-block" width="20" height="20" viewBox="0 0 100 100">
     <title>Malus</title>
     <circle cx="50" cy="50" r="50" fill="#8B5CF6" />
     <polyline points="25 35 50 75 75 35" stroke="#262626" style="stroke-width: 10; stroke-linecap: round; fill: none;" />

@@ -89,7 +89,6 @@ export enum StatusTypeTagType {
 
 /**
  * The icon type used by a skill.
- * When any numeric value is changed, update skill-icon.component.html.
  */
 export enum SkillIconType {
 

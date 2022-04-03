@@ -36,6 +36,8 @@ export class EnemyBuilder {
       new Strike('Attack'));
   }
 
+  // TODO FBE add a generic AoE enemy used to test the change detection with async/await
+
   // Enemies for the fang forest
 
   static buildBear(): Enemy {

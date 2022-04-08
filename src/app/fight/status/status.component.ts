@@ -1,5 +1,6 @@
 import {Component, Input} from '@angular/core';
-import {StatusApplication} from "../../model/status-application.model";
+import {StatusApplication} from '../../model/status-application.model';
+import {StatusTypeName} from '../../model/status-type.model';
 
 @Component({
   selector: 'app-status',
@@ -7,10 +8,14 @@ import {StatusApplication} from "../../model/status-application.model";
 })
 export class StatusComponent {
 
+  // Needed to be able to use the enum type in the template
+  statusTypeName: typeof StatusTypeName;
+
   @Input()
   statusApplication: StatusApplication;
 
   constructor() {
+    this.statusTypeName = StatusTypeName;
   }
 
   /**

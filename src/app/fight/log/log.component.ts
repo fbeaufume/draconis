@@ -8,7 +8,7 @@ import {LogType} from '../../model/common.model';
 })
 export class LogComponent {
 
-  // Needed to be able to use the LogType enum in the template
+  // Needed to be able to use the enum type in the template
   logType: typeof LogType;
 
   @Input()

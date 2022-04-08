@@ -7,7 +7,7 @@ import {SkillIconType} from "../../model/common.model";
 })
 export class SkillIconComponent {
 
-  // Needed to be able to use the SkillIconType enum in the template
+  // Needed to be able to use the enum type in the template
   skillIconType: typeof SkillIconType;
 
   @Input()

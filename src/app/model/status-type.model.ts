@@ -83,6 +83,21 @@ export class ReflectDamageStatusEffect extends StatusEffect {
   }
 }
 
+export enum StatusTypeName {
+  DEFEND,
+  BLEED,
+  POISON,
+  BURN,
+  REGENERATION,
+  COMBO_1,
+  COMBO_2,
+  ATTACK,
+  DEFENSE,
+  FIRE_TRAP,
+  ICE_TRAP,
+  BLADE_SHIELD
+}
+
 /**
  * An immutable status descriptor.
  * Should be an enumeration if they were properly implemented in TypeScript.
@@ -92,7 +107,7 @@ export class StatusType {
   /**
    * Name of the status.
    */
-  name: String;
+  name: StatusTypeName;
 
   /**
    * True for a positive status, false otherwise.
@@ -120,7 +135,7 @@ export class StatusType {
   statusEffects: StatusEffect[];
 
   constructor(
-    name: string,
+    name: StatusTypeName,
     improvement: boolean,
     expirationType: StatusExpirationType,
     cumulative: boolean,
@@ -144,25 +159,24 @@ export class StatusType {
 }
 
 // The supported statuses
-// When a new status is added, update status.component.html
-export const defend = new StatusType('Defend', true, StatusExpirationType.ORIGIN_CREATURE_TURN_START, false);
-export const bleed = new StatusType('Bleed', false, StatusExpirationType.END_OF_ROUND, true,
+export const defend = new StatusType(StatusTypeName.DEFEND, true, StatusExpirationType.ORIGIN_CREATURE_TURN_START, false);
+export const bleed = new StatusType(StatusTypeName.BLEED, false, StatusExpirationType.END_OF_ROUND, true,
   [StatusTypeTagType.DOT]);
-export const poison = new StatusType('Poison', false, StatusExpirationType.END_OF_ROUND, true,
+export const poison = new StatusType(StatusTypeName.POISON, false, StatusExpirationType.END_OF_ROUND, true,
   [StatusTypeTagType.DOT]);
-export const burn = new StatusType('Burn', false, StatusExpirationType.END_OF_ROUND, true,
+export const burn = new StatusType(StatusTypeName.BURN, false, StatusExpirationType.END_OF_ROUND, true,
   [StatusTypeTagType.DOT]);
-export const regeneration = new StatusType('Regeneration', true, StatusExpirationType.END_OF_ROUND, true,
+export const regeneration = new StatusType(StatusTypeName.REGENERATION, true, StatusExpirationType.END_OF_ROUND, true,
   [StatusTypeTagType.HOT]);
-export const combo1 = new StatusType('Combo1', false, StatusExpirationType.ORIGIN_CREATURE_TURN_END, true);
-export const combo2 = new StatusType('Combo2', false, StatusExpirationType.ORIGIN_CREATURE_TURN_END, true);
-export const attackBonus = new StatusType('Attack', true, StatusExpirationType.ORIGIN_CREATURE_TURN_START, false);
-export const attackMalus = new StatusType('Attack', false, StatusExpirationType.ORIGIN_CREATURE_TURN_START, false);
-export const defenseBonus = new StatusType('Defense', true, StatusExpirationType.ORIGIN_CREATURE_TURN_START, false);
-export const defenseMalus = new StatusType('Defense', false, StatusExpirationType.ORIGIN_CREATURE_TURN_START, false);
-export const fireTrap = new StatusType('Fire Trap', true, StatusExpirationType.ORIGIN_CREATURE_TURN_START, false,
+export const combo1 = new StatusType(StatusTypeName.COMBO_1, false, StatusExpirationType.ORIGIN_CREATURE_TURN_END, true);
+export const combo2 = new StatusType(StatusTypeName.COMBO_2, false, StatusExpirationType.ORIGIN_CREATURE_TURN_END, true);
+export const attackBonus = new StatusType(StatusTypeName.ATTACK, true, StatusExpirationType.ORIGIN_CREATURE_TURN_START, false);
+export const attackMalus = new StatusType(StatusTypeName.ATTACK, false, StatusExpirationType.ORIGIN_CREATURE_TURN_START, false);
+export const defenseBonus = new StatusType(StatusTypeName.DEFENSE, true, StatusExpirationType.ORIGIN_CREATURE_TURN_START, false);
+export const defenseMalus = new StatusType(StatusTypeName.DEFENSE, false, StatusExpirationType.ORIGIN_CREATURE_TURN_START, false);
+export const fireTrap = new StatusType(StatusTypeName.FIRE_TRAP, true, StatusExpirationType.ORIGIN_CREATURE_TURN_START, false,
   [], [new ApplyDotStatusEffect(true, burn, 0.25, 3)]);
-export const iceTrap = new StatusType('Ice Trap', true, StatusExpirationType.ORIGIN_CREATURE_TURN_START, false,
+export const iceTrap = new StatusType(StatusTypeName.ICE_TRAP, true, StatusExpirationType.ORIGIN_CREATURE_TURN_START, false,
   [], [new ApplyStatusStatusEffect(true, attackMalus, 2), new ApplyStatusStatusEffect(true, defenseMalus, 2)]);
-export const reflectMeleeDamage = new StatusType('Blade Shield', true, StatusExpirationType.ORIGIN_CREATURE_TURN_START, false,
+export const reflectMeleeDamage = new StatusType(StatusTypeName.BLADE_SHIELD, true, StatusExpirationType.ORIGIN_CREATURE_TURN_START, false,
   [], [new ReflectDamageStatusEffect(true, 0.5)]);

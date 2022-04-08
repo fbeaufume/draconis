@@ -15,7 +15,7 @@ import {Fight} from '../model/fight.model';
 })
 export class FightComponent implements AfterViewInit {
 
-  // Needed to be able to use the GameState enum in the template
+  // Needed to be able to use the enum type in the template
   gameState: typeof GameState;
 
   // These are used to scroll the log panels to the bottom when a log is added,

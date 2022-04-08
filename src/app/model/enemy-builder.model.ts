@@ -36,7 +36,10 @@ export class EnemyBuilder {
       new Strike('Attack'));
   }
 
-  // TODO FBE add a generic AoE enemy used to test the change detection with async/await
+  static buildGenericAoeMonster(life: number, power: number): Enemy {
+    return new StrategicEnemy(CreatureType.OTHER, 'AoE Monster', life, power,
+      new Damage('Attack', SkillTargetType.OTHER_ALIVE_ALL, 0, false, 2, 1, '', [1]));
+  }
 
   // Enemies for the fang forest
 

@@ -31,12 +31,14 @@ export enum CreatureType {
  * When any value is changed, update class-icon.component.html.
  */
 export enum CreatureClass {
-  ENEMY = 'enemy',
-  END_OF_ROUND = 'end-of-round',
-  WARRIOR = 'Warrior',
-  PALADIN = 'Paladin',
-  ARCHER = 'Archer',
-  MAGE = 'Mage',
+  ENEMY,
+  END_OF_ROUND,
+  WARRIOR,
+  MONK,
+  PALADIN,
+  ARCHER,
+  MAGE,
+  PRIEST,
 }
 
 export enum LifeChangeType {

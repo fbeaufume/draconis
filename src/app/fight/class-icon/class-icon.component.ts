@@ -1,5 +1,6 @@
 import {Component, Input} from '@angular/core';
 import {Creature} from '../../model/creature.model';
+import {CreatureClass} from "../../model/common.model";
 
 @Component({
   selector: 'app-class-icon',
@@ -7,9 +8,13 @@ import {Creature} from '../../model/creature.model';
 })
 export class ClassIconComponent {
 
+  // Needed to be able to use the enum type in the template
+  creatureClass: typeof CreatureClass;
+
   @Input()
   creature: Creature;
 
   constructor() {
+    this.creatureClass = CreatureClass;
   }
 }

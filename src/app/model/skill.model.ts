@@ -610,7 +610,7 @@ abstract class ApplyStatus extends Skill {
       const statusApplication = new StatusApplication(status, this.powerLevels[0], activeCreature, this.statusDuration);
       targetCreature.applyStatus(statusApplication);
 
-      logs.addCreatureLog(status.improvement ? LogType.PositiveStatus : LogType.NegativeStatus, activeCreature, targetCreature, null, null, statusApplication);
+      logs.addSkillExecutionLog(this, activeCreature, targetCreature, null);
     })
   }
 }
@@ -641,8 +641,8 @@ export class ApplyDeterioration extends ApplyStatus {
 export class Damage extends Skill {
 
   executeOnTargetCreature(activeCreature: Creature, targetCreature: Creature, fight: Fight) {
-    logs.addCreatureLog(LogType.Damage, activeCreature, targetCreature,
-      targetCreature.addLifeChange(computeEffectiveDamage(this, activeCreature, targetCreature, this.powerLevels[0], false)), null);
+    logs.addSkillExecutionLog(this, activeCreature, targetCreature,
+      targetCreature.addLifeChange(computeEffectiveDamage(this, activeCreature, targetCreature, this.powerLevels[0], false)));
   }
 
   get iconTypes(): SkillIconType[] {
@@ -751,7 +751,7 @@ export class ComboDamage extends Skill {
     }
 
     const lifeChange = targetCreature.addLifeChange(computeEffectiveDamage(this, activeCreature, targetCreature, power, false))
-    logs.addCreatureLog(LogType.Damage, activeCreature, targetCreature, lifeChange, null);
+    logs.addSkillExecutionLog(this, activeCreature, targetCreature, lifeChange);
 
     // Add the buff if the attack succeeded
     if (comboStep <= 2 && lifeChange.isSuccess()) {
@@ -772,6 +772,7 @@ export class Drain extends Skill {
   executeOnTargetCreature(activeCreature: Creature, targetCreature: Creature, fight: Fight) {
     const lifeChange: LifeChange = computeEffectiveDamage(this, activeCreature, targetCreature, this.powerLevels[0], false);
 
+    // TODO FBE use addSkillLog
     if (lifeChange.isSuccess()) {
       logs.addCreatureLog(LogType.DamageAndHeal, activeCreature, targetCreature,
         targetCreature.addLifeChange(lifeChange),
@@ -794,6 +795,7 @@ export class Sacrifice extends Skill {
   executeOnTargetCreature(activeCreature: Creature, targetCreature: Creature, fight: Fight) {
     const lifeChange: LifeChange = computeEffectiveDamage(this, activeCreature, targetCreature, this.powerLevels[0], false);
 
+    // TODO FBE use addSkillLog
     if (lifeChange.isSuccess()) {
       logs.addCreatureLog(LogType.DamageAndDamage, activeCreature, targetCreature,
         targetCreature.addLifeChange(computeEffectiveDamage(this, activeCreature, targetCreature, this.powerLevels[0], false)),
@@ -817,7 +819,7 @@ export class DamageAndDot extends Skill {
     const lifeChange: LifeChange = computeEffectiveDamage(this, activeCreature, targetCreature, this.powerLevels[0], false);
 
     // Direct damage part
-    logs.addCreatureLog(LogType.Damage, activeCreature, targetCreature, targetCreature.addLifeChange(lifeChange), null);
+    logs.addSkillExecutionLog(this, activeCreature, targetCreature, targetCreature.addLifeChange(lifeChange));
 
     // Damage over time part
     if (lifeChange.isSuccess()) {
@@ -839,7 +841,7 @@ export class DamageAndStatus extends Skill {
     const lifeChange: LifeChange = computeEffectiveDamage(this, activeCreature, targetCreature, this.powerLevels[0], false);
 
     // Damage part
-    logs.addCreatureLog(LogType.Damage, activeCreature, targetCreature, targetCreature.addLifeChange(lifeChange), null);
+    logs.addSkillExecutionLog(this, activeCreature, targetCreature, targetCreature.addLifeChange(lifeChange));
 
     // Statuses part
     if (lifeChange.isSuccess()) {
@@ -875,8 +877,8 @@ export class DamageAndSelfStatus extends Damage {
 export class Heal extends Skill {
 
   executeOnTargetCreature(activeCreature: Creature, targetCreature: Creature, fight: Fight) {
-    logs.addCreatureLog(LogType.Heal, activeCreature, targetCreature,
-      targetCreature.addLifeChange(computeEffectiveHeal(activeCreature, targetCreature, this.powerLevels[0])), null);
+    logs.addSkillExecutionLog(this, activeCreature, targetCreature,
+      targetCreature.addLifeChange(computeEffectiveHeal(activeCreature, targetCreature, this.powerLevels[0])));
   }
 
   get iconTypes(): SkillIconType[] {
@@ -899,11 +901,11 @@ export class Heal extends Skill {
 export class DualHeal extends Skill {
 
   executeOnTargetCreature(activeCreature: Creature, targetCreature: Creature, fight: Fight) {
-    logs.addCreatureLog(LogType.Heal, activeCreature, targetCreature,
-      targetCreature.addLifeChange(computeEffectiveHeal(activeCreature, targetCreature, this.powerLevels[0])), null);
+    logs.addSkillExecutionLog(this, activeCreature, targetCreature,
+      targetCreature.addLifeChange(computeEffectiveHeal(activeCreature, targetCreature, this.powerLevels[0])));
 
-    logs.addCreatureLog(LogType.Heal, activeCreature, activeCreature,
-      activeCreature.addLifeChange(computeEffectiveHeal(activeCreature, activeCreature, this.powerLevels[1])), null);
+    logs.addSkillExecutionLog(this, activeCreature, activeCreature,
+      activeCreature.addLifeChange(computeEffectiveHeal(activeCreature, activeCreature, this.powerLevels[1])));
   }
 
   get iconTypes(): SkillIconType[] {
@@ -918,6 +920,7 @@ export class Regenerate extends Heal {
 
   executeOnTargetCreature(activeCreature: Creature, targetCreature: Creature, fight: Fight) {
     targetCreature.applyStatus(new StatusApplication(regeneration, this.powerLevels[1], activeCreature, this.statusDuration));
+    // TODO FBE add a log
   }
 
   get iconTypes(): SkillIconType[] {
@@ -932,7 +935,7 @@ export class Revive extends Skill {
 
   executeOnTargetCreature(activeCreature: Creature, targetCreature: Creature, fight: Fight) {
     targetCreature.addLifeChange(new LifeGain(targetCreature.lifeMax / 2));
-    logs.addCreatureLog(LogType.Revive, activeCreature, targetCreature, null, null);
+    logs.addSkillExecutionLog(this, activeCreature, targetCreature, null);
   }
 
   get iconTypes(): SkillIconType[] {
@@ -948,7 +951,7 @@ export class AlterTime extends Skill {
   executeOnTargetCreature(activeCreature: Creature, targetCreature: Creature, fight: Fight) {
     const increment: number = activeCreature?.isSameFactionThan(targetCreature) ? 1 : -1;
     targetCreature.activeStatusApplications.forEach(sa => sa.remainingDuration += sa.isImprovement() ? increment : -increment)
-    logs.addCreatureLog(LogType.AlterTime, activeCreature, targetCreature, null, null);
+    logs.addSkillExecutionLog(this, activeCreature, targetCreature, null);
   }
 
   get iconTypes(): SkillIconType[] {

@@ -20,6 +20,17 @@
   <div *ngSwitchCase="this.logType.Defend">
     <app-creature-log [creature]="log.creature1"></app-creature-log> defends.
   </div>
+  <div *ngSwitchCase="this.logType.SKILL">
+    <app-creature-log [creature]="log.creature1"></app-creature-log>
+    uses <span class="text-gray-200">{{ log.string }}</span>
+    on <app-creature-log [creature]="log.creature2"></app-creature-log>.
+  </div>
+  <div *ngSwitchCase="this.logType.SKILL_AND_LIFE_CHANGE">
+    <app-creature-log [creature]="log.creature1"></app-creature-log>
+    uses <span class="text-gray-200">{{ log.string }}</span>
+    on <app-creature-log [creature]="log.creature2"></app-creature-log> :
+    <app-life-change-log [lifeChange]="log.lifeChange1"></app-life-change-log>.
+  </div>
   <div *ngSwitchCase="this.logType.Damage">
     <app-creature-log [creature]="log.creature1"></app-creature-log>
     damages <app-creature-log [creature]="log.creature2"></app-creature-log>

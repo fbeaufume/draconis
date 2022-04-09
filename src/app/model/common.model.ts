@@ -272,6 +272,8 @@ export enum GameState {
 /**
  * The various types of log messages.
  */
+// TODO FBE use upper cases
+// TODO FBE remove unused values
 export enum LogType {
   EnterZone,
   OppositionAppear,
@@ -280,6 +282,8 @@ export enum LogType {
   Wait,
   Leave,
   Defend,
+  SKILL,
+  SKILL_AND_LIFE_CHANGE,
   Damage,
   DamageAndHeal,
   DamageAndDamage,

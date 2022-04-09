@@ -481,7 +481,7 @@ export class Advance extends Skill {
     }
     activeEnemy.distance--;
 
-    logs.addCreatureLog(LogType.Advance, activeEnemy, null, null, null);
+    logs.addCreatureLog(LogType.ADVANCE, activeEnemy, null, null, null);
   }
 
   isUsableByCreature(creature: Creature, fight: Fight): boolean {
@@ -514,7 +514,7 @@ export class Wait extends Skill {
   }
 
   executeOnActiveCreature(activeCreature: Creature, fight: Fight) {
-    logs.addCreatureLog(LogType.Wait, activeCreature, null, null, null);
+    logs.addCreatureLog(LogType.WAIT, activeCreature, null, null, null);
   }
 }
 
@@ -535,7 +535,7 @@ export class LogMessage extends Skill {
   }
 
   executeOnActiveCreature(activeCreature: Creature, fight: Fight) {
-    logs.addStringLog(LogType.GenericMessage, this.message);
+    logs.addStringLog(LogType.GENERIC_MESSAGE, this.message);
   }
 }
 
@@ -558,7 +558,7 @@ export class Leave extends Skill {
     fight.opposition.removeDeadEnemies();
     fight.opposition.removeEmptyRows();
 
-    logs.addCreatureLog(LogType.Leave, activeCreature, null, null, null);
+    logs.addCreatureLog(LogType.LEAVE, activeCreature, null, null, null);
   }
 }
 
@@ -570,7 +570,7 @@ export class Defend extends Skill {
   executeOnActiveCreature(activeCreature: Creature, fight: Fight) {
     activeCreature.applyStatus(new StatusApplication(defend, 0, activeCreature, this.statusDuration));
 
-    logs.addCreatureLog(LogType.Defend, activeCreature, null, null, null);
+    logs.addCreatureLog(LogType.DEFEND, activeCreature, null, null, null);
   }
 
   get iconTypes(): SkillIconType[] {
@@ -774,11 +774,11 @@ export class Drain extends Skill {
 
     // TODO FBE use addSkillLog
     if (lifeChange.isSuccess()) {
-      logs.addCreatureLog(LogType.DamageAndHeal, activeCreature, targetCreature,
+      logs.addCreatureLog(LogType.DAMAGE_AND_HEAL, activeCreature, targetCreature,
         targetCreature.addLifeChange(lifeChange),
         activeCreature.addLifeChange(new LifeGain(lifeChange.amount * this.powerLevels[1], lifeChange.efficiency)));
     } else {
-      logs.addCreatureLog(LogType.Damage, activeCreature, targetCreature, targetCreature.addLifeChange(lifeChange), null);
+      logs.addCreatureLog(LogType.DAMAGE, activeCreature, targetCreature, targetCreature.addLifeChange(lifeChange), null);
     }
   }
 
@@ -797,11 +797,11 @@ export class Sacrifice extends Skill {
 
     // TODO FBE use addSkillLog
     if (lifeChange.isSuccess()) {
-      logs.addCreatureLog(LogType.DamageAndDamage, activeCreature, targetCreature,
+      logs.addCreatureLog(LogType.DAMAGE_AND_DAMAGE, activeCreature, targetCreature,
         targetCreature.addLifeChange(computeEffectiveDamage(this, activeCreature, targetCreature, this.powerLevels[0], false)),
         activeCreature.addLifeChange(new LifeLoss(lifeChange.amount * this.powerLevels[1], lifeChange.efficiency)));
     } else {
-      logs.addCreatureLog(LogType.Damage, activeCreature, targetCreature, targetCreature.addLifeChange(lifeChange), null);
+      logs.addCreatureLog(LogType.DAMAGE, activeCreature, targetCreature, targetCreature.addLifeChange(lifeChange), null);
     }
   }
 
@@ -920,7 +920,7 @@ export class Regenerate extends Heal {
 
   executeOnTargetCreature(activeCreature: Creature, targetCreature: Creature, fight: Fight) {
     targetCreature.applyStatus(new StatusApplication(regeneration, this.powerLevels[1], activeCreature, this.statusDuration));
-    // TODO FBE add a log
+    logs.addSkillExecutionLog(this, activeCreature, targetCreature, null);
   }
 
   get iconTypes(): SkillIconType[] {

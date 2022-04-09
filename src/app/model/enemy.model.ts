@@ -132,7 +132,7 @@ export class OldManEnemy extends Enemy {
   addLifeChange(lifeChange: LifeChange): LifeChange {
     if (this.phase == 1) {
       // Turn into a druid
-      logs.addBasicLog(LogType.OldManTransformation);
+      logs.addBasicLog(LogType.OLD_MAN_TRANSFORMATION);
       this.phase = 2;
       this.name = 'Elder Druid';
 

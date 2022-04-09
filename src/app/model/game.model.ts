@@ -38,7 +38,7 @@ export class Game {
     this.region = this.dungeon.name;
 
     logs.clear();
-    logs.addStringLog(LogType.EnterZone, this.region);
+    logs.addStringLog(LogType.ENTER_ZONE, this.region);
   }
 
   get opposition(): Opposition {

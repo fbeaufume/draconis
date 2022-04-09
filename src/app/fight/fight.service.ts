@@ -76,11 +76,11 @@ export class FightService {
       this.game.startNextEncounter();
 
       logs.clear();
-      logs.addStringLog(LogType.OppositionAppear, this.fight.opposition.description);
+      logs.addStringLog(LogType.OPPOSITION_APPEAR, this.fight.opposition.description);
     } else if (this.game.state == GameState.START_FIGHT) {
       this.game.state = GameState.END_OF_TURN;
 
-      logs.addNumberLog(LogType.StartRound, this.fight.round);
+      logs.addNumberLog(LogType.START_ROUND, this.fight.round);
 
       // Execute the turn of the first creature
       await this.processTurn();
@@ -377,7 +377,7 @@ export class FightService {
       // Start the next round
       if (!await this.processEndOfFight()) {
         this.fight.round++;
-        logs.addNumberLog(LogType.StartRound, this.fight.round);
+        logs.addNumberLog(LogType.START_ROUND, this.fight.round);
 
         await this.processNextTurn(true);
       }
@@ -385,7 +385,7 @@ export class FightService {
       // Start the next round
       if (!await this.processEndOfFight()) {
         this.fight.round++;
-        logs.addNumberLog(LogType.StartRound, this.fight.round);
+        logs.addNumberLog(LogType.START_ROUND, this.fight.round);
 
         await this.processNextTurn(true);
       }
@@ -466,7 +466,7 @@ export class FightService {
     this.fight.turnOrder.removeDeadEnemies();
 
     // Log the defeated enemies
-    removedEnemies.forEach(enemy => logs.addCreatureLog(LogType.EnemyDefeated, enemy, null, null, null));
+    removedEnemies.forEach(enemy => logs.addCreatureLog(LogType.ENEMY_DEFEAT, enemy, null, null, null));
   }
 
   /**
@@ -481,7 +481,7 @@ export class FightService {
       await this.pause();
 
       // The dungeon is over
-      logs.addBasicLog(LogType.PartyDefeat);
+      logs.addBasicLog(LogType.PARTY_DEFEAT);
       this.state = GameState.DUNGEON_END;
 
       return true;
@@ -493,14 +493,14 @@ export class FightService {
 
       await this.pause();
 
-      logs.addBasicLog(LogType.PartyVictory);
+      logs.addBasicLog(LogType.PARTY_VICTORY);
 
       if (this.game.hasNextEncounter()) {
         // Moving on to the next encounter
         this.state = GameState.START_NEXT_ENCOUNTER;
       } else {
         // The dungeon is over
-        logs.addBasicLog(LogType.DungeonCleared);
+        logs.addBasicLog(LogType.DUNGEON_CLEARED);
         this.state = GameState.DUNGEON_END;
       }
 

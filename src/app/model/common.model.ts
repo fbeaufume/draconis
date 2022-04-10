@@ -272,7 +272,6 @@ export enum GameState {
 /**
  * The various types of log messages.
  */
-// TODO FBE remove unused values
 export enum LogType {
   ENTER_ZONE,
   OPPOSITION_APPEAR,

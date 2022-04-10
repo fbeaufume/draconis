@@ -17,7 +17,7 @@ export class Log {
     // A generic string placeholder, for skill messages this is the skill name
     public string: string | null,
     public number: number | null,
-    public creature1: Creature | null,
+    public activeCreature: Creature | null,
     public creature2: Creature | null,
     public lifeChange1: LifeChange | null,
     public lifeChange2: LifeChange | null,
@@ -48,14 +48,13 @@ export class Logs {
     this.addLogInternal(new Log(type, null, null, creature1, creature2, lifeChange1, lifeChange2, statusApplication));
   }
 
-  // TODO FBE use this instead of addCreatureLog whenever possible
-  addSkillExecutionLog(skill: Skill, creature1: Creature | null, creature2: Creature | null, lifeChange1: LifeChange | null) {
-    if (creature2 == null) {
-      this.addLogInternal(new Log(LogType.SKILL, skill.name, null, creature1, null, null, null, null));
+  addSkillExecutionLog(skill: Skill, activeCreature: Creature | null, targetCreature: Creature | null, lifeChange1: LifeChange | null) {
+    if (targetCreature == null) {
+      this.addLogInternal(new Log(LogType.SKILL, skill.name, null, activeCreature, null, null, null, null));
     } else if (lifeChange1 == null) {
-      this.addLogInternal(new Log(LogType.SKILL_WITH_TARGET, skill.name, null, creature1, creature2, lifeChange1, null, null));
+      this.addLogInternal(new Log(LogType.SKILL_WITH_TARGET, skill.name, null, activeCreature, targetCreature, lifeChange1, null, null));
     } else {
-      this.addLogInternal(new Log(LogType.SKILL_WITH_TARGET_AND_LIFE_CHANGE, skill.name, null, creature1, creature2, lifeChange1, null, null));
+      this.addLogInternal(new Log(LogType.SKILL_WITH_TARGET_AND_LIFE_CHANGE, skill.name, null, activeCreature, targetCreature, lifeChange1, null, null));
     }
   }
 

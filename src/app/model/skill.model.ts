@@ -772,13 +772,11 @@ export class Drain extends Skill {
   executeOnTargetCreature(activeCreature: Creature, targetCreature: Creature, fight: Fight) {
     const lifeChange: LifeChange = computeEffectiveDamage(this, activeCreature, targetCreature, this.powerLevels[0], false);
 
-    // TODO FBE use addSkillLog
+    logs.addSkillExecutionLog(this, activeCreature, targetCreature, targetCreature.addLifeChange(lifeChange));
+
+    // Execute and log the second life change only if the attack succeeded
     if (lifeChange.isSuccess()) {
-      logs.addCreatureLog(LogType.DAMAGE_AND_HEAL, activeCreature, targetCreature,
-        targetCreature.addLifeChange(lifeChange),
-        activeCreature.addLifeChange(new LifeGain(lifeChange.amount * this.powerLevels[1], lifeChange.efficiency)));
-    } else {
-      logs.addCreatureLog(LogType.DAMAGE, activeCreature, targetCreature, targetCreature.addLifeChange(lifeChange), null);
+      logs.addSkillExecutionLog(this, activeCreature, activeCreature, activeCreature.addLifeChange(new LifeGain(lifeChange.amount * this.powerLevels[1], lifeChange.efficiency)));
     }
   }
 
@@ -790,18 +788,16 @@ export class Drain extends Skill {
 /**
  * A skill that damages the target creatures but also the origin creature.
  */
-export class Sacrifice extends Skill {
+export class Berserk extends Skill {
 
   executeOnTargetCreature(activeCreature: Creature, targetCreature: Creature, fight: Fight) {
     const lifeChange: LifeChange = computeEffectiveDamage(this, activeCreature, targetCreature, this.powerLevels[0], false);
 
-    // TODO FBE use addSkillLog
+    logs.addSkillExecutionLog(this, activeCreature, targetCreature, targetCreature.addLifeChange(lifeChange));
+
+    // Execute and log the second life change only if the attack succeeded
     if (lifeChange.isSuccess()) {
-      logs.addCreatureLog(LogType.DAMAGE_AND_DAMAGE, activeCreature, targetCreature,
-        targetCreature.addLifeChange(computeEffectiveDamage(this, activeCreature, targetCreature, this.powerLevels[0], false)),
-        activeCreature.addLifeChange(new LifeLoss(lifeChange.amount * this.powerLevels[1], lifeChange.efficiency)));
-    } else {
-      logs.addCreatureLog(LogType.DAMAGE, activeCreature, targetCreature, targetCreature.addLifeChange(lifeChange), null);
+      logs.addSkillExecutionLog(this, activeCreature, activeCreature, activeCreature.addLifeChange(new LifeLoss(lifeChange.amount * this.powerLevels[1], lifeChange.efficiency)));
     }
   }
 

@@ -570,7 +570,7 @@ export class Defend extends Skill {
   executeOnActiveCreature(activeCreature: Creature, fight: Fight) {
     activeCreature.applyStatus(new StatusApplication(defend, 0, activeCreature, this.statusDuration));
 
-    logs.addCreatureLog(LogType.DEFEND, activeCreature, null, null, null);
+    logs.addSkillExecutionLog(this, activeCreature, null, null);
   }
 
   get iconTypes(): SkillIconType[] {

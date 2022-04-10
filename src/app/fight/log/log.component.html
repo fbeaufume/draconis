@@ -17,19 +17,20 @@
   <div *ngSwitchCase="this.logType.LEAVE">
     <app-creature-log [creature]="log.creature1"></app-creature-log> leaves the fight.
   </div>
-  <div *ngSwitchCase="this.logType.DEFEND">
-    <app-creature-log [creature]="log.creature1"></app-creature-log> defends.
-  </div>
   <div *ngSwitchCase="this.logType.SKILL">
+    <app-creature-log [creature]="log.creature1"></app-creature-log>
+    uses <span class="text-gray-200">{{ log.string }}</span>.
+  </div>
+  <div *ngSwitchCase="this.logType.SKILL_WITH_TARGET">
     <app-creature-log [creature]="log.creature1"></app-creature-log>
     uses <span class="text-gray-200">{{ log.string }}</span>
     on <app-creature-log [creature]="log.creature2"></app-creature-log>.
   </div>
-  <div *ngSwitchCase="this.logType.SKILL_AND_LIFE_CHANGE">
+  <div *ngSwitchCase="this.logType.SKILL_WITH_TARGET_AND_LIFE_CHANGE">
     <app-creature-log [creature]="log.creature1"></app-creature-log>
     uses <span class="text-gray-200">{{ log.string }}</span>
-    on <app-creature-log [creature]="log.creature2"></app-creature-log> :
-    <app-life-change-log [lifeChange]="log.lifeChange1"></app-life-change-log>.
+    on <app-creature-log [creature]="log.creature2"></app-creature-log>
+    for <app-life-change-log [lifeChange]="log.lifeChange1"></app-life-change-log>.
   </div>
   <div *ngSwitchCase="this.logType.DAMAGE">
     <app-creature-log [creature]="log.creature1"></app-creature-log>
@@ -47,15 +48,6 @@
     damages <app-creature-log [creature]="log.creature2"></app-creature-log>
     for <app-life-change-log [lifeChange]="log.lifeChange1"></app-life-change-log>
     and looses <app-life-change-log [lifeChange]="log.lifeChange2"></app-life-change-log>.
-  </div>
-  <div *ngSwitchCase="this.logType.HEAL">
-    <app-creature-log [creature]="log.creature1"></app-creature-log>
-    heals <app-creature-log [creature]="log.creature2"></app-creature-log>
-    for <app-life-change-log [lifeChange]="log.lifeChange1"></app-life-change-log>.
-  </div>
-  <div *ngSwitchCase="this.logType.REVIVE">
-    <app-creature-log [creature]="log.creature1"></app-creature-log>
-    revives <app-creature-log [creature]="log.creature2"></app-creature-log>.
   </div>
   <div *ngSwitchCase="this.logType.DOT">
     <app-creature-log [creature]="log.creature1"></app-creature-log>

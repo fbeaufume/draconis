@@ -50,10 +50,12 @@ export class Logs {
 
   // TODO FBE use this instead of addCreatureLog whenever possible
   addSkillExecutionLog(skill: Skill, creature1: Creature | null, creature2: Creature | null, lifeChange1: LifeChange | null) {
-    if (lifeChange1 == null) {
-      this.addLogInternal(new Log(LogType.SKILL, skill.name, null, creature1, creature2, lifeChange1, null, null));
+    if (creature2 == null) {
+      this.addLogInternal(new Log(LogType.SKILL, skill.name, null, creature1, null, null, null, null));
+    } else if (lifeChange1 == null) {
+      this.addLogInternal(new Log(LogType.SKILL_WITH_TARGET, skill.name, null, creature1, creature2, lifeChange1, null, null));
     } else {
-      this.addLogInternal(new Log(LogType.SKILL_AND_LIFE_CHANGE, skill.name, null, creature1, creature2, lifeChange1, null, null));
+      this.addLogInternal(new Log(LogType.SKILL_WITH_TARGET_AND_LIFE_CHANGE, skill.name, null, creature1, creature2, lifeChange1, null, null));
     }
   }
 

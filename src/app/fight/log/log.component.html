@@ -22,9 +22,9 @@
     uses <span class="text-blue-400">{{ log.string }}</span>.
   </div>
   <div *ngSwitchCase="this.logType.SKILL_WITH_TARGET">
-    <app-creature-log [creature]="log.activeCreature"></app-creature-log>
-    uses <span class="text-blue-400">{{ log.string }}</span>
-    on <app-creature-log [creature]="log.creature2"></app-creature-log>.
+    <app-log-item [item]="log.activeCreature"></app-log-item>
+    uses <app-log-item [item]="log.string"></app-log-item>
+    on <app-log-item [item]="log.creature2"></app-log-item>.
   </div>
   <div *ngSwitchCase="this.logType.SKILL_WITH_TARGET_AND_LIFE_CHANGE">
     <app-creature-log [creature]="log.activeCreature"></app-creature-log>

@@ -297,3 +297,13 @@ export enum LogType {
   DUNGEON_CLEARED,
   GENERIC_MESSAGE,
 }
+
+/**
+ * The various types of log items.
+ */
+export enum LogItemType {
+  CREATURE,
+  SKILL,
+  LIFE_CHANGE,
+  OTHER,
+}

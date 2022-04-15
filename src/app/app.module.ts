@@ -14,6 +14,7 @@ import {LifeChangePopupComponent} from './fight/life-change-popup/life-change-po
 import {LifeChangeLogComponent} from './fight/log/life-change-log/life-change-log.component';
 import {CreatureLogComponent} from './fight/log/creature-log/creature-log.component';
 import {StatusLogComponent} from './fight/log/status-log/status-log.component';
+import { LogItemComponent } from './fight/log/log-item/log-item.component';
 
 @NgModule({
   declarations: [
@@ -28,7 +29,8 @@ import {StatusLogComponent} from './fight/log/status-log/status-log.component';
     LifeChangePopupComponent,
     LifeChangeLogComponent,
     CreatureLogComponent,
-    StatusLogComponent
+    StatusLogComponent,
+    LogItemComponent
   ],
   imports: [
     BrowserModule,

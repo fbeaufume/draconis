@@ -9,12 +9,11 @@ import {CreatureClass} from "../../model/common.model";
 export class ClassIconComponent {
 
   // Needed to be able to use the enum type in the template
-  creatureClass: typeof CreatureClass;
+  creatureClass: typeof CreatureClass = CreatureClass;
 
   @Input()
   creature: Creature;
 
   constructor() {
-    this.creatureClass = CreatureClass;
   }
 }

@@ -9,13 +9,12 @@ import {StatusTypeName} from '../../model/status-type.model';
 export class StatusComponent {
 
   // Needed to be able to use the enum type in the template
-  statusTypeName: typeof StatusTypeName;
+  statusTypeName: typeof StatusTypeName = StatusTypeName;
 
   @Input()
   statusApplication: StatusApplication;
 
   constructor() {
-    this.statusTypeName = StatusTypeName;
   }
 
   /**

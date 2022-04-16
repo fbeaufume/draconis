@@ -16,7 +16,7 @@ import {Fight} from '../model/fight.model';
 export class FightComponent implements AfterViewInit {
 
   // Needed to be able to use the enum type in the template
-  gameState: typeof GameState;
+  gameState: typeof GameState = GameState;
 
   // These are used to scroll the log panels to the bottom when a log is added,
   // inspired by https://pumpingco.de/blog/automatic-scrolling-only-if-a-user-already-scrolled-the-bottom-of-a-page-in-angular/
@@ -25,7 +25,6 @@ export class FightComponent implements AfterViewInit {
   private logFrameElement: any;
 
   constructor(public fightService: FightService) {
-    this.gameState = GameState;
   }
 
   ngAfterViewInit(): void {

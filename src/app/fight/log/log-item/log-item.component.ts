@@ -3,6 +3,7 @@ import {LogItemType} from '../../../model/common.model';
 import {Creature} from '../../../model/creature.model';
 import {Skill} from '../../../model/skill.model';
 import {LifeChange} from '../../../model/life-change.model';
+import {StatusApplication} from '../../../model/status-application.model';
 
 /**
  * This component is used to display on item within a log entry (such as a creature name, a skill name,
@@ -27,9 +28,11 @@ export class LogItemComponent {
     if (this.item instanceof Creature) {
       return LogItemType.CREATURE;
     } else if (this.item instanceof Skill) {
-      return LogItemType.SKILL
+      return LogItemType.SKILL;
     } else if (this.item instanceof LifeChange) {
-      return LogItemType.LIFE_CHANGE
+      return LogItemType.LIFE_CHANGE;
+    } else if (this.item instanceof StatusApplication) {
+      return LogItemType.STATUS_APPLICATION;
     } else {
       return LogItemType.OTHER;
     }

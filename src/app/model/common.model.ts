@@ -303,5 +303,6 @@ export enum LogItemType {
   CREATURE,
   SKILL,
   LIFE_CHANGE,
+  STATUS_APPLICATION,
   OTHER,
 }

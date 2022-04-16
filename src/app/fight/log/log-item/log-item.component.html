@@ -9,6 +9,9 @@
     <span *ngIf="item.isCritical()"> (critical)</span>
     <span *ngIf="item.isDodge()"> (dodge)</span>
   </span>
+  <span *ngSwitchCase="logItemType.STATUS_APPLICATION" class="font-bold"
+        [ngClass]="item.isImprovement() ? 'text-green-500' : 'text-red-500'">{{ item.statusType.name }}
+  </span>
   <span *ngSwitchCase="logItemType.OTHER" class="text-gray-200">{{ item }}
   </span>
 </ng-container>

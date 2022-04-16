@@ -1,16 +1,14 @@
-<div [ngSwitch]="getLogItemType()">
-  <div *ngSwitchCase="logItemType.CREATURE">
-    <span [ngClass]="item.isEnemy() ? 'text-yellow-200' : 'text-gray-200'">{{ item.name }}</span>
-  </div>
-  <div *ngSwitchCase="logItemType.SKILL">
-    <span class="text-blue-400">{{ item.name }}</span>
-  </div>
-  <div *ngSwitchCase="logItemType.LIFE_CHANGE">
+<ng-container [ngSwitch]="getLogItemType()">
+  <span *ngSwitchCase="logItemType.CREATURE"
+        [ngClass]="item.isEnemy() ? 'text-yellow-200' : 'text-gray-200'">{{ item.name }}
+  </span>
+  <span *ngSwitchCase="logItemType.SKILL" class="text-blue-400">{{ item.name }}
+  </span>
+  <span *ngSwitchCase="logItemType.LIFE_CHANGE">
     <span class="font-bold" [ngClass]="item.isGain() ? 'text-green-500' : 'text-red-500'">{{ item.amount }}</span> HP
     <span *ngIf="item.isCritical()"> (critical)</span>
     <span *ngIf="item.isDodge()"> (dodge)</span>
-  </div>
-  <div *ngSwitchCase="logItemType.OTHER">
-    <span class="text-gray-200">{{ item }}</span>
-  </div>
-</div>
+  </span>
+  <span *ngSwitchCase="logItemType.OTHER" class="text-gray-200">{{ item }}
+  </span>
+</ng-container>

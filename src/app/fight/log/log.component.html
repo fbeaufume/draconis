@@ -1,64 +1,64 @@
 <div [ngSwitch]="log.type">
   <div *ngSwitchCase="this.logType.ENTER_ZONE">
-    Entering <span class="text-gray-200">{{ log.string }}</span>.
+    Entering <app-log-item [item]="log.string"></app-log-item>.
   </div>
   <div *ngSwitchCase="this.logType.OPPOSITION_APPEAR">
-    The party encounters <span class="text-gray-200">{{ log.string }}</span>.
+    The party encounters <app-log-item [item]="log.string"></app-log-item>.
   </div>
   <div *ngSwitchCase="this.logType.START_ROUND">
-    Round <span class="text-gray-200">{{ log.number }}</span> starts.
+    Round <app-log-item [item]="log.number"></app-log-item> starts.
   </div>
   <div *ngSwitchCase="this.logType.ADVANCE">
-    <app-creature-log [creature]="log.activeCreature"></app-creature-log> advances.
+    <app-log-item [item]="log.activeCreature"></app-log-item> advances.
   </div>
   <div *ngSwitchCase="this.logType.WAIT">
-    <app-creature-log [creature]="log.activeCreature"></app-creature-log> waits.
+    <app-log-item [item]="log.activeCreature"></app-log-item> waits.
   </div>
   <div *ngSwitchCase="this.logType.LEAVE">
-    <app-creature-log [creature]="log.activeCreature"></app-creature-log> leaves the fight.
+    <app-log-item [item]="log.activeCreature"></app-log-item> leaves the fight.
   </div>
   <div *ngSwitchCase="this.logType.SKILL">
-    <app-creature-log [creature]="log.activeCreature"></app-creature-log>
-    uses <span class="text-blue-400">{{ log.string }}</span>.
+    <app-log-item [item]="log.activeCreature"></app-log-item>
+    uses <app-log-item [item]="log.skill"></app-log-item>.
   </div>
   <div *ngSwitchCase="this.logType.SKILL_WITH_TARGET">
     <app-log-item [item]="log.activeCreature"></app-log-item>
-    uses <app-log-item [item]="log.string"></app-log-item>
+    uses <app-log-item [item]="log.skill"></app-log-item>
     on <app-log-item [item]="log.creature2"></app-log-item>.
   </div>
   <div *ngSwitchCase="this.logType.SKILL_WITH_TARGET_AND_LIFE_CHANGE">
-    <app-creature-log [creature]="log.activeCreature"></app-creature-log>
-    uses <span class="text-blue-400">{{ log.string }}</span>
-    on <app-creature-log [creature]="log.creature2"></app-creature-log>
-    for <app-life-change-log [lifeChange]="log.lifeChange1"></app-life-change-log>.
+    <app-log-item [item]="log.activeCreature"></app-log-item>
+    uses <app-log-item [item]="log.skill"></app-log-item>
+    on <app-log-item [item]="log.creature2"></app-log-item>
+    for <app-log-item [item]="log.lifeChange1"></app-log-item>.
   </div>
   <div *ngSwitchCase="this.logType.DAMAGE">
-    <app-creature-log [creature]="log.activeCreature"></app-creature-log>
-    damages <app-creature-log [creature]="log.creature2"></app-creature-log>
-    for <app-life-change-log [lifeChange]="log.lifeChange1"></app-life-change-log>.
+    <app-log-item [item]="log.activeCreature"></app-log-item>
+    damages <app-log-item [item]="log.creature2"></app-log-item>
+    for <app-log-item [item]="log.lifeChange1"></app-log-item>.
   </div>
   <div *ngSwitchCase="this.logType.DAMAGE_AND_HEAL">
-    <app-creature-log [creature]="log.activeCreature"></app-creature-log>
-    damages <app-creature-log [creature]="log.creature2"></app-creature-log>
-    for <app-life-change-log [lifeChange]="log.lifeChange1"></app-life-change-log>
-    and gains <app-life-change-log [lifeChange]="log.lifeChange2"></app-life-change-log>.
+    <app-log-item [item]="log.activeCreature"></app-log-item>
+    damages <app-log-item [item]="log.creature2"></app-log-item>
+    for <app-log-item [item]="log.lifeChange1"></app-log-item>
+    and gains <app-log-item [item]="log.lifeChange2"></app-log-item>.
   </div>
   <div *ngSwitchCase="this.logType.DAMAGE_AND_DAMAGE">
-    <app-creature-log [creature]="log.activeCreature"></app-creature-log>
-    damages <app-creature-log [creature]="log.creature2"></app-creature-log>
-    for <app-life-change-log [lifeChange]="log.lifeChange1"></app-life-change-log>
-    and looses <app-life-change-log [lifeChange]="log.lifeChange2"></app-life-change-log>.
+    <app-log-item [item]="log.activeCreature"></app-log-item>
+    damages <app-log-item [item]="log.creature2"></app-log-item>
+    for <app-log-item [item]="log.lifeChange1"></app-log-item>
+    and looses <app-log-item [item]="log.lifeChange2"></app-log-item>.
   </div>
   <div *ngSwitchCase="this.logType.DOT">
-    <app-creature-log [creature]="log.activeCreature"></app-creature-log>
-    looses a total of <app-life-change-log [lifeChange]="log.lifeChange1"></app-life-change-log>.
+    <app-log-item [item]="log.activeCreature"></app-log-item>
+    looses a total of <app-log-item [item]="log.lifeChange1"></app-log-item>.
   </div>
   <div *ngSwitchCase="this.logType.HOT">
-    <app-creature-log [creature]="log.activeCreature"></app-creature-log>
-    gains a total of <app-life-change-log [lifeChange]="log.lifeChange1"></app-life-change-log>.
+    <app-log-item [item]="log.activeCreature"></app-log-item>
+    gains a total of <app-log-item [item]="log.lifeChange1"></app-log-item>.
   </div>
   <div *ngSwitchCase="this.logType.ENEMY_DEFEAT">
-    <app-creature-log [creature]="log.activeCreature"></app-creature-log> is defeated.
+    <app-log-item [item]="log.activeCreature"></app-log-item> is defeated.
   </div>
   <div *ngSwitchCase="this.logType.PARTY_VICTORY">
     The party wins!
@@ -67,20 +67,10 @@
     The party loses!
   </div>
   <div *ngSwitchCase="this.logType.PAUSE_DURATION_CHANGED">
-    Using pause of <span class="text-gray-200">{{ log.number }}</span> msec.
+    Using pause of <app-log-item [item]="log.number"></app-log-item> msec.
   </div>
   <div *ngSwitchCase="this.logType.OLD_MAN_TRANSFORMATION">
     The old man is actually an elder druid and quite furious now.
-  </div>
-  <div *ngSwitchCase="this.logType.POSITIVE_STATUS">
-    <app-creature-log [creature]="log.activeCreature"></app-creature-log>
-    strengthens <app-creature-log [creature]="log.creature2"></app-creature-log>
-    with <app-status-log [statusApplication]="log.statusApplication"></app-status-log>
-  </div>
-  <div *ngSwitchCase="this.logType.NEGATIVE_STATUS">
-    <app-creature-log [creature]="log.activeCreature"></app-creature-log>
-    weakens <app-creature-log [creature]="log.creature2"></app-creature-log>
-    with <app-status-log [statusApplication]="log.statusApplication"></app-status-log>
   </div>
   <div *ngSwitchCase="this.logType.DUNGEON_CLEARED">
     The dungeon is cleared!

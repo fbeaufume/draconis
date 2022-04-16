@@ -28,12 +28,13 @@ export class TestDungeon extends Dungeon {
     super('Test Dungeon', [
       new Opposition('some monsters', [
         // EnemyBuilder.buildFireElemental(),
-        EnemyBuilder.buildIceElemental(),
-        EnemyBuilder.buildIceElemental(),
+        // EnemyBuilder.buildIceElemental(),
         // EnemyBuilder.buildRedMage(),
         // EnemyBuilder.buildBlackMage(),
         // EnemyBuilder.buildGenericMonster(1, 100),
-        // EnemyBuilder.buildGenericMonster(30, 6),
+        EnemyBuilder.buildGenericMonster(30, 6),
+        EnemyBuilder.buildGenericMonster(30, 6),
+        EnemyBuilder.buildGenericMonster(30, 6),
         // EnemyBuilder.buildBrambleSpirit(),
         // EnemyBuilder.buildTroll(),
         // EnemyBuilder.buildWolf(),
@@ -41,7 +42,7 @@ export class TestDungeon extends Dungeon {
         // EnemyBuilder.buildGenericMonster(30,5),
       ], [
         // EnemyBuilder.buildGenericMonster(1, 1),
-        EnemyBuilder.buildGenericMonster(50, 8),
+        // EnemyBuilder.buildGenericMonster(50, 8),
       ]),
       new Opposition('some monsters', [
         EnemyBuilder.buildGenericAoeMonster(1, 100),

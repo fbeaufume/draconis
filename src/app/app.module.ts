@@ -11,9 +11,6 @@ import {SkillIconComponent} from './fight/skill-icon/skill-icon.component';
 import {StatusComponent} from './fight/status/status.component';
 import {ClassIconComponent} from './fight/class-icon/class-icon.component';
 import {LifeChangePopupComponent} from './fight/life-change-popup/life-change-popup.component';
-import {LifeChangeLogComponent} from './fight/log/life-change-log/life-change-log.component';
-import {CreatureLogComponent} from './fight/log/creature-log/creature-log.component';
-import {StatusLogComponent} from './fight/log/status-log/status-log.component';
 import { LogItemComponent } from './fight/log/log-item/log-item.component';
 
 @NgModule({
@@ -27,9 +24,6 @@ import { LogItemComponent } from './fight/log/log-item/log-item.component';
     StatusComponent,
     ClassIconComponent,
     LifeChangePopupComponent,
-    LifeChangeLogComponent,
-    CreatureLogComponent,
-    StatusLogComponent,
     LogItemComponent
   ],
   imports: [

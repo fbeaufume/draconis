@@ -15,7 +15,7 @@ import {LifeChange} from '../../../model/life-change.model';
 export class LogItemComponent {
 
   // Needed to be able to use the enum type in the template
-  logItemType: typeof LogItemType;
+  logItemType: typeof LogItemType = LogItemType;
 
   @Input()
   item: any;

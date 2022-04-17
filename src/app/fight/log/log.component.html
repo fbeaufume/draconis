@@ -35,23 +35,6 @@
     on <app-log-item [item]="log.creature2"></app-log-item>
     for <app-log-item [item]="log.lifeChange1"></app-log-item>.
   </div>
-  <div *ngSwitchCase="this.logType.DAMAGE">
-    <app-log-item [item]="log.activeCreature"></app-log-item>
-    damages <app-log-item [item]="log.creature2"></app-log-item>
-    for <app-log-item [item]="log.lifeChange1"></app-log-item>.
-  </div>
-  <div *ngSwitchCase="this.logType.DAMAGE_AND_HEAL">
-    <app-log-item [item]="log.activeCreature"></app-log-item>
-    damages <app-log-item [item]="log.creature2"></app-log-item>
-    for <app-log-item [item]="log.lifeChange1"></app-log-item>
-    and gains <app-log-item [item]="log.lifeChange2"></app-log-item>.
-  </div>
-  <div *ngSwitchCase="this.logType.DAMAGE_AND_DAMAGE">
-    <app-log-item [item]="log.activeCreature"></app-log-item>
-    damages <app-log-item [item]="log.creature2"></app-log-item>
-    for <app-log-item [item]="log.lifeChange1"></app-log-item>
-    and looses <app-log-item [item]="log.lifeChange2"></app-log-item>.
-  </div>
   <div *ngSwitchCase="this.logType.DOT">
     <app-log-item [item]="log.activeCreature"></app-log-item>
     looses a total of <app-log-item [item]="log.lifeChange1"></app-log-item>.

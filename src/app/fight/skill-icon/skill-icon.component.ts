@@ -1,5 +1,5 @@
 import {Component, Input} from '@angular/core';
-import {SkillIconType} from "../../model/common.model";
+import {SkillIconType} from '../../model/common.model';
 
 @Component({
   selector: 'app-skill-icon',

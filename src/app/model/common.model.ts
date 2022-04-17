@@ -298,6 +298,7 @@ export enum LogType {
   HOT,
   ENEMY_DEFEAT,
   PAUSE_DURATION_CHANGED,
+  // TODO FBE remove this
   GENERIC_MESSAGE,
 }
 

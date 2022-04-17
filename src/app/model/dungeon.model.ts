@@ -1,5 +1,5 @@
-import {Opposition} from "./opposition.model";
-import {EnemyBuilder} from "./enemy-builder.model";
+import {Opposition} from './opposition.model';
+import {EnemyBuilder} from './enemy-builder.model';
 
 /**
  * Dungeon base class. A dungeon is where the fights happen. It is a succession of encounters.

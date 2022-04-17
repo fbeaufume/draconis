@@ -1,4 +1,4 @@
-import {LifeChangeEfficiency, LifeChangeType} from "./common.model";
+import {LifeChangeEfficiency, LifeChangeType} from './common.model';
 
 /**
  * A life change due to a damage or heal.

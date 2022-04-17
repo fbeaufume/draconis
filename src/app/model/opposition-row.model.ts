@@ -1,5 +1,5 @@
-import {Enemy} from "./enemy.model";
-import {Constants} from "./constants.model";
+import {Enemy} from './enemy.model';
+import {Constants} from './constants.model';
 
 /**
  * A row of enemies in the opposition.

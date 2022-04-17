@@ -1,55 +1,80 @@
 <div [ngSwitch]="log.type">
   <div *ngSwitchCase="this.logType.BASIC_LOG">
-    {{ log.string }}
+    {{ log.getItem(0) }}
   </div>
   <div *ngSwitchCase="this.logType.ENTER_ZONE">
-    Entering <app-log-item [item]="log.string"></app-log-item>.
+    Entering
+    <app-log-item [item]="log.getItem(0)"></app-log-item>
+    .
   </div>
   <div *ngSwitchCase="this.logType.OPPOSITION_APPEAR">
-    The party encounters <app-log-item [item]="log.string"></app-log-item>.
+    The party encounters
+    <app-log-item [item]="log.getItem(0)"></app-log-item>
+    .
   </div>
   <div *ngSwitchCase="this.logType.START_ROUND">
-    Round <app-log-item [item]="log.number"></app-log-item> starts.
+    Round
+    <app-log-item [item]="log.getItem(0)"></app-log-item>
+    starts.
   </div>
   <div *ngSwitchCase="this.logType.ADVANCE">
-    <app-log-item [item]="log.activeCreature"></app-log-item> advances.
+    <app-log-item [item]="log.getItem(0)"></app-log-item>
+    advances.
   </div>
   <div *ngSwitchCase="this.logType.WAIT">
-    <app-log-item [item]="log.activeCreature"></app-log-item> waits.
+    <app-log-item [item]="log.getItem(0)"></app-log-item>
+    waits.
   </div>
   <div *ngSwitchCase="this.logType.LEAVE">
-    <app-log-item [item]="log.activeCreature"></app-log-item> leaves the fight.
+    <app-log-item [item]="log.getItem(0)"></app-log-item>
+    leaves the fight.
   </div>
   <div *ngSwitchCase="this.logType.SKILL">
-    <app-log-item [item]="log.activeCreature"></app-log-item>
-    uses <app-log-item [item]="log.skill"></app-log-item>.
+    <app-log-item [item]="log.getItem(0)"></app-log-item>
+    uses
+    <app-log-item [item]="log.getItem(1)"></app-log-item>
+    .
   </div>
   <div *ngSwitchCase="this.logType.SKILL_WITH_TARGET">
-    <app-log-item [item]="log.activeCreature"></app-log-item>
-    uses <app-log-item [item]="log.skill"></app-log-item>
-    on <app-log-item [item]="log.creature2"></app-log-item>.
+    <app-log-item [item]="log.getItem(0)"></app-log-item>
+    uses
+    <app-log-item [item]="log.getItem(1)"></app-log-item>
+    on
+    <app-log-item [item]="log.getItem(2)"></app-log-item>
+    .
   </div>
   <div *ngSwitchCase="this.logType.SKILL_WITH_TARGET_AND_LIFE_CHANGE">
-    <app-log-item [item]="log.activeCreature"></app-log-item>
-    uses <app-log-item [item]="log.skill"></app-log-item>
-    on <app-log-item [item]="log.creature2"></app-log-item>
-    for <app-log-item [item]="log.lifeChange1"></app-log-item>.
+    <app-log-item [item]="log.getItem(0)"></app-log-item>
+    uses
+    <app-log-item [item]="log.getItem(1)"></app-log-item>
+    on
+    <app-log-item [item]="log.getItem(2)"></app-log-item>
+    for
+    <app-log-item [item]="log.getItem(3)"></app-log-item>
+    .
   </div>
   <div *ngSwitchCase="this.logType.DOT">
-    <app-log-item [item]="log.activeCreature"></app-log-item>
-    looses a total of <app-log-item [item]="log.lifeChange1"></app-log-item>.
+    <app-log-item [item]="log.getItem(0)"></app-log-item>
+    looses a total of
+    <app-log-item [item]="log.getItem(1)"></app-log-item>
+    .
   </div>
   <div *ngSwitchCase="this.logType.HOT">
-    <app-log-item [item]="log.activeCreature"></app-log-item>
-    gains a total of <app-log-item [item]="log.lifeChange1"></app-log-item>.
+    <app-log-item [item]="log.getItem(0)"></app-log-item>
+    gains a total of
+    <app-log-item [item]="log.getItem(1)"></app-log-item>
+    .
   </div>
   <div *ngSwitchCase="this.logType.ENEMY_DEFEAT">
-    <app-log-item [item]="log.activeCreature"></app-log-item> is defeated.
+    <app-log-item [item]="log.getItem(0)"></app-log-item>
+    is defeated.
   </div>
   <div *ngSwitchCase="this.logType.PAUSE_DURATION_CHANGED">
-    Using pause of <app-log-item [item]="log.number"></app-log-item> msec.
+    Using pause of
+    <app-log-item [item]="log.getItem(0)"></app-log-item>
+    msec.
   </div>
   <div *ngSwitchCase="this.logType.GENERIC_MESSAGE">
-    {{ log.string }}
+    {{ log.getItem(0) }}
   </div>
 </div>

@@ -3,7 +3,6 @@
 import {Creature} from './creature.model';
 import {BasicLogType, LogType} from './common.model';
 import {LifeChange} from './life-change.model';
-import {StatusApplication} from './status-application.model';
 import {Constants} from './constants.model';
 import {Skill} from './skill.model';
 
@@ -12,17 +11,23 @@ import {Skill} from './skill.model';
  */
 export class Log {
 
-  constructor(
-    public type: LogType,
-    // A generic string placeholder, for skill messages this is the skill name
-    public string: string | null,
-    public number: number | null,
-    public activeCreature: Creature | null,
-    public skill: Skill | null,
-    public creature2: Creature | null,
-    public lifeChange1: LifeChange | null,
-    public lifeChange2: LifeChange | null,
-    public statusApplication: StatusApplication | null) {
+  /**
+   * The log template type.
+   */
+  type: LogType;
+
+  /**
+   * The items in the log message displayed using specific formatting.
+   */
+  items: any[];
+
+  constructor(type: LogType, ...items: any[]) {
+    this.type = type;
+    this.items = items;
+  }
+
+  getItem(position: number): any {
+    return this.items[position];
   }
 }
 
@@ -37,31 +42,34 @@ export class Logs {
    * Display a simple, static log.
    */
   addBasicLog(type: BasicLogType) {
-    this.addLogInternal(new Log(LogType.BASIC_LOG, type, null, null, null, null, null, null, null));
+    this.addLogInternal(new Log(LogType.BASIC_LOG, type));
   }
 
+  // TODO FBE replace this by addGenericLog
   addStringLog(type: LogType, string: string) {
-    this.addLogInternal(new Log(type, string, null, null, null, null, null, null, null));
+    this.addLogInternal(new Log(type, string));
   }
 
+  // TODO FBE replace this by addGenericLog
   addNumberLog(type: LogType, number: number) {
-    this.addLogInternal(new Log(type, null, number, null, null, null, null, null, null));
+    this.addLogInternal(new Log(type, number));
   }
 
-  addCreatureLog(type: LogType, creature1: Creature | null, creature2: Creature | null, lifeChange1: LifeChange | null, lifeChange2: LifeChange | null, statusApplication: StatusApplication | null = null) {
-    this.addLogInternal(new Log(type, null, null, creature1, null, creature2, lifeChange1, lifeChange2, statusApplication));
+  // TODO FBE remove this
+  addCreatureLog(type: LogType, creature: Creature, lifeChange: LifeChange | null) {
+    this.addLogInternal(new Log(type, creature, lifeChange));
   }
 
   /**
    * Display a skill execution log.
    */
-  addSkillExecutionLog(skill: Skill, activeCreature: Creature | null, targetCreature: Creature | null, lifeChange1: LifeChange | null) {
+  addSkillExecutionLog(activeCreature: Creature, skill: Skill, targetCreature: Creature | null, lifeChange: LifeChange | null) {
     if (targetCreature == null) {
-      this.addLogInternal(new Log(LogType.SKILL, null, null, activeCreature, skill, null, null, null, null));
-    } else if (lifeChange1 == null) {
-      this.addLogInternal(new Log(LogType.SKILL_WITH_TARGET, null, null, activeCreature, skill, targetCreature, null, null, null));
+      this.addLogInternal(new Log(LogType.SKILL, activeCreature, skill));
+    } else if (lifeChange == null) {
+      this.addLogInternal(new Log(LogType.SKILL_WITH_TARGET, activeCreature, skill, targetCreature));
     } else {
-      this.addLogInternal(new Log(LogType.SKILL_WITH_TARGET_AND_LIFE_CHANGE, null, null, activeCreature, skill, targetCreature, lifeChange1, null, null));
+      this.addLogInternal(new Log(LogType.SKILL_WITH_TARGET_AND_LIFE_CHANGE, activeCreature, skill, targetCreature, lifeChange));
     }
   }
 

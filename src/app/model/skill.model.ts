@@ -481,7 +481,7 @@ export class Advance extends Skill {
     }
     activeEnemy.distance--;
 
-    logs.addCreatureLog(LogType.ADVANCE, activeEnemy, null, null, null);
+    logs.addCreatureLog(LogType.ADVANCE, activeEnemy, null);
   }
 
   isUsableByCreature(creature: Creature, fight: Fight): boolean {
@@ -514,7 +514,7 @@ export class Wait extends Skill {
   }
 
   executeOnActiveCreature(activeCreature: Creature, fight: Fight) {
-    logs.addCreatureLog(LogType.WAIT, activeCreature, null, null, null);
+    logs.addCreatureLog(LogType.WAIT, activeCreature, null);
   }
 }
 
@@ -558,7 +558,7 @@ export class Leave extends Skill {
     fight.opposition.removeDeadEnemies();
     fight.opposition.removeEmptyRows();
 
-    logs.addCreatureLog(LogType.LEAVE, activeCreature, null, null, null);
+    logs.addCreatureLog(LogType.LEAVE, activeCreature, null);
   }
 }
 
@@ -570,7 +570,7 @@ export class Defend extends Skill {
   executeOnActiveCreature(activeCreature: Creature, fight: Fight) {
     activeCreature.applyStatus(new StatusApplication(defend, 0, activeCreature, this.statusDuration));
 
-    logs.addSkillExecutionLog(this, activeCreature, null, null);
+    logs.addSkillExecutionLog(activeCreature, this, null, null);
   }
 
   get iconTypes(): SkillIconType[] {
@@ -610,7 +610,7 @@ abstract class ApplyStatus extends Skill {
       const statusApplication = new StatusApplication(status, this.powerLevels[0], activeCreature, this.statusDuration);
       targetCreature.applyStatus(statusApplication);
 
-      logs.addSkillExecutionLog(this, activeCreature, targetCreature, null);
+      logs.addSkillExecutionLog(activeCreature, this, targetCreature, null);
     })
   }
 }
@@ -641,7 +641,7 @@ export class ApplyDeterioration extends ApplyStatus {
 export class Damage extends Skill {
 
   executeOnTargetCreature(activeCreature: Creature, targetCreature: Creature, fight: Fight) {
-    logs.addSkillExecutionLog(this, activeCreature, targetCreature,
+    logs.addSkillExecutionLog(activeCreature, this, targetCreature,
       targetCreature.addLifeChange(computeEffectiveDamage(this, activeCreature, targetCreature, this.powerLevels[0], false)));
   }
 
@@ -751,7 +751,7 @@ export class ComboDamage extends Skill {
     }
 
     const lifeChange = targetCreature.addLifeChange(computeEffectiveDamage(this, activeCreature, targetCreature, power, false))
-    logs.addSkillExecutionLog(this, activeCreature, targetCreature, lifeChange);
+    logs.addSkillExecutionLog(activeCreature, this, targetCreature, lifeChange);
 
     // Add the buff if the attack succeeded
     if (comboStep <= 2 && lifeChange.isSuccess()) {
@@ -772,11 +772,11 @@ export class Drain extends Skill {
   executeOnTargetCreature(activeCreature: Creature, targetCreature: Creature, fight: Fight) {
     const lifeChange: LifeChange = computeEffectiveDamage(this, activeCreature, targetCreature, this.powerLevels[0], false);
 
-    logs.addSkillExecutionLog(this, activeCreature, targetCreature, targetCreature.addLifeChange(lifeChange));
+    logs.addSkillExecutionLog(activeCreature, this, targetCreature, targetCreature.addLifeChange(lifeChange));
 
     // Execute and log the second life change only if the attack succeeded
     if (lifeChange.isSuccess()) {
-      logs.addSkillExecutionLog(this, activeCreature, activeCreature, activeCreature.addLifeChange(new LifeGain(lifeChange.amount * this.powerLevels[1], lifeChange.efficiency)));
+      logs.addSkillExecutionLog(activeCreature, this, activeCreature, activeCreature.addLifeChange(new LifeGain(lifeChange.amount * this.powerLevels[1], lifeChange.efficiency)));
     }
   }
 
@@ -793,11 +793,11 @@ export class Berserk extends Skill {
   executeOnTargetCreature(activeCreature: Creature, targetCreature: Creature, fight: Fight) {
     const lifeChange: LifeChange = computeEffectiveDamage(this, activeCreature, targetCreature, this.powerLevels[0], false);
 
-    logs.addSkillExecutionLog(this, activeCreature, targetCreature, targetCreature.addLifeChange(lifeChange));
+    logs.addSkillExecutionLog(activeCreature, this, targetCreature, targetCreature.addLifeChange(lifeChange));
 
     // Execute and log the second life change only if the attack succeeded
     if (lifeChange.isSuccess()) {
-      logs.addSkillExecutionLog(this, activeCreature, activeCreature, activeCreature.addLifeChange(new LifeLoss(lifeChange.amount * this.powerLevels[1], lifeChange.efficiency)));
+      logs.addSkillExecutionLog(activeCreature, this, activeCreature, activeCreature.addLifeChange(new LifeLoss(lifeChange.amount * this.powerLevels[1], lifeChange.efficiency)));
     }
   }
 
@@ -815,7 +815,7 @@ export class DamageAndDot extends Skill {
     const lifeChange: LifeChange = computeEffectiveDamage(this, activeCreature, targetCreature, this.powerLevels[0], false);
 
     // Direct damage part
-    logs.addSkillExecutionLog(this, activeCreature, targetCreature, targetCreature.addLifeChange(lifeChange));
+    logs.addSkillExecutionLog(activeCreature, this, targetCreature, targetCreature.addLifeChange(lifeChange));
 
     // Damage over time part
     if (lifeChange.isSuccess()) {
@@ -837,7 +837,7 @@ export class DamageAndStatus extends Skill {
     const lifeChange: LifeChange = computeEffectiveDamage(this, activeCreature, targetCreature, this.powerLevels[0], false);
 
     // Damage part
-    logs.addSkillExecutionLog(this, activeCreature, targetCreature, targetCreature.addLifeChange(lifeChange));
+    logs.addSkillExecutionLog(activeCreature, this, targetCreature, targetCreature.addLifeChange(lifeChange));
 
     // Statuses part
     if (lifeChange.isSuccess()) {
@@ -873,7 +873,7 @@ export class DamageAndSelfStatus extends Damage {
 export class Heal extends Skill {
 
   executeOnTargetCreature(activeCreature: Creature, targetCreature: Creature, fight: Fight) {
-    logs.addSkillExecutionLog(this, activeCreature, targetCreature,
+    logs.addSkillExecutionLog(activeCreature, this, targetCreature,
       targetCreature.addLifeChange(computeEffectiveHeal(activeCreature, targetCreature, this.powerLevels[0])));
   }
 
@@ -897,10 +897,10 @@ export class Heal extends Skill {
 export class DualHeal extends Skill {
 
   executeOnTargetCreature(activeCreature: Creature, targetCreature: Creature, fight: Fight) {
-    logs.addSkillExecutionLog(this, activeCreature, targetCreature,
+    logs.addSkillExecutionLog(activeCreature, this, targetCreature,
       targetCreature.addLifeChange(computeEffectiveHeal(activeCreature, targetCreature, this.powerLevels[0])));
 
-    logs.addSkillExecutionLog(this, activeCreature, activeCreature,
+    logs.addSkillExecutionLog(activeCreature, this, activeCreature,
       activeCreature.addLifeChange(computeEffectiveHeal(activeCreature, activeCreature, this.powerLevels[1])));
   }
 
@@ -916,7 +916,7 @@ export class Regenerate extends Heal {
 
   executeOnTargetCreature(activeCreature: Creature, targetCreature: Creature, fight: Fight) {
     targetCreature.applyStatus(new StatusApplication(regeneration, this.powerLevels[1], activeCreature, this.statusDuration));
-    logs.addSkillExecutionLog(this, activeCreature, targetCreature, null);
+    logs.addSkillExecutionLog(activeCreature, this, targetCreature, null);
   }
 
   get iconTypes(): SkillIconType[] {
@@ -931,7 +931,7 @@ export class Revive extends Skill {
 
   executeOnTargetCreature(activeCreature: Creature, targetCreature: Creature, fight: Fight) {
     targetCreature.addLifeChange(new LifeGain(targetCreature.lifeMax / 2));
-    logs.addSkillExecutionLog(this, activeCreature, targetCreature, null);
+    logs.addSkillExecutionLog(activeCreature, this, targetCreature, null);
   }
 
   get iconTypes(): SkillIconType[] {
@@ -947,7 +947,7 @@ export class AlterTime extends Skill {
   executeOnTargetCreature(activeCreature: Creature, targetCreature: Creature, fight: Fight) {
     const increment: number = activeCreature?.isSameFactionThan(targetCreature) ? 1 : -1;
     targetCreature.activeStatusApplications.forEach(sa => sa.remainingDuration += sa.isImprovement() ? increment : -increment)
-    logs.addSkillExecutionLog(this, activeCreature, targetCreature, null);
+    logs.addSkillExecutionLog(activeCreature, this, targetCreature, null);
   }
 
   get iconTypes(): SkillIconType[] {

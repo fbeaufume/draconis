@@ -1,4 +1,7 @@
 <div [ngSwitch]="log.type">
+  <div *ngSwitchCase="this.logType.BASIC_LOG">
+    {{ log.string }}
+  </div>
   <div *ngSwitchCase="this.logType.ENTER_ZONE">
     Entering <app-log-item [item]="log.string"></app-log-item>.
   </div>
@@ -60,20 +63,8 @@
   <div *ngSwitchCase="this.logType.ENEMY_DEFEAT">
     <app-log-item [item]="log.activeCreature"></app-log-item> is defeated.
   </div>
-  <div *ngSwitchCase="this.logType.PARTY_VICTORY">
-    The party wins!
-  </div>
-  <div *ngSwitchCase="this.logType.PARTY_DEFEAT">
-    The party loses!
-  </div>
   <div *ngSwitchCase="this.logType.PAUSE_DURATION_CHANGED">
     Using pause of <app-log-item [item]="log.number"></app-log-item> msec.
-  </div>
-  <div *ngSwitchCase="this.logType.OLD_MAN_TRANSFORMATION">
-    The old man is actually an elder druid and quite furious now.
-  </div>
-  <div *ngSwitchCase="this.logType.DUNGEON_CLEARED">
-    The dungeon is cleared!
   </div>
   <div *ngSwitchCase="this.logType.GENERIC_MESSAGE">
     {{ log.string }}

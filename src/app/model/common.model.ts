@@ -270,9 +270,21 @@ export enum GameState {
 }
 
 /**
+ * The various types of log items.
+ */
+export enum LogItemType {
+  CREATURE,
+  SKILL,
+  LIFE_CHANGE,
+  STATUS_APPLICATION,
+  OTHER,
+}
+
+/**
  * The various types of log messages.
  */
 export enum LogType {
+  BASIC_LOG,
   ENTER_ZONE,
   OPPOSITION_APPEAR,
   START_ROUND,
@@ -288,21 +300,13 @@ export enum LogType {
   DOT,
   HOT,
   ENEMY_DEFEAT,
-  PARTY_VICTORY,
-  PARTY_DEFEAT,
   PAUSE_DURATION_CHANGED,
-  OLD_MAN_TRANSFORMATION,
-  DUNGEON_CLEARED,
   GENERIC_MESSAGE,
 }
 
-/**
- * The various types of log items.
- */
-export enum LogItemType {
-  CREATURE,
-  SKILL,
-  LIFE_CHANGE,
-  STATUS_APPLICATION,
-  OTHER,
+export enum BasicLogType {
+  PARTY_VICTORY = 'The party wins!',
+  PARTY_DEFEAT = 'The party was defeated.',
+  DUNGEON_CLEAR = 'The dungeon is cleared!',
+  OLD_MAN_TRANSFORMATION = 'The old man is actually an elder druid and quite furious now.',
 }

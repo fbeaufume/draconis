@@ -1,11 +1,11 @@
 // Log related classes
 
 import {Creature} from './creature.model';
-import {LogType} from "./common.model";
-import {LifeChange} from "./life-change.model";
-import {StatusApplication} from "./status-application.model";
-import {Constants} from "./constants.model";
-import {Skill} from "./skill.model";
+import {BasicLogType, LogType} from './common.model';
+import {LifeChange} from './life-change.model';
+import {StatusApplication} from './status-application.model';
+import {Constants} from './constants.model';
+import {Skill} from './skill.model';
 
 /**
  * A log message.
@@ -33,8 +33,11 @@ export class Logs {
 
   logs: Log[] = [];
 
-  addBasicLog(type: LogType) {
-    this.addLogInternal(new Log(type, null, null, null, null, null, null, null, null));
+  /**
+   * Display a simple, static log.
+   */
+  addBasicLog(type: BasicLogType) {
+    this.addLogInternal(new Log(LogType.BASIC_LOG, type, null, null, null, null, null, null, null));
   }
 
   addStringLog(type: LogType, string: string) {
@@ -49,6 +52,9 @@ export class Logs {
     this.addLogInternal(new Log(type, null, null, creature1, null, creature2, lifeChange1, lifeChange2, statusApplication));
   }
 
+  /**
+   * Display a skill execution log.
+   */
   addSkillExecutionLog(skill: Skill, activeCreature: Creature | null, targetCreature: Creature | null, lifeChange1: LifeChange | null) {
     if (targetCreature == null) {
       this.addLogInternal(new Log(LogType.SKILL, null, null, activeCreature, skill, null, null, null, null));

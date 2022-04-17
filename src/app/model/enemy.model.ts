@@ -1,14 +1,14 @@
-import {Game} from "./game.model";
-import {Advance, Leave, Skill, Strike, Wait} from "./skill.model";
-import {CreatureClass, CreatureType, FactionType, LogType} from "./common.model";
-import {LifeChange} from "./life-change.model";
-import {logs} from "./log.model";
-import {Creature, defaultEnemyAction, EnemyAction} from "./creature.model";
-import {EnemyStrategy, PrioritySkillStrategy} from "./enemy-strategy.model";
-import {Constants} from "./constants.model";
-import {settings} from "./settings.model";
-import {StatusApplication} from "./status-application.model";
-import {StatusType} from "./status-type.model";
+import {Game} from './game.model';
+import {Advance, Leave, Skill, Strike, Wait} from './skill.model';
+import {BasicLogType, CreatureClass, CreatureType, FactionType} from './common.model';
+import {LifeChange} from './life-change.model';
+import {logs} from './log.model';
+import {Creature, defaultEnemyAction, EnemyAction} from './creature.model';
+import {EnemyStrategy, PrioritySkillStrategy} from './enemy-strategy.model';
+import {Constants} from './constants.model';
+import {settings} from './settings.model';
+import {StatusApplication} from './status-application.model';
+import {StatusType} from './status-type.model';
 
 /**
  * Base class for enemy classes.
@@ -132,7 +132,7 @@ export class OldManEnemy extends Enemy {
   addLifeChange(lifeChange: LifeChange): LifeChange {
     if (this.phase == 1) {
       // Turn into a druid
-      logs.addBasicLog(LogType.OLD_MAN_TRANSFORMATION);
+      logs.addBasicLog(BasicLogType.OLD_MAN_TRANSFORMATION);
       this.phase = 2;
       this.name = 'Elder Druid';
 

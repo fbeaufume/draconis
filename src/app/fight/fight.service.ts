@@ -4,12 +4,12 @@ import {Creature, EnemyAction} from '../model/creature.model';
 import {Skill} from '../model/skill.model';
 import {Log, logs} from '../model/log.model';
 import {Constants} from '../model/constants.model';
-import {GameState, LogType, SkillTargetType, StatusExpirationType} from "../model/common.model";
-import {Character} from "../model/character.model";
-import {Party} from "../model/party.model";
-import {settings} from "../model/settings.model";
-import {Enemy} from "../model/enemy.model";
-import {Fight} from "../model/fight.model";
+import {BasicLogType, GameState, LogType, SkillTargetType, StatusExpirationType} from '../model/common.model';
+import {Character} from '../model/character.model';
+import {Party} from '../model/party.model';
+import {settings} from '../model/settings.model';
+import {Enemy} from '../model/enemy.model';
+import {Fight} from '../model/fight.model';
 
 @Injectable({
   providedIn: 'root'
@@ -481,7 +481,7 @@ export class FightService {
       await this.pause();
 
       // The dungeon is over
-      logs.addBasicLog(LogType.PARTY_DEFEAT);
+      logs.addBasicLog(BasicLogType.PARTY_DEFEAT);
       this.state = GameState.DUNGEON_END;
 
       return true;
@@ -493,14 +493,14 @@ export class FightService {
 
       await this.pause();
 
-      logs.addBasicLog(LogType.PARTY_VICTORY);
+      logs.addBasicLog(BasicLogType.PARTY_VICTORY);
 
       if (this.game.hasNextEncounter()) {
         // Moving on to the next encounter
         this.state = GameState.START_NEXT_ENCOUNTER;
       } else {
         // The dungeon is over
-        logs.addBasicLog(LogType.DUNGEON_CLEARED);
+        logs.addBasicLog(BasicLogType.DUNGEON_CLEAR);
         this.state = GameState.DUNGEON_END;
       }
 

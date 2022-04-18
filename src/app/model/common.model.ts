@@ -298,8 +298,6 @@ export enum LogType {
   HOT,
   ENEMY_DEFEAT,
   PAUSE_DURATION_CHANGED,
-  // TODO FBE remove this
-  GENERIC_MESSAGE,
 }
 
 export enum BasicLogType {
@@ -307,4 +305,5 @@ export enum BasicLogType {
   PARTY_DEFEAT = 'The party was defeated.',
   DUNGEON_CLEAR = 'The dungeon is cleared!',
   OLD_MAN_TRANSFORMATION = 'The old man is actually an elder druid and quite furious now.',
+  DRAGON_BREATH = 'The dragon takes a deep breath.',
 }

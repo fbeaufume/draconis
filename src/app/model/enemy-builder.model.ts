@@ -1,5 +1,5 @@
 import {Enemy, OldManEnemy, StrategicEnemy, StrategicMeleeEnemy} from './enemy.model';
-import {CreatureType, SkillTargetType} from './common.model';
+import {BasicLogType, CreatureType, SkillTargetType} from './common.model';
 import {PrioritySkillStrategy, SequentialSkillStrategy, WeightedSkillStrategy} from './enemy-strategy.model';
 import {
   ApplyDeterioration,
@@ -99,8 +99,7 @@ export class EnemyBuilder {
       new SequentialSkillStrategy([
         new Strike('Left Claw'),
         new Strike('Right Claw'),
-        // TODO FBE use a BasicLogType instead
-        new LogMessage('The dragon takes a deep breath.'),
+        new LogMessage(BasicLogType.DRAGON_BREATH),
         new StrikeSmall('Fire Breath', SkillTargetType.OTHER_ALL)
       ]), 2);
   }

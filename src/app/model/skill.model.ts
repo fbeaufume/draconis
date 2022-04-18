@@ -2,7 +2,14 @@
 
 import {Creature} from './creature.model';
 import {logs} from './log.model';
-import {LifeChangeEfficiency, LogType, SkillIconType, SkillModifierType, SkillTargetType} from './common.model';
+import {
+  BasicLogType,
+  LifeChangeEfficiency,
+  LogType,
+  SkillIconType,
+  SkillModifierType,
+  SkillTargetType
+} from './common.model';
 import {
   ApplyDotStatusEffect,
   ApplyStatusStatusEffect,
@@ -523,11 +530,11 @@ export class Wait extends Skill {
  */
 export class LogMessage extends Skill {
 
-  message: string;
+  basicLogType: BasicLogType;
 
-  constructor(message: string) {
+  constructor(basicLogType: BasicLogType) {
     super('Log Message', SkillTargetType.NONE, 0, false, 0, 1, '');
-    this.message = message;
+    this.basicLogType = basicLogType;
   }
 
   get iconTypes(): SkillIconType[] {
@@ -535,7 +542,7 @@ export class LogMessage extends Skill {
   }
 
   executeOnActiveCreature(activeCreature: Creature, fight: Fight) {
-    logs.addStringLog(LogType.GENERIC_MESSAGE, this.message);
+    logs.addBasicLog(this.basicLogType);
   }
 }
 
@@ -753,6 +760,7 @@ export class ComboDamage extends Skill {
     const lifeChange = targetCreature.addLifeChange(computeEffectiveDamage(this, activeCreature, targetCreature, power, false))
     logs.addSkillExecutionLog(activeCreature, this, targetCreature, lifeChange);
 
+    // TODO FBE remove all other combo status applications (to prevent bugs with Alter Time for example)
     // Add the buff if the attack succeeded
     if (comboStep <= 2 && lifeChange.isSuccess()) {
       targetCreature.applyStatus(new StatusApplication(comboStep == 1 ? combo1 : combo2, 0, activeCreature, this.statusDuration));

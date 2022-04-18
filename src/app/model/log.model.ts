@@ -45,14 +45,11 @@ export class Logs {
     this.addLogInternal(new Log(LogType.BASIC_LOG, type));
   }
 
-  // TODO FBE replace this by addGenericLog
-  addStringLog(type: LogType, string: string) {
-    this.addLogInternal(new Log(type, string));
-  }
-
-  // TODO FBE replace this by addGenericLog
-  addNumberLog(type: LogType, number: number) {
-    this.addLogInternal(new Log(type, number));
+  /**
+   * Display a parameterized log.
+   */
+  addParameterizedLog(type: LogType, ...items:any[]) {
+    this.addLogInternal(new Log(type, items));
   }
 
   // TODO FBE remove this

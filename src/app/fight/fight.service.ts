@@ -76,11 +76,11 @@ export class FightService {
       this.game.startNextEncounter();
 
       logs.clear();
-      logs.addStringLog(LogType.OPPOSITION_APPEAR, this.fight.opposition.description);
+      logs.addParameterizedLog(LogType.OPPOSITION_APPEAR, this.fight.opposition.description);
     } else if (this.game.state == GameState.START_FIGHT) {
       this.game.state = GameState.END_OF_TURN;
 
-      logs.addNumberLog(LogType.START_ROUND, this.fight.round);
+      logs.addParameterizedLog(LogType.START_ROUND, this.fight.round);
 
       // Execute the turn of the first creature
       await this.processTurn();
@@ -377,7 +377,7 @@ export class FightService {
       // Start the next round
       if (!await this.processEndOfFight()) {
         this.fight.round++;
-        logs.addNumberLog(LogType.START_ROUND, this.fight.round);
+        logs.addParameterizedLog(LogType.START_ROUND, this.fight.round);
 
         await this.processNextTurn(true);
       }
@@ -385,7 +385,7 @@ export class FightService {
       // Start the next round
       if (!await this.processEndOfFight()) {
         this.fight.round++;
-        logs.addNumberLog(LogType.START_ROUND, this.fight.round);
+        logs.addParameterizedLog(LogType.START_ROUND, this.fight.round);
 
         await this.processNextTurn(true);
       }

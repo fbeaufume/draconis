@@ -488,7 +488,7 @@ export class Advance extends Skill {
     }
     activeEnemy.distance--;
 
-    logs.addCreatureLog(LogType.ADVANCE, activeEnemy, null);
+    logs.addParameterizedLog(LogType.ADVANCE, activeEnemy);
   }
 
   isUsableByCreature(creature: Creature, fight: Fight): boolean {
@@ -521,7 +521,7 @@ export class Wait extends Skill {
   }
 
   executeOnActiveCreature(activeCreature: Creature, fight: Fight) {
-    logs.addCreatureLog(LogType.WAIT, activeCreature, null);
+    logs.addParameterizedLog(LogType.WAIT, activeCreature);
   }
 }
 
@@ -565,7 +565,7 @@ export class Leave extends Skill {
     fight.opposition.removeDeadEnemies();
     fight.opposition.removeEmptyRows();
 
-    logs.addCreatureLog(LogType.LEAVE, activeCreature, null);
+    logs.addParameterizedLog(LogType.LEAVE, activeCreature);
   }
 }
 

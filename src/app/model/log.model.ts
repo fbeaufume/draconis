@@ -52,11 +52,6 @@ export class Logs {
     this.addLogInternal(new Log(type, items));
   }
 
-  // TODO FBE remove this
-  addCreatureLog(type: LogType, creature: Creature, lifeChange: LifeChange | null) {
-    this.addLogInternal(new Log(type, creature, lifeChange));
-  }
-
   /**
    * Display a skill execution log.
    */

@@ -390,8 +390,7 @@ export abstract class Creature {
       if (sa.originCreature != null) {
         const lifeChange = computeEffectiveDamage(null, sa.originCreature, this, sa.power, true);
         this.addLifeChange(lifeChange);
-        // TODO FBE change the log message for something like "<skillName> affects <creature> : <amount> HP"
-        logs.addCreatureLog(LogType.DOT, this, lifeChange);
+        logs.addParameterizedLog(LogType.DOT, this, lifeChange);
       }
     })
 
@@ -400,8 +399,7 @@ export abstract class Creature {
       if (sa.originCreature != null) {
         const lifeChange = computeEffectiveHeal(sa.originCreature, this, sa.power);
         this.addLifeChange(lifeChange);
-        // TODO FBE change the log message for something like "<skillName> affects <creature> : <amount> HP"
-        logs.addCreatureLog(LogType.HOT, this, lifeChange);
+        logs.addParameterizedLog(LogType.HOT, this, lifeChange);
       }
     })
   }

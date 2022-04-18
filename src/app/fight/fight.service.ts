@@ -466,7 +466,7 @@ export class FightService {
     this.fight.turnOrder.removeDeadEnemies();
 
     // Log the defeated enemies
-    removedEnemies.forEach(enemy => logs.addCreatureLog(LogType.ENEMY_DEFEAT, enemy, null));
+    removedEnemies.forEach(enemy => logs.addParameterizedLog(LogType.ENEMY_DEFEAT, enemy));
   }
 
   /**

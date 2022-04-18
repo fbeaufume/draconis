@@ -55,13 +55,13 @@
   </div>
   <div *ngSwitchCase="this.logType.DOT">
     <app-log-item [item]="log.getItem(0)"></app-log-item>
-    looses a total of
+    looses
     <app-log-item [item]="log.getItem(1)"></app-log-item>
     .
   </div>
   <div *ngSwitchCase="this.logType.HOT">
     <app-log-item [item]="log.getItem(0)"></app-log-item>
-    gains a total of
+    gains
     <app-log-item [item]="log.getItem(1)"></app-log-item>
     .
   </div>

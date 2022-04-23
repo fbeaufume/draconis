@@ -382,6 +382,13 @@ export abstract class Creature {
   }
 
   /**
+   * Remove all applications of a certain status type.
+   */
+  removeStatusApplications(statusType: StatusType) {
+    this.activeStatusApplications = this.activeStatusApplications.filter(sa => !(sa.statusType.name === statusType.name));
+  }
+
+  /**
    * Apply all DOT and HOT to the creature and log a single message.
    */
   applyDotsAndHots() {

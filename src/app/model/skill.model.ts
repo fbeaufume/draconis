@@ -746,23 +746,25 @@ export class Execution extends VariableDamage {
 export class ComboDamage extends Skill {
 
   executeOnTargetCreature(activeCreature: Creature, targetCreature: Creature, fight: Fight) {
-    // Get the current step and power of the combo
+    // Get the combo step to apply
     let comboStep = 1;
-    let power: number = this.powerLevels[0];
     if (targetCreature.hasStatusType(combo1)) {
       comboStep = 2;
-      power = this.powerLevels[1];
     } else if (targetCreature.hasStatusType(combo2)) {
       comboStep = 3;
-      power = this.powerLevels[2];
     }
+    const power: number = this.powerLevels[comboStep - 1];
 
     const lifeChange = targetCreature.addLifeChange(computeEffectiveDamage(this, activeCreature, targetCreature, power, false))
     logs.addSkillExecutionLog(activeCreature, this, targetCreature, lifeChange);
 
-    // TODO FBE remove all other combo status applications (to prevent bugs with Alter Time for example)
-    // Add the buff if the attack succeeded
+    // Add the status only if the attack succeeded
     if (comboStep <= 2 && lifeChange.isSuccess()) {
+      // In some special cases (for example if alter time was used on the target), extra applications of combo may be present,
+      // so we have to remove them all
+      targetCreature.removeStatusApplications(combo1);
+      targetCreature.removeStatusApplications(combo2);
+
       targetCreature.applyStatus(new StatusApplication(comboStep == 1 ? combo1 : combo2, 0, activeCreature, this.statusDuration));
     }
   }

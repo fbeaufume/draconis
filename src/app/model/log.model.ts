@@ -45,12 +45,11 @@ export class Logs {
     this.addLogInternal(new Log(LogType.BASIC_LOG, type));
   }
 
-  // TODO FBE fix display issue "[object Object],[object Object] looses ." or "[object Object],[object Object] gains ." when called from Creature.applyDotsAndHots()
   /**
    * Display a parameterized log.
    */
-  addParameterizedLog(type: LogType, ...items:any[]) {
-    this.addLogInternal(new Log(type, items));
+  addParameterizedLog(type: LogType, ...items: any[]) {
+    this.addLogInternal(new Log(type, ...items));
   }
 
   /**

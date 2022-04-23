@@ -33,8 +33,6 @@ export class TestDungeon extends Dungeon {
         // EnemyBuilder.buildBlackMage(),
         // EnemyBuilder.buildGenericMonster(1, 100),
         EnemyBuilder.buildGenericMonster(30, 6),
-        EnemyBuilder.buildGenericMonster(30, 6),
-        EnemyBuilder.buildGenericMonster(30, 6),
         // EnemyBuilder.buildBrambleSpirit(),
         // EnemyBuilder.buildTroll(),
         // EnemyBuilder.buildWolf(),

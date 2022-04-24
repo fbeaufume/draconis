@@ -48,6 +48,10 @@ export class Character extends Creature {
     return false;
   }
 
+  getEnergyName(): string {
+    return this.useMana ? 'MP' : 'TP';
+  }
+
   restoreEnergy() {
     this.energy = this.energyMax;
     this.updateEnergyPercent();

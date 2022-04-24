@@ -17,18 +17,9 @@
       </app-life-change-popup>
     </div>
   </div>
-  <div *ngIf="!character.useMana" class="flex flex-col items-center">
+  <div class="flex flex-col items-center">
     <p class="pl-2" [ngClass]="character.isAlive() ? 'text-blue-400' : 'text-blue-900'">
-      TP <span class="font-bold">{{ character.energy }}/{{ character.energyMax }}</span>
-    </p>
-    <div class="w-28 bg-blue-900">
-      <div class="h-1" [ngClass]="character.isAlive() ? 'bg-blue-500' : 'bg-blue-900'"
-           [style]="'width: ' + character.energyPercent + '%'"></div>
-    </div>
-  </div>
-  <div *ngIf="character.useMana" class="flex flex-col items-center">
-    <p class="pl-2" [ngClass]="character.isAlive() ? 'text-blue-400' : 'text-blue-900'">
-      MP <span class="font-bold">{{ character.energy }}/{{ character.energyMax }}</span>
+      {{ character.getEnergyName() }} <span class="font-bold">{{ character.energy }}/{{ character.energyMax }}</span>
     </p>
     <div class="w-28 bg-blue-900">
       <div class="h-1" [ngClass]="character.isAlive() ? 'bg-blue-500' : 'bg-blue-900'"

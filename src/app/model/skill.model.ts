@@ -920,6 +920,25 @@ export class DualHeal extends Skill {
 }
 
 /**
+ * A healing skill that also damages the caster.
+ */
+export class Sacrifice extends Skill {
+
+  executeOnTargetCreature(activeCreature: Creature, targetCreature: Creature, fight: Fight) {
+    const lifeChange: LifeChange = computeEffectiveHeal(activeCreature, targetCreature, this.powerLevels[0]);
+
+    logs.addSkillExecutionLog(activeCreature, this, targetCreature, targetCreature.addLifeChange(lifeChange));
+
+    logs.addSkillExecutionLog(activeCreature, this, activeCreature,
+      activeCreature.addLifeChange(new LifeLoss(lifeChange.amount * this.powerLevels[1], lifeChange.efficiency)));
+  }
+
+  get iconTypes(): SkillIconType[] {
+    return [SkillIconType.HEAL];
+  }
+}
+
+/**
  * A heal over time skill.
  */
 export class Regenerate extends Heal {

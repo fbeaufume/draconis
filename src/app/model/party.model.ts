@@ -20,6 +20,7 @@ import {
   Judgement,
   Regenerate,
   Revive,
+  Sacrifice,
   Shot,
   Strike,
   Vengeance
@@ -220,6 +221,8 @@ export class StandardParty extends Party {
               'Heal a character for 100% damage.'),
             new DualHeal('Dual Heal', SkillTargetType.SAME_ALIVE_OTHER, 10, false, 0, 2,
               'Heal a character for 100% damage and self for 80% damage.', [1, 0.8]),
+            new Sacrifice('Sacrifice', SkillTargetType.SAME_ALIVE_OTHER, 10, false, 0, 1,
+              'Heal a character for 150% damage but damages self for 50% damage.', [1.5, 0.33]),
             new Regenerate('Regenerate', SkillTargetType.SAME_ALIVE, 5, false, 0, 1,
               'Heal a character for 50% damage and 120% damage over 3 rounds.', [0.5, 0.4]),
             new Heal('Heal All', SkillTargetType.SAME_ALIVE_ALL, 15, false, 0, 3,

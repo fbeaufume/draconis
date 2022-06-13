@@ -106,6 +106,11 @@ export class EnemyBuilder {
 
   // Enemies for the forgotten graveyard
 
+  static buildGiantRat(): Enemy {
+    return new StrategicMeleeEnemy(CreatureType.BEAST, 'Giant Rat', 12, 6,
+      new Strike('Bite'));
+  }
+
   static buildSkeleton(): Enemy {
     return new StrategicMeleeEnemy(CreatureType.UNDEAD, 'Skeleton', 18, 7,
       new Strike('Strike'));

@@ -107,6 +107,15 @@ export class ForgottenGraveyardDungeon extends Dungeon {
 
   constructor() {
     super('Forgotten Graveyard', [
+      new Opposition('giant rats', [
+        EnemyBuilder.buildGiantRat(),
+        EnemyBuilder.buildGiantRat(),
+        EnemyBuilder.buildGiantRat(),
+      ], [
+        EnemyBuilder.buildGiantRat(),
+        EnemyBuilder.buildGiantRat(),
+        EnemyBuilder.buildGiantRat(),
+      ]),
       new Opposition('skeletons', [
         EnemyBuilder.buildSkeleton(),
         EnemyBuilder.buildSkeleton(),

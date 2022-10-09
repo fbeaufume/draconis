@@ -8,6 +8,10 @@ don't expect pretty. Best I can do is basic.
 This project is also a sandbox to keep working on frontend technologies such as:
 Angular, TypeScript, Tailwind, CSS animations, SVG, etc.
 
+A sample in-game screenshot:
+
+![Fight](doc/draconis-1.png)
+
 ## 1. Main design choices
 
 The current design choices and objectives are:

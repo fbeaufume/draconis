@@ -1,12 +1,16 @@
-// Asynchronous processing order tests, it prints the letters in order (A, then B, etc)
+// This small program shows that setTimeout and promise processing are both executed asynchronously,
+// but promise processing has a higher priority (they use microtasks) than setTimeout (that use macrotasks a.k.a. tasks).
+// This program prints the letters in order, i.e. A, then B, then C, etc.
 
 print('A');
 
-setTimeout(() => print('E'), 100);
+setTimeout(() => print('F'), 100);
 
-setTimeout(() => print('D'), 0);
+setTimeout(() => print('E'), 0);
 
 Promise.resolve('C').then(s => print(s));
+
+Promise.resolve('D').then(s => print(s));
 
 print('B');
 

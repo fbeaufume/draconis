@@ -65,6 +65,7 @@ export class Fight {
     this.opposition = opposition;
     this.turnOrder = new TurnOrder(party, this.opposition);
     this.activeCreature = null;
+    this.hoveredCharacter = null;
     this.hoveredSkill = null;
     this.focusedSkill = null;
     this.selectedSkill = null;

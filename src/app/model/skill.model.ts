@@ -462,7 +462,7 @@ export class Advance extends Skill {
     return [SkillIconType.DEFENSE];
   }
 
-  executeOnActiveCreature(activeCreature: Creature, fight: Fight) {
+  override executeOnActiveCreature(activeCreature: Creature, fight: Fight) {
     const activeEnemy: Enemy = activeCreature as Enemy;
 
     const currentRow = fight.opposition.rows[1];
@@ -491,7 +491,7 @@ export class Advance extends Skill {
     logs.addParameterizedLog(LogType.ADVANCE, activeEnemy);
   }
 
-  isUsableByCreature(creature: Creature, fight: Fight): boolean {
+  override isUsableByCreature(creature: Creature, fight: Fight): boolean {
     // Creature must be in back row
     if (creature.isInFrontRow()) {
       return false;
@@ -520,7 +520,7 @@ export class Wait extends Skill {
     return [SkillIconType.DEFENSE];
   }
 
-  executeOnActiveCreature(activeCreature: Creature, fight: Fight) {
+  override executeOnActiveCreature(activeCreature: Creature, fight: Fight) {
     logs.addParameterizedLog(LogType.WAIT, activeCreature);
   }
 }
@@ -541,7 +541,7 @@ export class LogMessage extends Skill {
     return [SkillIconType.DEFENSE];
   }
 
-  executeOnActiveCreature(activeCreature: Creature, fight: Fight) {
+  override executeOnActiveCreature(activeCreature: Creature, fight: Fight) {
     logs.addBasicLog(this.basicLogType);
   }
 }
@@ -559,7 +559,7 @@ export class Leave extends Skill {
     return [SkillIconType.DEFENSE];
   }
 
-  executeOnActiveCreature(activeCreature: Creature, fight: Fight) {
+  override executeOnActiveCreature(activeCreature: Creature, fight: Fight) {
     // Remove the creature from the fight
     activeCreature.life = 0;
     fight.opposition.removeDeadEnemies();
@@ -574,7 +574,7 @@ export class Leave extends Skill {
  */
 export class Defend extends Skill {
 
-  executeOnActiveCreature(activeCreature: Creature, fight: Fight) {
+  override executeOnActiveCreature(activeCreature: Creature, fight: Fight) {
     activeCreature.applyStatus(new StatusApplication(defend, 0, activeCreature, this.statusDuration));
 
     logs.addSkillExecutionLog(activeCreature, this, null, null);
@@ -612,7 +612,7 @@ export class DefendMagic extends Defend {
  */
 abstract class ApplyStatus extends Skill {
 
-  executeOnTargetCreature(activeCreature: Creature, targetCreature: Creature, fight: Fight) {
+  override executeOnTargetCreature(activeCreature: Creature, targetCreature: Creature, fight: Fight) {
     this.statuses.forEach(status => {
       const statusApplication = new StatusApplication(status, this.powerLevels[0], activeCreature, this.statusDuration);
       targetCreature.applyStatus(statusApplication);
@@ -647,7 +647,7 @@ export class ApplyDeterioration extends ApplyStatus {
  */
 export class Damage extends Skill {
 
-  executeOnTargetCreature(activeCreature: Creature, targetCreature: Creature, fight: Fight) {
+  override executeOnTargetCreature(activeCreature: Creature, targetCreature: Creature, fight: Fight) {
     logs.addSkillExecutionLog(activeCreature, this, targetCreature,
       targetCreature.addLifeChange(computeEffectiveDamage(this, activeCreature, targetCreature, this.powerLevels[0], false)));
   }
@@ -697,7 +697,7 @@ abstract class VariableDamage extends Damage {
 
   abstract getEffectivePower(activeCreature: Creature, targetCreature: Creature): number;
 
-  executeOnTargetCreature(activeCreature: Creature, targetCreature: Creature, fight: Fight) {
+  override executeOnTargetCreature(activeCreature: Creature, targetCreature: Creature, fight: Fight) {
     // Temporarily change the skill power
     const initialPowerLevel: number = this.powerLevels[0];
     this.powerLevels[0] *= this.getEffectivePower(activeCreature, targetCreature);
@@ -745,7 +745,7 @@ export class Execution extends VariableDamage {
  */
 export class ComboDamage extends Skill {
 
-  executeOnTargetCreature(activeCreature: Creature, targetCreature: Creature, fight: Fight) {
+  override executeOnTargetCreature(activeCreature: Creature, targetCreature: Creature, fight: Fight) {
     // Get the combo step to apply
     let comboStep = 1;
     if (targetCreature.hasStatusType(combo1)) {
@@ -779,7 +779,7 @@ export class ComboDamage extends Skill {
  */
 export class Drain extends Skill {
 
-  executeOnTargetCreature(activeCreature: Creature, targetCreature: Creature, fight: Fight) {
+  override executeOnTargetCreature(activeCreature: Creature, targetCreature: Creature, fight: Fight) {
     const lifeChange: LifeChange = computeEffectiveDamage(this, activeCreature, targetCreature, this.powerLevels[0], false);
 
     logs.addSkillExecutionLog(activeCreature, this, targetCreature, targetCreature.addLifeChange(lifeChange));
@@ -800,7 +800,7 @@ export class Drain extends Skill {
  */
 export class Berserk extends Skill {
 
-  executeOnTargetCreature(activeCreature: Creature, targetCreature: Creature, fight: Fight) {
+  override executeOnTargetCreature(activeCreature: Creature, targetCreature: Creature, fight: Fight) {
     const lifeChange: LifeChange = computeEffectiveDamage(this, activeCreature, targetCreature, this.powerLevels[0], false);
 
     logs.addSkillExecutionLog(activeCreature, this, targetCreature, targetCreature.addLifeChange(lifeChange));
@@ -821,7 +821,7 @@ export class Berserk extends Skill {
  */
 export class DamageAndDot extends Skill {
 
-  executeOnTargetCreature(activeCreature: Creature, targetCreature: Creature, fight: Fight) {
+  override executeOnTargetCreature(activeCreature: Creature, targetCreature: Creature, fight: Fight) {
     const lifeChange: LifeChange = computeEffectiveDamage(this, activeCreature, targetCreature, this.powerLevels[0], false);
 
     // Direct damage part
@@ -843,7 +843,7 @@ export class DamageAndDot extends Skill {
  */
 export class DamageAndStatus extends Skill {
 
-  executeOnTargetCreature(activeCreature: Creature, targetCreature: Creature, fight: Fight) {
+  override executeOnTargetCreature(activeCreature: Creature, targetCreature: Creature, fight: Fight) {
     const lifeChange: LifeChange = computeEffectiveDamage(this, activeCreature, targetCreature, this.powerLevels[0], false);
 
     // Damage part
@@ -866,13 +866,13 @@ export class DamageAndStatus extends Skill {
  */
 export class DamageAndSelfStatus extends Damage {
 
-  executeOnActiveCreature(activeCreature: Creature, fight: Fight) {
+  override executeOnActiveCreature(activeCreature: Creature, fight: Fight) {
     super.executeOnActiveCreature(activeCreature, fight);
 
     this.statuses.forEach(status => activeCreature.applyStatus(new StatusApplication(status, 0, activeCreature, this.statusDuration)))
   }
 
-  get iconTypes(): SkillIconType[] {
+  override get iconTypes(): SkillIconType[] {
     return [SkillIconType.ATTACK, SkillIconType.IMPROVEMENT];
   }
 }
@@ -882,7 +882,7 @@ export class DamageAndSelfStatus extends Damage {
  */
 export class Heal extends Skill {
 
-  executeOnTargetCreature(activeCreature: Creature, targetCreature: Creature, fight: Fight) {
+  override executeOnTargetCreature(activeCreature: Creature, targetCreature: Creature, fight: Fight) {
     logs.addSkillExecutionLog(activeCreature, this, targetCreature,
       targetCreature.addLifeChange(computeEffectiveHeal(activeCreature, targetCreature, this.powerLevels[0])));
   }
@@ -891,7 +891,7 @@ export class Heal extends Skill {
     return [SkillIconType.HEAL];
   }
 
-  isUsableByCreature(creature: Creature, fight: Fight): boolean {
+  override isUsableByCreature(creature: Creature, fight: Fight): boolean {
     // Ensure that at least one allied creature is wounded
     if (!fight.getAllEnemies().some(creature => creature.isDamaged())) {
       return false;
@@ -906,7 +906,7 @@ export class Heal extends Skill {
  */
 export class DualHeal extends Skill {
 
-  executeOnTargetCreature(activeCreature: Creature, targetCreature: Creature, fight: Fight) {
+  override executeOnTargetCreature(activeCreature: Creature, targetCreature: Creature, fight: Fight) {
     logs.addSkillExecutionLog(activeCreature, this, targetCreature,
       targetCreature.addLifeChange(computeEffectiveHeal(activeCreature, targetCreature, this.powerLevels[0])));
 
@@ -924,7 +924,7 @@ export class DualHeal extends Skill {
  */
 export class Sacrifice extends Skill {
 
-  executeOnTargetCreature(activeCreature: Creature, targetCreature: Creature, fight: Fight) {
+  override executeOnTargetCreature(activeCreature: Creature, targetCreature: Creature, fight: Fight) {
     const lifeChange: LifeChange = computeEffectiveHeal(activeCreature, targetCreature, this.powerLevels[0]);
 
     logs.addSkillExecutionLog(activeCreature, this, targetCreature, targetCreature.addLifeChange(lifeChange));
@@ -943,12 +943,12 @@ export class Sacrifice extends Skill {
  */
 export class Regenerate extends Heal {
 
-  executeOnTargetCreature(activeCreature: Creature, targetCreature: Creature, fight: Fight) {
+  override executeOnTargetCreature(activeCreature: Creature, targetCreature: Creature, fight: Fight) {
     targetCreature.applyStatus(new StatusApplication(regeneration, this.powerLevels[1], activeCreature, this.statusDuration));
     logs.addSkillExecutionLog(activeCreature, this, targetCreature, null);
   }
 
-  get iconTypes(): SkillIconType[] {
+  override get iconTypes(): SkillIconType[] {
     return [SkillIconType.HEAL, SkillIconType.IMPROVEMENT];
   }
 }
@@ -958,7 +958,7 @@ export class Regenerate extends Heal {
  */
 export class Revive extends Skill {
 
-  executeOnTargetCreature(activeCreature: Creature, targetCreature: Creature, fight: Fight) {
+  override executeOnTargetCreature(activeCreature: Creature, targetCreature: Creature, fight: Fight) {
     targetCreature.addLifeChange(new LifeGain(targetCreature.lifeMax / 2));
     logs.addSkillExecutionLog(activeCreature, this, targetCreature, null);
   }
@@ -973,7 +973,7 @@ export class Revive extends Skill {
  */
 export class AlterTime extends Skill {
 
-  executeOnTargetCreature(activeCreature: Creature, targetCreature: Creature, fight: Fight) {
+  override executeOnTargetCreature(activeCreature: Creature, targetCreature: Creature, fight: Fight) {
     const increment: number = activeCreature?.isSameFactionThan(targetCreature) ? 1 : -1;
     targetCreature.activeStatusApplications.forEach(sa => sa.remainingDuration += sa.isImprovement() ? increment : -increment)
     logs.addSkillExecutionLog(activeCreature, this, targetCreature, null);
@@ -989,7 +989,7 @@ export class AlterTime extends Skill {
  */
 export class MassAlterTime extends AlterTime {
 
-  protected isUsableByCreature(creature: Creature, fight: Fight): boolean {
+  protected override isUsableByCreature(creature: Creature, fight: Fight): boolean {
     // Can be used only if at least 2 opposing creature have at least 1 status each
     const count: number = fight.getAllAliveCharacters()
       .filter(creature => creature.activeStatusApplications.length >= 1)

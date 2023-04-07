@@ -1,9 +1,10 @@
 import {Component, Input} from '@angular/core';
-import {LogItemType} from '../../../model/common.model';
-import {Creature} from '../../../model/creature.model';
-import {Skill} from '../../../model/skill.model';
-import {LifeChange} from '../../../model/life-change.model';
-import {StatusApplication} from '../../../model/status-application.model';
+import {CommonModule} from '@angular/common';
+import {LogItemType} from "../../../model/common.model";
+import {Creature} from "../../../model/creature.model";
+import {Skill} from "../../../model/skill.model";
+import {LifeChange} from "../../../model/life-change.model";
+import {StatusApplication} from "../../../model/status-application.model";
 
 /**
  * This component is used to display on item within a log entry (such as a creature name, a skill name,
@@ -11,6 +12,8 @@ import {StatusApplication} from '../../../model/status-application.model';
  */
 @Component({
   selector: 'app-log-item',
+  standalone: true,
+  imports: [CommonModule],
   templateUrl: './log-item.component.html'
 })
 export class LogItemComponent {

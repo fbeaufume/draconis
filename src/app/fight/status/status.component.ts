@@ -1,9 +1,12 @@
 import {Component, Input} from '@angular/core';
-import {StatusApplication} from '../../model/status-application.model';
-import {StatusTypeName} from '../../model/status-type.model';
+import {CommonModule} from '@angular/common';
+import {StatusTypeName} from "../../model/status-type.model";
+import {StatusApplication} from "../../model/status-application.model";
 
 @Component({
   selector: 'app-status',
+  standalone: true,
+  imports: [CommonModule],
   templateUrl: './status.component.html'
 })
 export class StatusComponent {
@@ -12,7 +15,7 @@ export class StatusComponent {
   statusTypeName: typeof StatusTypeName = StatusTypeName;
 
   @Input()
-  statusApplication: StatusApplication;
+  statusApplication!: StatusApplication;
 
   constructor() {
   }

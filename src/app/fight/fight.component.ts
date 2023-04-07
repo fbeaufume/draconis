@@ -1,16 +1,24 @@
 import {AfterViewInit, Component, ElementRef, HostListener, QueryList, ViewChild, ViewChildren} from '@angular/core';
-import {Game} from '../model/game.model';
-import {Skill} from '../model/skill.model';
-import {FightService} from './fight.service';
-import {GameState} from '../model/common.model';
-import {Constants} from '../model/constants.model';
-import {Character} from '../model/character.model';
-import {settings} from '../model/settings.model';
-import {Enemy} from '../model/enemy.model';
-import {Fight} from '../model/fight.model';
+import {CommonModule} from '@angular/common';
+import {GameState} from "../model/common.model";
+import {FightService} from "./fight.service";
+import {Fight} from "../model/fight.model";
+import {Game} from "../model/game.model";
+import {Constants} from "../model/constants.model";
+import {Character} from "../model/character.model";
+import {Skill} from "../model/skill.model";
+import {Enemy} from "../model/enemy.model";
+import {settings} from "../model/settings.model";
+import {ClassIconComponent} from "./class-icon/class-icon.component";
+import {EnemyComponent} from "./enemy/enemy.component";
+import {CharacterComponent} from "./character/character.component";
+import {SkillIconComponent} from "./skill-icon/skill-icon.component";
+import {LogComponent} from "./log/log.component";
 
 @Component({
   selector: 'app-fight',
+  standalone: true,
+  imports: [CommonModule, ClassIconComponent, EnemyComponent, CharacterComponent, SkillIconComponent, LogComponent],
   templateUrl: './fight.component.html'
 })
 export class FightComponent implements AfterViewInit {
@@ -20,8 +28,8 @@ export class FightComponent implements AfterViewInit {
 
   // These are used to scroll the log panels to the bottom when a log is added,
   // inspired by https://pumpingco.de/blog/automatic-scrolling-only-if-a-user-already-scrolled-the-bottom-of-a-page-in-angular/
-  @ViewChild('logFrame', {static: false}) logFrameElementRef: ElementRef;
-  @ViewChildren('log') logItemElements: QueryList<any>;
+  @ViewChild('logFrame', {static: false}) logFrameElementRef!: ElementRef;
+  @ViewChildren('log') logItemElements!: QueryList<any>;
   private logFrameElement: any;
 
   constructor(public fightService: FightService) {

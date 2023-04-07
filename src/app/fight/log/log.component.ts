@@ -1,9 +1,13 @@
-import {Component, Input} from '@angular/core';
-import {Log} from '../../model/log.model';
-import {LogType} from '../../model/common.model';
+import { Component, Input } from '@angular/core';
+import { CommonModule } from '@angular/common';
+import {LogType} from "../../model/common.model";
+import {Log} from "../../model/log.model";
+import {LogItemComponent} from "./log-item/log-item.component";
 
 @Component({
   selector: 'app-log',
+  standalone: true,
+  imports: [CommonModule, LogItemComponent],
   templateUrl: './log.component.html'
 })
 export class LogComponent {
@@ -12,7 +16,7 @@ export class LogComponent {
   logType: typeof LogType = LogType;
 
   @Input()
-  log: Log;
+  log!: Log;
 
   constructor() {
   }

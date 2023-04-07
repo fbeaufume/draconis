@@ -1,34 +1,18 @@
-import {BrowserModule} from '@angular/platform-browser';
 import {NgModule} from '@angular/core';
+import {BrowserModule} from '@angular/platform-browser';
 
 import {AppRoutingModule} from './app-routing.module';
 import {AppComponent} from './app.component';
-import {FightComponent} from './fight/fight.component';
-import {CharacterComponent} from './fight/character/character.component';
-import {EnemyComponent} from './fight/enemy/enemy.component';
-import {LogComponent} from './fight/log/log.component';
-import {SkillIconComponent} from './fight/skill-icon/skill-icon.component';
-import {StatusComponent} from './fight/status/status.component';
-import {ClassIconComponent} from './fight/class-icon/class-icon.component';
-import {LifeChangePopupComponent} from './fight/life-change-popup/life-change-popup.component';
-import { LogItemComponent } from './fight/log/log-item/log-item.component';
+import {FightComponent} from "./fight/fight.component";
 
 @NgModule({
   declarations: [
-    AppComponent,
-    FightComponent,
-    CharacterComponent,
-    EnemyComponent,
-    LogComponent,
-    SkillIconComponent,
-    StatusComponent,
-    ClassIconComponent,
-    LifeChangePopupComponent,
-    LogItemComponent
+    AppComponent
   ],
   imports: [
     BrowserModule,
-    AppRoutingModule
+    AppRoutingModule,
+    FightComponent
   ],
   providers: [],
   bootstrap: [AppComponent]

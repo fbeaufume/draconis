@@ -8,12 +8,10 @@ describe('LogItemComponent', () => {
 
   beforeEach(async () => {
     await TestBed.configureTestingModule({
-      declarations: [ LogItemComponent ]
+      imports: [ LogItemComponent ]
     })
     .compileComponents();
-  });
 
-  beforeEach(() => {
     fixture = TestBed.createComponent(LogItemComponent);
     component = fixture.componentInstance;
     fixture.detectChanges();

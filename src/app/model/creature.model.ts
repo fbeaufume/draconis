@@ -54,7 +54,7 @@ export abstract class Creature {
   /**
    * The current life percent.
    */
-  lifePercent: number;
+  lifePercent: number = 100;
 
   /**
    * Damages and heals received this turn and displayed in a popup.
@@ -74,7 +74,7 @@ export abstract class Creature {
   /**
    * The current energy percent.
    */
-  energyPercent: number;
+  energyPercent: number = 100;
 
   /**
    * Generic power of the creature, used to compute damage or heal amounts.

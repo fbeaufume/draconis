@@ -8,12 +8,10 @@ describe('LifeChangePopupComponent', () => {
 
   beforeEach(async () => {
     await TestBed.configureTestingModule({
-      declarations: [ LifeChangePopupComponent ]
+      imports: [ LifeChangePopupComponent ]
     })
     .compileComponents();
-  });
 
-  beforeEach(() => {
     fixture = TestBed.createComponent(LifeChangePopupComponent);
     component = fixture.componentInstance;
     fixture.detectChanges();

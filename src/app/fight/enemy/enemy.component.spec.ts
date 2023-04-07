@@ -8,12 +8,10 @@ describe('EnemyComponent', () => {
 
   beforeEach(async () => {
     await TestBed.configureTestingModule({
-      declarations: [ EnemyComponent ]
+      imports: [ EnemyComponent ]
     })
     .compileComponents();
-  });
 
-  beforeEach(() => {
     fixture = TestBed.createComponent(EnemyComponent);
     component = fixture.componentInstance;
     fixture.detectChanges();

@@ -8,12 +8,10 @@ describe('ClassIconComponent', () => {
 
   beforeEach(async () => {
     await TestBed.configureTestingModule({
-      declarations: [ ClassIconComponent ]
+      imports: [ ClassIconComponent ]
     })
     .compileComponents();
-  });
 
-  beforeEach(() => {
     fixture = TestBed.createComponent(ClassIconComponent);
     component = fixture.componentInstance;
     fixture.detectChanges();

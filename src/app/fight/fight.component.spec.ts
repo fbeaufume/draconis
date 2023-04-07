@@ -8,12 +8,10 @@ describe('FightComponent', () => {
 
   beforeEach(async () => {
     await TestBed.configureTestingModule({
-      declarations: [ FightComponent ]
+      imports: [ FightComponent ]
     })
     .compileComponents();
-  });
 
-  beforeEach(() => {
     fixture = TestBed.createComponent(FightComponent);
     component = fixture.componentInstance;
     fixture.detectChanges();

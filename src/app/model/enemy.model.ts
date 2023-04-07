@@ -129,7 +129,7 @@ export class OldManEnemy extends Enemy {
 
   mainAttack: Skill = new Strike('Strike');
 
-  addLifeChange(lifeChange: LifeChange): LifeChange {
+  override addLifeChange(lifeChange: LifeChange): LifeChange {
     if (this.phase == 1) {
       // Turn into a druid
       logs.addBasicLog(BasicLogType.OLD_MAN_TRANSFORMATION);

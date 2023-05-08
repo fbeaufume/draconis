@@ -1,6 +1,6 @@
 import {Game} from './game.model';
 import {Advance, Leave, Skill, Strike, Wait} from './skill.model';
-import {BasicLogType, CreatureClass, CreatureType, FactionType} from './common.model';
+import {BasicLogType, CreatureClass, CreatureType, ElementType, FactionType} from './common.model';
 import {LifeChange} from './life-change.model';
 import {logs} from './log.model';
 import {Creature, defaultEnemyAction, EnemyAction} from './creature.model';
@@ -20,6 +20,11 @@ export abstract class Enemy extends Creature {
    * The base name of the creature, such as 'Goblin'.
    */
   baseName: string;
+
+  /**
+   * The elemental resistances.
+   */
+  elementalResistances: Map<ElementType, number> = new Map<ElementType, number>();
 
   /**
    * Number of actions per turn.
@@ -48,6 +53,16 @@ export abstract class Enemy extends Creature {
     this.actions = actions;
   }
 
+  /**
+   * Add an elemental resistance to the enemy.
+   */
+  withElementalResistance(type: ElementType, value: number) {
+    this.elementalResistances.set(type, value);
+  }
+
+  /**
+   * Add a passive status to the enemy.
+   */
   withPassiveStatus(statusType: StatusType, power: number) {
     const statusApplication = new StatusApplication(statusType, power, this, 0);
     this.addPassiveStatusApplication(statusApplication);
@@ -64,6 +79,10 @@ export abstract class Enemy extends Creature {
 
   isEndOfRound(): boolean {
     return false;
+  }
+
+  override getElementalResistance(type: ElementType): number {
+    return this.elementalResistances.get(type) ?? 0;
   }
 
   /**

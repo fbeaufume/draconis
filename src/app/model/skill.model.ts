@@ -97,6 +97,8 @@ export abstract class Skill extends EnemyStrategy {
    */
   description: string;
 
+  // TODO FBE add an (optional ?) element type
+
   /**
    * The power levels of a skill. A regular power level is 1. User a higher number for a stronger skill,
    * or a lower number for a weaker skill. Multiple number are used since a skill may have multiple effects,
@@ -396,6 +398,11 @@ export function computeEffectiveDamage(skill: Skill | null, emitter: Creature, r
   const afterSpecialtyAttack = emitter.hasSpecialtyOfCreature(receiver) ? afterDefense * (1 + Constants.SPECIALTY_ATTACK_BONUS) : afterDefense;
   const afterSpecialtyDefense = receiver.hasSpecialtyOfCreature(emitter) ? afterSpecialtyAttack * (1 - Constants.SPECIALTY_DEFENSE_BONUS) : afterSpecialtyAttack;
 
+  // Apply elemental resistance
+  // TODO FBE apply elemental resistance
+
+  const finalDamage = afterSpecialtyDefense;
+
   // Apply status effects if needed, for example a creature protected by a fire trap
   // will apply a fire damage-over-time back to the attacker when melee attacked
   if (skill != null) {
@@ -416,13 +423,13 @@ export function computeEffectiveDamage(skill: Skill | null, emitter: Creature, r
         }
 
         if (statusEffect instanceof ReflectDamageStatusEffect) {
-          emitter.addLifeChange(new LifeLoss(afterSpecialtyDefense * statusEffect.percentage, efficiency));
+          emitter.addLifeChange(new LifeLoss(finalDamage * statusEffect.percentage, efficiency));
         }
       });
     });
   }
 
-  return new LifeLoss(randomize(afterSpecialtyDefense), isCritical ? LifeChangeEfficiency.CRITICAL : LifeChangeEfficiency.NORMAL);
+  return new LifeLoss(randomize(finalDamage), isCritical ? LifeChangeEfficiency.CRITICAL : LifeChangeEfficiency.NORMAL);
 }
 
 /**

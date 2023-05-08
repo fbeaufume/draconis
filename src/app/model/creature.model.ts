@@ -3,7 +3,7 @@ import {logs} from './log.model';
 import {Constants} from './constants.model';
 import {
   CreatureClass,
-  CreatureType,
+  CreatureType, ElementType,
   FactionType,
   LogType,
   StatusExpirationType,
@@ -237,6 +237,14 @@ export abstract class Creature {
       return maxAmount;
     }
     return amount;
+  }
+
+  /**
+   * Return the resistance to a given element, e.g. 0.2 means that the creature will receive only 80% of the damage.
+   * Can be negative to increase the received damage.
+   */
+  getElementalResistance(type: ElementType): number {
+    return 0;
   }
 
   /**

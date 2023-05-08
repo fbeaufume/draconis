@@ -41,6 +41,19 @@ export enum CreatureClass {
   PRIEST,
 }
 
+/**
+ * The various element types. A positive resistance to a given element reduces received damages from that element.
+ */
+export enum ElementType {
+  PHYSICAL,
+  BLEED,
+  POISON,
+  FIRE,
+  ICE,
+  LIGHT,
+  DARK
+}
+
 export enum LifeChangeType {
   GAIN,
   LOSS,

@@ -1,5 +1,5 @@
 import {Enemy, OldManEnemy, StrategicEnemy, StrategicMeleeEnemy} from './enemy.model';
-import {BasicLogType, CreatureType, SkillTargetType} from './common.model';
+import {BasicLogType, CreatureType, ElementType, SkillTargetType} from './common.model';
 import {PrioritySkillStrategy, SequentialSkillStrategy, WeightedSkillStrategy} from './enemy-strategy.model';
 import {
   ApplyDeterioration,
@@ -64,6 +64,7 @@ export class EnemyBuilder {
   static buildBrambleSpirit(): Enemy {
     return new StrategicMeleeEnemy(CreatureType.ELEMENTAL, 'Bramble Spirit', 24, 6,
       new Strike('Scratch'))
+      .withElementalResistance(ElementType.FIRE, -0.3)
       .withPassiveStatus(reflectMeleeDamage, 0);
   }
 
@@ -113,40 +114,50 @@ export class EnemyBuilder {
 
   static buildSkeleton(): Enemy {
     return new StrategicMeleeEnemy(CreatureType.UNDEAD, 'Skeleton', 18, 7,
-      new Strike('Strike'));
+      new Strike('Strike'))
+      .withElementalResistance(ElementType.DARK, 0.5);
   }
 
   static buildZombie(): Enemy {
     return new StrategicMeleeEnemy(CreatureType.UNDEAD, 'Zombie', 28, 8,
-      new DamageAndDot('Infect', SkillTargetType.OTHER_ALIVE, 20, true, 1, 1, '', [0.5, 0.4], [poison]));
+      new DamageAndDot('Infect', SkillTargetType.OTHER_ALIVE, 20, true, 1, 1, '', [0.5, 0.4], [poison]))
+      .withElementalResistance(ElementType.DARK, 0.5);
   }
 
   static buildVampire(): Enemy {
     return new StrategicMeleeEnemy(CreatureType.UNDEAD, 'Vampire', 34, 8,
-      new Drain('Bite', SkillTargetType.OTHER_ALIVE, 20, true, 1, 1, '', [0.7, 0.7]));
+      new Drain('Bite', SkillTargetType.OTHER_ALIVE, 20, true, 1, 1, '', [0.7, 0.7]))
+      .withElementalResistance(ElementType.DARK, 0.5);
   }
 
   static buildLich(): Enemy {
     return new StrategicMeleeEnemy(CreatureType.UNDEAD, 'Lich', 38, 8,
-      new Shot('Dark Bolt'));
+      new Shot('Dark Bolt'))
+      .withElementalResistance(ElementType.DARK, 0.5);
   }
 
   // Enemies for the mage tower
 
   static buildStoneGolem(): Enemy {
     return new StrategicMeleeEnemy(CreatureType.ELEMENTAL, 'Stone Golem', 40, 5,
-      new Strike('Bash'));
+      new Strike('Bash'))
+      .withElementalResistance(ElementType.BLEED, 1)
+      .withElementalResistance(ElementType.BLEED, 0.5);
   }
 
   static buildFireElemental(): Enemy {
     return new StrategicMeleeEnemy(CreatureType.ELEMENTAL, 'Fire Elemental', 30, 7,
       new Strike('Strike'))
+      .withElementalResistance(ElementType.FIRE, 1)
+      .withElementalResistance(ElementType.ICE, -0.3)
       .withPassiveStatus(fireTrap, 0);
   }
 
   static buildIceElemental(): Enemy {
     return new StrategicMeleeEnemy(CreatureType.ELEMENTAL, 'Ice Elemental', 30, 7,
       new Strike('Strike'))
+      .withElementalResistance(ElementType.FIRE, -0.3)
+      .withElementalResistance(ElementType.ICE, 1)
       .withPassiveStatus(iceTrap, 0);
   }
 

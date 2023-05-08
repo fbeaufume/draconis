@@ -56,14 +56,15 @@ export abstract class Enemy extends Creature {
   /**
    * Add an elemental resistance to the enemy.
    */
-  withElementalResistance(type: ElementType, value: number) {
+  withElementalResistance(type: ElementType, value: number): Enemy {
     this.elementalResistances.set(type, value);
+    return this;
   }
 
   /**
    * Add a passive status to the enemy.
    */
-  withPassiveStatus(statusType: StatusType, power: number) {
+  withPassiveStatus(statusType: StatusType, power: number): Enemy {
     const statusApplication = new StatusApplication(statusType, power, this, 0);
     this.addPassiveStatusApplication(statusApplication);
     return this;

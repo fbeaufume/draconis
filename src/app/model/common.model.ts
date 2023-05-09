@@ -45,13 +45,16 @@ export enum CreatureClass {
  * The various element types. A positive resistance to a given element reduces received damages from that element.
  */
 export enum ElementType {
+  NONE,
   PHYSICAL,
   BLEED,
   POISON,
   FIRE,
   ICE,
+  LIGHTNING,
   LIGHT,
-  DARK
+  DARK,
+  ARCANE
 }
 
 export enum LifeChangeType {

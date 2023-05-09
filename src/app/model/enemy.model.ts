@@ -125,7 +125,7 @@ export class StrategicEnemy extends Enemy {
 }
 
 /**
- * An melee enemy class, i.e. an enemy class with skills only usable when in the first row.
+ * A melee enemy class, i.e. an enemy class with skills only usable when in the first row.
  * When not yet in the first row, this enemy will advance if possible.
  * When in the first row, this enemy will use its strategy.
  */
@@ -147,7 +147,7 @@ export class StrategicMeleeEnemy extends StrategicEnemy {
  */
 export class OldManEnemy extends Enemy {
 
-  mainAttack: Skill = new Strike('Strike');
+  mainAttack: Skill = new Strike('Strike', ElementType.PHYSICAL);
 
   override addLifeChange(lifeChange: LifeChange): LifeChange {
     if (this.phase == 1) {

@@ -4,6 +4,7 @@ import {Creature} from './creature.model';
 import {logs} from './log.model';
 import {
   BasicLogType,
+  ElementType,
   LifeChangeEfficiency,
   LogType,
   SkillIconType,
@@ -97,7 +98,10 @@ export abstract class Skill extends EnemyStrategy {
    */
   description: string;
 
-  // TODO FBE add an (optional ?) element type
+  /**
+   * The element type of this skill. Can be used to reduce the inflicted damage done to resistant creatures.
+   */
+  elementType: ElementType;
 
   /**
    * The power levels of a skill. A regular power level is 1. User a higher number for a stronger skill,
@@ -129,6 +133,7 @@ export abstract class Skill extends EnemyStrategy {
     range: number,
     coolDownMax: number,
     description: string,
+    elementType: ElementType,
     powerLevels: number[] = [1],
     statuses: StatusType[] = [],
     statusDuration: number = Constants.DEFAULT_STATUS_DURATION,
@@ -143,6 +148,7 @@ export abstract class Skill extends EnemyStrategy {
     this.cooldownMax = coolDownMax;
     this.cooldown = 0;
     this.description = description;
+    this.elementType = elementType;
     this.powerLevels = powerLevels;
     this.statuses = statuses;
     this.statusDuration = statusDuration;
@@ -446,6 +452,8 @@ export function computeEffectiveHeal(emitter: Creature, receiver: Creature, skil
   const isCritical = random < emitter.criticalChance;
   const afterCritical = isCritical ? baseAmount * emitter.criticalBonus : baseAmount;
 
+  // The elemental resistance is not used here
+
   return new LifeGain(randomize(afterCritical), isCritical ? LifeChangeEfficiency.CRITICAL : LifeChangeEfficiency.NORMAL);
 }
 
@@ -462,7 +470,7 @@ function randomize(amount: number): number {
 export class Advance extends Skill {
 
   constructor() {
-    super('Advance', SkillTargetType.NONE, 0, false, 0, 1, '');
+    super('Advance', SkillTargetType.NONE, 0, false, 0, 1, '', ElementType.NONE);
   }
 
   get iconTypes(): SkillIconType[] {
@@ -520,7 +528,7 @@ export class Advance extends Skill {
 export class Wait extends Skill {
 
   constructor() {
-    super('Wait', SkillTargetType.NONE, 0, false, 0, 1, '');
+    super('Wait', SkillTargetType.NONE, 0, false, 0, 1, '', ElementType.NONE);
   }
 
   get iconTypes(): SkillIconType[] {
@@ -540,7 +548,7 @@ export class LogMessage extends Skill {
   basicLogType: BasicLogType;
 
   constructor(basicLogType: BasicLogType) {
-    super('Log Message', SkillTargetType.NONE, 0, false, 0, 1, '');
+    super('Log Message', SkillTargetType.NONE, 0, false, 0, 1, '', ElementType.NONE);
     this.basicLogType = basicLogType;
   }
 
@@ -559,7 +567,7 @@ export class LogMessage extends Skill {
 export class Leave extends Skill {
 
   constructor() {
-    super('Leave', SkillTargetType.NONE, 0, false, 0, 1, '');
+    super('Leave', SkillTargetType.NONE, 0, false, 0, 1, '', ElementType.NONE);
   }
 
   get iconTypes(): SkillIconType[] {
@@ -599,7 +607,7 @@ export class DefendTech extends Defend {
 
   constructor() {
     super('Defend', SkillTargetType.NONE, -1000, false, 0, 1,
-      'Reduce received damage by 20% during one turn. Regain all TP.', [1], [], Constants.DEFEND_DURATION);
+      'Reduce received damage by 20% during one turn. Regain all TP.', ElementType.NONE, [1], [], Constants.DEFEND_DURATION);
   }
 }
 
@@ -610,7 +618,7 @@ export class DefendMagic extends Defend {
 
   constructor() {
     super('Defend', SkillTargetType.NONE, 0, false, 0, 1,
-      'Reduce received damage by 20% during one turn.', [1], [], Constants.DEFEND_DURATION);
+      'Reduce received damage by 20% during one turn.', ElementType.NONE, [1], [], Constants.DEFEND_DURATION);
   }
 }
 
@@ -669,18 +677,19 @@ export class Damage extends Skill {
  */
 export class Strike extends Damage {
 
-  constructor(name: string) {
-    super(name, SkillTargetType.OTHER_ALIVE, 10, true, 1, 1, 'Inflict 100% damage to the target.');
+  constructor(name: string, elementType: ElementType) {
+    super(name, SkillTargetType.OTHER_ALIVE, 10, true, 1, 1, 'Inflict 100% damage to the target.', elementType);
   }
 }
 
 /**
  * A single target small damaging skill.
  */
+// TODO FBE remove this ?
 export class StrikeSmall extends Damage {
 
-  constructor(name: string, targetType: SkillTargetType = SkillTargetType.OTHER_ALIVE) {
-    super(name, targetType, 10, true, 1, 1, '', [0.7]);
+  constructor(name: string, elementType: ElementType, targetType: SkillTargetType = SkillTargetType.OTHER_ALIVE) {
+    super(name, targetType, 10, true, 1, 1, '', elementType,[0.7]);
   }
 }
 
@@ -689,8 +698,8 @@ export class StrikeSmall extends Damage {
  */
 export class Shot extends Damage {
 
-  constructor(name: string) {
-    super(name, SkillTargetType.OTHER_ALIVE, 10, false, 2, 1, 'Inflict 100% damage to the target.');
+  constructor(name: string, elementType: ElementType) {
+    super(name, SkillTargetType.OTHER_ALIVE, 10, false, 2, 1, 'Inflict 100% damage to the target.', elementType);
   }
 }
 
@@ -826,6 +835,7 @@ export class Berserk extends Skill {
 /**
  * A damaging skill that also adds a damage over time.
  */
+// TODO FBE make sure that the DOT uses the correct element type
 export class DamageAndDot extends Skill {
 
   override executeOnTargetCreature(activeCreature: Creature, targetCreature: Creature, fight: Fight) {

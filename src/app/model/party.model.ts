@@ -194,7 +194,7 @@ export class StandardParty extends Party {
     super([
         new Character('Melkan', CreatureClass.WARRIOR, 4, 30, false, 50, 8, [
             new DefendTech(),
-            new Strike('Strike', ElementType.PHYSICAL), // TODO FBE add an optional description in the constructor and mention that the damage is physical
+            new Strike('Strike', ElementType.PHYSICAL, 'Inflict 100% physical damage to the target.'),
             new Vengeance('Vengeance', SkillTargetType.OTHER_ALIVE, 10, true, 1, 1,
               'Inflict 80% to 160% physical damage to the target based on how low the character life is.', ElementType.PHYSICAL),
             new Berserk('Berserk', SkillTargetType.OTHER_ALIVE, 10, true, 1, 1,
@@ -202,7 +202,7 @@ export class StandardParty extends Party {
             new DamageAndSelfStatus('Guard Strike', SkillTargetType.OTHER_ALIVE, 10, true, 1, 1,
               'Inflict 50% physical damage to the target and reduce received damage by 20% during one turn.', ElementType.PHYSICAL, [0.5], [defend], 1),
             new DamageAndDot('Deep Wound', SkillTargetType.OTHER_ALIVE, 15, true, 1, 1,
-              'Inflict 50% damage to the target and 120% damage over 3 rounds.', ElementType.BLEED, [0.5, 0.4], [bleed]),
+              'Inflict 50% bleed damage to the target and 120% bleed damage over 3 rounds.', ElementType.BLEED, [0.5, 0.4], [bleed]),
             new Damage('Slash', SkillTargetType.OTHER_ALIVE_DOUBLE, 10, true, 1, 2,
               'Inflict 80% physical damage to two adjacent targets.', ElementType.PHYSICAL, [0.8]),
             new ApplyImprovement('War Cry', SkillTargetType.SAME_ALIVE_ALL, 10, false, 0, 3,
@@ -237,9 +237,9 @@ export class StandardParty extends Party {
       [
         new Character('Faren', CreatureClass.ARCHER, 4, 30, false, 50, 8, [
             new DefendTech(),
-            new Shot('Shot', ElementType.PHYSICAL), // TODO FBE add an optional description in the constructor and mention that the damage is physical
+            new Shot('Shot', ElementType.PHYSICAL, 'Inflict 100% physical damage to the target.'),
             new DamageAndDot('Viper Shot', SkillTargetType.OTHER_ALIVE, 15, false, 2, 1,
-              'Inflict 50% damage to the target and 120% damage over 3 rounds.', ElementType.POISON, [0.5, 0.4], [poison]),
+              'Inflict 50% poison damage to the target and 120% poison damage over 3 rounds.', ElementType.POISON, [0.5, 0.4], [poison]),
             new ComboDamage('Combo Shot', SkillTargetType.OTHER_ALIVE, 10, false, 2, 1,
               'Inflict 80% physical damage then 120% then 160% when used on the same target during consecutive turns. Cannot be dodged.', ElementType.PHYSICAL, [0.8, 1.2, 1.6], [],
               Constants.COMBO_DURATION, [SkillModifierType.CANNOT_BE_DODGED]),

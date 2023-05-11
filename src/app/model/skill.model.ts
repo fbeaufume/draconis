@@ -677,8 +677,8 @@ export class Damage extends Skill {
  */
 export class Strike extends Damage {
 
-  constructor(name: string, elementType: ElementType) {
-    super(name, SkillTargetType.OTHER_ALIVE, 10, true, 1, 1, 'Inflict 100% damage to the target.', elementType);
+  constructor(name: string, elementType: ElementType, description: string = 'Inflict 100% damage to the target.') {
+    super(name, SkillTargetType.OTHER_ALIVE, 10, true, 1, 1, description, elementType);
   }
 }
 
@@ -689,7 +689,7 @@ export class Strike extends Damage {
 export class StrikeSmall extends Damage {
 
   constructor(name: string, elementType: ElementType, targetType: SkillTargetType = SkillTargetType.OTHER_ALIVE) {
-    super(name, targetType, 10, true, 1, 1, '', elementType,[0.7]);
+    super(name, targetType, 10, true, 1, 1, '', elementType, [0.7]);
   }
 }
 
@@ -698,8 +698,8 @@ export class StrikeSmall extends Damage {
  */
 export class Shot extends Damage {
 
-  constructor(name: string, elementType: ElementType) {
-    super(name, SkillTargetType.OTHER_ALIVE, 10, false, 2, 1, 'Inflict 100% damage to the target.', elementType);
+  constructor(name: string, elementType: ElementType, description: string = 'Inflict 100% damage to the target.') {
+    super(name, SkillTargetType.OTHER_ALIVE, 10, false, 2, 1, description, elementType);
   }
 }
 

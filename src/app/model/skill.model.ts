@@ -673,7 +673,7 @@ export class Damage extends Skill {
 }
 
 /**
- * A single target regular damaging skill.
+ * A single target melee damaging skill.
  */
 export class Strike extends Damage {
 
@@ -683,18 +683,18 @@ export class Strike extends Damage {
 }
 
 /**
- * A single target small damaging skill.
+ * A customizable melee damaging skill.
  */
 // TODO FBE remove this ?
-export class StrikeSmall extends Damage {
+export class CustomStrike extends Damage {
 
-  constructor(name: string, elementType: ElementType, targetType: SkillTargetType = SkillTargetType.OTHER_ALIVE) {
-    super(name, targetType, 10, true, 1, 1, '', elementType, [0.7]);
+  constructor(name: string, elementType: ElementType, powerLevel: number, targetType: SkillTargetType) {
+    super(name, targetType, 10, true, 1, 1, '', elementType, [powerLevel]);
   }
 }
 
 /**
- * A long range single target regular damaging skill.
+ * A single target distance damaging skill.
  */
 export class Shot extends Damage {
 
@@ -835,6 +835,7 @@ export class Berserk extends Skill {
 /**
  * A damaging skill that also adds a damage over time.
  */
+// TODO FBE remove the direct damage part
 // TODO FBE make sure that the DOT uses the correct element type
 export class DamageAndDot extends Skill {
 
@@ -958,6 +959,7 @@ export class Sacrifice extends Skill {
 /**
  * A heal over time skill.
  */
+// TODO FBE remove the direct heal part
 export class Regenerate extends Heal {
 
   override executeOnTargetCreature(activeCreature: Creature, targetCreature: Creature, fight: Fight) {

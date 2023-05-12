@@ -4,6 +4,7 @@ import {PrioritySkillStrategy, SequentialSkillStrategy, WeightedSkillStrategy} f
 import {
   ApplyDeterioration,
   ApplyImprovement,
+  CustomStrike,
   Damage,
   DamageAndDot,
   Drain,
@@ -12,7 +13,6 @@ import {
   MassAlterTime,
   Shot,
   Strike,
-  StrikeSmall,
   Vengeance
 } from './skill.model';
 import {
@@ -101,7 +101,7 @@ export class EnemyBuilder {
         new Strike('Left Claw', ElementType.PHYSICAL),
         new Strike('Right Claw', ElementType.PHYSICAL),
         new LogMessage(BasicLogType.DRAGON_BREATH),
-        new StrikeSmall('Fire Breath', ElementType.FIRE, SkillTargetType.OTHER_ALL)
+        new CustomStrike('Fire Breath', ElementType.FIRE, 0.7, SkillTargetType.OTHER_ALL)
       ]), 2);
   }
 
@@ -170,6 +170,7 @@ export class EnemyBuilder {
       new WeightedSkillStrategy()
         .addSkill(new Shot('Fire Blast', ElementType.FIRE), 1)
         .addSkill(new DamageAndDot('Burn', SkillTargetType.OTHER_ALIVE, 10, false, 2, 1, '', ElementType.FIRE, [0.5, 0.5], [burn]), 1)
+        // TODO FBE use a CustomShot instead of a Damage
         .addSkill(new Damage('Fireball', SkillTargetType.OTHER_ALIVE_TRIPLE, 10, false, 2, 1, '', ElementType.FIRE, [0.8]), 1));
   }
 

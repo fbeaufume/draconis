@@ -4,8 +4,8 @@ import {PrioritySkillStrategy, SequentialSkillStrategy, WeightedSkillStrategy} f
 import {
   ApplyDeterioration,
   ApplyImprovement,
+  CustomShot,
   CustomStrike,
-  Damage,
   DamageAndDot,
   Drain,
   Heal,
@@ -38,7 +38,7 @@ export class EnemyBuilder {
 
   static buildGenericAoeMonster(life: number, power: number): Enemy {
     return new StrategicEnemy(CreatureType.OTHER, 'AoE Monster', life, power,
-      new Damage('Attack', SkillTargetType.OTHER_ALIVE_ALL, 0, false, 2, 1, '', ElementType.PHYSICAL, [1]));
+      new CustomShot('Attack', ElementType.PHYSICAL, 1, SkillTargetType.OTHER_ALIVE_ALL));
   }
 
   // Enemies for the fang forest
@@ -170,8 +170,7 @@ export class EnemyBuilder {
       new WeightedSkillStrategy()
         .addSkill(new Shot('Fire Blast', ElementType.FIRE), 1)
         .addSkill(new DamageAndDot('Burn', SkillTargetType.OTHER_ALIVE, 10, false, 2, 1, '', ElementType.FIRE, [0.5, 0.5], [burn]), 1)
-        // TODO FBE use a CustomShot instead of a Damage
-        .addSkill(new Damage('Fireball', SkillTargetType.OTHER_ALIVE_TRIPLE, 10, false, 2, 1, '', ElementType.FIRE, [0.8]), 1));
+        .addSkill(new CustomShot('Fireball', ElementType.FIRE, 0.8, SkillTargetType.OTHER_ALIVE_TRIPLE), 1));
   }
 
   static buildWhiteMage(): Enemy {

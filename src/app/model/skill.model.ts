@@ -685,7 +685,6 @@ export class Strike extends Damage {
 /**
  * A customizable melee damaging skill.
  */
-// TODO FBE remove this ?
 export class CustomStrike extends Damage {
 
   constructor(name: string, elementType: ElementType, powerLevel: number, targetType: SkillTargetType) {
@@ -700,6 +699,16 @@ export class Shot extends Damage {
 
   constructor(name: string, elementType: ElementType, description: string = 'Inflict 100% damage to the target.') {
     super(name, SkillTargetType.OTHER_ALIVE, 10, false, 2, 1, description, elementType);
+  }
+}
+
+/**
+ * A customizable distance damaging skill.
+ */
+export class CustomShot extends Damage {
+
+  constructor(name: string, elementType: ElementType, powerLevel: number, targetType: SkillTargetType) {
+    super(name, targetType, 10, false, 2, 1, '', elementType, [powerLevel]);
   }
 }
 

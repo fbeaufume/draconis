@@ -41,6 +41,12 @@ export class EnemyBuilder {
       new CustomShot('Attack', ElementType.PHYSICAL, 1, SkillTargetType.OTHER_ALIVE_ALL));
   }
 
+  static buildGenericVulnerableMonster(life: number, power: number, ...elementTypes: ElementType[]): Enemy {
+    const monster = this.buildGenericMonster(life, power);
+    elementTypes.forEach(type => monster.withElementalResistance(type, -9)); // -9 means that the creature receives x10 damages
+    return monster;
+  }
+
   // Enemies for the fang forest
 
   static buildBear(): Enemy {

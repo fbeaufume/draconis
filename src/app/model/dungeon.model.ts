@@ -1,5 +1,6 @@
 import {Opposition} from './opposition.model';
 import {EnemyBuilder} from './enemy-builder.model';
+import {ElementType} from "./common.model";
 
 /**
  * Dungeon base class. A dungeon is where the fights happen. It is a succession of encounters.
@@ -32,9 +33,9 @@ export class TestDungeon extends Dungeon {
         // EnemyBuilder.buildRedMage(),
         // EnemyBuilder.buildBlackMage(),
         // EnemyBuilder.buildGenericMonster(1, 100),
-        EnemyBuilder.buildGenericMonster(30, 6),
-        EnemyBuilder.buildGenericMonster(30, 6),
-        EnemyBuilder.buildGenericMonster(30, 6),
+        EnemyBuilder.buildGenericVulnerableMonster(1000, 5, ElementType.PHYSICAL, ElementType.FIRE, ElementType.DARK),
+        // EnemyBuilder.buildGenericMonster(30, 6),
+        // EnemyBuilder.buildGenericMonster(30, 6),
         // EnemyBuilder.buildBrambleSpirit(),
         // EnemyBuilder.buildTroll(),
         // EnemyBuilder.buildWolf(),

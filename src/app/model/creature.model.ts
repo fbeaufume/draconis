@@ -240,7 +240,8 @@ export abstract class Creature {
   }
 
   /**
-   * Return the resistance to a given element, e.g. 0.2 means that the creature will receive only 80% of the damage.
+   * Return the resistance to a given element, e.g. 0.2 means that the creature will resist 20% of the damage
+   * and so will receive only 80% of the damage.
    * Can be negative to increase the received damage.
    */
   getElementalResistance(type: ElementType): number {

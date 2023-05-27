@@ -405,9 +405,10 @@ export function computeEffectiveDamage(skill: Skill | null, emitter: Creature, r
   const afterSpecialtyDefense = receiver.hasSpecialtyOfCreature(emitter) ? afterSpecialtyAttack * (1 - Constants.SPECIALTY_DEFENSE_BONUS) : afterSpecialtyAttack;
 
   // Apply elemental resistance
-  // TODO FBE apply elemental resistance
+  // TODO FBE apply elemental resistance to DOT as well
+  const afterElementalResistance = afterSpecialtyDefense * (1 - getElementalResistance(receiver, skill))
 
-  const finalDamage = afterSpecialtyDefense;
+  const finalDamage = afterElementalResistance;
 
   // Apply status effects if needed, for example a creature protected by a fire trap
   // will apply a fire damage-over-time back to the attacker when melee attacked
@@ -436,6 +437,16 @@ export function computeEffectiveDamage(skill: Skill | null, emitter: Creature, r
   }
 
   return new LifeLoss(randomize(finalDamage), isCritical ? LifeChangeEfficiency.CRITICAL : LifeChangeEfficiency.NORMAL);
+}
+
+/**
+ * Return the elemental resistance of a given creature to a given attack.
+ */
+function getElementalResistance(receiver: Creature, skill: Skill | null): number {
+  if (skill != null) {
+    return receiver.getElementalResistance(skill.elementType);
+  }
+  return 0;
 }
 
 /**
@@ -845,7 +856,6 @@ export class Berserk extends Skill {
  * A damaging skill that also adds a damage over time.
  */
 // TODO FBE remove the direct damage part
-// TODO FBE make sure that the DOT uses the correct element type
 export class DamageAndDot extends Skill {
 
   override executeOnTargetCreature(activeCreature: Creature, targetCreature: Creature, fight: Fight) {

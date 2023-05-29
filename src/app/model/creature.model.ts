@@ -404,7 +404,7 @@ export abstract class Creature {
     // Use the DOT statuses
     this.getStatusApplicationsByTag(StatusTypeTagType.DOT).forEach(sa => {
       if (sa.originCreature != null) {
-        const lifeChange = computeEffectiveDamage(null, sa.originCreature, this, sa.power, true);
+        const lifeChange = computeEffectiveDamage(sa, sa.originCreature, this, sa.power, true);
         this.addLifeChange(lifeChange);
         logs.addParameterizedLog(LogType.DOT, this, lifeChange);
       }

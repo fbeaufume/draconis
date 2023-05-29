@@ -358,13 +358,13 @@ export abstract class Skill extends EnemyStrategy {
  * Compute the effective amount for a damaging attack from a creature to a creature using their characteristics
  * and a small random modification. The result is rounded.
  */
-export function computeEffectiveDamage(skill: Skill | null, emitter: Creature, receiver: Creature, skillPower: number, isDamageOrHealOverTime: boolean): LifeChange {
+export function computeEffectiveDamage(action: Skill | StatusApplication | null, emitter: Creature, receiver: Creature, skillPower: number, isDamageOrHealOverTime: boolean): LifeChange {
   const random = Math.random();
 
   // Check if dodge, critical or normal hit
   let dodgeable: boolean = !isDamageOrHealOverTime;
-  if (dodgeable && skill != null) {
-    dodgeable = !skill.hasModifier(SkillModifierType.CANNOT_BE_DODGED);
+  if (dodgeable && action instanceof Skill) {
+    dodgeable = !action.hasModifier(SkillModifierType.CANNOT_BE_DODGED);
   }
   if (dodgeable && (random < receiver.dodgeChance)) {
     return new LifeLoss(0, LifeChangeEfficiency.DODGE);
@@ -406,17 +406,20 @@ export function computeEffectiveDamage(skill: Skill | null, emitter: Creature, r
 
   // Apply elemental resistance
   // TODO FBE apply elemental resistance to DOT as well
-  const afterElementalResistance = afterSpecialtyDefense * (1 - getElementalResistance(receiver, skill))
+  let afterElementalResistance = afterSpecialtyDefense;
+  if (action instanceof Skill) {
+    afterElementalResistance *= 1 - getElementalResistance(receiver, action);
+  }
 
   const finalDamage = afterElementalResistance;
 
   // Apply status effects if needed, for example a creature protected by a fire trap
   // will apply a fire damage-over-time back to the attacker when melee attacked
-  if (skill != null) {
+  if (action instanceof Skill) {
     receiver.getAllStatusApplications().forEach(sa => {
       sa.statusType.statusEffects.forEach(statusEffect => {
         // Check the status effect range
-        if (statusEffect.melee && !skill.melee) {
+        if (statusEffect.melee && !action.melee) {
           // The status effect requires a melee skill, but the skill os not a melee one
           return;
         }

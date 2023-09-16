@@ -1,4 +1,4 @@
-import {StatusExpirationType, StatusTypeTagType} from "./common.model";
+import {ElementType, StatusExpirationType, StatusTypeTagType} from "./common.model";
 
 /**
  * This base class describes an effects that can be applied when a creature (that has the status of this effect) is involved
@@ -36,11 +36,14 @@ export class ApplyDotStatusEffect extends StatusEffect {
    */
   duration: number;
 
-  constructor(melee: boolean, dotType: StatusType, power: number, duration: number) {
+  elementType: ElementType;
+
+  constructor(melee: boolean, dotType: StatusType, power: number, duration: number, elementType: ElementType) {
     super(melee);
     this.dotType = dotType;
     this.power = power;
     this.duration = duration;
+    this.elementType = elementType;
   }
 }
 
@@ -59,10 +62,13 @@ export class ApplyStatusStatusEffect extends StatusEffect {
    */
   duration: number;
 
-  constructor(melee: boolean, statusType: StatusType, duration: number) {
+  elementType: ElementType;
+
+  constructor(melee: boolean, statusType: StatusType, duration: number, elementType: ElementType) {
     super(melee);
     this.statusType = statusType;
     this.duration = duration;
+    this.elementType = elementType;
   }
 }
 
@@ -175,8 +181,8 @@ export const attackMalus = new StatusType(StatusTypeName.ATTACK, false, StatusEx
 export const defenseBonus = new StatusType(StatusTypeName.DEFENSE, true, StatusExpirationType.ORIGIN_CREATURE_TURN_START, false);
 export const defenseMalus = new StatusType(StatusTypeName.DEFENSE, false, StatusExpirationType.ORIGIN_CREATURE_TURN_START, false);
 export const fireTrap = new StatusType(StatusTypeName.FIRE_TRAP, true, StatusExpirationType.ORIGIN_CREATURE_TURN_START, false,
-  [], [new ApplyDotStatusEffect(true, burn, 0.25, 3)]);
+  [], [new ApplyDotStatusEffect(true, burn, 0.25, 3, ElementType.FIRE)]);
 export const iceTrap = new StatusType(StatusTypeName.ICE_TRAP, true, StatusExpirationType.ORIGIN_CREATURE_TURN_START, false,
-  [], [new ApplyStatusStatusEffect(true, attackMalus, 2), new ApplyStatusStatusEffect(true, defenseMalus, 2)]);
+  [], [new ApplyStatusStatusEffect(true, attackMalus, 2, ElementType.ICE), new ApplyStatusStatusEffect(true, defenseMalus, 2, ElementType.ICE)]);
 export const reflectMeleeDamage = new StatusType(StatusTypeName.BLADE_SHIELD, true, StatusExpirationType.ORIGIN_CREATURE_TURN_START, false,
   [], [new ReflectDamageStatusEffect(true, 0.5)]);

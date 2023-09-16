@@ -1,6 +1,6 @@
 import {Creature} from "./creature.model";
 import {StatusType} from "./status-type.model";
-import {StatusTypeTagType} from "./common.model";
+import {ElementType, StatusTypeTagType} from "./common.model";
 
 /**
  * A status applied to a creature, such as damage over time, an attack bonus, etc.
@@ -27,16 +27,23 @@ export class StatusApplication {
    */
   remainingDuration: number;
 
+  /**
+   * The element type of this status application. Can be used to reduce the inflicted damage done to resistant creatures.
+   */
+  elementType: ElementType;
+
   constructor(
     statusType: StatusType,
     power: number,
     originCreature: Creature | null,
-    remainingDuration: number
+    remainingDuration: number,
+    elementType: ElementType
   ) {
     this.statusType = statusType;
     this.power = power;
     this.originCreature = originCreature;
     this.remainingDuration = remainingDuration;
+    this.elementType = elementType;
   }
 
   isImprovement(): boolean {

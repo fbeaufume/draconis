@@ -54,7 +54,9 @@ export enum ElementType {
   LIGHTNING,
   LIGHT,
   DARK,
-  ARCANE
+  ARCANE,
+  // TODO FBE this is a fake element type, only used to make the code compile while implementing the elemental resistance feature, replace its usages by a real element types and remove it
+  REMOVE_THIS,
 }
 
 export enum LifeChangeType {
@@ -322,4 +324,11 @@ export enum BasicLogType {
   DUNGEON_CLEAR = 'The dungeon is cleared!',
   OLD_MAN_TRANSFORMATION = 'The old man is actually an elder druid and quite furious now.',
   DRAGON_BREATH = 'The dragon takes a deep breath.',
+}
+
+/**
+ * Interface for data types that can inflict damages.
+ */
+export interface DamageSource {
+  elementType: ElementType;
 }

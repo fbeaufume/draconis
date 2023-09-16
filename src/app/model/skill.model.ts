@@ -4,6 +4,7 @@ import {Creature} from './creature.model';
 import {logs} from './log.model';
 import {
   BasicLogType,
+  DamageSource,
   ElementType,
   LifeChangeEfficiency,
   LogType,
@@ -34,10 +35,12 @@ import {Constants} from './constants.model';
 import {Fight} from './fight.model';
 import {EnemyStrategy} from './enemy-strategy.model';
 
+// TODO FBE use the resistance also for non damaging skill effects (e.g. Intimidate, Ice Blast proc, etc)
+
 /**
  * A character skill.
  */
-export abstract class Skill extends EnemyStrategy {
+export abstract class Skill extends EnemyStrategy implements DamageSource {
 
   /**
    * The skill icon type. Only used in the UI and for character skills.
@@ -358,15 +361,12 @@ export abstract class Skill extends EnemyStrategy {
  * Compute the effective amount for a damaging attack from a creature to a creature using their characteristics
  * and a small random modification. The result is rounded.
  */
-export function computeEffectiveDamage(action: Skill | StatusApplication | null, emitter: Creature, receiver: Creature, skillPower: number, isDamageOrHealOverTime: boolean): LifeChange {
+export function computeEffectiveDamage(source: DamageSource, emitter: Creature, receiver: Creature, skillPower: number): LifeChange {
   const random = Math.random();
 
   // Check if dodge, critical or normal hit
-  let dodgeable: boolean = !isDamageOrHealOverTime;
-  if (dodgeable && action instanceof Skill) {
-    dodgeable = !action.hasModifier(SkillModifierType.CANNOT_BE_DODGED);
-  }
-  if (dodgeable && (random < receiver.dodgeChance)) {
+  const canBeDodged: boolean = source instanceof Skill && !source.hasModifier(SkillModifierType.CANNOT_BE_DODGED);
+  if (canBeDodged && (random < receiver.dodgeChance)) {
     return new LifeLoss(0, LifeChangeEfficiency.DODGE);
   }
 
@@ -405,31 +405,25 @@ export function computeEffectiveDamage(action: Skill | StatusApplication | null,
   const afterSpecialtyDefense = receiver.hasSpecialtyOfCreature(emitter) ? afterSpecialtyAttack * (1 - Constants.SPECIALTY_DEFENSE_BONUS) : afterSpecialtyAttack;
 
   // Apply elemental resistance
-  // TODO FBE apply elemental resistance to DOT as well
-  let afterElementalResistance = afterSpecialtyDefense;
-  if (action instanceof Skill) {
-    afterElementalResistance *= 1 - getElementalResistance(receiver, action);
-  }
-
-  const finalDamage = afterElementalResistance;
+  const finalDamage = afterSpecialtyDefense * (1 - receiver.getElementalResistance(source.elementType));
 
   // Apply status effects if needed, for example a creature protected by a fire trap
   // will apply a fire damage-over-time back to the attacker when melee attacked
-  if (action instanceof Skill) {
+  if (source instanceof Skill) {
     receiver.getAllStatusApplications().forEach(sa => {
       sa.statusType.statusEffects.forEach(statusEffect => {
         // Check the status effect range
-        if (statusEffect.melee && !action.melee) {
+        if (statusEffect.melee && !source.melee) {
           // The status effect requires a melee skill, but the skill os not a melee one
           return;
         }
 
         if (statusEffect instanceof ApplyDotStatusEffect) {
-          emitter.applyStatus(new StatusApplication(statusEffect.dotType, statusEffect.power, sa.originCreature, statusEffect.duration));
+          emitter.applyStatus(new StatusApplication(statusEffect.dotType, statusEffect.power, sa.originCreature, statusEffect.duration, statusEffect.elementType));
         }
 
         if (statusEffect instanceof ApplyStatusStatusEffect) {
-          emitter.applyStatus(new StatusApplication(statusEffect.statusType, 0, sa.originCreature, statusEffect.duration))
+          emitter.applyStatus(new StatusApplication(statusEffect.statusType, 0, sa.originCreature, statusEffect.duration, statusEffect.elementType))
         }
 
         if (statusEffect instanceof ReflectDamageStatusEffect) {
@@ -440,16 +434,6 @@ export function computeEffectiveDamage(action: Skill | StatusApplication | null,
   }
 
   return new LifeLoss(randomize(finalDamage), isCritical ? LifeChangeEfficiency.CRITICAL : LifeChangeEfficiency.NORMAL);
-}
-
-/**
- * Return the elemental resistance of a given creature to a given attack.
- */
-function getElementalResistance(receiver: Creature, skill: Skill | null): number {
-  if (skill != null) {
-    return receiver.getElementalResistance(skill.elementType);
-  }
-  return 0;
 }
 
 /**
@@ -604,7 +588,7 @@ export class Leave extends Skill {
 export class Defend extends Skill {
 
   override executeOnActiveCreature(activeCreature: Creature, fight: Fight) {
-    activeCreature.applyStatus(new StatusApplication(defend, 0, activeCreature, this.statusDuration));
+    activeCreature.applyStatus(new StatusApplication(defend, 0, activeCreature, this.statusDuration, ElementType.NONE));
 
     logs.addSkillExecutionLog(activeCreature, this, null, null);
   }
@@ -643,7 +627,7 @@ abstract class ApplyStatus extends Skill {
 
   override executeOnTargetCreature(activeCreature: Creature, targetCreature: Creature, fight: Fight) {
     this.statuses.forEach(status => {
-      const statusApplication = new StatusApplication(status, this.powerLevels[0], activeCreature, this.statusDuration);
+      const statusApplication = new StatusApplication(status, this.powerLevels[0], activeCreature, this.statusDuration, ElementType.REMOVE_THIS);
       targetCreature.applyStatus(statusApplication);
 
       logs.addSkillExecutionLog(activeCreature, this, targetCreature, null);
@@ -678,7 +662,7 @@ export class Damage extends Skill {
 
   override executeOnTargetCreature(activeCreature: Creature, targetCreature: Creature, fight: Fight) {
     logs.addSkillExecutionLog(activeCreature, this, targetCreature,
-      targetCreature.addLifeChange(computeEffectiveDamage(this, activeCreature, targetCreature, this.powerLevels[0], false)));
+      targetCreature.addLifeChange(computeEffectiveDamage(this, activeCreature, targetCreature, this.powerLevels[0])));
   }
 
   get iconTypes(): SkillIconType[] {
@@ -794,7 +778,7 @@ export class ComboDamage extends Skill {
     }
     const power: number = this.powerLevels[comboStep - 1];
 
-    const lifeChange = targetCreature.addLifeChange(computeEffectiveDamage(this, activeCreature, targetCreature, power, false))
+    const lifeChange = targetCreature.addLifeChange(computeEffectiveDamage(this, activeCreature, targetCreature, power))
     logs.addSkillExecutionLog(activeCreature, this, targetCreature, lifeChange);
 
     // Add the status only if the attack succeeded
@@ -804,7 +788,7 @@ export class ComboDamage extends Skill {
       targetCreature.removeStatusApplications(combo1);
       targetCreature.removeStatusApplications(combo2);
 
-      targetCreature.applyStatus(new StatusApplication(comboStep == 1 ? combo1 : combo2, 0, activeCreature, this.statusDuration));
+      targetCreature.applyStatus(new StatusApplication(comboStep == 1 ? combo1 : combo2, 0, activeCreature, this.statusDuration, ElementType.NONE));
     }
   }
 
@@ -819,7 +803,7 @@ export class ComboDamage extends Skill {
 export class Drain extends Skill {
 
   override executeOnTargetCreature(activeCreature: Creature, targetCreature: Creature, fight: Fight) {
-    const lifeChange: LifeChange = computeEffectiveDamage(this, activeCreature, targetCreature, this.powerLevels[0], false);
+    const lifeChange: LifeChange = computeEffectiveDamage(this, activeCreature, targetCreature, this.powerLevels[0]);
 
     logs.addSkillExecutionLog(activeCreature, this, targetCreature, targetCreature.addLifeChange(lifeChange));
 
@@ -840,7 +824,7 @@ export class Drain extends Skill {
 export class Berserk extends Skill {
 
   override executeOnTargetCreature(activeCreature: Creature, targetCreature: Creature, fight: Fight) {
-    const lifeChange: LifeChange = computeEffectiveDamage(this, activeCreature, targetCreature, this.powerLevels[0], false);
+    const lifeChange: LifeChange = computeEffectiveDamage(this, activeCreature, targetCreature, this.powerLevels[0]);
 
     logs.addSkillExecutionLog(activeCreature, this, targetCreature, targetCreature.addLifeChange(lifeChange));
 
@@ -862,14 +846,14 @@ export class Berserk extends Skill {
 export class DamageAndDot extends Skill {
 
   override executeOnTargetCreature(activeCreature: Creature, targetCreature: Creature, fight: Fight) {
-    const lifeChange: LifeChange = computeEffectiveDamage(this, activeCreature, targetCreature, this.powerLevels[0], false);
+    const lifeChange: LifeChange = computeEffectiveDamage(this, activeCreature, targetCreature, this.powerLevels[0]);
 
     // Direct damage part
     logs.addSkillExecutionLog(activeCreature, this, targetCreature, targetCreature.addLifeChange(lifeChange));
 
     // Damage over time part
     if (lifeChange.isSuccess()) {
-      targetCreature.applyStatus(new StatusApplication(this.statuses[0], this.powerLevels[1], activeCreature, this.statusDuration));
+      targetCreature.applyStatus(new StatusApplication(this.statuses[0], this.powerLevels[1], activeCreature, this.statusDuration, ElementType.REMOVE_THIS));
     }
   }
 
@@ -884,14 +868,14 @@ export class DamageAndDot extends Skill {
 export class DamageAndStatus extends Skill {
 
   override executeOnTargetCreature(activeCreature: Creature, targetCreature: Creature, fight: Fight) {
-    const lifeChange: LifeChange = computeEffectiveDamage(this, activeCreature, targetCreature, this.powerLevels[0], false);
+    const lifeChange: LifeChange = computeEffectiveDamage(this, activeCreature, targetCreature, this.powerLevels[0]);
 
     // Damage part
     logs.addSkillExecutionLog(activeCreature, this, targetCreature, targetCreature.addLifeChange(lifeChange));
 
     // Statuses part
     if (lifeChange.isSuccess()) {
-      this.statuses.forEach(status => targetCreature.applyStatus(new StatusApplication(status, 0, activeCreature, this.statusDuration)))
+      this.statuses.forEach(status => targetCreature.applyStatus(new StatusApplication(status, 0, activeCreature, this.statusDuration, ElementType.REMOVE_THIS)))
     }
   }
 
@@ -909,7 +893,7 @@ export class DamageAndSelfStatus extends Damage {
   override executeOnActiveCreature(activeCreature: Creature, fight: Fight) {
     super.executeOnActiveCreature(activeCreature, fight);
 
-    this.statuses.forEach(status => activeCreature.applyStatus(new StatusApplication(status, 0, activeCreature, this.statusDuration)))
+    this.statuses.forEach(status => activeCreature.applyStatus(new StatusApplication(status, 0, activeCreature, this.statusDuration, ElementType.REMOVE_THIS)))
   }
 
   override get iconTypes(): SkillIconType[] {
@@ -985,7 +969,7 @@ export class Sacrifice extends Skill {
 export class Regenerate extends Heal {
 
   override executeOnTargetCreature(activeCreature: Creature, targetCreature: Creature, fight: Fight) {
-    targetCreature.applyStatus(new StatusApplication(regeneration, this.powerLevels[1], activeCreature, this.statusDuration));
+    targetCreature.applyStatus(new StatusApplication(regeneration, this.powerLevels[1], activeCreature, this.statusDuration, ElementType.LIGHT));
     logs.addSkillExecutionLog(activeCreature, this, targetCreature, null);
   }
 

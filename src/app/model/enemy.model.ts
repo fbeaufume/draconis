@@ -65,7 +65,7 @@ export abstract class Enemy extends Creature {
    * Add a passive status to the enemy.
    */
   withPassiveStatus(statusType: StatusType, power: number): Enemy {
-    const statusApplication = new StatusApplication(statusType, power, this, 0);
+    const statusApplication = new StatusApplication(statusType, power, this, 0, ElementType.REMOVE_THIS);
     this.addPassiveStatusApplication(statusApplication);
     return this;
   }

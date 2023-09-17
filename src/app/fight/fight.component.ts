@@ -37,6 +37,7 @@ export class FightComponent implements AfterViewInit {
 
   ngAfterViewInit(): void {
     this.logFrameElement = this.logFrameElementRef.nativeElement;
+    // TODO FBE unsubscribe somewhere ?
     this.logItemElements.changes.subscribe(_ => this.scrollLogFrameToBottom());
   }
 

@@ -164,6 +164,7 @@ export class FightComponent implements AfterViewInit {
     return states.includes(this.game.state) ? 'cursor-pointer' : 'cursor-default';
   }
 
+  // TODO FBE use keyup instead of keydown ?
   @HostListener('window:keydown', ['$event'])
   processKeyboardShortcut(event: KeyboardEvent) {
     // Check if numeric keypad 1 to 9 (could have been easier with event.keyCode, but it's deprecated)
@@ -173,7 +174,7 @@ export class FightComponent implements AfterViewInit {
     if (index >= 0) {
       this.fightService.selectFromKey(index);
       event.preventDefault();
-    } else if (event.key == ' ') {
+    } else if (event.key == ' ' || event.key == 'Enter') {
       this.fightService.onProceed();
       event.preventDefault();
     } else if (event.key == 'p') {

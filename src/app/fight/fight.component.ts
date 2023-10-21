@@ -164,8 +164,10 @@ export class FightComponent implements AfterViewInit {
     return states.includes(this.game.state) ? 'cursor-pointer' : 'cursor-default';
   }
 
-  // TODO FBE use keyup instead of keydown ?
-  @HostListener('window:keydown', ['$event'])
+  // Using 'keyup' would prevent multiple events when keys are maintained down,
+  // but 'keydown' prevents Firefox from interpreting numeric keypad keys to be used for page search.
+  // As a result 'keydown' is the best option.
+  @HostListener('document:keydown', ['$event'])
   processKeyboardShortcut(event: KeyboardEvent) {
     // Check if numeric keypad 1 to 9 (could have been easier with event.keyCode, but it's deprecated)
     const index = ['1', '2', '3', '4', '5', '6', '7', '8', '9'].indexOf(event.key);

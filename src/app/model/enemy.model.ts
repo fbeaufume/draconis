@@ -86,6 +86,12 @@ export abstract class Enemy extends Creature {
     return this.elementalResistances.get(type) ?? 0;
   }
 
+  promoteToChampion() {
+    this.lifeMax = Math.round(this.lifeMax * (1 + Constants.CHAMPION_LIFE_BONUS));
+    this.life = this.lifeMax;
+    this.power *= (1 + Constants.CHAMPION_POWER_BONUS);
+  }
+
   /**
    * Handle the creation turn, mostly delegates to the choose action method.
    * @param game

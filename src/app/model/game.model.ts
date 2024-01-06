@@ -32,7 +32,7 @@ export class Game {
     new MageTowerDungeon()];
   dungeon: Dungeon = this.dungeons[settings.dungeon] || this.dungeons[1] || this.dungeons[0];
 
-  fight: Fight = new Fight(this.party, new Opposition(''));
+  fight: Fight = new Fight(this.party, new Opposition('', true));
 
   constructor() {
     this.region = this.dungeon.name;

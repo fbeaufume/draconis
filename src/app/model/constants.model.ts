@@ -50,6 +50,21 @@ export class Constants {
   static readonly CAN_SELECT_SKILL_STATES = [GameState.SELECT_SKILL, GameState.SELECT_ENEMY, GameState.SELECT_CHARACTER, GameState.SELECT_CHARACTER_OR_ENEMY];
 
   /**
+   * Chance for a given creature to be a champion, i.e. stronger, 0.1 means a 10% chance.
+   */
+  static readonly CHAMPION_CHANCE = 0.1;
+
+  /**
+   * Life bonus for a champion creature, 0.4 means 40% extra life.
+   */
+  static readonly CHAMPION_LIFE_BONUS = 0.4;
+
+  /**
+   * Power bonus for a champion creature, 0.25 means 25% extra power.
+   */
+  static readonly CHAMPION_POWER_BONUS = 0.25;
+
+  /**
    * The default number of attacks per round for enemies.
    */
   static readonly DEFAULT_ATTACK_COUNT = 1;

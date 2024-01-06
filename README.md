@@ -64,6 +64,7 @@ Features of the combat system:
 - [x] Multiple effect skills, e.g. a damage and an effect
 - [x] Chained attacks, i.e. consecutively using  the same attack changes its result
 - [x] Specialties, i.e. per class benefits against specific creature types (such as beasts, undeads, etc)
+- [x] Champions support, i.e. some randomly selected creatures are stronger
 
 Not yet implemented:
 - [ ] Advanced damage computation using armor, elemental resistances, etc

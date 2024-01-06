@@ -27,7 +27,7 @@ export class TestDungeon extends Dungeon {
 
   constructor() {
     super('Test Dungeon', [
-      new Opposition('some monsters', [
+      new Opposition('some monsters', true, [
         // EnemyBuilder.buildFireElemental(),
         // EnemyBuilder.buildIceElemental(),
         // EnemyBuilder.buildRedMage(),
@@ -45,10 +45,10 @@ export class TestDungeon extends Dungeon {
         // EnemyBuilder.buildGenericMonster(1, 1),
         // EnemyBuilder.buildGenericMonster(50, 8),
       ]),
-      new Opposition('some monsters', [
+      new Opposition('some monsters', true, [
         EnemyBuilder.buildGreenDragon(),
       ], []),
-      new Opposition('some monsters', [
+      new Opposition('some monsters', true, [
         EnemyBuilder.buildGenericAoeMonster(1, 100),
         EnemyBuilder.buildGenericAoeMonster(1, 100),
       ], []),
@@ -63,30 +63,30 @@ export class FangForestDungeon extends Dungeon {
 
   constructor() {
     super('Fang Forest', [
-      new Opposition('wild bears', [
+      new Opposition('wild bears', true, [
         EnemyBuilder.buildBear(),
         EnemyBuilder.buildBear(),
       ]),
-      new Opposition('a pack of wolves', [
+      new Opposition('a pack of wolves', true, [
         EnemyBuilder.buildWolf(),
       ], [
         EnemyBuilder.buildWolf(),
         EnemyBuilder.buildWolf(),
         EnemyBuilder.buildWolf(),
       ]),
-      new Opposition('several bramble spirits', [
+      new Opposition('several bramble spirits', true, [
         EnemyBuilder.buildBrambleSpirit(),
         EnemyBuilder.buildBrambleSpirit(),
         EnemyBuilder.buildBrambleSpirit(),
       ]),
-      new Opposition('a mysterious old man', [
+      new Opposition('a mysterious old man', true, [
         EnemyBuilder.buildOldMan()
       ]),
-      new Opposition('trolls', [
+      new Opposition('trolls', true, [
         EnemyBuilder.buildTroll(),
         EnemyBuilder.buildTroll(),
       ]),
-      new Opposition('a band of goblins', [
+      new Opposition('a band of goblins', true, [
         EnemyBuilder.buildGoblinSoldier(),
         EnemyBuilder.buildGoblinSoldier(),
         EnemyBuilder.buildGoblinSoldier(),
@@ -94,7 +94,7 @@ export class FangForestDungeon extends Dungeon {
         EnemyBuilder.buildGoblinHunter(),
         EnemyBuilder.buildGoblinShaman(),
       ]),
-      new Opposition('a young but fierce green dragon', [
+      new Opposition('a young but fierce green dragon', false, [
         EnemyBuilder.buildGreenDragon(),
       ]),
     ]);
@@ -108,7 +108,7 @@ export class ForgottenGraveyardDungeon extends Dungeon {
 
   constructor() {
     super('Forgotten Graveyard', [
-      new Opposition('giant rats', [
+      new Opposition('giant rats', true, [
         EnemyBuilder.buildGiantRat(),
         EnemyBuilder.buildGiantRat(),
         EnemyBuilder.buildGiantRat(),
@@ -117,30 +117,30 @@ export class ForgottenGraveyardDungeon extends Dungeon {
         EnemyBuilder.buildGiantRat(),
         EnemyBuilder.buildGiantRat(),
       ]),
-      new Opposition('skeletons', [
+      new Opposition('skeletons', true, [
         EnemyBuilder.buildSkeleton(),
         EnemyBuilder.buildSkeleton(),
       ], [
         EnemyBuilder.buildSkeleton(),
         EnemyBuilder.buildSkeleton(),
       ]),
-      new Opposition('zombies', [
+      new Opposition('zombies', true, [
         EnemyBuilder.buildZombie(),
         EnemyBuilder.buildZombie(),
         EnemyBuilder.buildZombie(),
       ]),
-      new Opposition('vampires', [
+      new Opposition('vampires', true, [
         EnemyBuilder.buildVampire(),
         EnemyBuilder.buildVampire(),
       ]),
-      new Opposition('undeads', [
+      new Opposition('undeads', true, [
         EnemyBuilder.buildSkeleton(),
         EnemyBuilder.buildSkeleton(),
       ], [
         EnemyBuilder.buildZombie(),
         EnemyBuilder.buildVampire(),
       ]),
-      new Opposition('undeads', [
+      new Opposition('undeads', true, [
         EnemyBuilder.buildSkeleton(),
         EnemyBuilder.buildZombie(),
         EnemyBuilder.buildSkeleton(),
@@ -158,22 +158,22 @@ export class MageTowerDungeon extends Dungeon {
 
   constructor() {
     super('Mage Tower', [
-      new Opposition('stone golems', [
+      new Opposition('stone golems', true, [
         EnemyBuilder.buildStoneGolem(),
         EnemyBuilder.buildStoneGolem(),
       ]),
-      new Opposition('red mages', [
+      new Opposition('red mages', true, [
         EnemyBuilder.buildRedMage(),
         EnemyBuilder.buildRedMage(),
         EnemyBuilder.buildRedMage(),
       ]),
-      new Opposition('white mages', [
+      new Opposition('white mages', true, [
         EnemyBuilder.buildStoneGolem(),
       ], [
         EnemyBuilder.buildWhiteMage(),
         EnemyBuilder.buildWhiteMage(),
       ]),
-      new Opposition('black mages', [
+      new Opposition('black mages', true, [
         EnemyBuilder.buildBlackMage(),
         EnemyBuilder.buildBlackMage(),
         EnemyBuilder.buildBlackMage(),

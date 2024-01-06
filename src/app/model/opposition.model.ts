@@ -1,5 +1,6 @@
 import {OppositionRow} from "./opposition-row.model";
 import {Enemy} from "./enemy.model";
+import {Constants} from "./constants.model";
 
 /**
  * A group of enemies.
@@ -10,6 +11,11 @@ export class Opposition {
    * The description of the opposition.
    */
   description: string;
+
+  /**
+   * Can this opposition have champions.
+   */
+  canHaveChampion: boolean;
 
   /**
    * The enemy rows. The first row in the array is the front row.
@@ -24,17 +30,21 @@ export class Opposition {
 
   constructor(
     description: string,
+    canHaveChampion: boolean,
     // Front row enemies
     row1Enemies: Enemy[] = [],
     // Back row enemies
     row2Enemies: Enemy[] = []) {
     this.description = description;
+    this.canHaveChampion = canHaveChampion;
     this.rows.push(new OppositionRow(row1Enemies));
     this.rows.push(new OppositionRow(row2Enemies));
 
     this.updateDistances();
 
     this.computeEffectiveNames();
+
+    this.makeChampions();
   }
 
   /**
@@ -58,6 +68,19 @@ export class Opposition {
         }, enemy => enemy.baseName === baseName);
       }
     })
+  }
+
+  /**
+   * If this opposition supports champions, then randomly upgrade some creatures to champion.
+   */
+  makeChampions() {
+    if (this.canHaveChampion) {
+      this.forEachEnemy(enemy => {
+        if (Math.random() < Constants.CHAMPION_CHANCE) {
+          enemy.promoteToChampion();
+        }
+      });
+    }
   }
 
   /**

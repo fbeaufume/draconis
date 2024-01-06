@@ -2,7 +2,6 @@ import {CreatureClass, CreatureType, FactionType} from "./common.model";
 import {Skill} from "./skill.model";
 import {Creature} from "./creature.model";
 
-
 /**
  * A party character.
  */
@@ -41,6 +40,10 @@ export class Character extends Creature {
   }
 
   isEnemy(): boolean {
+    return false;
+  }
+
+  isChampion(): boolean {
     return false;
   }
 

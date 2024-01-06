@@ -10,7 +10,7 @@
     <hr class="border-gray-700 my-4">
 
     <p *ngFor="let creature of fight.turnOrder.currentOrder; index as i" class="p-1"
-       [ngClass]="{ 'text-yellow-200': creature.isEnemy(), 'text-gray-500': creature.isDead(), 'text-blue-500': creature.isEndOfRound() }">
+       [ngClass]="{ 'text-orange-500': creature.isEnemy() && creature.isChampion(), 'text-yellow-200': creature.isEnemy() && !creature.isChampion(), 'text-gray-500': creature.isDead(), 'text-blue-500': creature.isEndOfRound() }">
       <app-class-icon [creature]="creature"></app-class-icon>
       {{ creature.name }}
     </p>

@@ -27,6 +27,11 @@ export abstract class Enemy extends Creature {
   elementalResistances: Map<ElementType, number> = new Map<ElementType, number>();
 
   /**
+   * Is this creature a champion.
+   */
+  champion: boolean = false;
+
+  /**
    * Number of actions per turn.
    */
   actions: number;
@@ -78,6 +83,10 @@ export abstract class Enemy extends Creature {
     return true;
   }
 
+  override isChampion(): boolean {
+    return this.champion;
+  }
+
   isEndOfRound(): boolean {
     return false;
   }
@@ -87,9 +96,12 @@ export abstract class Enemy extends Creature {
   }
 
   promoteToChampion() {
-    this.lifeMax = Math.round(this.lifeMax * (1 + Constants.CHAMPION_LIFE_BONUS));
-    this.life = this.lifeMax;
-    this.power *= (1 + Constants.CHAMPION_POWER_BONUS);
+    if (!this.champion) {
+      this.champion = true;
+      this.lifeMax = Math.round(this.lifeMax * (1 + Constants.CHAMPION_LIFE_BONUS));
+      this.life = this.lifeMax;
+      this.power *= (1 + Constants.CHAMPION_POWER_BONUS);
+    }
   }
 
   /**

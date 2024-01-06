@@ -158,6 +158,8 @@ export abstract class Creature {
 
   abstract isEnemy(): boolean;
 
+  abstract isChampion(): boolean;
+
   abstract isEndOfRound(): boolean;
 
   isSameFactionThan(creature: Creature) {
@@ -439,6 +441,10 @@ export class EndOfRound extends Creature {
   }
 
   isEnemy(): boolean {
+    return false;
+  }
+
+  isChampion(): boolean {
     return false;
   }
 

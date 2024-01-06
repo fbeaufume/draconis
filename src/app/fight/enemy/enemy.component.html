@@ -1,4 +1,4 @@
-<p class="text-yellow-200">{{ enemy.name }}</p>
+<p [ngClass]="enemy.isChampion() ? 'text-orange-500' : 'text-yellow-200'">{{ enemy.name }}</p>
 <div class="flex flex-col items-center">
   <p class="pr-2 text-red-500">HP <span class="font-bold">{{ enemy.life}}/{{ enemy.lifeMax }}</span></p>
   <div class="absolute z-10 flex justify-center space-x-2">

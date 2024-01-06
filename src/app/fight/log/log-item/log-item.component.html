@@ -1,6 +1,6 @@
 <ng-container [ngSwitch]="getLogItemType()">
   <span *ngSwitchCase="logItemType.CREATURE"
-        [ngClass]="item.isEnemy() ? 'text-yellow-200' : 'text-gray-200'">{{ item.name }}
+        [ngClass]="item.isEnemy() ? (item.isChampion() ? 'text-orange-500' : 'text-yellow-200') : 'text-gray-200'">{{ item.name }}
   </span>
   <span *ngSwitchCase="logItemType.SKILL" class="text-blue-400">{{ item.name }}
   </span>

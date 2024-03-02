@@ -1,5 +1,17 @@
 @startuml
 
+scale 1.0
+hide empty methods
+hide empty attributes
+skinparam arrowColor #DimGray
+<style>
+spotClass { BackgroundColor white }
+</style>
+skinparam class {
+  BackgroundColor White
+  HeaderBackgroundColor LightSteelBlue
+}
+
 class Game {
   state: GameState
   region: string
@@ -12,21 +24,6 @@ class Dungeon {
 
 class Fight {
   round: number
-}
-
-class Party {
-}
-
-class PartyRow {
-}
-
-class Opposition {
-}
-
-class OppositionRow {
-}
-
-class TurnOrder {
 }
 
 class Creature {
@@ -60,24 +57,6 @@ class Enemy {
   actions: number
 }
 
-class StrategicEnemy {
-}
-
-class StrategicMeleeEnemy {
-}
-
-class EnemyStrategy {
-}
-
-class SingleSkillStrategy {
-}
-
-class WeightedSkillStrategy {
-}
-
-class SequentialSkillStrategy {
-}
-
 class Skill {
   type: SkillIconType
   name: string
@@ -92,9 +71,9 @@ class Skill {
   improvementStatus: boolean
 }
 
-Game *-left- "*" Dungeon
-Game *-left- Dungeon
-Game *-right- Fight
+Game *-- "*" Dungeon : "Available\ndungeons"
+Game *-- Dungeon : "Current\ndungeon"
+Game *-- Fight
 Game *-- Party
 Dungeon *-- "*" Opposition
 Fight -- Party
@@ -112,14 +91,5 @@ StatusApplication -- StatusType
 Creature <|-- Character
 Character *-- "*" Skill
 Creature <|-- Enemy
-Enemy <|-right- StrategicEnemy
-StrategicEnemy <|-left- StrategicMeleeEnemy
-StrategicEnemy *-- EnemyStrategy
-EnemyStrategy <|-- SingleSkillStrategy
-SingleSkillStrategy *-right- Skill
-EnemyStrategy <|-- WeightedSkillStrategy
-EnemyStrategy <|-- SequentialSkillStrategy
-WeightedSkillStrategy *-right- "*" Skill
-SequentialSkillStrategy *-right- "*" Skill
 
 @enduml

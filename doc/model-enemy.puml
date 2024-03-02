@@ -1,0 +1,25 @@
+@startuml
+
+scale 1.0
+hide empty methods
+hide empty attributes
+skinparam arrowColor #DimGray
+<style>
+spotClass { BackgroundColor white }
+</style>
+skinparam class {
+  BackgroundColor White
+  HeaderBackgroundColor LightCoral
+}
+
+Enemy <|-- StrategicEnemy
+StrategicEnemy <|-- StrategicMeleeEnemy
+StrategicEnemy *-- EnemyStrategy
+EnemyStrategy <|-- SingleSkillStrategy
+SingleSkillStrategy *-- Skill
+EnemyStrategy <|-- WeightedSkillStrategy
+EnemyStrategy <|-- SequentialSkillStrategy
+WeightedSkillStrategy *-- "*" Skill
+SequentialSkillStrategy *-- "*" Skill
+
+@enduml

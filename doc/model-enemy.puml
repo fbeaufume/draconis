@@ -12,13 +12,21 @@ skinparam class {
   HeaderBackgroundColor LightCoral
 }
 
+class WeightedSkillStrategy {
+  weights: number[]
+  totalWeight: number
+}
+
 Enemy <|-- StrategicEnemy
+Enemy <|-- OldMan
 StrategicEnemy <|-- StrategicMeleeEnemy
 StrategicEnemy *-- EnemyStrategy
-EnemyStrategy <|-- SingleSkillStrategy
-SingleSkillStrategy *-- Skill
-EnemyStrategy <|-- WeightedSkillStrategy
+EnemyStrategy <|-- Skill
+EnemyStrategy <|-- PrioritySkillStrategy
 EnemyStrategy <|-- SequentialSkillStrategy
+EnemyStrategy <|-- WeightedSkillStrategy
+PrioritySkillStrategy *-- Skill
+PrioritySkillStrategy *-- EnemyStrategy
 WeightedSkillStrategy *-- "*" Skill
 SequentialSkillStrategy *-- "*" Skill
 

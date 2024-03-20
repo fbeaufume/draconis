@@ -48,7 +48,7 @@ Features of the combat system:
 - [x] Group based, i.e. multiple characters vs multiple enemies
 - [x] Turn based
 - [x] Turn order is randomly generated for each fight and evenly interleaves characters and enemies
-- [x] Row based, i.e. creatures are front row or back row
+- [x] Row based, i.e. a group has two rows, the front row or back row
 - [x] Some creatures (e.g. bosses) can have multiple actions per turn
 - [x] Skill ranges, i.e. melee attacks can only reach front row opponents while distance attacks can reach any opponent
 - [x] Single target skills and area of effect skills

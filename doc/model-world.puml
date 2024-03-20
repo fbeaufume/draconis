@@ -54,7 +54,11 @@ class Character {
 
 class Enemy {
   baseName: string
+  elementalResistances: Map<ElementType, number>
+  champion: boolean
   actions: number
+  step: number
+  phase: number
 }
 
 class Skill {

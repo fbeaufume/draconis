@@ -38,11 +38,13 @@ export abstract class Enemy extends Creature {
 
   /**
    * The enemy action step. Zero based, i.e. 0 the for the first action, 1 for the second, etc.
+   * Incremented whenever the enemy executes an action.
+   * Can be used to identify the first enemy action during a turn, for example to apply DOT or HOT.
    */
   step: number = -1;
 
   /**
-   * Some enemies have phases with different abilities.
+   * Some enemies have phases with different abilities. One based, i.e. 1 for the first phase, 2 for the second, etc.
    */
   phase: number = 1;
 

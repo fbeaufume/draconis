@@ -1,5 +1,5 @@
 import {PartyRow} from "./party-row.model";
-import {Character, Hunter, Mage, Paladin, Warrior} from "./character.model";
+import {Character, Knight, Mage, Priest, Warrior} from "./character.model";
 
 /**
  * The player party.
@@ -154,9 +154,9 @@ export class StandardParty extends Party {
   constructor() {
     super([
       new Warrior('Melkan'),
-      new Paladin('Arwin')
+      new Knight('Arwin')
     ], [
-      new Hunter('Faren'),
-      new Mage('Harika')]);
+      new Mage('Harika'),
+      new Priest('Nairo')]);
   }
 }

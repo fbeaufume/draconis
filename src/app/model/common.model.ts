@@ -30,11 +30,13 @@ export enum CreatureType {
  * The various classes of creatures.
  * When any value is changed, update class-icon.component.html.
  */
+// TODO FBE remove MONK, PALADIN and ARCHER
 export enum CreatureClass {
   ENEMY,
   END_OF_ROUND,
   WARRIOR,
   MONK,
+  KNIGHT,
   PALADIN,
   ARCHER,
   MAGE,

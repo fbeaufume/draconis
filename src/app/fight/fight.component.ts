@@ -12,13 +12,12 @@ import {settings} from "../model/settings.model";
 import {ClassIconComponent} from "./class-icon/class-icon.component";
 import {EnemyComponent} from "./enemy/enemy.component";
 import {CharacterComponent} from "./character/character.component";
-import {SkillIconComponent} from "./skill-icon/skill-icon.component";
 import {LogComponent} from "./log/log.component";
 
 @Component({
   selector: 'app-fight',
   standalone: true,
-  imports: [CommonModule, ClassIconComponent, EnemyComponent, CharacterComponent, SkillIconComponent, LogComponent],
+  imports: [CommonModule, ClassIconComponent, EnemyComponent, CharacterComponent, LogComponent],
   templateUrl: './fight.component.html'
 })
 export class FightComponent implements AfterViewInit {

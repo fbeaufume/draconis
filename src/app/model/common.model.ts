@@ -110,37 +110,6 @@ export enum StatusTypeTagType {
 }
 
 /**
- * The icon type used by a skill.
- */
-export enum SkillIconType {
-
-  /**
-   * The skill is mostly a defensive one.
-   */
-  DEFENSE,
-
-  /**
-   * The skill is mostly a damaging one.
-   */
-  ATTACK,
-
-  /**
-   * The skill is mostly a healing one.
-   */
-  HEAL,
-
-  /**
-   * The skill is mostly an improvement for a creature of the same faction.
-   */
-  IMPROVEMENT,
-
-  /**
-   * The skill is mostly a deterioration for a creature of the other faction.
-   */
-  DETERIORATION,
-}
-
-/**
  * The type of target of a skill.
  */
 export enum SkillTargetType {

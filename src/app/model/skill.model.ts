@@ -53,6 +53,8 @@ export abstract class Skill extends EnemyStrategy implements DamageSource {
 
   /**
    * The energy cost of the skill when used.
+   * Can be zero, for free to use skills.
+   * Can be negative, for skills that actually generate some energy.
    */
   cost: number;
 
@@ -150,6 +152,10 @@ export abstract class Skill extends EnemyStrategy implements DamageSource {
     this.statuses = statuses;
     this.statusDuration = statusDuration;
     this.modifiers = modifiers;
+  }
+
+  get costAbsoluteValue(): number {
+    return Math.abs(this.cost);
   }
 
   chooseSkill(fight: Fight): Skill | null {
@@ -577,7 +583,7 @@ export class Defend extends Skill {
 export class DefendTech extends Defend {
 
   constructor() {
-    super('Defend', SkillTargetType.NONE, -1000, false, 0, 1,
+    super('Defend', SkillTargetType.NONE, -2, false, 0, 1,
       'Reduce received damage by 20% during one turn. Regain all TP.', ElementType.NONE, [1], [], Constants.DEFEND_DURATION);
   }
 }
@@ -637,7 +643,7 @@ export class Damage extends Skill {
 export class Strike extends Damage {
 
   constructor(name: string, elementType: ElementType, description: string = 'Inflict 100% damage to the target.') {
-    super(name, SkillTargetType.OTHER_ALIVE, 10, true, 1, 1, description, elementType);
+    super(name, SkillTargetType.OTHER_ALIVE, -1, true, 1, 1, description, elementType);
   }
 }
 

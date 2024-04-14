@@ -88,9 +88,9 @@
         <hr class="border-gray-700 my-4">
 
         <div class="flex">
-          <p class="flex-1 text-gray-500">Cost</p>
+          <p class="flex-1 text-gray-500">{{ fight.focusedSkill.cost >= 0 ? 'Cost' : 'Gain' }}</p>
           <p class="flex-1" [ngClass]="{'text-red-500': fight.focusedSkill.cost > (fight.activeCreature?.energy || 0)}">
-            {{ fight.focusedSkill.cost > 0 ? fight.focusedSkill.cost : 0 }}
+            {{ fight.focusedSkill.costAbsoluteValue }}
           </p>
         </div>
         <div class="flex">
@@ -99,9 +99,10 @@
         </div>
         <div class="flex">
           <p class="flex-1 text-gray-500">Cooldown</p>
-          <p class="flex-1"
-             [ngClass]="{'text-red-500': fight.focusedSkill.cooldown > 0}">{{ fight.focusedSkill.cooldown }}
-            / {{ fight.focusedSkill.cooldownMax }}</p>
+          <!-- TODO FBE improve cooldown display, e.g. "3 (1 left)" instead of "1/3" -->
+          <p class="flex-1" [ngClass]="{'text-red-500': fight.focusedSkill.cooldown > 0}">
+            {{ fight.focusedSkill.cooldown }} / {{ fight.focusedSkill.cooldownMax }}
+          </p>
         </div>
 
         <hr class="border-gray-700 my-4">

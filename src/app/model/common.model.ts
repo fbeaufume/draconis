@@ -27,6 +27,16 @@ export enum CreatureType {
 }
 
 /**
+ * The various creature sizes, used to determine the number of creatures that can fit in a row.
+ */
+export enum CreatureSize {
+  SMALL = 0.7, // 4 max per rom
+  REGULAR = 1, // 3 max per row
+  LARGE = 1.5, // 2 max per row
+  HUGE = 3, // 1 max per row
+}
+
+/**
  * The various classes of creatures.
  * When any value is changed, update class-icon.component.html.
  */

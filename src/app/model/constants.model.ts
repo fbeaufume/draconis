@@ -42,7 +42,7 @@ export class Constants {
   /**
    * Maximum number of enemies per row.
    */
-  static readonly OPPOSITION_ROW_SIZE = 3;
+  static readonly OPPOSITION_ROW_CAPACITY = 3;
 
   /**
    * The states when it is ok for the player to choose a character skill, possibly to change his mind.

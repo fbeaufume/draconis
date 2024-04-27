@@ -506,12 +506,7 @@ export class Advance extends Skill {
     }
 
     // There must be some free space in the front row
-    // noinspection RedundantIfStatementJS
-    if (fight.opposition.rows[0].isFull()) {
-      return false;
-    }
-
-    return true;
+    return fight.opposition.rows[0].canAccept(creature);
   }
 }
 

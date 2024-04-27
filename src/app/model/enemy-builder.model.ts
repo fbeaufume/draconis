@@ -1,5 +1,5 @@
 import {Enemy, OldManEnemy, StrategicEnemy, StrategicMeleeEnemy} from './enemy.model';
-import {BasicLogType, CreatureType, ElementType, SkillTargetType} from './common.model';
+import {BasicLogType, CreatureSize, CreatureType, ElementType, SkillTargetType} from './common.model';
 import {PrioritySkillStrategy, SequentialSkillStrategy, WeightedSkillStrategy} from './enemy-strategy.model';
 import {
   ApplyDeterioration,
@@ -47,6 +47,8 @@ export class EnemyBuilder {
     return monster;
   }
 
+  // TODO FBE add rats (with tiny size)
+
   // Enemies for the fang forest
 
   static buildBear(): Enemy {
@@ -64,7 +66,8 @@ export class EnemyBuilder {
       new WeightedSkillStrategy()
         .addSkill(new Strike('Bite', ElementType.PHYSICAL), 3)
         .addSkill(new ApplyImprovement('Howl', SkillTargetType.SELF, 0, false, 0,
-          1, '', ElementType.PHYSICAL, [], [attackBonus]), 1));
+          1, '', ElementType.PHYSICAL, [], [attackBonus]), 1),
+      CreatureSize.SMALL);
   }
 
   static buildBrambleSpirit(): Enemy {
@@ -75,7 +78,7 @@ export class EnemyBuilder {
   }
 
   static buildOldMan(): Enemy {
-    return new OldManEnemy(CreatureType.HUMANOID, 'Old Man', 28, 10, 2);
+    return new OldManEnemy(CreatureType.HUMANOID, 'Old Man', 28, 10, CreatureSize.REGULAR, 2);
   }
 
   static buildTroll(): Enemy {
@@ -108,7 +111,7 @@ export class EnemyBuilder {
         new Strike('Right Claw', ElementType.PHYSICAL),
         new LogMessage(BasicLogType.DRAGON_BREATH),
         new CustomStrike('Fire Breath', ElementType.FIRE, 0.7, SkillTargetType.OTHER_ALL)
-      ]), 2);
+      ]), CreatureSize.HUGE, 2);
   }
 
   // Enemies for the forgotten graveyard

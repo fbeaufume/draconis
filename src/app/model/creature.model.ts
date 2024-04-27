@@ -3,7 +3,9 @@ import {logs} from './log.model';
 import {Constants} from './constants.model';
 import {
   CreatureClass,
-  CreatureType, ElementType,
+  CreatureSize,
+  CreatureType,
+  ElementType,
   FactionType,
   LogType,
   StatusExpirationType,
@@ -80,6 +82,11 @@ export abstract class Creature {
    * Generic power of the creature, used to compute damage or heal amounts.
    */
   power: number;
+
+  /**
+   * The size of a creature is used to determine the number of creatures that can fit in a faction row.
+   */
+  size: CreatureSize = CreatureSize.REGULAR;
 
   /**
    * The distance between the creature and the other faction, i.e. 1 means the creature is in the front row, 2 is the back row.

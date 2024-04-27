@@ -1,6 +1,6 @@
 import {Game} from './game.model';
 import {Advance, Leave, Skill, Strike, Wait} from './skill.model';
-import {BasicLogType, CreatureClass, CreatureType, ElementType, FactionType} from './common.model';
+import {BasicLogType, CreatureClass, CreatureSize, CreatureType, ElementType, FactionType} from './common.model';
 import {LifeChange} from './life-change.model';
 import {logs} from './log.model';
 import {Creature, defaultEnemyAction, EnemyAction} from './creature.model';
@@ -53,10 +53,12 @@ export abstract class Enemy extends Creature {
     name: string,
     lifeMax: number,
     power: number,
+    size: CreatureSize = CreatureSize.REGULAR,
     actions: number = Constants.DEFAULT_ATTACK_COUNT) {
     super(FactionType.OPPOSITION, type, name, CreatureClass.ENEMY, lifeMax * settings.enemyHealthAndPowerCoefficient,
       100, power * settings.enemyHealthAndPowerCoefficient, []);
     this.baseName = name;
+    this.size = size;
     this.actions = actions;
   }
 
@@ -134,8 +136,9 @@ export class StrategicEnemy extends Enemy {
     lifeMax: number,
     power: number,
     strategy: EnemyStrategy,
+    size: CreatureSize = CreatureSize.REGULAR,
     actions: number = Constants.DEFAULT_ATTACK_COUNT) {
-    super(type, name, lifeMax, power, actions);
+    super(type, name, lifeMax, power, size, actions);
     this.strategy = strategy;
   }
 
@@ -157,8 +160,9 @@ export class StrategicMeleeEnemy extends StrategicEnemy {
     lifeMax: number,
     power: number,
     strategy: EnemyStrategy,
+    size: CreatureSize = CreatureSize.REGULAR,
     actions: number = Constants.DEFAULT_ATTACK_COUNT) {
-    super(type, name, lifeMax, power, new PrioritySkillStrategy(new Advance(), strategy), actions);
+    super(type, name, lifeMax, power, new PrioritySkillStrategy(new Advance(), strategy), size, actions);
   }
 }
 

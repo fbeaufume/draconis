@@ -1,5 +1,7 @@
 import {Character} from "./character.model";
 
+// TODO FBE move to party.model.js
+
 /**
  * A row of characters in the party.
  */

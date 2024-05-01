@@ -32,7 +32,7 @@ import {StatusApplication} from './status-application.model';
 import {Enemy} from './enemy.model';
 import {Constants} from './constants.model';
 import {Fight} from './fight.model';
-import {EnemyStrategy} from './enemy-strategy.model';
+import {EnemyStrategy} from './strategy.model';
 
 // TODO FBE use the resistance also for non damaging skill effects (e.g. Intimidate, Ice Blast proc, etc)
 

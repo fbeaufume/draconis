@@ -1,6 +1,6 @@
 import {Enemy, OldManEnemy, StrategicEnemy, StrategicMeleeEnemy} from './enemy.model';
 import {BasicLogType, CreatureSize, CreatureType, ElementType, SkillTargetType} from './common.model';
-import {PrioritySkillStrategy, SequentialSkillStrategy, WeightedSkillStrategy} from './enemy-strategy.model';
+import {PrioritySkillStrategy, SequentialSkillStrategy, WeightedSkillStrategy} from './strategy.model';
 import {
   ApplyDeterioration,
   ApplyImprovement,

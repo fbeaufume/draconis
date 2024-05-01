@@ -4,7 +4,7 @@ import {BasicLogType, CreatureClass, CreatureSize, CreatureType, ElementType, Fa
 import {LifeChange} from './life-change.model';
 import {logs} from './log.model';
 import {Creature, defaultEnemyAction, EnemyAction} from './creature.model';
-import {EnemyStrategy, PrioritySkillStrategy} from './enemy-strategy.model';
+import {EnemyStrategy, PrioritySkillStrategy} from './strategy.model';
 import {Constants} from './constants.model';
 import {settings} from './settings.model';
 import {StatusApplication} from './status-application.model';

@@ -3,10 +3,12 @@ import {Creature, EnemyAction} from "./creature.model";
 import {Skill} from "./skill.model";
 import {SkillTargetType} from "./common.model";
 
+// TODO FBE in all strategy constructors, receive strategies instead of skills
+
 /**
  * Interface for the various enemy combat strategies.
  */
-export abstract class EnemyStrategy {
+export abstract class Strategy {
 
   /**
    * Choose the action for an active enemy, i.e. the chosen skill and the target creatures if any.
@@ -70,11 +72,87 @@ export abstract class EnemyStrategy {
 }
 
 /**
+ * Strategy using a skill or (if the skill cannot be used) a strategy.
+ */
+export class PrioritySkillStrategy extends Strategy {
+
+  skill: Skill;
+
+  strategy: Strategy;
+
+  // TODO FBE receive strategies instead of one skill and one strategy
+  constructor(skill: Skill, strategy: Strategy) {
+    super();
+    this.skill = skill;
+    this.strategy = strategy;
+  }
+
+  chooseSkill(fight: Fight): Skill | null {
+    if (this.skill.isUsableByActiveCreature(fight)) {
+      return this.skill;
+    } else {
+      return this.strategy.chooseSkill(fight);
+    }
+  }
+}
+
+/**
+ * Strategy using several skills that are executed sequentially.
+ */
+export class SequentialStrategy extends Strategy {
+
+  /**
+   * The skills.
+   */
+  skills: Skill[];
+
+  /**
+   * The index in the skills array of the next skill to use.
+   */
+  currentIndex: number = 0;
+
+  // TODO FBE receive a vararg instead of an array
+  constructor(skills: Skill[]) {
+    super();
+    this.skills = skills;
+  }
+
+  chooseSkill(fight: Fight): Skill | null {
+    // If this strategy is empty, return null
+    if (this.skills.length <= 0) {
+      return null;
+    }
+
+    // Find the next usable skill
+    for (let i = 0; i < this.skills.length; i++) {
+      const skill = this.skills[this.currentIndex];
+
+      this.incrementSkillIndex();
+
+      if (skill.isUsableByActiveCreature(fight)) {
+        return skill;
+      }
+    }
+
+    return null;
+  }
+
+  private incrementSkillIndex() {
+    this.currentIndex++;
+    if (this.currentIndex >= this.skills.length) {
+      this.currentIndex = 0;
+    }
+  }
+}
+
+// TODO FBE add a random strategy that extends WeightedStrategy
+
+/**
  * Strategy using several skills. Each skill has a weight.
  * To return an action, a skill is randomly selected using the weight.
  * The higher the weight, the more likely the skill to be selected.
  */
-export class WeightedSkillStrategy extends EnemyStrategy {
+export class WeightedStrategy extends Strategy {
 
   /**
    * The skills.
@@ -98,7 +176,7 @@ export class WeightedSkillStrategy extends EnemyStrategy {
   /**
    * Add a skill with a weight to this strategy.
    */
-  addSkill(skill: Skill, weight: number): WeightedSkillStrategy {
+  addSkill(skill: Skill, weight: number): WeightedStrategy {
     if (weight > 0) {
       this.skills.push(skill);
       this.weights.push(weight);
@@ -142,74 +220,4 @@ export class WeightedSkillStrategy extends EnemyStrategy {
   }
 }
 
-/**
- * Strategy using several skills that are executed sequentially.
- */
-export class SequentialSkillStrategy extends EnemyStrategy {
-
-  /**
-   * The skills.
-   */
-  skills: Skill[];
-
-  /**
-   * The index in the skills array of the next skill to use.
-   */
-  currentSkillIndex: number = 0;
-
-  constructor(skills: Skill[]) {
-    super();
-    this.skills = skills;
-  }
-
-  chooseSkill(fight: Fight): Skill | null {
-    // If this strategy is empty, return null
-    if (this.skills.length <= 0) {
-      return null;
-    }
-
-    // Find the next usable skill
-    for (let i = 0; i < this.skills.length; i++) {
-      const skill = this.skills[this.currentSkillIndex];
-
-      this.incrementSkillIndex();
-
-      if (skill.isUsableByActiveCreature(fight)) {
-        return skill;
-      }
-    }
-
-    return null;
-  }
-
-  private incrementSkillIndex() {
-    this.currentSkillIndex++;
-    if (this.currentSkillIndex >= this.skills.length) {
-      this.currentSkillIndex = 0;
-    }
-  }
-}
-
-/**
- * Strategy using a skill or (if the skill cannot be used) a strategy.
- */
-export class PrioritySkillStrategy extends EnemyStrategy {
-
-  skill: Skill;
-
-  strategy: EnemyStrategy;
-
-  constructor(skill: Skill, strategy: EnemyStrategy) {
-    super();
-    this.skill = skill;
-    this.strategy = strategy;
-  }
-
-  chooseSkill(fight: Fight): Skill | null {
-    if (this.skill.isUsableByActiveCreature(fight)) {
-      return this.skill;
-    } else {
-      return this.strategy.chooseSkill(fight);
-    }
-  }
-}
+// TODO FBE add a conditional strategy

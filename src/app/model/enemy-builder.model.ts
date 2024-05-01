@@ -1,6 +1,6 @@
 import {Enemy, OldManEnemy, StrategicEnemy, StrategicMeleeEnemy} from './enemy.model';
 import {BasicLogType, CreatureSize, CreatureType, ElementType, SkillTargetType} from './common.model';
-import {PrioritySkillStrategy, SequentialSkillStrategy, WeightedSkillStrategy} from './strategy.model';
+import {PrioritySkillStrategy, SequentialStrategy, WeightedStrategy} from './strategy.model';
 import {
   ApplyDeterioration,
   ApplyImprovement,
@@ -51,7 +51,7 @@ export class EnemyBuilder {
 
   static buildBear(): Enemy {
     return new StrategicMeleeEnemy(CreatureType.BEAST, 'Bear', 34, 8,
-      new WeightedSkillStrategy()
+      new WeightedStrategy()
         .addSkill(new Strike('Bite', ElementType.PHYSICAL), 1)
         .addSkill(new DamageAndDot('Maul', SkillTargetType.OTHER_ALIVE, 20, true, 1,
           1, '', ElementType.BLEED, [0.5, 0.4], [bleed]), 1)
@@ -61,7 +61,7 @@ export class EnemyBuilder {
 
   static buildWolf(): Enemy {
     return new StrategicMeleeEnemy(CreatureType.BEAST, 'Wolf', 22, 6,
-      new WeightedSkillStrategy()
+      new WeightedStrategy()
         .addSkill(new Strike('Bite', ElementType.PHYSICAL), 3)
         .addSkill(new ApplyImprovement('Howl', SkillTargetType.SELF, 0, false, 0,
           1, '', ElementType.PHYSICAL, [], [attackBonus]), 1),
@@ -104,7 +104,7 @@ export class EnemyBuilder {
 
   static buildGreenDragon(): Enemy {
     return new StrategicMeleeEnemy(CreatureType.BEAST, 'Green Dragon', 120, 10,
-      new SequentialSkillStrategy([
+      new SequentialStrategy([
         new Strike('Left Claw', ElementType.PHYSICAL),
         new Strike('Right Claw', ElementType.PHYSICAL),
         new LogMessage(BasicLogType.DRAGON_BREATH),
@@ -174,7 +174,7 @@ export class EnemyBuilder {
 
   static buildRedMage(): Enemy {
     return new StrategicEnemy(CreatureType.HUMANOID, 'Red Mage', 26, 7,
-      new WeightedSkillStrategy()
+      new WeightedStrategy()
         .addSkill(new Shot('Fire Blast', ElementType.FIRE), 1)
         .addSkill(new DamageAndDot('Burn', SkillTargetType.OTHER_ALIVE, 10, false, 2, 1, '', ElementType.FIRE, [0.5, 0.5], [burn]), 1)
         .addSkill(new CustomShot('Fireball', ElementType.FIRE, 0.8, SkillTargetType.OTHER_ALIVE_TRIPLE), 1));
@@ -189,7 +189,7 @@ export class EnemyBuilder {
 
   static buildBlackMage(): Enemy {
     return new StrategicEnemy(CreatureType.HUMANOID, 'Black Mage', 26, 7,
-      new WeightedSkillStrategy()
+      new WeightedStrategy()
         .addSkill(new Drain('Drain Life', SkillTargetType.OTHER_ALIVE, 10, false, 2, 1, '', ElementType.DARK, [0.5, 1]), 1)
         .addSkill(new MassAlterTime('Mass Alter Time', SkillTargetType.OTHER_ALL, 10, false, 2, 1, '', ElementType.ARCANE), 1));
   }

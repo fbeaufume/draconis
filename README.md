@@ -66,6 +66,7 @@ Features of the combat system:
 - [x] Specialties, i.e. per class benefits against specific creature types (such as beasts, undeads, etc)
 - [x] Creature size (small, regular, large, etc) to control the maximum number of enemies per row
 - [x] Champions support, i.e. some randomly selected creatures are stronger
+- [x] Several enemy strategies: single skill, priority, sequential, weighted 
 
 Not yet implemented:
 - [ ] Advanced damage computation using armor, elemental resistances, etc

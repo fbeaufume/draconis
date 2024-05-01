@@ -32,14 +32,14 @@ import {StatusApplication} from './status-application.model';
 import {Enemy} from './enemy.model';
 import {Constants} from './constants.model';
 import {Fight} from './fight.model';
-import {EnemyStrategy} from './strategy.model';
+import {Strategy} from './strategy.model';
 
 // TODO FBE use the resistance also for non damaging skill effects (e.g. Intimidate, Ice Blast proc, etc)
 
 /**
  * A character skill.
  */
-export abstract class Skill extends EnemyStrategy implements DamageSource {
+export abstract class Skill extends Strategy implements DamageSource {
 
   /**
    * The skill name.

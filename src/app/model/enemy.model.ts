@@ -4,7 +4,7 @@ import {BasicLogType, CreatureClass, CreatureSize, CreatureType, ElementType, Fa
 import {LifeChange} from './life-change.model';
 import {logs} from './log.model';
 import {Creature, defaultEnemyAction, EnemyAction} from './creature.model';
-import {EnemyStrategy, PrioritySkillStrategy} from './strategy.model';
+import {Strategy, PrioritySkillStrategy} from './strategy.model';
 import {Constants} from './constants.model';
 import {settings} from './settings.model';
 import {StatusApplication} from './status-application.model';
@@ -128,14 +128,14 @@ export abstract class Enemy extends Creature {
  */
 export class StrategicEnemy extends Enemy {
 
-  strategy: EnemyStrategy;
+  strategy: Strategy;
 
   constructor(
     type: CreatureType,
     name: string,
     lifeMax: number,
     power: number,
-    strategy: EnemyStrategy,
+    strategy: Strategy,
     size: CreatureSize = CreatureSize.REGULAR,
     actions: number = Constants.DEFAULT_ATTACK_COUNT) {
     super(type, name, lifeMax, power, size, actions);
@@ -159,7 +159,7 @@ export class StrategicMeleeEnemy extends StrategicEnemy {
     name: string,
     lifeMax: number,
     power: number,
-    strategy: EnemyStrategy,
+    strategy: Strategy,
     size: CreatureSize = CreatureSize.REGULAR,
     actions: number = Constants.DEFAULT_ATTACK_COUNT) {
     super(type, name, lifeMax, power, new PrioritySkillStrategy(new Advance(), strategy), size, actions);

@@ -47,8 +47,6 @@ export class EnemyBuilder {
     return monster;
   }
 
-  // TODO FBE add rats (with tiny size)
-
   // Enemies for the fang forest
 
   static buildBear(): Enemy {
@@ -117,8 +115,8 @@ export class EnemyBuilder {
   // Enemies for the forgotten graveyard
 
   static buildGiantRat(): Enemy {
-    return new StrategicMeleeEnemy(CreatureType.BEAST, 'Giant Rat', 12, 6,
-      new Strike('Bite', ElementType.PHYSICAL));
+    return new StrategicMeleeEnemy(CreatureType.BEAST, 'Giant Rat', 12, 5,
+      new Strike('Bite', ElementType.PHYSICAL), CreatureSize.TINY);
   }
 
   static buildSkeleton(): Enemy {

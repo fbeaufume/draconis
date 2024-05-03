@@ -460,6 +460,8 @@ export class EndOfRound extends Creature {
   }
 }
 
+// TODO FBE move the next two exports to strategy.model.ts
+
 /**
  * An enemy action.
  */

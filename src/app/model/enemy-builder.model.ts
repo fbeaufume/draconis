@@ -1,14 +1,15 @@
 import {Enemy, OldManEnemy, StrategicEnemy, StrategicMeleeEnemy} from './enemy.model';
 import {BasicLogType, CreatureSize, CreatureType, ElementType, SkillTargetType} from './common.model';
-import {PrioritySkillStrategy, SequentialStrategy, WeightedStrategy} from './strategy.model';
+import {PriorityStrategy, SequentialStrategy, WeightedStrategy} from './strategy.model';
 import {
+  Advance,
   ApplyDeterioration,
   ApplyImprovement,
   CustomShot,
   CustomStrike,
   DamageAndDot,
   Drain,
-  Heal,
+  Heal, Leave,
   LogMessage,
   MassAlterTime,
   Shot,
@@ -97,7 +98,7 @@ export class EnemyBuilder {
 
   static buildGoblinShaman(): Enemy {
     return new StrategicEnemy(CreatureType.HUMANOID, 'Goblin Shaman', 26, 7,
-      new PrioritySkillStrategy(
+      new PriorityStrategy(
         new Heal('Heal', SkillTargetType.SAME_WOUNDED, 5, false, 0, 1, '', ElementType.LIGHT),
         new Shot('Lightning', ElementType.LIGHTNING)));
   }
@@ -115,8 +116,13 @@ export class EnemyBuilder {
   // Enemies for the forgotten graveyard
 
   static buildGiantRat(): Enemy {
-    return new StrategicMeleeEnemy(CreatureType.BEAST, 'Giant Rat', 12, 5,
-      new Strike('Bite', ElementType.PHYSICAL), CreatureSize.TINY);
+    return new StrategicEnemy(CreatureType.BEAST, 'Giant Rat', 12, 5,
+      new WeightedStrategy()
+        .addSkill(new Leave(), 20)
+        .addSkill(new PriorityStrategy(
+          new Advance(),
+          new Strike('Bite', ElementType.PHYSICAL)), 80)
+      , CreatureSize.TINY);
   }
 
   static buildSkeleton(): Enemy {
@@ -153,7 +159,7 @@ export class EnemyBuilder {
     return new StrategicMeleeEnemy(CreatureType.ELEMENTAL, 'Stone Golem', 40, 5,
       new Strike('Bash', ElementType.PHYSICAL))
       .withElementalResistance(ElementType.BLEED, 1)
-      .withElementalResistance(ElementType.BLEED, 0.5);
+      .withElementalResistance(ElementType.PHYSICAL, 0.5);
   }
 
   static buildFireElemental(): Enemy {
@@ -182,7 +188,7 @@ export class EnemyBuilder {
 
   static buildWhiteMage(): Enemy {
     return new StrategicEnemy(CreatureType.HUMANOID, 'White Mage', 26, 7,
-      new PrioritySkillStrategy(
+      new PriorityStrategy(
         new Heal('Heal', SkillTargetType.SAME_WOUNDED, 5, false, 0, 1, '', ElementType.LIGHT),
         new Shot('Light Blast', ElementType.LIGHT)));
   }

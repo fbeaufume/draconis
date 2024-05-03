@@ -24,7 +24,6 @@ class SequentialStrategy {
 
 class WeightedStrategy {
   weights: number[]
-  totalWeight: number
 }
 
 Enemy <|-- StrategicEnemy

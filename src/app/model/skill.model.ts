@@ -206,7 +206,7 @@ export abstract class Skill extends Strategy implements DamageSource {
       case SkillTargetType.ALIVE:
         return creature.isAlive() && (creature.isCharacter() || this.range >= creature.distance);
       default:
-        console.log('Error in isUsableOn, target type ' + this.targetType + ' is not supported')
+        console.log('Error in isUsableOn, target type ' + this.targetType + ' is not supported');
         return false;
     }
   }
@@ -550,6 +550,7 @@ export class Leave extends Skill {
     super('Leave', SkillTargetType.NONE, 0, false, 0, 1, '', ElementType.NONE);
   }
 
+  // TODO FBE bugged, this may cause some characters to use a strategy of an enemy
   override executeOnActiveCreature(activeCreature: Creature, fight: Fight) {
     // Remove the creature from the fight
     activeCreature.life = 0;

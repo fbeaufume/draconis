@@ -14,9 +14,14 @@ export abstract class Strategy {
    * Choose the action for an active enemy, i.e. the chosen skill and the target creatures if any.
    */
   chooseAction(fight: Fight): EnemyAction | null {
+    if (fight.activeCreature?.isCharacter()) {
+      console.log(`Error in chooseAction, current creature '${fight.activeCreature?.name}' is a character`);
+    }
+
     const skill: Skill | null = this.chooseSkill(fight);
+
     if (skill == null) {
-      return null;
+      return null; // TODO FBE return defaultEnemyAction instead of in StrategyEnemy.chooseAction, then change the return type to "EnemyAction"
     } else {
       return new EnemyAction(skill, this.chooseTargets(skill, fight));
     }
@@ -74,7 +79,7 @@ export abstract class Strategy {
 /**
  * Strategy using a skill or (if the skill cannot be used) a strategy.
  */
-export class PrioritySkillStrategy extends Strategy {
+export class PriorityStrategy extends Strategy {
 
   skill: Skill;
 
@@ -148,39 +153,34 @@ export class SequentialStrategy extends Strategy {
 // TODO FBE add a random strategy that extends WeightedStrategy
 
 /**
- * Strategy using several skills. Each skill has a weight.
- * To return an action, a skill is randomly selected using the weight.
- * The higher the weight, the more likely the skill to be selected.
+ * A composite strategy that delegates to several weighted sub-strategies.
+ * The final skill is randomly selected from the sub-strategies using the weights.
+ * The higher the weight, the more likely that subs-strategy to be selected.
  */
 export class WeightedStrategy extends Strategy {
 
   /**
-   * The skills.
+   * The sub-strategies.
    */
-  skills: Skill[] = [];
+  strategies: Strategy[] = [];
 
   /**
-   * The weight of the skills.
+   * The weight of the sub-strategies.
    */
   weights: number[] = []
-
-  /**
-   * The total weight of the skills.
-   */
-  totalWeight: number = 0;
 
   constructor() {
     super();
   }
 
+  // TODO FBE move the weight to first parameter
   /**
-   * Add a skill with a weight to this strategy.
+   * Add a sub-strategy with a weight to this strategy.
    */
-  addSkill(skill: Skill, weight: number): WeightedStrategy {
+  addSkill(strategy: Strategy, weight: number): WeightedStrategy {
     if (weight > 0) {
-      this.skills.push(skill);
+      this.strategies.push(strategy);
       this.weights.push(weight);
-      this.totalWeight += weight;
     }
     return this;
   }
@@ -190,12 +190,16 @@ export class WeightedStrategy extends Strategy {
     const usableWeights: number[] = [];
     let usableTotalWeight: number = 0;
 
-    // Keep only usable skills
-    this.skills.filter(skill => skill.isUsableByActiveCreature(fight)).forEach((skill, index) => {
-      usableSkills.push(skill);
-      usableWeights.push(this.weights[index]);
-      usableTotalWeight += this.weights[index];
-    })
+    // Keep only non null skills
+    this.strategies.forEach((strategy, index) => {
+      const skill = strategy.chooseSkill(fight);
+      const i=1;
+      if (skill != null) {
+        usableSkills.push(skill);
+        usableWeights.push(this.weights[index]);
+        usableTotalWeight += this.weights[index];
+      }
+    });
 
     // If there is no usable skill, return null
     if (usableSkills.length <= 0) {

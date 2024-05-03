@@ -4,7 +4,7 @@ import {BasicLogType, CreatureClass, CreatureSize, CreatureType, ElementType, Fa
 import {LifeChange} from './life-change.model';
 import {logs} from './log.model';
 import {Creature, defaultEnemyAction, EnemyAction} from './creature.model';
-import {Strategy, PrioritySkillStrategy} from './strategy.model';
+import {Strategy, PriorityStrategy} from './strategy.model';
 import {Constants} from './constants.model';
 import {settings} from './settings.model';
 import {StatusApplication} from './status-application.model';
@@ -162,7 +162,7 @@ export class StrategicMeleeEnemy extends StrategicEnemy {
     strategy: Strategy,
     size: CreatureSize = CreatureSize.REGULAR,
     actions: number = Constants.DEFAULT_ATTACK_COUNT) {
-    super(type, name, lifeMax, power, new PrioritySkillStrategy(new Advance(), strategy), size, actions);
+    super(type, name, lifeMax, power, new PriorityStrategy(new Advance(), strategy), size, actions);
   }
 }
 

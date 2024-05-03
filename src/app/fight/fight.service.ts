@@ -197,7 +197,7 @@ export class FightService {
         this.state = GameState.SELECT_CHARACTER_OR_ENEMY;
         break;
       default:
-        console.log('Error in selectSkill, skill target type ' + skill.targetType + ' is not supported');
+        console.log(`Error in selectSkill, skill target type ${skill.targetType} is not supported`);
     }
   }
 

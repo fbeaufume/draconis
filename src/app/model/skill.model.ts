@@ -206,7 +206,7 @@ export abstract class Skill extends Strategy implements DamageSource {
       case SkillTargetType.ALIVE:
         return creature.isAlive() && (creature.isCharacter() || this.range >= creature.distance);
       default:
-        console.log('Error in isUsableOn, target type ' + this.targetType + ' is not supported');
+        console.log(`Error in isUsableOn, target type ${this.targetType} is not supported`);
         return false;
     }
   }
@@ -251,7 +251,7 @@ export abstract class Skill extends Strategy implements DamageSource {
 
         break;
       default:
-        console.log('Error in getTargetEnemies, target type ' + this.targetType + ' is not supported');
+        console.log(`Error in getTargetEnemies, target type ${this.targetType} is not supported`);
     }
 
     return targets;
@@ -272,7 +272,7 @@ export abstract class Skill extends Strategy implements DamageSource {
         targets.push(character);
         break;
       default:
-        console.log('Error in getTargetCharacters, target type ' + this.targetType + ' is not supported');
+        console.log(`Error in getTargetCharacters, target type ${this.targetType} is not supported`);
     }
 
     return targets;
@@ -934,7 +934,6 @@ export class MassAlterTime extends AlterTime {
       .filter(creature => creature.activeStatusApplications.length >= 1)
       .map(() => 1)
       .reduce((currentSum, a) => currentSum + a, 0);
-    console.log('Count', count);
     if (count < 2) {
       return false;
     }

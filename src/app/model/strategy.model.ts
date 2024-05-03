@@ -15,7 +15,7 @@ export abstract class Strategy {
    */
   chooseAction(fight: Fight): EnemyAction | null {
     if (fight.activeCreature?.isCharacter()) {
-      console.log(`Error in chooseAction, current creature '${fight.activeCreature?.name}' is a character`);
+      console.log(`Error in chooseAction, current creature '${fight.activeCreature?.name}' is not an enemy`);
     }
 
     const skill: Skill | null = this.chooseSkill(fight);
@@ -70,7 +70,7 @@ export abstract class Strategy {
       case SkillTargetType.OTHER_ALL:
         return fight.party.targetAllAliveCharacters();
       default:
-        console.log('Error in chooseTargets, skill target type ' + skill.targetType + ' is not supported');
+        console.log(`Error in chooseTargets, skill target type ${skill.targetType} is not supported`);
         return [];
     }
   }

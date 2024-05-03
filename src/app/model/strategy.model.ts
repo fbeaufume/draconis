@@ -1,6 +1,6 @@
-import {Fight} from "./fight.model";
-import {Creature, EnemyAction} from "./creature.model";
-import {Skill} from "./skill.model";
+import {Fight} from './fight.model';
+import {Creature} from "./creature.model";
+import {Skill, Wait} from "./skill.model";
 import {SkillTargetType} from "./common.model";
 
 // TODO FBE in all strategy constructors, receive strategies instead of skills
@@ -13,7 +13,7 @@ export abstract class Strategy {
   /**
    * Choose the action for an active enemy, i.e. the chosen skill and the target creatures if any.
    */
-  chooseAction(fight: Fight): EnemyAction | null {
+  chooseAction(fight: Fight): EnemyAction {
     if (fight.activeCreature?.isCharacter()) {
       console.log(`Error in chooseAction, current creature '${fight.activeCreature?.name}' is not an enemy`);
     }
@@ -21,7 +21,7 @@ export abstract class Strategy {
     const skill: Skill | null = this.chooseSkill(fight);
 
     if (skill == null) {
-      return null; // TODO FBE return defaultEnemyAction instead of in StrategyEnemy.chooseAction, then change the return type to "EnemyAction"
+      return new EnemyAction(new Wait(), []);
     } else {
       return new EnemyAction(skill, this.chooseTargets(skill, fight));
     }
@@ -73,6 +73,29 @@ export abstract class Strategy {
         console.log(`Error in chooseTargets, skill target type ${skill.targetType} is not supported`);
         return [];
     }
+  }
+}
+
+/**
+ * An enemy action.
+ */
+export class EnemyAction {
+
+  /**
+   * The executed skill.
+   */
+  skill: Skill;
+
+  /**
+   * The creatures targeted by the skill, if any.
+   */
+  targetCreatures: Creature[];
+
+  constructor(
+    skill: Skill,
+    targetCreatures: Creature[]) {
+    this.skill = skill;
+    this.targetCreatures = targetCreatures;
   }
 }
 
@@ -193,7 +216,7 @@ export class WeightedStrategy extends Strategy {
     // Keep only non null skills
     this.strategies.forEach((strategy, index) => {
       const skill = strategy.chooseSkill(fight);
-      const i=1;
+      const i = 1;
       if (skill != null) {
         usableSkills.push(skill);
         usableWeights.push(this.weights[index]);

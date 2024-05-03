@@ -1,4 +1,4 @@
-import {computeEffectiveDamage, computeEffectiveHeal, Skill, Wait} from './skill.model';
+import {computeEffectiveDamage, computeEffectiveHeal, Skill} from './skill.model';
 import {logs} from './log.model';
 import {Constants} from './constants.model';
 import {
@@ -10,10 +10,10 @@ import {
   LogType,
   StatusExpirationType,
   StatusTypeTagType
-} from "./common.model";
-import {StatusType} from "./status-type.model";
-import {LifeChange} from "./life-change.model";
-import {StatusApplication} from "./status-application.model";
+} from './common.model';
+import {StatusType} from './status-type.model';
+import {LifeChange} from './life-change.model';
+import {StatusApplication} from './status-application.model';
 
 /**
  * Base class for enemies and characters.
@@ -459,33 +459,3 @@ export class EndOfRound extends Creature {
     return true;
   }
 }
-
-// TODO FBE move the next two exports to strategy.model.ts
-
-/**
- * An enemy action.
- */
-export class EnemyAction {
-
-  /**
-   * The executed skill.
-   */
-  skill: Skill;
-
-  /**
-   * The creatures targeted by the skill, if any.
-   */
-  targetCreatures: Creature[];
-
-  constructor(
-    skill: Skill,
-    targetCreatures: Creature[]) {
-    this.skill = skill;
-    this.targetCreatures = targetCreatures;
-  }
-}
-
-/**
- * Default action used when no other action can be used.
- */
-export const defaultEnemyAction: EnemyAction = new EnemyAction(new Wait(), []);

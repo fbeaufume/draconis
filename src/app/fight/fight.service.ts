@@ -1,6 +1,6 @@
 import {Injectable} from '@angular/core';
 import {Game} from '../model/game.model';
-import {Creature, EnemyAction} from '../model/creature.model';
+import {Creature} from '../model/creature.model';
 import {Skill} from '../model/skill.model';
 import {Log, logs} from '../model/log.model';
 import {Constants} from '../model/constants.model';
@@ -10,6 +10,7 @@ import {Party} from '../model/party.model';
 import {settings} from '../model/settings.model';
 import {Enemy} from '../model/enemy.model';
 import {Fight} from '../model/fight.model';
+import {EnemyAction} from '../model/strategy.model';
 
 @Injectable({
   providedIn: 'root'

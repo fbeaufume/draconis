@@ -1,5 +1,3 @@
-// Skill related classes
-
 import {Creature} from './creature.model';
 import {logs} from './log.model';
 import {

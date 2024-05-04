@@ -139,8 +139,7 @@ export class SequentialStrategy extends Strategy {
    */
   currentIndex: number = 0;
 
-  // TODO FBE receive a vararg instead of an array
-  constructor(skills: Skill[]) {
+  constructor(...skills: Skill[]) {
     super();
     this.skills = skills;
   }

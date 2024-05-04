@@ -106,12 +106,12 @@ export class EnemyBuilder {
 
   static buildGreenDragon(): Enemy {
     return new StrategicMeleeEnemy(CreatureType.BEAST, 'Green Dragon', 120, 10,
-      new SequentialStrategy([
+      new SequentialStrategy(
         new Strike('Left Claw', ElementType.PHYSICAL),
         new Strike('Right Claw', ElementType.PHYSICAL),
         new LogMessage(BasicLogType.DRAGON_BREATH),
         new CustomStrike('Fire Breath', ElementType.FIRE, 0.7, SkillTargetType.OTHER_ALL)
-      ]), CreatureSize.HUGE, 2);
+      ), CreatureSize.HUGE, 2);
   }
 
   // Enemies for the forgotten graveyard

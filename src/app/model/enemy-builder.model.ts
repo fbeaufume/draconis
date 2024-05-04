@@ -54,19 +54,19 @@ export class EnemyBuilder {
   static buildBear(): Enemy {
     return new StrategicMeleeEnemy(CreatureType.BEAST, 'Bear', 34, 8,
       new WeightedStrategy()
-        .addSkill(new Strike('Bite', ElementType.PHYSICAL), 1)
-        .addSkill(new DamageAndDot('Maul', SkillTargetType.OTHER_ALIVE, 20, true, 1,
-          1, '', ElementType.BLEED, [0.5, 0.4], [bleed]), 1)
-        .addSkill(new ApplyDeterioration('Roar', SkillTargetType.OTHER_ALIVE, 0, false, 1,
-          1, '', ElementType.PHYSICAL, [], [attackMalus]), 1));
+        .addSkill(1, new Strike('Bite', ElementType.PHYSICAL))
+        .addSkill(1, new DamageAndDot('Maul', SkillTargetType.OTHER_ALIVE, 20, true, 1,
+          1, '', ElementType.BLEED, [0.5, 0.4], [bleed]))
+        .addSkill(1, new ApplyDeterioration('Roar', SkillTargetType.OTHER_ALIVE, 0, false, 1,
+          1, '', ElementType.PHYSICAL, [], [attackMalus])));
   }
 
   static buildWolf(): Enemy {
     return new StrategicMeleeEnemy(CreatureType.BEAST, 'Wolf', 22, 6,
       new WeightedStrategy()
-        .addSkill(new Strike('Bite', ElementType.PHYSICAL), 3)
-        .addSkill(new ApplyImprovement('Howl', SkillTargetType.SELF, 0, false, 0,
-          1, '', ElementType.PHYSICAL, [], [attackBonus]), 1),
+        .addSkill(3, new Strike('Bite', ElementType.PHYSICAL))
+        .addSkill(1, new ApplyImprovement('Howl', SkillTargetType.SELF, 0, false, 0,
+          1, '', ElementType.PHYSICAL, [], [attackBonus])),
       CreatureSize.SMALL);
   }
 
@@ -119,10 +119,10 @@ export class EnemyBuilder {
   static buildGiantRat(): Enemy {
     return new StrategicEnemy(CreatureType.BEAST, 'Giant Rat', 12, 5,
       new WeightedStrategy()
-        .addSkill(new Leave(), 20)
-        .addSkill(new PriorityStrategy(
+        .addSkill(2, new Leave())
+        .addSkill(8, new PriorityStrategy(
           new Advance(),
-          new Strike('Bite', ElementType.PHYSICAL)), 80)
+          new Strike('Bite', ElementType.PHYSICAL)))
       , CreatureSize.TINY);
   }
 
@@ -182,9 +182,9 @@ export class EnemyBuilder {
   static buildRedMage(): Enemy {
     return new StrategicEnemy(CreatureType.HUMANOID, 'Red Mage', 26, 7,
       new WeightedStrategy()
-        .addSkill(new Shot('Fire Blast', ElementType.FIRE), 1)
-        .addSkill(new DamageAndDot('Burn', SkillTargetType.OTHER_ALIVE, 10, false, 2, 1, '', ElementType.FIRE, [0.5, 0.5], [burn]), 1)
-        .addSkill(new CustomShot('Fireball', ElementType.FIRE, 0.8, SkillTargetType.OTHER_ALIVE_TRIPLE), 1));
+        .addSkill(1, new Shot('Fire Blast', ElementType.FIRE))
+        .addSkill(1, new DamageAndDot('Burn', SkillTargetType.OTHER_ALIVE, 10, false, 2, 1, '', ElementType.FIRE, [0.5, 0.5], [burn]))
+        .addSkill(1, new CustomShot('Fireball', ElementType.FIRE, 0.8, SkillTargetType.OTHER_ALIVE_TRIPLE)));
   }
 
   static buildWhiteMage(): Enemy {
@@ -197,7 +197,7 @@ export class EnemyBuilder {
   static buildBlackMage(): Enemy {
     return new StrategicEnemy(CreatureType.HUMANOID, 'Black Mage', 26, 7,
       new WeightedStrategy()
-        .addSkill(new Drain('Drain Life', SkillTargetType.OTHER_ALIVE, 10, false, 2, 1, '', ElementType.DARK, [0.5, 1]), 1)
-        .addSkill(new MassAlterTime('Mass Alter Time', SkillTargetType.OTHER_ALL, 10, false, 2, 1, '', ElementType.ARCANE), 1));
+        .addSkill(1, new Drain('Drain Life', SkillTargetType.OTHER_ALIVE, 10, false, 2, 1, '', ElementType.DARK, [0.5, 1]))
+        .addSkill(1, new MassAlterTime('Mass Alter Time', SkillTargetType.OTHER_ALL, 10, false, 2, 1, '', ElementType.ARCANE)));
   }
 }

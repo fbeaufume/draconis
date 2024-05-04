@@ -183,27 +183,26 @@ export class SequentialStrategy extends Strategy {
 export class WeightedStrategy extends Strategy {
 
   /**
-   * The sub-strategies.
-   */
-  strategies: Strategy[] = [];
-
-  /**
    * The weight of the sub-strategies.
    */
   weights: number[] = []
+
+  /**
+   * The sub-strategies.
+   */
+  strategies: Strategy[] = [];
 
   constructor() {
     super();
   }
 
-  // TODO FBE move the weight to first parameter
   /**
    * Add a sub-strategy with a weight to this strategy.
    */
-  addSkill(strategy: Strategy, weight: number): WeightedStrategy {
+  addSkill(weight: number, strategy: Strategy): WeightedStrategy {
     if (weight > 0) {
-      this.strategies.push(strategy);
       this.weights.push(weight);
+      this.strategies.push(strategy);
     }
     return this;
   }

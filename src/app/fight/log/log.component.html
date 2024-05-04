@@ -4,13 +4,11 @@
   </div>
   <div *ngSwitchCase="this.logType.ENTER_ZONE">
     Entering
-    <app-log-item [item]="log.getItem(0)"></app-log-item>
-    .
+    <app-log-item [item]="log.getItem(0)"></app-log-item>.
   </div>
   <div *ngSwitchCase="this.logType.OPPOSITION_APPEAR">
     The party encounters
-    <app-log-item [item]="log.getItem(0)"></app-log-item>
-    .
+    <app-log-item [item]="log.getItem(0)"></app-log-item>.
   </div>
   <div *ngSwitchCase="this.logType.START_ROUND">
     Round
@@ -32,16 +30,14 @@
   <div *ngSwitchCase="this.logType.SKILL">
     <app-log-item [item]="log.getItem(0)"></app-log-item>
     uses
-    <app-log-item [item]="log.getItem(1)"></app-log-item>
-    .
+    <app-log-item [item]="log.getItem(1)"></app-log-item>.
   </div>
   <div *ngSwitchCase="this.logType.SKILL_WITH_TARGET">
     <app-log-item [item]="log.getItem(0)"></app-log-item>
     uses
     <app-log-item [item]="log.getItem(1)"></app-log-item>
     on
-    <app-log-item [item]="log.getItem(2)"></app-log-item>
-    .
+    <app-log-item [item]="log.getItem(2)"></app-log-item>.
   </div>
   <div *ngSwitchCase="this.logType.SKILL_WITH_TARGET_AND_LIFE_CHANGE">
     <app-log-item [item]="log.getItem(0)"></app-log-item>
@@ -50,20 +46,17 @@
     on
     <app-log-item [item]="log.getItem(2)"></app-log-item>
     for
-    <app-log-item [item]="log.getItem(3)"></app-log-item>
-    .
+    <app-log-item [item]="log.getItem(3)"></app-log-item>.
   </div>
   <div *ngSwitchCase="this.logType.DOT">
     <app-log-item [item]="log.getItem(0)"></app-log-item>
     looses
-    <app-log-item [item]="log.getItem(1)"></app-log-item>
-    .
+    <app-log-item [item]="log.getItem(1)"></app-log-item>.
   </div>
   <div *ngSwitchCase="this.logType.HOT">
     <app-log-item [item]="log.getItem(0)"></app-log-item>
     gains
-    <app-log-item [item]="log.getItem(1)"></app-log-item>
-    .
+    <app-log-item [item]="log.getItem(1)"></app-log-item>.
   </div>
   <div *ngSwitchCase="this.logType.ENEMY_DEFEAT">
     <app-log-item [item]="log.getItem(0)"></app-log-item>

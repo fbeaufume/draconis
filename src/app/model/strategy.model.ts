@@ -100,27 +100,30 @@ export class EnemyAction {
 }
 
 /**
- * Strategy using a skill or (if the skill cannot be used) a strategy.
+ * A composite strategy that delegate to prioritized sub-strategies.
+ * The final skill is selected from the subs-strategies, from the first to the last, until one of them is valid.
  */
 export class PriorityStrategy extends Strategy {
 
-  skill: Skill;
+  /**
+   * The sub-strategies.
+   */
+  strategies: Strategy[] = [];
 
-  strategy: Strategy;
-
-  // TODO FBE receive strategies instead of one skill and one strategy
-  constructor(skill: Skill, strategy: Strategy) {
+  constructor(...strategies: Strategy[]) {
     super();
-    this.skill = skill;
-    this.strategy = strategy;
+    this.strategies = strategies;
   }
 
   chooseSkill(fight: Fight): Skill | null {
-    if (this.skill.isUsableByActiveCreature(fight)) {
-      return this.skill;
-    } else {
-      return this.strategy.chooseSkill(fight);
+    for (let i = 0; i < this.strategies.length; i++) {
+      const skill = this.strategies[i].chooseSkill(fight);
+      if (skill != null) {
+        return skill;
+      }
     }
+
+    return null;
   }
 }
 

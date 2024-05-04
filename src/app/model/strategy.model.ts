@@ -173,8 +173,6 @@ export class SequentialStrategy extends Strategy {
   }
 }
 
-// TODO FBE add a random strategy that extends WeightedStrategy
-
 /**
  * A composite strategy that delegates to several weighted sub-strategies.
  * The final skill is randomly selected from the sub-strategies using the weights.

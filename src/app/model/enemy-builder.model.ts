@@ -54,10 +54,10 @@ export class EnemyBuilder {
   static buildBear(): Enemy {
     return new StrategicMeleeEnemy(CreatureType.BEAST, 'Bear', 34, 8,
       new WeightedStrategy()
-        .addSkill(1, new Strike('Bite', ElementType.PHYSICAL))
-        .addSkill(1, new DamageAndDot('Maul', SkillTargetType.OTHER_ALIVE, 20, true, 1,
+        .addSkill(4, new Strike('Bite', ElementType.PHYSICAL))
+        .addSkill(3, new DamageAndDot('Maul', SkillTargetType.OTHER_ALIVE, 20, true, 1,
           1, '', ElementType.BLEED, [0.5, 0.4], [bleed]))
-        .addSkill(1, new ApplyDeterioration('Roar', SkillTargetType.OTHER_ALIVE, 0, false, 1,
+        .addSkill(3, new ApplyDeterioration('Roar', SkillTargetType.OTHER_ALIVE, 0, false, 1,
           1, '', ElementType.PHYSICAL, [], [attackMalus])));
   }
 
@@ -182,9 +182,9 @@ export class EnemyBuilder {
   static buildRedMage(): Enemy {
     return new StrategicEnemy(CreatureType.HUMANOID, 'Red Mage', 26, 7,
       new WeightedStrategy()
-        .addSkill(1, new Shot('Fire Blast', ElementType.FIRE))
-        .addSkill(1, new DamageAndDot('Burn', SkillTargetType.OTHER_ALIVE, 10, false, 2, 1, '', ElementType.FIRE, [0.5, 0.5], [burn]))
-        .addSkill(1, new CustomShot('Fireball', ElementType.FIRE, 0.8, SkillTargetType.OTHER_ALIVE_TRIPLE)));
+        .addSkill(4, new Shot('Fire Blast', ElementType.FIRE))
+        .addSkill(3, new DamageAndDot('Burn', SkillTargetType.OTHER_ALIVE, 10, false, 2, 1, '', ElementType.FIRE, [0.5, 0.5], [burn]))
+        .addSkill(3, new CustomShot('Fireball', ElementType.FIRE, 0.8, SkillTargetType.OTHER_ALIVE_TRIPLE)));
   }
 
   static buildWhiteMage(): Enemy {
@@ -197,7 +197,7 @@ export class EnemyBuilder {
   static buildBlackMage(): Enemy {
     return new StrategicEnemy(CreatureType.HUMANOID, 'Black Mage', 26, 7,
       new WeightedStrategy()
-        .addSkill(1, new Drain('Drain Life', SkillTargetType.OTHER_ALIVE, 10, false, 2, 1, '', ElementType.DARK, [0.5, 1]))
-        .addSkill(1, new MassAlterTime('Mass Alter Time', SkillTargetType.OTHER_ALL, 10, false, 2, 1, '', ElementType.ARCANE)));
+        .addSkill(6, new Drain('Drain Life', SkillTargetType.OTHER_ALIVE, 10, false, 2, 1, '', ElementType.DARK, [0.5, 1]))
+        .addSkill(4, new MassAlterTime('Mass Alter Time', SkillTargetType.OTHER_ALL, 10, false, 2, 1, '', ElementType.ARCANE)));
   }
 }

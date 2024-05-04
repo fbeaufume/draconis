@@ -166,6 +166,8 @@ export class StrategicMeleeEnemy extends StrategicEnemy {
   }
 }
 
+// TODO FBE add a StrategicFleeingMeleeEnemy for the rats
+
 /**
  * A peaceful old man (in phase 1) than turns into a strong druid (in phase 2) when attacked.
  */

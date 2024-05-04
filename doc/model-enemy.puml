@@ -15,6 +15,9 @@ skinparam class {
 class Enemy {
 }
 
+class Skill {
+}
+
 class PriorityStrategy {
 }
 
@@ -34,9 +37,8 @@ Strategy <|-- Skill
 Strategy <|-- PriorityStrategy
 Strategy <|-- SequentialStrategy
 Strategy <|-- WeightedStrategy
-PriorityStrategy *-- Skill
-PriorityStrategy *-- Strategy
-WeightedStrategy *-- "*" Skill
-SequentialStrategy *-- "*" Skill
+PriorityStrategy *-- "*" Strategy
+SequentialStrategy *-- "*" Strategy
+WeightedStrategy *-- "*" Strategy
 
 @enduml

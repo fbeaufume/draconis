@@ -29,6 +29,10 @@ class WeightedStrategy {
   weights: number[]
 }
 
+class ConditionalStrategy {
+  conditions: StrategyCondition[]
+}
+
 Enemy <|-- StrategicEnemy
 Enemy <|-- OldMan
 StrategicEnemy <|-- StrategicMeleeEnemy
@@ -38,8 +42,10 @@ Skill <|-- LogMessage
 Strategy <|-- PriorityStrategy
 Strategy <|-- SequentialStrategy
 Strategy <|-- WeightedStrategy
+Strategy <|-- ConditionalStrategy
 PriorityStrategy *-- "*" Strategy
 SequentialStrategy *-- "*" Strategy
 WeightedStrategy *-- "*" Strategy
+ConditionalStrategy *-- "*" Strategy
 
 @enduml

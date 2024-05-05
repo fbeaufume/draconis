@@ -189,6 +189,10 @@ export abstract class Creature {
     return this.life < this.lifeMax;
   }
 
+  isLifePercentAbove(percent: number): boolean {
+    return this.life * 100 / this.lifeMax >= percent;
+  }
+
   /**
    * Inflict some damage to the creature.
    */

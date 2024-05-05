@@ -106,7 +106,7 @@ export class PriorityStrategy extends Strategy {
   /**
    * The sub-strategies.
    */
-  strategies: Strategy[] = [];
+  private strategies: Strategy[] = [];
 
   constructor(...strategies: Strategy[]) {
     super();
@@ -135,12 +135,12 @@ export class SequentialStrategy extends Strategy {
   /**
    * The sub-strategies.
    */
-  strategies: Strategy[];
+  private strategies: Strategy[];
 
   /**
    * The index in the skills array of the next skill to use.
    */
-  currentIndex: number = 0;
+  private currentIndex: number = 0;
 
   constructor(...strategies: Strategy[]) {
     super();
@@ -170,12 +170,12 @@ export class WeightedStrategy extends Strategy {
   /**
    * The weight of the sub-strategies.
    */
-  weights: number[] = []
+  private weights: number[] = [];
 
   /**
    * The sub-strategies.
    */
-  strategies: Strategy[] = [];
+  private strategies: Strategy[] = [];
 
   constructor() {
     super();
@@ -184,7 +184,7 @@ export class WeightedStrategy extends Strategy {
   /**
    * Add a sub-strategy with a weight to this strategy.
    */
-  addSkill(weight: number, strategy: Strategy): WeightedStrategy {
+  addStrategy(weight: number, strategy: Strategy): WeightedStrategy {
     if (weight > 0) {
       this.weights.push(weight);
       this.strategies.push(strategy);
@@ -200,7 +200,6 @@ export class WeightedStrategy extends Strategy {
     // Keep only non null skills
     this.strategies.forEach((strategy, index) => {
       const skill = strategy.chooseSkill(fight);
-      const i = 1;
       if (skill != null) {
         usableSkills.push(skill);
         usableWeights.push(this.weights[index]);
@@ -231,4 +230,58 @@ export class WeightedStrategy extends Strategy {
   }
 }
 
-// TODO FBE add a conditional strategy
+/**
+ * A composite strategy that delegates to several conditional sub-strategies.
+ * Each sub-strategy has a condition (e.g. the life of the creature is lower than a certain percentage).
+ * Each sub-strategy is tried in order until a skill is selected: first the condition is checked, then the result skill.
+ */
+export class ConditionalStrategy extends Strategy {
+
+  /**
+   * The conditions of the sub-strategies.
+   */
+  private conditions: StrategyCondition[] = [];
+
+  /**
+   * The sub-strategies.
+   */
+  private strategies: Strategy[] = [];
+
+  constructor() {
+    super();
+  }
+
+  /**
+   * Add a sub-strategy with a condition to this strategy.
+   */
+  addStrategy(condition: StrategyCondition, strategy: Strategy): ConditionalStrategy {
+    this.conditions.push(condition);
+    this.strategies.push(strategy);
+    return this;
+  }
+
+  /**
+   * Add a sub-strategy with an always true condition to this strategy.
+   */
+  addDefaultStrategy(strategy: Strategy): ConditionalStrategy {
+    this.conditions.push((_1, _2) => true);
+    this.strategies.push(strategy);
+    return this;
+  }
+
+  chooseSkill(fight: Fight): Skill | null {
+    // Find the first usable skill
+    for (let i = 0; i < this.strategies.length; i++) {
+      if (this.conditions[i](fight.activeCreature!, fight)) {
+        const skill = this.strategies[i].chooseSkill(fight);
+        if (skill != null) {
+          return skill;
+        }
+      }
+    }
+
+    return null;
+  }
+}
+
+export type StrategyCondition = (currentCreature: Creature, fight: Fight) => boolean;

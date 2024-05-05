@@ -1,6 +1,6 @@
 import {Enemy, OldManEnemy, StrategicEnemy, StrategicMeleeEnemy} from './enemy.model';
 import {BasicLogType, CreatureSize, CreatureType, ElementType, SkillTargetType} from './common.model';
-import {PriorityStrategy, SequentialStrategy, WeightedStrategy} from './strategy.model';
+import {ConditionalStrategy, PriorityStrategy, SequentialStrategy, WeightedStrategy} from './strategy.model';
 import {
   Advance,
   ApplyDeterioration,
@@ -8,6 +8,7 @@ import {
   CustomShot,
   CustomStrike,
   DamageAndDot,
+  DefendMagic,
   Drain,
   Heal,
   Leave,
@@ -49,23 +50,30 @@ export class EnemyBuilder {
     return monster;
   }
 
+  static buildGuardian(life: number, power: number): Enemy {
+    return new StrategicMeleeEnemy(CreatureType.OTHER, 'Conditional Monster', life, power,
+      new ConditionalStrategy()
+        .addStrategy((creature, _) => creature.isLifePercentAbove(50), new DefendMagic())
+        .addDefaultStrategy(new Strike('Strike', ElementType.PHYSICAL)));
+  }
+
   // Enemies for the fang forest
 
   static buildBear(): Enemy {
     return new StrategicMeleeEnemy(CreatureType.BEAST, 'Bear', 34, 8,
       new WeightedStrategy()
-        .addSkill(4, new Strike('Bite', ElementType.PHYSICAL))
-        .addSkill(3, new DamageAndDot('Maul', SkillTargetType.OTHER_ALIVE, 20, true, 1,
+        .addStrategy(4, new Strike('Bite', ElementType.PHYSICAL))
+        .addStrategy(3, new DamageAndDot('Maul', SkillTargetType.OTHER_ALIVE, 20, true, 1,
           1, '', ElementType.BLEED, [0.5, 0.4], [bleed]))
-        .addSkill(3, new ApplyDeterioration('Roar', SkillTargetType.OTHER_ALIVE, 0, false, 1,
+        .addStrategy(3, new ApplyDeterioration('Roar', SkillTargetType.OTHER_ALIVE, 0, false, 1,
           1, '', ElementType.PHYSICAL, [], [attackMalus])));
   }
 
   static buildWolf(): Enemy {
     return new StrategicMeleeEnemy(CreatureType.BEAST, 'Wolf', 22, 6,
       new WeightedStrategy()
-        .addSkill(3, new Strike('Bite', ElementType.PHYSICAL))
-        .addSkill(1, new ApplyImprovement('Howl', SkillTargetType.SELF, 0, false, 0,
+        .addStrategy(3, new Strike('Bite', ElementType.PHYSICAL))
+        .addStrategy(1, new ApplyImprovement('Howl', SkillTargetType.SELF, 0, false, 0,
           1, '', ElementType.PHYSICAL, [], [attackBonus])),
       CreatureSize.SMALL);
   }
@@ -119,8 +127,8 @@ export class EnemyBuilder {
   static buildGiantRat(): Enemy {
     return new StrategicEnemy(CreatureType.BEAST, 'Giant Rat', 12, 5,
       new WeightedStrategy()
-        .addSkill(2, new Leave())
-        .addSkill(8, new PriorityStrategy(
+        .addStrategy(2, new Leave())
+        .addStrategy(8, new PriorityStrategy(
           new Advance(),
           new Strike('Bite', ElementType.PHYSICAL)))
       , CreatureSize.TINY);
@@ -182,9 +190,9 @@ export class EnemyBuilder {
   static buildRedMage(): Enemy {
     return new StrategicEnemy(CreatureType.HUMANOID, 'Red Mage', 26, 7,
       new WeightedStrategy()
-        .addSkill(4, new Shot('Fire Blast', ElementType.FIRE))
-        .addSkill(3, new DamageAndDot('Burn', SkillTargetType.OTHER_ALIVE, 10, false, 2, 1, '', ElementType.FIRE, [0.5, 0.5], [burn]))
-        .addSkill(3, new CustomShot('Fireball', ElementType.FIRE, 0.8, SkillTargetType.OTHER_ALIVE_TRIPLE)));
+        .addStrategy(4, new Shot('Fire Blast', ElementType.FIRE))
+        .addStrategy(3, new DamageAndDot('Burn', SkillTargetType.OTHER_ALIVE, 10, false, 2, 1, '', ElementType.FIRE, [0.5, 0.5], [burn]))
+        .addStrategy(3, new CustomShot('Fireball', ElementType.FIRE, 0.8, SkillTargetType.OTHER_ALIVE_TRIPLE)));
   }
 
   static buildWhiteMage(): Enemy {
@@ -197,7 +205,7 @@ export class EnemyBuilder {
   static buildBlackMage(): Enemy {
     return new StrategicEnemy(CreatureType.HUMANOID, 'Black Mage', 26, 7,
       new WeightedStrategy()
-        .addSkill(6, new Drain('Drain Life', SkillTargetType.OTHER_ALIVE, 10, false, 2, 1, '', ElementType.DARK, [0.5, 1]))
-        .addSkill(4, new MassAlterTime('Mass Alter Time', SkillTargetType.OTHER_ALL, 10, false, 2, 1, '', ElementType.ARCANE)));
+        .addStrategy(6, new Drain('Drain Life', SkillTargetType.OTHER_ALIVE, 10, false, 2, 1, '', ElementType.DARK, [0.5, 1]))
+        .addStrategy(4, new MassAlterTime('Mass Alter Time', SkillTargetType.OTHER_ALL, 10, false, 2, 1, '', ElementType.ARCANE)));
   }
 }

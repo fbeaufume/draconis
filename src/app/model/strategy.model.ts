@@ -3,8 +3,6 @@ import {Creature} from "./creature.model";
 import {Skill, Wait} from "./skill.model";
 import {SkillTargetType} from "./common.model";
 
-// TODO FBE in all strategy constructors, receive strategies instead of skills
-
 /**
  * Interface for the various enemy combat strategies.
  */
@@ -128,50 +126,37 @@ export class PriorityStrategy extends Strategy {
 }
 
 /**
- * Strategy using several skills that are executed sequentially.
+ * A composite strategy that delegates to several ordered sub-strategies.
+ * First, the first sub-strategy is tried, then the second, then the third, etc, until the last sub-strategy
+ * is reached, then it starts over.
  */
 export class SequentialStrategy extends Strategy {
 
   /**
-   * The skills.
+   * The sub-strategies.
    */
-  skills: Skill[];
+  strategies: Strategy[];
 
   /**
    * The index in the skills array of the next skill to use.
    */
   currentIndex: number = 0;
 
-  constructor(...skills: Skill[]) {
+  constructor(...strategies: Strategy[]) {
     super();
-    this.skills = skills;
+    this.strategies = strategies;
   }
 
   chooseSkill(fight: Fight): Skill | null {
-    // If this strategy is empty, return null
-    if (this.skills.length <= 0) {
-      return null;
-    }
-
     // Find the next usable skill
-    for (let i = 0; i < this.skills.length; i++) {
-      const skill = this.skills[this.currentIndex];
-
-      this.incrementSkillIndex();
-
-      if (skill.isUsableByActiveCreature(fight)) {
+    for (let i = 0; i < this.strategies.length; i++) {
+      const skill = this.strategies[this.currentIndex++ % this.strategies.length].chooseSkill(fight);
+      if (skill != null) {
         return skill;
       }
     }
 
     return null;
-  }
-
-  private incrementSkillIndex() {
-    this.currentIndex++;
-    if (this.currentIndex >= this.skills.length) {
-      this.currentIndex = 0;
-    }
   }
 }
 

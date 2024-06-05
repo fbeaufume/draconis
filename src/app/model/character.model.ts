@@ -5,7 +5,7 @@ import {
   FactionType,
   SkillModifierType,
   SkillTargetType
-} from "./common.model";
+} from './common.model';
 import {
   AlterTime,
   ApplyDeterioration,
@@ -28,8 +28,8 @@ import {
   Skill,
   Strike,
   Vengeance
-} from "./skill.model";
-import {Creature} from "./creature.model";
+} from './skill.model';
+import {Creature} from './creature.model';
 import {
   attackBonus,
   attackMalus,
@@ -40,8 +40,8 @@ import {
   defenseMalus,
   fireTrap,
   iceTrap
-} from "./status-type.model";
-import {Constants} from "./constants.model";
+} from './status-type.model';
+import {Constants} from './constants.model';
 
 /**
  * A party character.

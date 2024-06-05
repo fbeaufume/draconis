@@ -1,8 +1,8 @@
-import {Creature, EndOfRound} from "./creature.model";
-import {Party} from "./party.model";
-import {Opposition} from "./opposition.model";
-import {Character} from "./character.model";
-import {Enemy} from "./enemy.model";
+import {Creature, EndOfRound} from './creature.model';
+import {Party} from './party.model';
+import {Opposition} from './opposition.model';
+import {Character} from './character.model';
+import {Enemy} from './enemy.model';
 
 /**
  * The action order of characters and enemies during a turn.

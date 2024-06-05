@@ -1,23 +1,23 @@
 import {AfterViewInit, Component, ElementRef, HostListener, QueryList, ViewChild, ViewChildren} from '@angular/core';
 import {CommonModule} from '@angular/common';
-import {GameState} from "../model/common.model";
-import {FightService} from "./fight.service";
-import {Fight} from "../model/fight.model";
-import {Game} from "../model/game.model";
-import {Constants} from "../model/constants.model";
-import {Character} from "../model/character.model";
-import {Skill} from "../model/skill.model";
-import {Enemy} from "../model/enemy.model";
-import {settings} from "../model/settings.model";
-import {ClassIconComponent} from "./class-icon/class-icon.component";
-import {EnemyComponent} from "./enemy/enemy.component";
-import {CharacterComponent} from "./character/character.component";
-import {LogComponent} from "./log/log.component";
+import {GameState} from '../model/common.model';
+import {FightService} from './fight.service';
+import {Fight} from '../model/fight.model';
+import {Game} from '../model/game.model';
+import {Constants} from '../model/constants.model';
+import {Character} from '../model/character.model';
+import {Skill} from '../model/skill.model';
+import {Enemy} from '../model/enemy.model';
+import {settings} from '../model/settings.model';
+import {ClassIconComponent} from './class-icon/class-icon.component';
+import {EnemyComponent} from './enemy/enemy.component';
+import {CharacterComponent} from './character/character.component';
+import {MessageComponent} from './message/message.component';
 
 @Component({
   selector: 'app-fight',
   standalone: true,
-  imports: [CommonModule, ClassIconComponent, EnemyComponent, CharacterComponent, LogComponent],
+  imports: [CommonModule, ClassIconComponent, EnemyComponent, CharacterComponent, MessageComponent],
   templateUrl: './fight.component.html'
 })
 export class FightComponent implements AfterViewInit {
@@ -25,19 +25,19 @@ export class FightComponent implements AfterViewInit {
   // Needed to be able to use the enum type in the template
   gameState: typeof GameState = GameState;
 
-  // These are used to scroll the log panels to the bottom when a log is added,
+  // These are used to scroll the messages panel to the bottom when a message is added,
   // inspired by https://pumpingco.de/blog/automatic-scrolling-only-if-a-user-already-scrolled-the-bottom-of-a-page-in-angular/
-  @ViewChild('logFrame', {static: false}) logFrameElementRef!: ElementRef;
-  @ViewChildren('log') logItemElements!: QueryList<any>;
-  private logFrameElement: any;
+  @ViewChild('messageFrame', {static: false}) messageFrameElementRef!: ElementRef;
+  @ViewChildren('message') messageItemElements!: QueryList<any>;
+  private messaeFrameElement: any;
 
   constructor(public fightService: FightService) {
   }
 
   ngAfterViewInit(): void {
-    this.logFrameElement = this.logFrameElementRef.nativeElement;
+    this.messaeFrameElement = this.messageFrameElementRef.nativeElement;
     // TODO FBE unsubscribe somewhere ?
-    this.logItemElements.changes.subscribe(_ => this.scrollLogFrameToBottom());
+    this.messageItemElements.changes.subscribe(_ => this.scrollMessageFrameToBottom());
   }
 
   get fight(): Fight {
@@ -52,9 +52,9 @@ export class FightComponent implements AfterViewInit {
     return Constants.OPPOSITION_ROWS;
   }
 
-  private scrollLogFrameToBottom(): void {
-    this.logFrameElement.scroll({
-      top: this.logFrameElement.scrollHeight,
+  private scrollMessageFrameToBottom(): void {
+    this.messaeFrameElement.scroll({
+      top: this.messaeFrameElement.scrollHeight,
       left: 0,
       behavior: 'smooth'
     });

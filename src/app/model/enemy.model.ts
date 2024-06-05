@@ -1,8 +1,8 @@
 import {Game} from './game.model';
 import {Advance, Leave, Skill, Strike, Wait} from './skill.model';
-import {BasicLogType, CreatureClass, CreatureSize, CreatureType, ElementType, FactionType} from './common.model';
+import {BasicMessageType, CreatureClass, CreatureSize, CreatureType, ElementType, FactionType} from './common.model';
 import {LifeChange} from './life-change.model';
-import {logs} from './log.model';
+import {messages} from './message.model';
 import {Creature} from './creature.model';
 import {EnemyAction, PriorityStrategy, Strategy} from './strategy.model';
 import {Constants} from './constants.model';
@@ -178,7 +178,7 @@ export class OldManEnemy extends Enemy {
   override addLifeChange(lifeChange: LifeChange): LifeChange {
     if (this.phase == 1) {
       // Turn into a druid
-      logs.addBasicLog(BasicLogType.OLD_MAN_TRANSFORMATION);
+      messages.addBasicMessage(BasicMessageType.OLD_MAN_TRANSFORMATION);
       this.phase = 2;
       this.name = 'Elder Druid';
 

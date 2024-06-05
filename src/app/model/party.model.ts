@@ -1,4 +1,4 @@
-import {Character, Knight, Mage, Priest, Warrior} from "./character.model";
+import {Character, Knight, Mage, Priest, Warrior} from './character.model';
 
 /**
  * The player party.

@@ -1,6 +1,6 @@
 import {Component, Input} from '@angular/core';
 import {CommonModule} from '@angular/common';
-import {LifeChange} from "../../model/life-change.model";
+import {LifeChange} from '../../model/life-change.model';
 
 @Component({
   selector: 'app-life-change-popup',

@@ -1,0 +1,70 @@
+<div [ngSwitch]="message.type">
+  <div *ngSwitchCase="this.messageType.BASIC_MESSAGE">
+    {{ message.getItem(0) }}
+  </div>
+  <div *ngSwitchCase="this.messageType.ENTER_ZONE">
+    Entering
+    <app-message-item [item]="message.getItem(0)"></app-message-item>.
+  </div>
+  <div *ngSwitchCase="this.messageType.OPPOSITION_APPEAR">
+    The party encounters
+    <app-message-item [item]="message.getItem(0)"></app-message-item>.
+  </div>
+  <div *ngSwitchCase="this.messageType.START_ROUND">
+    Round
+    <app-message-item [item]="message.getItem(0)"></app-message-item>
+    starts.
+  </div>
+  <div *ngSwitchCase="this.messageType.ADVANCE">
+    <app-message-item [item]="message.getItem(0)"></app-message-item>
+    advances.
+  </div>
+  <div *ngSwitchCase="this.messageType.WAIT">
+    <app-message-item [item]="message.getItem(0)"></app-message-item>
+    waits.
+  </div>
+  <div *ngSwitchCase="this.messageType.LEAVE">
+    <app-message-item [item]="message.getItem(0)"></app-message-item>
+    leaves the fight.
+  </div>
+  <div *ngSwitchCase="this.messageType.SKILL">
+    <app-message-item [item]="message.getItem(0)"></app-message-item>
+    uses
+    <app-message-item [item]="message.getItem(1)"></app-message-item>.
+  </div>
+  <div *ngSwitchCase="this.messageType.SKILL_WITH_TARGET">
+    <app-message-item [item]="message.getItem(0)"></app-message-item>
+    uses
+    <app-message-item [item]="message.getItem(1)"></app-message-item>
+    on
+    <app-message-item [item]="message.getItem(2)"></app-message-item>.
+  </div>
+  <div *ngSwitchCase="this.messageType.SKILL_WITH_TARGET_AND_LIFE_CHANGE">
+    <app-message-item [item]="message.getItem(0)"></app-message-item>
+    uses
+    <app-message-item [item]="message.getItem(1)"></app-message-item>
+    on
+    <app-message-item [item]="message.getItem(2)"></app-message-item>
+    for
+    <app-message-item [item]="message.getItem(3)"></app-message-item>.
+  </div>
+  <div *ngSwitchCase="this.messageType.DOT">
+    <app-message-item [item]="message.getItem(0)"></app-message-item>
+    looses
+    <app-message-item [item]="message.getItem(1)"></app-message-item>.
+  </div>
+  <div *ngSwitchCase="this.messageType.HOT">
+    <app-message-item [item]="message.getItem(0)"></app-message-item>
+    gains
+    <app-message-item [item]="message.getItem(1)"></app-message-item>.
+  </div>
+  <div *ngSwitchCase="this.messageType.ENEMY_DEFEAT">
+    <app-message-item [item]="message.getItem(0)"></app-message-item>
+    is defeated.
+  </div>
+  <div *ngSwitchCase="this.messageType.PAUSE_DURATION_CHANGED">
+    Using pause of
+    <app-message-item [item]="message.getItem(0)"></app-message-item>
+    msec.
+  </div>
+</div>

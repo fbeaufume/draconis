@@ -1,5 +1,5 @@
 import {computeEffectiveDamage, computeEffectiveHeal, Skill} from './skill.model';
-import {logs} from './log.model';
+import {messages} from './message.model';
 import {Constants} from './constants.model';
 import {
   CreatureClass,
@@ -7,7 +7,7 @@ import {
   CreatureType,
   ElementType,
   FactionType,
-  LogType,
+  MessageType,
   StatusExpirationType,
   StatusTypeTagType
 } from './common.model';
@@ -411,7 +411,7 @@ export abstract class Creature {
   }
 
   /**
-   * Apply all DOT and HOT to the creature and log a single message.
+   * Apply all DOT and HOT to the creature and display a single message.
    */
   applyDotsAndHots() {
     // Use the DOT statuses
@@ -419,7 +419,7 @@ export abstract class Creature {
       if (sa.originCreature != null) {
         const lifeChange = computeEffectiveDamage(sa, sa.originCreature, this, sa.power);
         this.addLifeChange(lifeChange);
-        logs.addParameterizedLog(LogType.DOT, this, lifeChange);
+        messages.addParameterizedMessage(MessageType.DOT, this, lifeChange);
       }
     })
 
@@ -428,7 +428,7 @@ export abstract class Creature {
       if (sa.originCreature != null) {
         const lifeChange = computeEffectiveHeal(sa.originCreature, this, sa.power);
         this.addLifeChange(lifeChange);
-        logs.addParameterizedLog(LogType.HOT, this, lifeChange);
+        messages.addParameterizedMessage(MessageType.HOT, this, lifeChange);
       }
     })
   }

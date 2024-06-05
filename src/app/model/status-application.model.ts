@@ -1,6 +1,6 @@
-import {Creature} from "./creature.model";
-import {StatusType} from "./status-type.model";
-import {ElementType, StatusTypeTagType} from "./common.model";
+import {Creature} from './creature.model';
+import {StatusType} from './status-type.model';
+import {ElementType, StatusTypeTagType} from './common.model';
 
 /**
  * A status applied to a creature, such as damage over time, an attack bonus, etc.

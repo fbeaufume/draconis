@@ -1,7 +1,7 @@
 import {Component, Input} from '@angular/core';
 import {CommonModule} from '@angular/common';
-import {StatusTypeName} from "../../model/status-type.model";
-import {StatusApplication} from "../../model/status-application.model";
+import {StatusTypeName} from '../../model/status-type.model';
+import {StatusApplication} from '../../model/status-application.model';
 
 @Component({
   selector: 'app-status',

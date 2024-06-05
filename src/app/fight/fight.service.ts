@@ -2,9 +2,9 @@ import {Injectable} from '@angular/core';
 import {Game} from '../model/game.model';
 import {Creature} from '../model/creature.model';
 import {Skill} from '../model/skill.model';
-import {Log, logs} from '../model/log.model';
+import {Message, messages} from '../model/message.model';
 import {Constants} from '../model/constants.model';
-import {BasicLogType, GameState, LogType, SkillTargetType, StatusExpirationType} from '../model/common.model';
+import {BasicMessageType, GameState, MessageType, SkillTargetType, StatusExpirationType} from '../model/common.model';
 import {Character} from '../model/character.model';
 import {Party} from '../model/party.model';
 import {settings} from '../model/settings.model';
@@ -23,8 +23,8 @@ export class FightService {
     this.game = new Game();
   }
 
-  get logs(): Log[] {
-    return logs.logs;
+  get messages(): Message[] {
+    return messages.messages;
   }
 
   get state(): GameState {
@@ -76,12 +76,12 @@ export class FightService {
       // Initialize the next fight
       this.game.startNextEncounter();
 
-      logs.clear();
-      logs.addParameterizedLog(LogType.OPPOSITION_APPEAR, this.fight.opposition.description);
+      messages.clear();
+      messages.addParameterizedMessage(MessageType.OPPOSITION_APPEAR, this.fight.opposition.description);
     } else if (this.game.state == GameState.START_FIGHT) {
       this.game.state = GameState.END_OF_TURN;
 
-      logs.addParameterizedLog(LogType.START_ROUND, this.fight.round);
+      messages.addParameterizedMessage(MessageType.START_ROUND, this.fight.round);
 
       // Execute the turn of the first creature
       await this.processTurn();
@@ -272,7 +272,7 @@ export class FightService {
     // Get the effective target creatures
     this.fight.targetCreatures.push(...this.fight.selectedSkill.getTargetCharacters(character, this.fight));
 
-    // Execute the skill and log the output
+    // Execute the skill and display the output
     this.executeSkill(this.fight.selectedSkill);
 
     this.state = GameState.EXECUTING_SKILL;
@@ -337,7 +337,7 @@ export class FightService {
   }
 
   /**
-   * Process the second step of an enemy turn: execute the skill and log the result.
+   * Process the second step of an enemy turn: execute the skill and display the result.
    */
   async processEnemyTurnStep2(action: EnemyAction) {
     // Execute the skill
@@ -378,7 +378,7 @@ export class FightService {
       // Start the next round
       if (!await this.processEndOfFight()) {
         this.fight.round++;
-        logs.addParameterizedLog(LogType.START_ROUND, this.fight.round);
+        messages.addParameterizedMessage(MessageType.START_ROUND, this.fight.round);
 
         await this.processNextTurn(true);
       }
@@ -386,7 +386,7 @@ export class FightService {
       // Start the next round
       if (!await this.processEndOfFight()) {
         this.fight.round++;
-        logs.addParameterizedLog(LogType.START_ROUND, this.fight.round);
+        messages.addParameterizedMessage(MessageType.START_ROUND, this.fight.round);
 
         await this.processNextTurn(true);
       }
@@ -466,8 +466,8 @@ export class FightService {
     // Remove dead enemies from the turn order
     this.fight.turnOrder.removeDeadEnemies();
 
-    // Log the defeated enemies
-    removedEnemies.forEach(enemy => logs.addParameterizedLog(LogType.ENEMY_DEFEAT, enemy));
+    // Message the defeated enemies
+    removedEnemies.forEach(enemy => messages.addParameterizedMessage(MessageType.ENEMY_DEFEAT, enemy));
   }
 
   /**
@@ -482,7 +482,7 @@ export class FightService {
       await this.pause();
 
       // The dungeon is over
-      logs.addBasicLog(BasicLogType.PARTY_DEFEAT);
+      messages.addBasicMessage(BasicMessageType.PARTY_DEFEAT);
       this.state = GameState.DUNGEON_END;
 
       return true;
@@ -494,14 +494,14 @@ export class FightService {
 
       await this.pause();
 
-      logs.addBasicLog(BasicLogType.PARTY_VICTORY);
+      messages.addBasicMessage(BasicMessageType.PARTY_VICTORY);
 
       if (this.game.hasNextEncounter()) {
         // Moving on to the next encounter
         this.state = GameState.START_NEXT_ENCOUNTER;
       } else {
         // The dungeon is over
-        logs.addBasicLog(BasicLogType.DUNGEON_CLEAR);
+        messages.addBasicMessage(BasicMessageType.DUNGEON_CLEAR);
         this.state = GameState.DUNGEON_END;
       }
 

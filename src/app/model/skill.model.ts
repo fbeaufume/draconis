@@ -1,11 +1,11 @@
 import {Creature} from './creature.model';
-import {logs} from './log.model';
+import {messages} from './message.model';
 import {
-  BasicLogType,
+  BasicMessageType,
   DamageSource,
   ElementType,
   LifeChangeEfficiency,
-  LogType,
+  MessageType,
   SkillModifierType,
   SkillTargetType
 } from './common.model';
@@ -494,7 +494,7 @@ export class Advance extends Skill {
     }
     activeEnemy.distance--;
 
-    logs.addParameterizedLog(LogType.ADVANCE, activeEnemy);
+    messages.addParameterizedMessage(MessageType.ADVANCE, activeEnemy);
   }
 
   override isUsableByCreature(creature: Creature, fight: Fight): boolean {
@@ -518,24 +518,24 @@ export class Wait extends Skill {
   }
 
   override executeOnActiveCreature(activeCreature: Creature, _fight: Fight) {
-    logs.addParameterizedLog(LogType.WAIT, activeCreature);
+    messages.addParameterizedMessage(MessageType.WAIT, activeCreature);
   }
 }
 
 /**
- * Log a message.
+ * Display a message.
  */
-export class LogMessage extends Skill {
+export class Message extends Skill {
 
-  basicLogType: BasicLogType;
+  basicMessageType: BasicMessageType;
 
-  constructor(basicLogType: BasicLogType) {
-    super('Log Message', SkillTargetType.NONE, 0, false, 0, 1, '', ElementType.NONE);
-    this.basicLogType = basicLogType;
+  constructor(basicMessageType: BasicMessageType) {
+    super('Message', SkillTargetType.NONE, 0, false, 0, 1, '', ElementType.NONE);
+    this.basicMessageType = basicMessageType;
   }
 
   override executeOnActiveCreature(_activeCreature: Creature, _fight: Fight) {
-    logs.addBasicLog(this.basicLogType);
+    messages.addBasicMessage(this.basicMessageType);
   }
 }
 
@@ -555,7 +555,7 @@ export class Leave extends Skill {
     fight.opposition.removeDeadEnemies();
     fight.opposition.removeEmptyRows();
 
-    logs.addParameterizedLog(LogType.LEAVE, activeCreature);
+    messages.addParameterizedMessage(MessageType.LEAVE, activeCreature);
   }
 }
 
@@ -567,7 +567,7 @@ export class Defend extends Skill {
   override executeOnActiveCreature(activeCreature: Creature, _fight: Fight) {
     activeCreature.applyStatus(new StatusApplication(defend, 0, activeCreature, this.statusDuration, ElementType.NONE));
 
-    logs.addSkillExecutionLog(activeCreature, this, null, null);
+    messages.addSkillExecutionMessage(activeCreature, this, null, null);
   }
 }
 
@@ -603,7 +603,7 @@ abstract class ApplyStatus extends Skill {
       const statusApplication = new StatusApplication(status, this.powerLevels[0], activeCreature, this.statusDuration, ElementType.REMOVE_THIS);
       targetCreature.applyStatus(statusApplication);
 
-      logs.addSkillExecutionLog(activeCreature, this, targetCreature, null);
+      messages.addSkillExecutionMessage(activeCreature, this, targetCreature, null);
     })
   }
 }
@@ -626,7 +626,7 @@ export class ApplyDeterioration extends ApplyStatus {
 export class Damage extends Skill {
 
   override executeOnTargetCreature(activeCreature: Creature, targetCreature: Creature, _fight: Fight) {
-    logs.addSkillExecutionLog(activeCreature, this, targetCreature,
+    messages.addSkillExecutionMessage(activeCreature, this, targetCreature,
       targetCreature.addLifeChange(computeEffectiveDamage(this, activeCreature, targetCreature, this.powerLevels[0])));
   }
 }
@@ -740,7 +740,7 @@ export class ComboDamage extends Skill {
     const power: number = this.powerLevels[comboStep - 1];
 
     const lifeChange = targetCreature.addLifeChange(computeEffectiveDamage(this, activeCreature, targetCreature, power))
-    logs.addSkillExecutionLog(activeCreature, this, targetCreature, lifeChange);
+    messages.addSkillExecutionMessage(activeCreature, this, targetCreature, lifeChange);
 
     // Add the status only if the attack succeeded
     if (comboStep <= 2 && lifeChange.isSuccess()) {
@@ -762,11 +762,11 @@ export class Drain extends Skill {
   override executeOnTargetCreature(activeCreature: Creature, targetCreature: Creature, _fight: Fight) {
     const lifeChange: LifeChange = computeEffectiveDamage(this, activeCreature, targetCreature, this.powerLevels[0]);
 
-    logs.addSkillExecutionLog(activeCreature, this, targetCreature, targetCreature.addLifeChange(lifeChange));
+    messages.addSkillExecutionMessage(activeCreature, this, targetCreature, targetCreature.addLifeChange(lifeChange));
 
-    // Execute and log the second life change only if the attack succeeded
+    // Execute and display the second life change only if the attack succeeded
     if (lifeChange.isSuccess()) {
-      logs.addSkillExecutionLog(activeCreature, this, activeCreature, activeCreature.addLifeChange(new LifeGain(lifeChange.amount * this.powerLevels[1], lifeChange.efficiency)));
+      messages.addSkillExecutionMessage(activeCreature, this, activeCreature, activeCreature.addLifeChange(new LifeGain(lifeChange.amount * this.powerLevels[1], lifeChange.efficiency)));
     }
   }
 }
@@ -779,11 +779,11 @@ export class Berserk extends Skill {
   override executeOnTargetCreature(activeCreature: Creature, targetCreature: Creature, _fight: Fight) {
     const lifeChange: LifeChange = computeEffectiveDamage(this, activeCreature, targetCreature, this.powerLevels[0]);
 
-    logs.addSkillExecutionLog(activeCreature, this, targetCreature, targetCreature.addLifeChange(lifeChange));
+    messages.addSkillExecutionMessage(activeCreature, this, targetCreature, targetCreature.addLifeChange(lifeChange));
 
-    // Execute and log the second life change only if the attack succeeded
+    // Execute and display the second life change only if the attack succeeded
     if (lifeChange.isSuccess()) {
-      logs.addSkillExecutionLog(activeCreature, this, activeCreature, activeCreature.addLifeChange(new LifeLoss(lifeChange.amount * this.powerLevels[1], lifeChange.efficiency)));
+      messages.addSkillExecutionMessage(activeCreature, this, activeCreature, activeCreature.addLifeChange(new LifeLoss(lifeChange.amount * this.powerLevels[1], lifeChange.efficiency)));
     }
   }
 }
@@ -798,7 +798,7 @@ export class DamageAndDot extends Skill {
     const lifeChange: LifeChange = computeEffectiveDamage(this, activeCreature, targetCreature, this.powerLevels[0]);
 
     // Direct damage part
-    logs.addSkillExecutionLog(activeCreature, this, targetCreature, targetCreature.addLifeChange(lifeChange));
+    messages.addSkillExecutionMessage(activeCreature, this, targetCreature, targetCreature.addLifeChange(lifeChange));
 
     // Damage over time part
     if (lifeChange.isSuccess()) {
@@ -816,7 +816,7 @@ export class DamageAndStatus extends Skill {
     const lifeChange: LifeChange = computeEffectiveDamage(this, activeCreature, targetCreature, this.powerLevels[0]);
 
     // Damage part
-    logs.addSkillExecutionLog(activeCreature, this, targetCreature, targetCreature.addLifeChange(lifeChange));
+    messages.addSkillExecutionMessage(activeCreature, this, targetCreature, targetCreature.addLifeChange(lifeChange));
 
     // Statuses part
     if (lifeChange.isSuccess()) {
@@ -843,7 +843,7 @@ export class DamageAndSelfStatus extends Damage {
 export class Heal extends Skill {
 
   override executeOnTargetCreature(activeCreature: Creature, targetCreature: Creature, _fight: Fight) {
-    logs.addSkillExecutionLog(activeCreature, this, targetCreature,
+    messages.addSkillExecutionMessage(activeCreature, this, targetCreature,
       targetCreature.addLifeChange(computeEffectiveHeal(activeCreature, targetCreature, this.powerLevels[0])));
   }
 
@@ -863,10 +863,10 @@ export class Heal extends Skill {
 export class DualHeal extends Skill {
 
   override executeOnTargetCreature(activeCreature: Creature, targetCreature: Creature, _fight: Fight) {
-    logs.addSkillExecutionLog(activeCreature, this, targetCreature,
+    messages.addSkillExecutionMessage(activeCreature, this, targetCreature,
       targetCreature.addLifeChange(computeEffectiveHeal(activeCreature, targetCreature, this.powerLevels[0])));
 
-    logs.addSkillExecutionLog(activeCreature, this, activeCreature,
+    messages.addSkillExecutionMessage(activeCreature, this, activeCreature,
       activeCreature.addLifeChange(computeEffectiveHeal(activeCreature, activeCreature, this.powerLevels[1])));
   }
 }
@@ -879,9 +879,9 @@ export class Sacrifice extends Skill {
   override executeOnTargetCreature(activeCreature: Creature, targetCreature: Creature, _fight: Fight) {
     const lifeChange: LifeChange = computeEffectiveHeal(activeCreature, targetCreature, this.powerLevels[0]);
 
-    logs.addSkillExecutionLog(activeCreature, this, targetCreature, targetCreature.addLifeChange(lifeChange));
+    messages.addSkillExecutionMessage(activeCreature, this, targetCreature, targetCreature.addLifeChange(lifeChange));
 
-    logs.addSkillExecutionLog(activeCreature, this, activeCreature,
+    messages.addSkillExecutionMessage(activeCreature, this, activeCreature,
       activeCreature.addLifeChange(new LifeLoss(lifeChange.amount * this.powerLevels[1], lifeChange.efficiency)));
   }
 }
@@ -894,7 +894,7 @@ export class Regenerate extends Heal {
 
   override executeOnTargetCreature(activeCreature: Creature, targetCreature: Creature, _fight: Fight) {
     targetCreature.applyStatus(new StatusApplication(regeneration, this.powerLevels[1], activeCreature, this.statusDuration, ElementType.LIGHT));
-    logs.addSkillExecutionLog(activeCreature, this, targetCreature, null);
+    messages.addSkillExecutionMessage(activeCreature, this, targetCreature, null);
   }
 }
 
@@ -905,7 +905,7 @@ export class Revive extends Skill {
 
   override executeOnTargetCreature(activeCreature: Creature, targetCreature: Creature, _fight: Fight) {
     targetCreature.addLifeChange(new LifeGain(targetCreature.lifeMax / 2));
-    logs.addSkillExecutionLog(activeCreature, this, targetCreature, null);
+    messages.addSkillExecutionMessage(activeCreature, this, targetCreature, null);
   }
 }
 
@@ -917,7 +917,7 @@ export class AlterTime extends Skill {
   override executeOnTargetCreature(activeCreature: Creature, targetCreature: Creature, _fight: Fight) {
     const increment: number = activeCreature?.isSameFactionThan(targetCreature) ? 1 : -1;
     targetCreature.activeStatusApplications.forEach(sa => sa.remainingDuration += sa.isImprovement() ? increment : -increment)
-    logs.addSkillExecutionLog(activeCreature, this, targetCreature, null);
+    messages.addSkillExecutionMessage(activeCreature, this, targetCreature, null);
   }
 }
 

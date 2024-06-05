@@ -1,13 +1,13 @@
 // Application constants
 
-import {GameState} from "./common.model";
+import {GameState} from './common.model';
 
 export class Constants {
 
   /**
-   * The maximum number of displayed log messages.
+   * The maximum number of displayed messages.
    */
-  static readonly LOG_MAX = 20;
+  static readonly MESSAGE_MAX = 20;
 
   /**
    * A pause duration preset, in msec.

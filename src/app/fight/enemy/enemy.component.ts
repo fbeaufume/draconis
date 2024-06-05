@@ -1,8 +1,8 @@
 import {Component, Input} from '@angular/core';
 import {CommonModule} from '@angular/common';
-import {LifeChangePopupComponent} from "../life-change-popup/life-change-popup.component";
-import {StatusComponent} from "../status/status.component";
-import {Enemy} from "../../model/enemy.model";
+import {LifeChangePopupComponent} from '../life-change-popup/life-change-popup.component';
+import {StatusComponent} from '../status/status.component';
+import {Enemy} from '../../model/enemy.model';
 
 @Component({
   selector: 'app-enemy',

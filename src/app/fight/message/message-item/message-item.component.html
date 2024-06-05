@@ -1,17 +1,17 @@
-<ng-container [ngSwitch]="getLogItemType()">
-  <span *ngSwitchCase="logItemType.CREATURE"
+<ng-container [ngSwitch]="getMessageItemType()">
+  <span *ngSwitchCase="messageItemType.CREATURE"
         [ngClass]="item.isEnemy() ? (item.isChampion() ? 'text-orange-500' : 'text-yellow-200') : 'text-gray-200'">{{ item.name }}
   </span>
-  <span *ngSwitchCase="logItemType.SKILL" class="text-blue-400">{{ item.name }}
+  <span *ngSwitchCase="messageItemType.SKILL" class="text-blue-400">{{ item.name }}
   </span>
-  <span *ngSwitchCase="logItemType.LIFE_CHANGE">
+  <span *ngSwitchCase="messageItemType.LIFE_CHANGE">
     <span class="font-bold" [ngClass]="item.isGain() ? 'text-green-500' : 'text-red-500'">{{ item.amount }}</span> HP
     <span *ngIf="item.isCritical()"> (critical)</span>
     <span *ngIf="item.isDodge()"> (dodge)</span>
   </span>
-  <span *ngSwitchCase="logItemType.STATUS_APPLICATION" class="font-bold"
+  <span *ngSwitchCase="messageItemType.STATUS_APPLICATION" class="font-bold"
         [ngClass]="item.isImprovement() ? 'text-green-500' : 'text-red-500'">{{ item.statusType.name }}
   </span>
-  <span *ngSwitchCase="logItemType.OTHER" class="text-gray-200">{{ item }}
+  <span *ngSwitchCase="messageItemType.OTHER" class="text-gray-200">{{ item }}
   </span>
 </ng-container>

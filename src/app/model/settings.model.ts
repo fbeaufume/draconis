@@ -1,6 +1,6 @@
-import {Constants} from "./constants.model";
-import {logs} from "./log.model";
-import {LogType} from "./common.model";
+import {Constants} from './constants.model';
+import {messages} from './message.model';
+import {MessageType} from './common.model';
 
 /**
  * Get the value of a query string parameter (empty string if the param is present without a value) or null.
@@ -67,7 +67,7 @@ export class Settings {
     } else {
       this.pauseDuration = Constants.PAUSE_LONG;
     }
-    logs.addParameterizedLog(LogType.PAUSE_DURATION_CHANGED, this.pauseDuration);
+    messages.addParameterizedMessage(MessageType.PAUSE_DURATION_CHANGED, this.pauseDuration);
   }
 }
 

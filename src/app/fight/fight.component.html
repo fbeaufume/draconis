@@ -112,11 +112,11 @@
     </div>
   </div>
 
-  <!-- Logs -->
+  <!-- Messages -->
 
   <div class="col-span-4 border border-gray-700 bg-gray-800 text-gray-500 p-4">
-    <div class="h-48 overflow-y-scroll" #logFrame>
-      <app-log *ngFor="let log of fightService.logs" [log]="log" #log></app-log>
+    <div class="h-48 overflow-y-scroll" #messageFrame>
+      <app-message *ngFor="let message of fightService.messages" [message]="message" #message></app-message>
     </div>
   </div>
 </div>

@@ -1,6 +1,6 @@
-import {Enemy} from "./enemy.model";
-import {Constants} from "./constants.model";
-import {Creature} from "./creature.model";
+import {Enemy} from './enemy.model';
+import {Constants} from './constants.model';
+import {Creature} from './creature.model';
 
 /**
  * A group of enemies.

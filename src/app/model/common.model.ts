@@ -270,9 +270,9 @@ export enum GameState {
 }
 
 /**
- * The various types of log items.
+ * The various types of message items.
  */
-export enum LogItemType {
+export enum MessageItemType {
   CREATURE,
   SKILL,
   LIFE_CHANGE,
@@ -281,10 +281,10 @@ export enum LogItemType {
 }
 
 /**
- * The various types of log messages.
+ * The various types of messages.
  */
-export enum LogType {
-  BASIC_LOG,
+export enum MessageType {
+  BASIC_MESSAGE,
   ENTER_ZONE,
   OPPOSITION_APPEAR,
   START_ROUND,
@@ -300,7 +300,7 @@ export enum LogType {
   PAUSE_DURATION_CHANGED,
 }
 
-export enum BasicLogType {
+export enum BasicMessageType {
   PARTY_VICTORY = 'The party wins!',
   PARTY_DEFEAT = 'The party was defeated.',
   DUNGEON_CLEAR = 'The dungeon is cleared!',

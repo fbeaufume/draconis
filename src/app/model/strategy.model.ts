@@ -1,7 +1,7 @@
 import {Fight} from './fight.model';
-import {Creature} from "./creature.model";
-import {Skill, Wait} from "./skill.model";
-import {SkillTargetType} from "./common.model";
+import {Creature} from './creature.model';
+import {Skill, Wait} from './skill.model';
+import {SkillTargetType} from './common.model';
 
 /**
  * Interface for the various enemy combat strategies.

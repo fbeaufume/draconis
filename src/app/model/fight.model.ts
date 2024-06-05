@@ -1,10 +1,10 @@
-import {Opposition} from "./opposition.model";
-import {TurnOrder} from "./turn-order.model";
-import {Creature} from "./creature.model";
-import {Character} from "./character.model";
-import {Skill} from "./skill.model";
-import {Enemy} from "./enemy.model";
-import {Party} from "./party.model";
+import {Opposition} from './opposition.model';
+import {TurnOrder} from './turn-order.model';
+import {Creature} from './creature.model';
+import {Character} from './character.model';
+import {Skill} from './skill.model';
+import {Enemy} from './enemy.model';
+import {Party} from './party.model';
 
 /**
  * All things related to a fight: party, opposition, active character, target enemy, etc.

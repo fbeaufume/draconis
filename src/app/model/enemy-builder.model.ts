@@ -1,5 +1,5 @@
 import {Enemy, OldManEnemy, StrategicEnemy, StrategicMeleeEnemy} from './enemy.model';
-import {BasicLogType, CreatureSize, CreatureType, ElementType, SkillTargetType} from './common.model';
+import {BasicMessageType, CreatureSize, CreatureType, ElementType, SkillTargetType} from './common.model';
 import {ConditionalStrategy, PriorityStrategy, SequentialStrategy, WeightedStrategy} from './strategy.model';
 import {
   Advance,
@@ -12,7 +12,7 @@ import {
   Drain,
   Heal,
   Leave,
-  LogMessage,
+  Message,
   MassAlterTime,
   Shot,
   Strike,
@@ -117,7 +117,7 @@ export class EnemyBuilder {
       new SequentialStrategy(
         new Strike('Left Claw', ElementType.PHYSICAL),
         new Strike('Right Claw', ElementType.PHYSICAL),
-        new LogMessage(BasicLogType.DRAGON_BREATH),
+        new Message(BasicMessageType.DRAGON_BREATH),
         new CustomStrike('Fire Breath', ElementType.FIRE, 0.7, SkillTargetType.OTHER_ALL)
       ), CreatureSize.HUGE, 2);
   }

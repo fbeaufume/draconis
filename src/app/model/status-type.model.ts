@@ -1,4 +1,4 @@
-import {ElementType, StatusExpirationType, StatusTypeTagType} from "./common.model";
+import {ElementType, StatusExpirationType, StatusTypeTagType} from './common.model';
 
 /**
  * This base class describes an effects that can be applied when a creature (that has the status of this effect) is involved

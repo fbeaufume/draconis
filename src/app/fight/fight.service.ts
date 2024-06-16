@@ -11,11 +11,14 @@ import {settings} from '../model/settings.model';
 import {Enemy} from '../model/enemy.model';
 import {Fight} from '../model/fight.model';
 import {EnemyAction} from '../model/strategy.model';
+import {Logger} from '../util/log';
 
 @Injectable({
   providedIn: 'root'
 })
 export class FightService {
+
+  logger: Logger = new Logger('FightService');
 
   game: Game;
 
@@ -97,6 +100,8 @@ export class FightService {
     const creature = this.fight.turnOrder.currentOrder[0];
     this.fight.activeCreature = creature;
 
+    this.logger.info(`Starting turn of ${creature.name}`);
+
     // Decrease the skills cooldown
     creature.decreaseCooldowns();
 
@@ -121,7 +126,7 @@ export class FightService {
     } else if (creature.isEndOfRound()) {
       await this.processEndOfRound();
     } else {
-      console.log('Invalid creature type', creature);
+      this.logger.error(`Invalid creature type ${creature}`);
     }
   }
 
@@ -198,7 +203,7 @@ export class FightService {
         this.state = GameState.SELECT_CHARACTER_OR_ENEMY;
         break;
       default:
-        console.log(`Error in selectSkill, skill target type ${skill.targetType} is not supported`);
+        this.logger.error(`Invalid skill target type ${skill.targetType} in selectSkill`);
     }
   }
 

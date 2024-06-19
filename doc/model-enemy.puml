@@ -38,7 +38,7 @@ Enemy <|-- OldMan
 StrategicEnemy <|-- StrategicMeleeEnemy
 StrategicEnemy *-- Strategy
 Strategy <|-- Skill
-Skill <|-- LogMessage
+Skill <|-- Message
 Strategy <|-- PriorityStrategy
 Strategy <|-- SequentialStrategy
 Strategy <|-- WeightedStrategy

@@ -204,7 +204,7 @@ export abstract class Skill extends Strategy implements DamageSource {
       case SkillTargetType.ALIVE:
         return creature.isAlive() && (creature.isCharacter() || this.range >= creature.distance);
       default:
-        console.log(`Error in isUsableOn, target type ${this.targetType} is not supported`);
+        this.logger.error(`Invalid target type ${this.targetType} in isUsableOn`);
         return false;
     }
   }
@@ -249,7 +249,7 @@ export abstract class Skill extends Strategy implements DamageSource {
 
         break;
       default:
-        console.log(`Error in getTargetEnemies, target type ${this.targetType} is not supported`);
+        this.logger.error(`Invalid target type ${this.targetType} in getTargetEnemies`);
     }
 
     return targets;
@@ -270,7 +270,7 @@ export abstract class Skill extends Strategy implements DamageSource {
         targets.push(character);
         break;
       default:
-        console.log(`Error in getTargetCharacters, target type ${this.targetType} is not supported`);
+        this.logger.error(`Invalid target type ${this.targetType} in getTargetCharacters`);
     }
 
     return targets;

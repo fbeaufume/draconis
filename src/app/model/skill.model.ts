@@ -90,6 +90,7 @@ export abstract class Skill extends Strategy implements DamageSource {
    */
   cooldown: number;
 
+  // TODO FBE add a rawDescription attribute that contains the text such as "Does _80% damage over _three turns" that is converted to this description by wrapping words preceded by a "_" by some style such as "<b>" and "</b>"
   /**
    * The skill description. Only used in the UI and for character skills.
    */
@@ -578,7 +579,7 @@ export class DefendTech extends Defend {
 
   constructor() {
     super('Defend', SkillTargetType.NONE, -2, false, 0, 1,
-      'Reduce received damage by 20% during one turn. Regain all TP.', ElementType.NONE, [1], [], Constants.DEFEND_DURATION);
+      'Reduce received damage by <b>20%</b> during <b>one</b> turn. Regain all TP.', ElementType.NONE, [1], [], Constants.DEFEND_DURATION);
   }
 }
 
@@ -589,7 +590,7 @@ export class DefendMagic extends Defend {
 
   constructor() {
     super('Defend', SkillTargetType.NONE, 0, false, 0, 1,
-      'Reduce received damage by 20% during one turn.', ElementType.NONE, [1], [], Constants.DEFEND_DURATION);
+      'Reduce received damage by <b>20%</b> during <b>one</b> turn.', ElementType.NONE, [1], [], Constants.DEFEND_DURATION);
   }
 }
 

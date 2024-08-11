@@ -90,7 +90,6 @@ export abstract class Skill extends Strategy implements DamageSource {
    */
   cooldown: number;
 
-  // TODO FBE add a rawDescription attribute that contains the text such as "Does _80% damage over _three turns" that is converted to this description by wrapping words preceded by a "_" by some style such as "<b>" and "</b>"
   /**
    * The skill description. Only used in the UI and for character skills.
    */
@@ -145,7 +144,8 @@ export abstract class Skill extends Strategy implements DamageSource {
     this.range = range;
     this.cooldownMax = coolDownMax;
     this.cooldown = 0;
-    this.description = description;
+
+    this.description = formatDescription(description);
     this.elementType = elementType;
     this.powerLevels = powerLevels;
     this.statuses = statuses;
@@ -353,6 +353,35 @@ export abstract class Skill extends Strategy implements DamageSource {
   executeOnTargetCreature(_activeCreature: Creature, _targetCreature: Creature, _fight: Fight) {
     // Does nothing by default
   }
+}
+
+/**
+ * Return a skill description with some HTML enhancements.
+ * Currently, it only highlights expressions that start by '_' by wrapping them with '<b>' and '</b>'.
+ */
+export function formatDescription(description: string) {
+  let input = description; // E.g 'one _two three'
+  while (true) {
+    const start = input.lastIndexOf('_'); // E.g. 4
+    if (start < 0) break;
+    const ends = [' ', '.', ',']
+      .map(pattern => input.indexOf(pattern, start))
+      .filter(position => position >= start); // E.g. [8]
+    const end = ends.length <= 0 ? input.length : Math.min(...ends); // E.g. 8
+
+    let next: string;
+    if (end === start + 1) {
+      // Discard empty blocs
+      next = input.substring(0, start) + input.substring(end, input.length);
+    }
+    else {
+      next = input.substring(0, start) + '<b>' + input.substring(start + 1, end) + '</b>' + input.substring(end, input.length);
+    }
+
+    input = next;
+  }
+
+  return input;
 }
 
 /**
@@ -579,7 +608,7 @@ export class DefendTech extends Defend {
 
   constructor() {
     super('Defend', SkillTargetType.NONE, -2, false, 0, 1,
-      'Reduce received damage by <b>20%</b> during <b>one</b> turn. Regain all TP.', ElementType.NONE, [1], [], Constants.DEFEND_DURATION);
+      'Reduce received damage by _20% during _1 round. Regain all TP.', ElementType.NONE, [1], [], Constants.DEFEND_DURATION);
   }
 }
 
@@ -590,7 +619,7 @@ export class DefendMagic extends Defend {
 
   constructor() {
     super('Defend', SkillTargetType.NONE, 0, false, 0, 1,
-      'Reduce received damage by <b>20%</b> during <b>one</b> turn.', ElementType.NONE, [1], [], Constants.DEFEND_DURATION);
+      'Reduce received damage by _20% during _1 round.', ElementType.NONE, [1], [], Constants.DEFEND_DURATION);
   }
 }
 

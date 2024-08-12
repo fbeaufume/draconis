@@ -31,6 +31,7 @@ import {Enemy} from './enemy.model';
 import {Constants} from './constants.model';
 import {Fight} from './fight.model';
 import {Strategy} from './strategy.model';
+import {transformString} from '../util/util';
 
 // TODO FBE use the resistance also for non damaging skill effects (e.g. Intimidate, Ice Blast proc, etc)
 
@@ -145,7 +146,7 @@ export abstract class Skill extends Strategy implements DamageSource {
     this.cooldownMax = coolDownMax;
     this.cooldown = 0;
 
-    this.description = formatDescription(description);
+    this.description = transformString(description, '_', '<b>', '</b>');
     this.elementType = elementType;
     this.powerLevels = powerLevels;
     this.statuses = statuses;
@@ -353,35 +354,6 @@ export abstract class Skill extends Strategy implements DamageSource {
   executeOnTargetCreature(_activeCreature: Creature, _targetCreature: Creature, _fight: Fight) {
     // Does nothing by default
   }
-}
-
-/**
- * Return a skill description with some HTML enhancements.
- * Currently, it only highlights expressions that start by '_' by wrapping them with '<b>' and '</b>'.
- */
-export function formatDescription(description: string) {
-  let input = description; // E.g 'one _two three'
-  while (true) {
-    const start = input.lastIndexOf('_'); // E.g. 4
-    if (start < 0) break;
-    const ends = [' ', '.', ',']
-      .map(pattern => input.indexOf(pattern, start))
-      .filter(position => position >= start); // E.g. [8]
-    const end = ends.length <= 0 ? input.length : Math.min(...ends); // E.g. 8
-
-    let next: string;
-    if (end === start + 1) {
-      // Discard empty blocs
-      next = input.substring(0, start) + input.substring(end, input.length);
-    }
-    else {
-      next = input.substring(0, start) + '<b>' + input.substring(start + 1, end) + '</b>' + input.substring(end, input.length);
-    }
-
-    input = next;
-  }
-
-  return input;
 }
 
 /**

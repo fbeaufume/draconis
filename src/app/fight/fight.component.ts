@@ -15,10 +15,9 @@ import {CharacterComponent} from './character/character.component';
 import {MessageComponent} from './message/message.component';
 
 @Component({
-  selector: 'app-fight',
-  standalone: true,
-  imports: [CommonModule, ClassIconComponent, EnemyComponent, CharacterComponent, MessageComponent],
-  templateUrl: './fight.component.html'
+    selector: 'app-fight',
+    imports: [CommonModule, ClassIconComponent, EnemyComponent, CharacterComponent, MessageComponent],
+    templateUrl: './fight.component.html'
 })
 export class FightComponent implements AfterViewInit {
 

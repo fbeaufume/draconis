@@ -5,10 +5,9 @@ import {Message} from '../../model/message.model';
 import {MessageItemComponent} from './message-item/message-item.component';
 
 @Component({
-  selector: 'app-message',
-  standalone: true,
-  imports: [CommonModule, MessageItemComponent],
-  templateUrl: './message.component.html'
+    selector: 'app-message',
+    imports: [CommonModule, MessageItemComponent],
+    templateUrl: './message.component.html'
 })
 export class MessageComponent {
 

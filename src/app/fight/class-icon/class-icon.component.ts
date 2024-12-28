@@ -4,10 +4,9 @@ import {CreatureClass} from '../../model/common.model';
 import {Creature} from '../../model/creature.model';
 
 @Component({
-  selector: 'app-class-icon',
-  standalone: true,
-  imports: [CommonModule],
-  templateUrl: './class-icon.component.html'
+    selector: 'app-class-icon',
+    imports: [CommonModule],
+    templateUrl: './class-icon.component.html'
 })
 export class ClassIconComponent {
 

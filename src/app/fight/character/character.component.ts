@@ -6,10 +6,9 @@ import {StatusComponent} from '../status/status.component';
 import {ClassIconComponent} from '../class-icon/class-icon.component';
 
 @Component({
-  selector: 'app-character',
-  standalone: true,
-  imports: [CommonModule, LifeChangePopupComponent, StatusComponent, ClassIconComponent],
-  templateUrl: './character.component.html'
+    selector: 'app-character',
+    imports: [CommonModule, LifeChangePopupComponent, StatusComponent, ClassIconComponent],
+    templateUrl: './character.component.html'
 })
 export class CharacterComponent {
 

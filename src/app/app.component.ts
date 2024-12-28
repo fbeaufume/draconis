@@ -6,7 +6,6 @@ import { NgIf } from '@angular/common';
 @Component({
     selector: 'app-root',
     templateUrl: './app.component.html',
-    standalone: true,
     imports: [NgIf, FightComponent]
 })
 export class AppComponent {

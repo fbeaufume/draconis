@@ -3,10 +3,9 @@ import {CommonModule} from '@angular/common';
 import {LifeChange} from '../../model/life-change.model';
 
 @Component({
-  selector: 'app-life-change-popup',
-  standalone: true,
-  imports: [CommonModule],
-  templateUrl: './life-change-popup.component.html'
+    selector: 'app-life-change-popup',
+    imports: [CommonModule],
+    templateUrl: './life-change-popup.component.html'
 })
 export class LifeChangePopupComponent {
 

@@ -4,10 +4,9 @@ import {StatusTypeName} from '../../model/status-type.model';
 import {StatusApplication} from '../../model/status-application.model';
 
 @Component({
-  selector: 'app-status',
-  standalone: true,
-  imports: [CommonModule],
-  templateUrl: './status.component.html'
+    selector: 'app-status',
+    imports: [CommonModule],
+    templateUrl: './status.component.html'
 })
 export class StatusComponent {
 

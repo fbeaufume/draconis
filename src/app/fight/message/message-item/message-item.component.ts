@@ -11,10 +11,9 @@ import {StatusApplication} from '../../../model/status-application.model';
  * a life change amount, etc.) with the right formatting.
  */
 @Component({
-  selector: 'app-message-item',
-  standalone: true,
-  imports: [CommonModule],
-  templateUrl: './message-item.component.html'
+    selector: 'app-message-item',
+    imports: [CommonModule],
+    templateUrl: './message-item.component.html'
 })
 export class MessageItemComponent {
 

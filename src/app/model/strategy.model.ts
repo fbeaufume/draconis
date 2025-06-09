@@ -19,6 +19,7 @@ export abstract class Strategy {
       this.logger.error(`Current creature '${fight.activeCreature?.name}' is not an enemy, in chooseAction`);
     }
 
+    // TODO FBE see if chooseSkill and chooseTargets could be merged into a single method
     const skill: Skill | null = this.chooseSkill(fight);
 
     if (skill == null) {

@@ -9,11 +9,13 @@
 
     <hr class="border-gray-700 my-4">
 
-    <p *ngFor="let creature of fight.turnOrder.currentOrder; index as i" class="p-1"
-       [ngClass]="{ 'text-orange-500': creature.isEnemy() && creature.isChampion(), 'text-yellow-200': creature.isEnemy() && !creature.isChampion(), 'text-gray-500': creature.isDead(), 'text-blue-500': creature.isEndOfRound() }">
-      <app-class-icon [creature]="creature"></app-class-icon>
-      {{ creature.name }}
-    </p>
+    @for (creature of fight.turnOrder.currentOrder; track creature; let i = $index) {
+      <p class="p-1"
+        [ngClass]="{ 'text-orange-500': creature.isEnemy() && creature.isChampion(), 'text-yellow-200': creature.isEnemy() && !creature.isChampion(), 'text-gray-500': creature.isDead(), 'text-blue-500': creature.isEndOfRound() }">
+        <app-class-icon [creature]="creature"></app-class-icon>
+        {{ creature.name }}
+      </p>
+    }
   </div>
 
   <div class="col-span-3">
@@ -22,36 +24,42 @@
 
     <div class="border border-gray-700 bg-gray-800 p-4">
 
-      <ng-container *ngFor="let row of fight.opposition.rows; index as i">
+      @for (row of fight.opposition.rows; track row; let i = $index) {
         <div class="flex justify-center space-x-6 h-28">
-          <app-enemy
-            *ngFor="let enemy of fight.opposition.rows[fight.opposition.rows.length - i - 1].enemies"
-            class="border p-2 flex flex-col items-center"
-            [enemy]="enemy"
-            [ngClass]="[getEnemyBorderClass(enemy), usePointerForStates([this.gameState.SELECT_ENEMY, this.gameState.SELECT_CHARACTER_OR_ENEMY])]"
-            (mouseenter)="fightService.enterEnemy(enemy)"
-            (mouseleave)="fightService.leaveEnemy()"
-            (click)="fightService.selectEnemy(enemy)">
-          </app-enemy>
+          @for (enemy of fight.opposition.rows[fight.opposition.rows.length - i - 1].enemies; track enemy) {
+            <app-enemy
+              class="border p-2 flex flex-col items-center"
+              [enemy]="enemy"
+              [ngClass]="[getEnemyBorderClass(enemy), usePointerForStates([this.gameState.SELECT_ENEMY, this.gameState.SELECT_CHARACTER_OR_ENEMY])]"
+              (mouseenter)="fightService.enterEnemy(enemy)"
+              (mouseleave)="fightService.leaveEnemy()"
+              (click)="fightService.selectEnemy(enemy)">
+            </app-enemy>
+          }
         </div>
-
-        <hr *ngIf="i < oppositionRowCount - 1" class="border-gray-700 my-4">
-      </ng-container>
+        @if (i < oppositionRowCount - 1) {
+          <hr class="border-gray-700 my-4">
+        }
+      }
     </div>
 
     <!-- Party -->
 
-    <div *ngFor="let row of game.party.rows; index as r" class="flex justify-center space-x-4"
-         [ngClass]="{ 'pb-4 mt-8': r == 0}">
-      <app-character *ngFor="let character of row.characters"
-                     class="border w-1/3 bg-gray-800 p-4 h-36"
-                     [character]="character"
-                     [ngClass]="[getCharacterBorderClass(character), usePointerForStates([this.gameState.SELECT_CHARACTER, this.gameState.SELECT_CHARACTER_OR_ENEMY])]"
-                     (mouseenter)="fightService.enterCharacter(character)"
-                     (mouseleave)="fightService.leaveCharacter()"
-                     (click)="fightService.selectCharacter(character)">
-      </app-character>
-    </div>
+    @for (row of game.party.rows; track row; let r = $index) {
+      <div class="flex justify-center space-x-4"
+        [ngClass]="{ 'pb-4 mt-8': r == 0}">
+        @for (character of row.characters; track character) {
+          <app-character
+            class="border w-1/3 bg-gray-800 p-4 h-36"
+            [character]="character"
+            [ngClass]="[getCharacterBorderClass(character), usePointerForStates([this.gameState.SELECT_CHARACTER, this.gameState.SELECT_CHARACTER_OR_ENEMY])]"
+            (mouseenter)="fightService.enterCharacter(character)"
+            (mouseleave)="fightService.leaveCharacter()"
+            (click)="fightService.selectCharacter(character)">
+          </app-character>
+        }
+      </div>
+    }
   </div>
 
   <div class="row-span-2 flex flex-col space-y-8">
@@ -65,50 +73,50 @@
 
       <hr class="border-gray-700 my-4">
 
-      <div *ngFor="let skill of fight.activeCreature?.skills" class="border p-1 flex justify-between"
-           [ngClass]="[getSkillBorderClass(skill), usePointerForStates([this.gameState.SELECT_SKILL, this.gameState.SELECT_ENEMY, this.gameState.SELECT_CHARACTER])]"
-           (mouseenter)="fightService.enterSkill(skill)"
-           (mouseleave)="fightService.leaveSkill()"
-           (click)="fightService.selectSkill(skill)">
-        <p [ngClass]="{ 'text-gray-500': mustDimSkill(skill) }">{{ skill.name }}</p>
-        <p [ngClass]="{ 'text-gray-500': mustDimSkill(skill) }">{{ skill.cost > 0 ? skill.cost : '' }}</p>
-      </div>
+      @for (skill of fight.activeCreature?.skills; track skill) {
+        <div class="border p-1 flex justify-between"
+          [ngClass]="[getSkillBorderClass(skill), usePointerForStates([this.gameState.SELECT_SKILL, this.gameState.SELECT_ENEMY, this.gameState.SELECT_CHARACTER])]"
+          (mouseenter)="fightService.enterSkill(skill)"
+          (mouseleave)="fightService.leaveSkill()"
+          (click)="fightService.selectSkill(skill)">
+          <p [ngClass]="{ 'text-gray-500': mustDimSkill(skill) }">{{ skill.name }}</p>
+          <p [ngClass]="{ 'text-gray-500': mustDimSkill(skill) }">{{ skill.cost > 0 ? skill.cost : '' }}</p>
+        </div>
+      }
     </div>
 
     <!-- Focused skill -->
 
     <div class="flex-1 border border-gray-700 bg-gray-800 p-4">
-      <div *ngIf="fight.focusedSkill != null">
-        <div class="flex justify-center">
-          <p>
-            <span class="mr-1">{{ fight.focusedSkill.name }}</span>
-          </p>
+      @if (fight.focusedSkill != null) {
+        <div>
+          <div class="flex justify-center">
+            <p>
+              <span class="mr-1">{{ fight.focusedSkill.name }}</span>
+            </p>
+          </div>
+          <hr class="border-gray-700 my-4">
+          <div class="flex">
+            <p class="flex-1 text-gray-500">{{ fight.focusedSkill.cost >= 0 ? 'Cost' : 'Gain' }}</p>
+            <p class="flex-1" [ngClass]="{'text-red-500': fight.focusedSkill.cost > (fight.activeCreature?.energy || 0)}">
+              {{ fight.focusedSkill.costAbsoluteValue }}
+            </p>
+          </div>
+          <div class="flex">
+            <p class="flex-1 text-gray-500">Range</p>
+            <p class="flex-1">{{ fight.focusedSkill.range > 0 ? fight.focusedSkill.range : '-' }}</p>
+          </div>
+          <div class="flex">
+            <p class="flex-1 text-gray-500">Cooldown</p>
+            <!-- TODO FBE improve cooldown display, e.g. "3 (1 left)" instead of "1/3" -->
+            <p class="flex-1" [ngClass]="{'text-red-500': fight.focusedSkill.cooldown > 0}">
+              {{ fight.focusedSkill.cooldown }} / {{ fight.focusedSkill.cooldownMax }}
+            </p>
+          </div>
+          <hr class="border-gray-700 my-4">
+          <p [innerHTML]="fight.focusedSkill.description"></p>
         </div>
-
-        <hr class="border-gray-700 my-4">
-
-        <div class="flex">
-          <p class="flex-1 text-gray-500">{{ fight.focusedSkill.cost >= 0 ? 'Cost' : 'Gain' }}</p>
-          <p class="flex-1" [ngClass]="{'text-red-500': fight.focusedSkill.cost > (fight.activeCreature?.energy || 0)}">
-            {{ fight.focusedSkill.costAbsoluteValue }}
-          </p>
-        </div>
-        <div class="flex">
-          <p class="flex-1 text-gray-500">Range</p>
-          <p class="flex-1">{{ fight.focusedSkill.range > 0 ? fight.focusedSkill.range : '-' }}</p>
-        </div>
-        <div class="flex">
-          <p class="flex-1 text-gray-500">Cooldown</p>
-          <!-- TODO FBE improve cooldown display, e.g. "3 (1 left)" instead of "1/3" -->
-          <p class="flex-1" [ngClass]="{'text-red-500': fight.focusedSkill.cooldown > 0}">
-            {{ fight.focusedSkill.cooldown }} / {{ fight.focusedSkill.cooldownMax }}
-          </p>
-        </div>
-
-        <hr class="border-gray-700 my-4">
-
-        <p [innerHTML]="fight.focusedSkill.description"></p>
-      </div>
+      }
     </div>
   </div>
 
@@ -116,7 +124,9 @@
 
   <div class="col-span-4 border border-gray-700 bg-gray-800 text-gray-500 p-4">
     <div class="h-48 overflow-y-scroll" #messageFrame>
-      <app-message *ngFor="let message of fightService.messages" [message]="message" #message></app-message>
+      @for (message of fightService.messages; track message) {
+        <app-message [message]="message" #message></app-message>
+      }
     </div>
   </div>
 </div>

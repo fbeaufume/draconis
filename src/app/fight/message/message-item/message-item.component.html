@@ -1,17 +1,32 @@
-<ng-container [ngSwitch]="getMessageItemType()">
-  <span *ngSwitchCase="messageItemType.CREATURE"
-        [ngClass]="item.isEnemy() ? (item.isChampion() ? 'text-orange-500' : 'text-yellow-200') : 'text-gray-200'">{{ item.name }}
-  </span>
-  <span *ngSwitchCase="messageItemType.SKILL" class="text-blue-400">{{ item.name }}
-  </span>
-  <span *ngSwitchCase="messageItemType.LIFE_CHANGE">
-    <span class="font-bold" [ngClass]="item.isGain() ? 'text-green-500' : 'text-red-500'">{{ item.amount }}</span> HP
-    <span *ngIf="item.isCritical()"> (critical)</span>
-    <span *ngIf="item.isDodge()"> (dodge)</span>
-  </span>
-  <span *ngSwitchCase="messageItemType.STATUS_APPLICATION" class="font-bold"
-        [ngClass]="item.isImprovement() ? 'text-green-500' : 'text-red-500'">{{ item.statusType.name }}
-  </span>
-  <span *ngSwitchCase="messageItemType.OTHER" class="text-gray-200">{{ item }}
-  </span>
-</ng-container>
+
+@switch (getMessageItemType()) {
+  @case (messageItemType.CREATURE) {
+    <span
+      [ngClass]="item.isEnemy() ? (item.isChampion() ? 'text-orange-500' : 'text-yellow-200') : 'text-gray-200'">{{ item.name }}
+    </span>
+  }
+  @case (messageItemType.SKILL) {
+    <span class="text-blue-400">{{ item.name }}
+    </span>
+  }
+  @case (messageItemType.LIFE_CHANGE) {
+    <span>
+      <span class="font-bold" [ngClass]="item.isGain() ? 'text-green-500' : 'text-red-500'">{{ item.amount }}</span> HP
+      @if (item.isCritical()) {
+        <span> (critical)</span>
+      }
+      @if (item.isDodge()) {
+        <span> (dodge)</span>
+      }
+    </span>
+  }
+  @case (messageItemType.STATUS_APPLICATION) {
+    <span class="font-bold"
+      [ngClass]="item.isImprovement() ? 'text-green-500' : 'text-red-500'">{{ item.statusType.name }}
+    </span>
+  }
+  @case (messageItemType.OTHER) {
+    <span class="text-gray-200">{{ item }}
+    </span>
+  }
+}

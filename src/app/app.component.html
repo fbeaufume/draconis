@@ -4,18 +4,22 @@
       <p class="text-4xl font-bold">Draconis</p>
     </div>
     <div class="flex-1 flex justify-center">
-      <div *ngIf="fightService.getProceedMessage() != null">
-        <button class="text-white bg-blue-500 font-bold px-4 py-2 rounded" (click)="fightService.onProceed()">
-          {{fightService.getProceedMessage()}}
-        </button>
-      </div>
+      @if (fightService.getProceedMessage() != null) {
+        <div>
+          <button class="text-white bg-blue-500 font-bold px-4 py-2 rounded" (click)="fightService.onProceed()">
+            {{fightService.getProceedMessage()}}
+          </button>
+        </div>
+      }
     </div>
     <div class="flex-1 flex justify-end">
       <div class="text-xl">
         {{ fightService.game.region }}
-        <span *ngIf="fightService.game.oppositionId > 0">
-          <span class="text-gray-500">/ Fight </span> {{ fightService.game.oppositionId }}
-        </span>
+        @if (fightService.game.oppositionId > 0) {
+          <span>
+            <span class="text-gray-500">/ Fight </span> {{ fightService.game.oppositionId }}
+          </span>
+        }
       </div>
     </div>
   </div>

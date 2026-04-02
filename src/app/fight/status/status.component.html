@@ -1,125 +1,152 @@
-<ng-container [ngSwitch]="statusApplication.statusType.name">
-  <svg *ngSwitchCase="this.statusTypeName.DEFEND" class="inline-block" width="24" height="24" viewBox="0 0 100 100">
-    <title>Defend, granted by {{ statusApplication.getOriginCreatureName() }},
-      {{ statusApplication.remainingDuration }} round{{ statusApplication.remainingDuration > 1 ? 's' : '' }}
+
+@switch (statusApplication.statusType.name) {
+  @case (this.statusTypeName.DEFEND) {
+    <svg class="inline-block" width="24" height="24" viewBox="0 0 100 100">
+      <title>Defend, granted by {{ statusApplication.getOriginCreatureName() }},
+        {{ statusApplication.remainingDuration }} round{{ statusApplication.remainingDuration > 1 ? 's' : '' }}
       left</title>
-    <rect width="100" height="100" style="fill:#10B981;"/>
-    <path d="M 20 20 A 20 40 0 1 0 80 20 Z" fill="none" stroke="#262626"
+      <rect width="100" height="100" style="fill:#10B981;"/>
+      <path d="M 20 20 A 20 40 0 1 0 80 20 Z" fill="none" stroke="#262626"
+        style="stroke-width: 10; stroke-linecap: round;"/>
+      </svg>
+    }
+    @case (this.statusTypeName.BLEED) {
+      <svg class="inline-block" width="24" height="24" viewBox="0 0 100 100">
+        <title>
+          Bleed, inflicted by {{ statusApplication.getOriginCreatureName() }},
+          {{ statusApplication.remainingDuration }} round{{ statusApplication.remainingDuration > 1 ? 's' : '' }}
+        left</title>
+        <rect width="100" height="100" style="fill:#EF4444;"/>
+        <polyline points="35 50 50 25 65 50" stroke="#262626" style="stroke-width: 10; stroke-linecap: round; fill: none;"/>
+        <path d="M 35 50 A 18 20 0 1 0 65 50" fill="none" stroke="#262626"
           style="stroke-width: 10; stroke-linecap: round;"/>
-  </svg>
-  <svg *ngSwitchCase="this.statusTypeName.BLEED" class="inline-block" width="24" height="24" viewBox="0 0 100 100">
-    <title>
-      Bleed, inflicted by {{ statusApplication.getOriginCreatureName() }},
-      {{ statusApplication.remainingDuration }} round{{ statusApplication.remainingDuration > 1 ? 's' : '' }}
-      left</title>
-    <rect width="100" height="100" style="fill:#EF4444;"/>
-    <polyline points="35 50 50 25 65 50" stroke="#262626" style="stroke-width: 10; stroke-linecap: round; fill: none;"/>
-    <path d="M 35 50 A 18 20 0 1 0 65 50" fill="none" stroke="#262626"
-          style="stroke-width: 10; stroke-linecap: round;"/>
-  </svg>
-  <svg *ngSwitchCase="this.statusTypeName.POISON" class="inline-block" width="24" height="24" viewBox="0 0 100 100">
-    <title>Poison, inflicted by {{ statusApplication.getOriginCreatureName() }},
-      {{ statusApplication.remainingDuration }} round{{ statusApplication.remainingDuration > 1 ? 's' : '' }}
-      left</title>
-    <rect width="100" height="100" style="fill:#EF4444;"/>
-    <circle cx="40" cy="25" r="10" fill="#262626"/>
-    <circle cx="70" cy="45" r="15" fill="#262626"/>
-    <circle cx="30" cy="65" r="20" fill="#262626"/>
-  </svg>
-  <svg *ngSwitchCase="this.statusTypeName.BURN" class="inline-block" width="24" height="24" viewBox="0 0 100 100">
-    <title>Burn, inflicted by {{ statusApplication.getOriginCreatureName() }},
-      {{ statusApplication.remainingDuration }} round{{ statusApplication.remainingDuration > 1 ? 's' : '' }}
-      left</title>
-    <rect width="100" height="100" style="fill:#EF4444;"/>
-    <path d="M 35 20 C 45 30 45 40 35 50" fill="none" stroke="#262626"
-          style="stroke-width: 10; stroke-linecap: round;"/>
-    <path d="M 35 50 C 25 60 25 70 35 80" fill="none" stroke="#262626"
-          style="stroke-width: 10; stroke-linecap: round;"/>
-    <path d="M 65 20 C 75 30 75 40 65 50" fill="none" stroke="#262626"
-          style="stroke-width: 10; stroke-linecap: round;"/>
-    <path d="M 65 50 C 55 60 55 70 65 80" fill="none" stroke="#262626"
-          style="stroke-width: 10; stroke-linecap: round;"/>
-  </svg>
-  <svg *ngSwitchCase="this.statusTypeName.REGENERATION" class="inline-block" width="24" height="24" viewBox="0 0 100 100">
-    <title>Regeneration, granted by {{ statusApplication.getOriginCreatureName() }},
-      {{ statusApplication.remainingDuration }} round{{ statusApplication.remainingDuration > 1 ? 's' : '' }}
-      left</title>
-    <rect width="100" height="100" style="fill:#10B981;"/>
-    <line x1="35" y1="45" x2="35" y2="85" stroke="#262626" style="stroke-width: 10; stroke-linecap: round;"/>
-    <line x1="15" y1="65" x2="55" y2="65" stroke="#262626" style="stroke-width: 10; stroke-linecap: round;"/>
-    <line x1="70" y1="15" x2="70" y2="45" stroke="#262626" style="stroke-width: 10; stroke-linecap: round;"/>
-    <line x1="55" y1="30" x2="85" y2="30" stroke="#262626" style="stroke-width: 10; stroke-linecap: round;"/>
-  </svg>
-  <svg *ngSwitchCase="this.statusTypeName.COMBO_1" class="inline-block" width="24" height="24" viewBox="0 0 100 100">
-    <title>Combo shoot 1, granted by {{ statusApplication.getOriginCreatureName() }},
-      {{ statusApplication.remainingDuration }} round{{ statusApplication.remainingDuration > 1 ? 's' : '' }}
-      left</title>
-    <rect width="100" height="100" style="fill:#EF4444;"/>
-    <polygon points="50 30 75 25 70 50" style="fill: #262626;"/>
-    <line x1="25" y1="75" x2="60" y2="40" stroke="#262626" style="stroke-width: 10; stroke-linecap: round;"/>
-  </svg>
-  <svg *ngSwitchCase="this.statusTypeName.COMBO_2" class="inline-block" width="24" height="24" viewBox="0 0 100 100">
-    <title>Combo shoot 2, granted by {{ statusApplication.getOriginCreatureName() }},
-      {{ statusApplication.remainingDuration }} round{{ statusApplication.remainingDuration > 1 ? 's' : '' }}
-      left</title>
-    <rect width="100" height="100" style="fill:#EF4444;"/>
-    <polygon points="35 25 60 20 55 45" style="fill: #262626;"/>
-    <line x1="20" y1="60" x2="45" y2="35" stroke="#262626" style="stroke-width: 10; stroke-linecap: round;"/>
-    <polygon points="55 45 80 40 75 65" style="fill: #262626;"/>
-    <line x1="40" y1="80" x2="65" y2="55" stroke="#262626" style="stroke-width: 10; stroke-linecap: round;"/>
-  </svg>
-  <svg *ngSwitchCase="this.statusTypeName.ATTACK" class="inline-block" width="24" height="24" viewBox="0 0 100 100">
-    <title>Attack, {{ statusApplication.isImprovement() ? 'granted' : 'inflicted' }} by {{
-      statusApplication.getOriginCreatureName() }},
-      {{ statusApplication.remainingDuration }} round{{ statusApplication.remainingDuration > 1 ? 's' : '' }}
-      left</title>
-    <rect width="100" height="100" [ngStyle]="{ 'fill': statusApplication.isImprovement() ? '#10B981' : '#EF4444' }"/>
-    <polygon points="42 55 42 18 50 10 58 18 58 55" style="fill: #262626;" />
-    <line x1="30" y1="60" x2="70" y2="60" stroke="#262626" style="stroke-width: 10; stroke-linecap: round;" />
-    <line x1="50" y1="60" x2="50" y2="80" stroke="#262626" style="stroke-width: 10; stroke-linecap: round;" />
-  </svg>
-  <svg *ngSwitchCase="this.statusTypeName.DEFENSE" class="inline-block" width="24" height="24" viewBox="0 0 100 100">
-    <title>Defense, {{ statusApplication.isImprovement() ? 'granted' : 'inflicted' }} by {{
-      statusApplication.getOriginCreatureName() }},
-      {{ statusApplication.remainingDuration }} round{{ statusApplication.remainingDuration > 1 ? 's' : '' }}
-      left</title>
-    <rect width="100" height="100" [ngStyle]="{ 'fill': statusApplication.isImprovement() ? '#10B981' : '#EF4444' }"/>
-    <path d="M 20 20 A 20 40 0 1 0 80 20 Z" fill="none" stroke="#262626"
-          style="stroke-width: 10; stroke-linecap: round;"/>
-    <path d="M 35 30 A 15 35 0 1 0 65 30 Z" fill="#262626"/>
-  </svg>
-  <svg *ngSwitchCase="this.statusTypeName.FIRE_TRAP" class="inline-block" width="24" height="24" viewBox="0 0 100 100">
-    <title>Fire Trap, granted by {{ statusApplication.getOriginCreatureName() }},
-      {{ statusApplication.remainingDuration }} round{{ statusApplication.remainingDuration > 1 ? 's' : '' }}
-      left</title>
-    <rect width="100" height="100" style="fill:#10B981;" />
-    <path d="M 37 20 C 44 27 44 36 37 43" fill ="none" stroke ="#262626" style="stroke-width: 10; stroke-linecap: round;" />
-    <path d="M 37 43 C 30 50 30 59 37 66" fill ="none" stroke ="#262626" style="stroke-width: 10; stroke-linecap: round;" />
-    <path d="M 63 20 C 70 27 70 36 63 43" fill ="none" stroke ="#262626" style="stroke-width: 10; stroke-linecap: round;" />
-    <path d="M 63 43 C 56 50 56 59 63 66" fill ="none" stroke ="#262626" style="stroke-width: 10; stroke-linecap: round;" />
-    <line x1="25" y1="85" x2="75" y2="85" stroke="#262626" style="stroke-width: 10; stroke-linecap: round;" />
-  </svg>
-  <svg *ngSwitchCase="this.statusTypeName.ICE_TRAP" class="inline-block" width="24" height="24" viewBox="0 0 100 100">
-    <title>Ice Trap, granted by {{ statusApplication.getOriginCreatureName() }},
-      {{ statusApplication.remainingDuration }} round{{ statusApplication.remainingDuration > 1 ? 's' : '' }}
-      left</title>
-    <rect width="100" height="100" style="fill:#10B981;" />
-    <polyline points="50 15 65 42 50 68 35 42 50 15" fill="none" stroke="#262626" style="stroke-width: 10; stroke-linecap: round; stroke-linejoin: round"/>
-    <line x1="25" y1="85" x2="75" y2="85" stroke="#262626" style="stroke-width: 10; stroke-linecap: round;" />
-  </svg>
-  <svg *ngSwitchCase="this.statusTypeName.BLADE_SHIELD" class="inline-block" width="24" height="24" viewBox="0 0 100 100">
-    <title>Thorns, granted by {{ statusApplication.getOriginCreatureName() }},
-      {{ statusApplication.remainingDuration }} round{{ statusApplication.remainingDuration > 1 ? 's' : '' }}
-      left</title>
-    <rect width="100" height="100" style="fill:#10B981;" />
-    <path d="M 25 70 C 40 55 60 55 75 70" fill ="none" stroke ="#262626" style="stroke-width: 10; stroke-linecap: round;" />
-    <polygon points="42 47 50 20 58 47" style="fill: #262626;" />
-    <polygon points="42 47 50 20 58 47" style="fill: #262626;" transform="rotate(-30 50 90)"/>
-    <polygon points="42 47 50 20 58 47" style="fill: #262626;" transform="rotate(30 50 90)"/>
-  </svg>
-</ng-container>
-<div class="flex justify-left space-x-1 pt-1">
-  <div *ngFor="let item of getDurationArray()"
-       [ngClass]="statusApplication.isImprovement() ? 'bg-green-500' : 'bg-red-500'"
-       style="width:2px;height:2px"></div>
-</div>
+        </svg>
+      }
+      @case (this.statusTypeName.POISON) {
+        <svg class="inline-block" width="24" height="24" viewBox="0 0 100 100">
+          <title>Poison, inflicted by {{ statusApplication.getOriginCreatureName() }},
+            {{ statusApplication.remainingDuration }} round{{ statusApplication.remainingDuration > 1 ? 's' : '' }}
+          left</title>
+          <rect width="100" height="100" style="fill:#EF4444;"/>
+          <circle cx="40" cy="25" r="10" fill="#262626"/>
+          <circle cx="70" cy="45" r="15" fill="#262626"/>
+          <circle cx="30" cy="65" r="20" fill="#262626"/>
+        </svg>
+      }
+      @case (this.statusTypeName.BURN) {
+        <svg class="inline-block" width="24" height="24" viewBox="0 0 100 100">
+          <title>Burn, inflicted by {{ statusApplication.getOriginCreatureName() }},
+            {{ statusApplication.remainingDuration }} round{{ statusApplication.remainingDuration > 1 ? 's' : '' }}
+          left</title>
+          <rect width="100" height="100" style="fill:#EF4444;"/>
+          <path d="M 35 20 C 45 30 45 40 35 50" fill="none" stroke="#262626"
+            style="stroke-width: 10; stroke-linecap: round;"/>
+            <path d="M 35 50 C 25 60 25 70 35 80" fill="none" stroke="#262626"
+              style="stroke-width: 10; stroke-linecap: round;"/>
+              <path d="M 65 20 C 75 30 75 40 65 50" fill="none" stroke="#262626"
+                style="stroke-width: 10; stroke-linecap: round;"/>
+                <path d="M 65 50 C 55 60 55 70 65 80" fill="none" stroke="#262626"
+                  style="stroke-width: 10; stroke-linecap: round;"/>
+                </svg>
+              }
+              @case (this.statusTypeName.REGENERATION) {
+                <svg class="inline-block" width="24" height="24" viewBox="0 0 100 100">
+                  <title>Regeneration, granted by {{ statusApplication.getOriginCreatureName() }},
+                    {{ statusApplication.remainingDuration }} round{{ statusApplication.remainingDuration > 1 ? 's' : '' }}
+                  left</title>
+                  <rect width="100" height="100" style="fill:#10B981;"/>
+                  <line x1="35" y1="45" x2="35" y2="85" stroke="#262626" style="stroke-width: 10; stroke-linecap: round;"/>
+                  <line x1="15" y1="65" x2="55" y2="65" stroke="#262626" style="stroke-width: 10; stroke-linecap: round;"/>
+                  <line x1="70" y1="15" x2="70" y2="45" stroke="#262626" style="stroke-width: 10; stroke-linecap: round;"/>
+                  <line x1="55" y1="30" x2="85" y2="30" stroke="#262626" style="stroke-width: 10; stroke-linecap: round;"/>
+                </svg>
+              }
+              @case (this.statusTypeName.COMBO_1) {
+                <svg class="inline-block" width="24" height="24" viewBox="0 0 100 100">
+                  <title>Combo shoot 1, granted by {{ statusApplication.getOriginCreatureName() }},
+                    {{ statusApplication.remainingDuration }} round{{ statusApplication.remainingDuration > 1 ? 's' : '' }}
+                  left</title>
+                  <rect width="100" height="100" style="fill:#EF4444;"/>
+                  <polygon points="50 30 75 25 70 50" style="fill: #262626;"/>
+                  <line x1="25" y1="75" x2="60" y2="40" stroke="#262626" style="stroke-width: 10; stroke-linecap: round;"/>
+                </svg>
+              }
+              @case (this.statusTypeName.COMBO_2) {
+                <svg class="inline-block" width="24" height="24" viewBox="0 0 100 100">
+                  <title>Combo shoot 2, granted by {{ statusApplication.getOriginCreatureName() }},
+                    {{ statusApplication.remainingDuration }} round{{ statusApplication.remainingDuration > 1 ? 's' : '' }}
+                  left</title>
+                  <rect width="100" height="100" style="fill:#EF4444;"/>
+                  <polygon points="35 25 60 20 55 45" style="fill: #262626;"/>
+                  <line x1="20" y1="60" x2="45" y2="35" stroke="#262626" style="stroke-width: 10; stroke-linecap: round;"/>
+                  <polygon points="55 45 80 40 75 65" style="fill: #262626;"/>
+                  <line x1="40" y1="80" x2="65" y2="55" stroke="#262626" style="stroke-width: 10; stroke-linecap: round;"/>
+                </svg>
+              }
+              @case (this.statusTypeName.ATTACK) {
+                <svg class="inline-block" width="24" height="24" viewBox="0 0 100 100">
+                  <title>Attack, {{ statusApplication.isImprovement() ? 'granted' : 'inflicted' }} by {{
+                    statusApplication.getOriginCreatureName() }},
+                    {{ statusApplication.remainingDuration }} round{{ statusApplication.remainingDuration > 1 ? 's' : '' }}
+                  left</title>
+                  <rect width="100" height="100" [ngStyle]="{ 'fill': statusApplication.isImprovement() ? '#10B981' : '#EF4444' }"/>
+                  <polygon points="42 55 42 18 50 10 58 18 58 55" style="fill: #262626;" />
+                  <line x1="30" y1="60" x2="70" y2="60" stroke="#262626" style="stroke-width: 10; stroke-linecap: round;" />
+                  <line x1="50" y1="60" x2="50" y2="80" stroke="#262626" style="stroke-width: 10; stroke-linecap: round;" />
+                </svg>
+              }
+              @case (this.statusTypeName.DEFENSE) {
+                <svg class="inline-block" width="24" height="24" viewBox="0 0 100 100">
+                  <title>Defense, {{ statusApplication.isImprovement() ? 'granted' : 'inflicted' }} by {{
+                    statusApplication.getOriginCreatureName() }},
+                    {{ statusApplication.remainingDuration }} round{{ statusApplication.remainingDuration > 1 ? 's' : '' }}
+                  left</title>
+                  <rect width="100" height="100" [ngStyle]="{ 'fill': statusApplication.isImprovement() ? '#10B981' : '#EF4444' }"/>
+                  <path d="M 20 20 A 20 40 0 1 0 80 20 Z" fill="none" stroke="#262626"
+                    style="stroke-width: 10; stroke-linecap: round;"/>
+                    <path d="M 35 30 A 15 35 0 1 0 65 30 Z" fill="#262626"/>
+                  </svg>
+                }
+                @case (this.statusTypeName.FIRE_TRAP) {
+                  <svg class="inline-block" width="24" height="24" viewBox="0 0 100 100">
+                    <title>Fire Trap, granted by {{ statusApplication.getOriginCreatureName() }},
+                      {{ statusApplication.remainingDuration }} round{{ statusApplication.remainingDuration > 1 ? 's' : '' }}
+                    left</title>
+                    <rect width="100" height="100" style="fill:#10B981;" />
+                    <path d="M 37 20 C 44 27 44 36 37 43" fill ="none" stroke ="#262626" style="stroke-width: 10; stroke-linecap: round;" />
+                    <path d="M 37 43 C 30 50 30 59 37 66" fill ="none" stroke ="#262626" style="stroke-width: 10; stroke-linecap: round;" />
+                    <path d="M 63 20 C 70 27 70 36 63 43" fill ="none" stroke ="#262626" style="stroke-width: 10; stroke-linecap: round;" />
+                    <path d="M 63 43 C 56 50 56 59 63 66" fill ="none" stroke ="#262626" style="stroke-width: 10; stroke-linecap: round;" />
+                    <line x1="25" y1="85" x2="75" y2="85" stroke="#262626" style="stroke-width: 10; stroke-linecap: round;" />
+                  </svg>
+                }
+                @case (this.statusTypeName.ICE_TRAP) {
+                  <svg class="inline-block" width="24" height="24" viewBox="0 0 100 100">
+                    <title>Ice Trap, granted by {{ statusApplication.getOriginCreatureName() }},
+                      {{ statusApplication.remainingDuration }} round{{ statusApplication.remainingDuration > 1 ? 's' : '' }}
+                    left</title>
+                    <rect width="100" height="100" style="fill:#10B981;" />
+                    <polyline points="50 15 65 42 50 68 35 42 50 15" fill="none" stroke="#262626" style="stroke-width: 10; stroke-linecap: round; stroke-linejoin: round"/>
+                    <line x1="25" y1="85" x2="75" y2="85" stroke="#262626" style="stroke-width: 10; stroke-linecap: round;" />
+                  </svg>
+                }
+                @case (this.statusTypeName.BLADE_SHIELD) {
+                  <svg class="inline-block" width="24" height="24" viewBox="0 0 100 100">
+                    <title>Thorns, granted by {{ statusApplication.getOriginCreatureName() }},
+                      {{ statusApplication.remainingDuration }} round{{ statusApplication.remainingDuration > 1 ? 's' : '' }}
+                    left</title>
+                    <rect width="100" height="100" style="fill:#10B981;" />
+                    <path d="M 25 70 C 40 55 60 55 75 70" fill ="none" stroke ="#262626" style="stroke-width: 10; stroke-linecap: round;" />
+                    <polygon points="42 47 50 20 58 47" style="fill: #262626;" />
+                    <polygon points="42 47 50 20 58 47" style="fill: #262626;" transform="rotate(-30 50 90)"/>
+                    <polygon points="42 47 50 20 58 47" style="fill: #262626;" transform="rotate(30 50 90)"/>
+                  </svg>
+                }
+              }
+              <div class="flex justify-left space-x-1 pt-1">
+                @for (item of getDurationArray(); track item) {
+                  <div
+                    [ngClass]="statusApplication.isImprovement() ? 'bg-green-500' : 'bg-red-500'"
+                  style="width:2px;height:2px"></div>
+                }
+              </div>

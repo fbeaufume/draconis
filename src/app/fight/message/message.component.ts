@@ -1,12 +1,12 @@
 import { Component, Input } from '@angular/core';
-import { CommonModule } from '@angular/common';
+
 import {MessageType} from '../../model/common.model';
 import {Message} from '../../model/message.model';
 import {MessageItemComponent} from './message-item/message-item.component';
 
 @Component({
     selector: 'app-message',
-    imports: [CommonModule, MessageItemComponent],
+    imports: [MessageItemComponent],
     templateUrl: './message.component.html'
 })
 export class MessageComponent {

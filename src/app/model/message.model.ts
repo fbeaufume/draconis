@@ -3,13 +3,14 @@ import {BasicMessageType, MessageType} from './common.model';
 import {LifeChange} from './life-change.model';
 import {Constants} from './constants.model';
 import {Skill} from './skill.model';
+import {Identifiable} from "./identifiable.model";
 
 // Message related classes
 
 /**
  * A message.
  */
-export class Message {
+export class Message extends Identifiable {
 
   /**
    * The message template type.
@@ -22,6 +23,7 @@ export class Message {
   items: any[];
 
   constructor(type: MessageType, ...items: any[]) {
+    super();
     this.type = type;
     this.items = items;
   }

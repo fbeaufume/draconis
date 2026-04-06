@@ -3,11 +3,12 @@ import {Party} from './party.model';
 import {Opposition} from './opposition.model';
 import {Character} from './character.model';
 import {Enemy} from './enemy.model';
+import {Identifiable} from "./identifiable.model";
 
 /**
  * The action order of characters and enemies during a turn.
  */
-export class TurnOrder {
+export class TurnOrder extends Identifiable{
 
   /**
    * Turn order of playable creatures (i.e. characters and living enemies).
@@ -18,6 +19,7 @@ export class TurnOrder {
   constructor(
     party: Party,
     opposition: Opposition) {
+    super();
     if (opposition.countAliveCreatures() <= 0) {
       // At the beginning of a dungeon, there is no opposition,
       // so we do not display any turn order

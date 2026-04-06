@@ -100,6 +100,14 @@ export class Character extends Creature {
     this.energy = this.energyMax;
     this.updateEnergyPercent();
   }
+
+  /**
+   * Angular @for does not know how to iterate over a number,
+   * so we give it an array containing the consecutive values, i.e. instead of 3, return [0, 1, 2].
+   */
+  getEnergyMaxArray(): number[] {
+    return Array.from({length: this.energyMax}, (_, i) => i);
+  }
 }
 
 export class Warrior extends Character {

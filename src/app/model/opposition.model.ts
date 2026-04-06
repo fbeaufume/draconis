@@ -1,11 +1,12 @@
 import {Enemy} from './enemy.model';
 import {Constants} from './constants.model';
 import {Creature} from './creature.model';
+import {Identifiable} from "./identifiable.model";
 
 /**
  * A group of enemies.
  */
-export class Opposition {
+export class Opposition extends Identifiable{
 
   /**
    * The description of the opposition.
@@ -35,6 +36,7 @@ export class Opposition {
     row1Enemies: Enemy[] = [],
     // Back row enemies
     row2Enemies: Enemy[] = []) {
+    super();
     this.description = description;
     this.canHaveChampion = canHaveChampion;
     this.rows.push(new OppositionRow(row1Enemies));
@@ -253,7 +255,7 @@ export class Opposition {
 /**
  * A row of enemies in the opposition.
  */
-export class OppositionRow {
+export class OppositionRow extends Identifiable {
 
   /**
    * The enemies of the row.
@@ -261,6 +263,7 @@ export class OppositionRow {
   enemies: Enemy[];
 
   constructor(enemies: Enemy[]) {
+    super();
     this.enemies = enemies;
   }
 

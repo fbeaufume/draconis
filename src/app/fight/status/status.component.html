@@ -144,7 +144,7 @@
                 }
               }
               <div class="flex justify-left space-x-1 pt-1">
-                @for (item of getDurationArray(); track item) {
+                @for (position of getDurationArray(); track position) {
                   <div
                     [ngClass]="statusApplication.isImprovement() ? 'bg-green-500' : 'bg-red-500'"
                   style="width:2px;height:2px"></div>

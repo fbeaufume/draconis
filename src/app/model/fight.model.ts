@@ -5,11 +5,12 @@ import {Character} from './character.model';
 import {Skill} from './skill.model';
 import {Enemy} from './enemy.model';
 import {Party} from './party.model';
+import {Identifiable} from "./identifiable.model";
 
 /**
  * All things related to a fight: party, opposition, active character, target enemy, etc.
  */
-export class Fight {
+export class Fight extends Identifiable {
 
   party: Party;
 
@@ -61,6 +62,7 @@ export class Fight {
     party: Party,
     opposition: Opposition,
   ) {
+    super();
     this.party = party;
     this.opposition = opposition;
     this.turnOrder = new TurnOrder(party, this.opposition);

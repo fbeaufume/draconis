@@ -1,9 +1,10 @@
 import {Character, Knight, Mage, Priest, Warrior} from './character.model';
+import {Identifiable} from "./identifiable.model";
 
 /**
  * The player party.
  */
-export class Party {
+export class Party extends Identifiable {
 
   /**
    * The characters rows. The first row in the array is the front row.
@@ -15,6 +16,7 @@ export class Party {
     row1Characters: Character[],
     // Back row characters
     row2Characters: Character[]) {
+    super();
     this.rows.push(new PartyRow(row1Characters));
     this.rows.push(new PartyRow(row2Characters));
 
@@ -163,7 +165,7 @@ export class StandardParty extends Party {
 /**
  * A row of characters in the party.
  */
-export class PartyRow {
+export class PartyRow extends Identifiable {
 
   /**
    * The characters of the row.
@@ -171,6 +173,7 @@ export class PartyRow {
   characters: Character[];
 
   constructor(characters: Character[]) {
+    super();
     this.characters = characters
   }
 

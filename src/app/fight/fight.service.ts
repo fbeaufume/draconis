@@ -100,7 +100,7 @@ export class FightService {
     const creature = this.fight.turnOrder.currentOrder[0];
     this.fight.activeCreature = creature;
 
-    this.logger.info(`Starting turn of ${creature.name}`);
+    this.logger.debug(`Starting turn of ${creature.name}`);
 
     // Decrease the skills cooldown
     creature.decreaseCooldowns();

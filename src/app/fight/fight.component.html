@@ -9,7 +9,7 @@
 
     <hr class="border-gray-700 my-4">
 
-    @for (creature of fight.turnOrder.currentOrder; track creature; let i = $index) {
+    @for (creature of fight.turnOrder.currentOrder; track creature.id) {
       <p class="p-1"
         [ngClass]="{ 'text-orange-500': creature.isEnemy() && creature.isChampion(), 'text-yellow-200': creature.isEnemy() && !creature.isChampion(), 'text-gray-500': creature.isDead(), 'text-blue-500': creature.isEndOfRound() }">
         <app-class-icon [creature]="creature"></app-class-icon>
@@ -24,9 +24,9 @@
 
     <div class="border border-gray-700 bg-gray-800 p-4">
 
-      @for (row of fight.opposition.rows; track row; let i = $index) {
+      @for (row of fight.opposition.rows; track row.id; let i = $index) {
         <div class="flex justify-center space-x-6 h-28">
-          @for (enemy of fight.opposition.rows[fight.opposition.rows.length - i - 1].enemies; track enemy) {
+          @for (enemy of fight.opposition.rows[fight.opposition.rows.length - i - 1].enemies; track enemy.id) {
             <app-enemy
               class="border p-2 flex flex-col items-center"
               [enemy]="enemy"
@@ -45,10 +45,10 @@
 
     <!-- Party -->
 
-    @for (row of game.party.rows; track row; let r = $index) {
+    @for (row of game.party.rows; track row.id; let r = $index) {
       <div class="flex justify-center space-x-4"
         [ngClass]="{ 'pb-4 mt-8': r == 0}">
-        @for (character of row.characters; track character) {
+        @for (character of row.characters; track character.id) {
           <app-character
             class="border w-1/3 bg-gray-800 p-4 h-36"
             [character]="character"
@@ -73,7 +73,7 @@
 
       <hr class="border-gray-700 my-4">
 
-      @for (skill of fight.activeCreature?.skills; track skill) {
+      @for (skill of fight.activeCreature?.skills; track skill.id) {
         <div class="border p-1 flex justify-between"
           [ngClass]="[getSkillBorderClass(skill), usePointerForStates([this.gameState.SELECT_SKILL, this.gameState.SELECT_ENEMY, this.gameState.SELECT_CHARACTER])]"
           (mouseenter)="fightService.enterSkill(skill)"
@@ -124,7 +124,7 @@
 
   <div class="col-span-4 border border-gray-700 bg-gray-800 text-gray-500 p-4">
     <div class="h-48 overflow-y-scroll" #messageFrame>
-      @for (message of fightService.messages; track message) {
+      @for (message of fightService.messages; track message.id) {
         <app-message [message]="message" #message></app-message>
       }
     </div>

@@ -5,13 +5,14 @@ import {Opposition} from './opposition.model';
 import {Dungeon, FangForestDungeon, ForgottenGraveyardDungeon, MageTowerDungeon, TestDungeon} from './dungeon.model';
 import {Fight} from './fight.model';
 import {messages} from './message.model';
+import {Identifiable} from "./identifiable.model";
 
 // Classes for the whole game and fights
 
 /**
  * Main model class. Contains the party, the dungeons, the current fight, etc.
  */
-export class Game {
+export class Game extends Identifiable {
 
   state: GameState = GameState.START_NEXT_ENCOUNTER;
 
@@ -35,6 +36,7 @@ export class Game {
   fight: Fight = new Fight(this.party, new Opposition('', true));
 
   constructor() {
+    super();
     this.region = this.dungeon.name;
 
     messages.clear();

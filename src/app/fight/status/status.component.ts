@@ -20,9 +20,10 @@ export class StatusComponent {
   }
 
   /**
-   * Angular ngFor does not know how to iterate over a number, so we give it an array.
+   * Angular @for does not know how to iterate over a number,
+   * so we give it an array containing the consecutive values, i.e. instead of 3, return [0, 1, 2].
    */
-  getDurationArray(): any[] {
-    return new Array(this.statusApplication.remainingDuration);
+  getDurationArray(): number[] {
+    return Array.from({length: this.statusApplication.remainingDuration}, (_, i) => i);
   }
 }

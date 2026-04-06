@@ -3,11 +3,12 @@ import {Creature} from './creature.model';
 import {Skill, Wait} from './skill.model';
 import {SkillTargetType} from './common.model';
 import {Logger} from '../util/log';
+import {Identifiable} from "./identifiable.model";
 
 /**
  * Interface for the various enemy combat strategies.
  */
-export abstract class Strategy {
+export abstract class Strategy extends Identifiable {
 
   logger: Logger = new Logger('Strategy');
 

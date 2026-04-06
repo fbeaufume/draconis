@@ -13,7 +13,7 @@
       <div class="h-1 bg-green-500" [style]="'width: ' + character.lifePercent + '%'"></div>
     </div>
     <div class="absolute z-10 flex justify-center space-x-2">
-      @for (lifeChange of character.lifeChanges; track lifeChange) {
+      @for (lifeChange of character.lifeChanges; track lifeChange.id) {
         <app-life-change-popup class="appear" [lifeChange]="lifeChange">
         </app-life-change-popup>
       }
@@ -25,7 +25,7 @@
     </p>
     @if (!character.useMana) {
       <div class="w-28 flex space-x-1">
-        @for (item of [].constructor(character.energyMax); track item; let i = $index) {
+        @for (position of character.getEnergyMaxArray(); track position; let i = $index) {
           <div class="h-1 grow" [ngClass]="character.isAlive() && character.energy > i ? 'bg-purple-500' : 'bg-purple-900'"></div>
         }
       </div>
@@ -39,11 +39,11 @@
   </div>
 </div>
 <div class="flex justify-center space-x-1 pt-4">
-  @for (statusApplication of character.getPositiveStatusApplications(); track statusApplication) {
+  @for (statusApplication of character.getPositiveStatusApplications(); track statusApplication.id) {
     <app-status
     [statusApplication]="statusApplication"></app-status>
   }
-  @for (statusApplication of character.getNegativeStatusApplications(); track statusApplication) {
+  @for (statusApplication of character.getNegativeStatusApplications(); track statusApplication.id) {
     <app-status
     [statusApplication]="statusApplication"></app-status>
   }

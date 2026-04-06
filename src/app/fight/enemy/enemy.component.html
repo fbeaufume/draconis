@@ -2,7 +2,7 @@
 <div class="flex flex-col items-center">
   <p class="pr-2 text-red-500">HP <span class="font-bold">{{ enemy.life}}/{{ enemy.lifeMax }}</span></p>
   <div class="absolute z-10 flex justify-center space-x-2">
-    @for (lifeChange of enemy.lifeChanges; track lifeChange) {
+    @for (lifeChange of enemy.lifeChanges; track lifeChange.id) {
       <app-life-change-popup class="appear" [lifeChange]="lifeChange">
       </app-life-change-popup>
     }
@@ -12,11 +12,11 @@
   </div>
 </div>
 <div class="flex justify-center space-x-1 pt-3">
-  @for (statusApplication of enemy.getPositiveStatusApplications(); track statusApplication) {
+  @for (statusApplication of enemy.getPositiveStatusApplications(); track statusApplication.id) {
     <app-status
     [statusApplication]="statusApplication"></app-status>
   }
-  @for (statusApplication of enemy.getNegativeStatusApplications(); track statusApplication) {
+  @for (statusApplication of enemy.getNegativeStatusApplications(); track statusApplication.id) {
     <app-status
     [statusApplication]="statusApplication"></app-status>
   }

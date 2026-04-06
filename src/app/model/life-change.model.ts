@@ -1,9 +1,10 @@
 import {LifeChangeEfficiency, LifeChangeType} from './common.model';
+import {Identifiable} from "./identifiable.model";
 
 /**
  * A life change due to a damage or heal.
  */
-export class LifeChange {
+export class LifeChange extends Identifiable {
 
   /**
    * Is this a life gain or loss.
@@ -26,6 +27,7 @@ export class LifeChange {
     amount: number,
     efficiency: LifeChangeEfficiency = LifeChangeEfficiency.NORMAL
   ) {
+    super();
     this.amount = Math.round(amount);
     this.efficiency = efficiency;
     this.type = type;

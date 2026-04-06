@@ -14,11 +14,12 @@ import {
 import {StatusType} from './status-type.model';
 import {LifeChange} from './life-change.model';
 import {StatusApplication} from './status-application.model';
+import {Identifiable} from './identifiable.model';
 
 /**
  * Base class for enemies and characters.
  */
-export abstract class Creature {
+export abstract class Creature extends Identifiable {
 
   /**
    * The faction type of the creature.
@@ -140,6 +141,7 @@ export abstract class Creature {
     skills: Skill[],
     specialties: CreatureType[] = []
   ) {
+    super();
     this.factionType = factionType;
     this.type = type;
     this.name = name;

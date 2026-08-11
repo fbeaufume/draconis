@@ -166,13 +166,13 @@ export class StatusType {
 
 // The supported statuses
 export const defend = new StatusType(StatusTypeName.DEFEND, true, StatusExpirationType.ORIGIN_CREATURE_TURN_START, false);
-export const bleed = new StatusType(StatusTypeName.BLEED, false, StatusExpirationType.END_OF_ROUND, true,
+export const bleed = new StatusType(StatusTypeName.BLEED, false, StatusExpirationType.CREATURE_TURN_START, true,
   [StatusTypeTagType.DOT]);
-export const poison = new StatusType(StatusTypeName.POISON, false, StatusExpirationType.END_OF_ROUND, true,
+export const poison = new StatusType(StatusTypeName.POISON, false, StatusExpirationType.CREATURE_TURN_START, true,
   [StatusTypeTagType.DOT]);
-export const burn = new StatusType(StatusTypeName.BURN, false, StatusExpirationType.END_OF_ROUND, true,
+export const burn = new StatusType(StatusTypeName.BURN, false, StatusExpirationType.CREATURE_TURN_START, true,
   [StatusTypeTagType.DOT]);
-export const regeneration = new StatusType(StatusTypeName.REGENERATION, true, StatusExpirationType.END_OF_ROUND, true,
+export const regeneration = new StatusType(StatusTypeName.REGENERATION, true, StatusExpirationType.CREATURE_TURN_START, true,
   [StatusTypeTagType.HOT]);
 export const combo1 = new StatusType(StatusTypeName.COMBO_1, false, StatusExpirationType.ORIGIN_CREATURE_TURN_END, true);
 export const combo2 = new StatusType(StatusTypeName.COMBO_2, false, StatusExpirationType.ORIGIN_CREATURE_TURN_END, true);

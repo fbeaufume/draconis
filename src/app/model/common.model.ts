@@ -89,9 +89,9 @@ export enum LifeChangeEfficiency {
 export enum StatusExpirationType {
 
   /**
-   * The status expires at the end of the round, used by life over time changes.
+   * The status expires at the start of the owning creature's first turn of the round, used by life over time changes.
    */
-  END_OF_ROUND,
+  CREATURE_TURN_START,
 
   /**
    * The status expires at the end of the origin creature turn, used by combo strike.

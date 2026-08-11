@@ -130,6 +130,11 @@ export abstract class Creature extends Identifiable {
    */
   activeStatusApplications: StatusApplication[] = [];
 
+  /**
+   * Whether the DOTs and HOTs have already been applied to this creature during the current round.
+   */
+  dotsAndHotsAppliedThisRound: boolean = false;
+
   protected constructor(
     factionType: FactionType,
     type: CreatureType,

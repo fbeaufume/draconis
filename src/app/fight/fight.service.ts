@@ -110,9 +110,39 @@ export class FightService {
       creature.decreaseStatusesDuration(StatusExpirationType.ORIGIN_CREATURE_TURN_START, this.fight.activeCreature);
     });
 
+    // Apply DOTs and HOTs on the creature's first turn of the round; this can kill it
+    if (!creature.isEndOfRound() && !creature.dotsAndHotsAppliedThisRound) {
+      creature.applyDotsAndHots();
+      creature.decreaseStatusesDuration(StatusExpirationType.CREATURE_TURN_START);
+      creature.dotsAndHotsAppliedThisRound = true;
+
+      if (creature.isDead()) {
+        if (creature.isEnemy()) {
+          // Remove the newly dead enemy from the opposition and the turn order, then move on
+          await this.pause();
+
+          this.processDeadEnemies();
+
+          if (await this.processEndOfFight()) {
+            return;
+          }
+
+          // processDeadEnemies() already removed this creature from turnOrder.currentOrder,
+          // so the next living creature is now at the front - do not call nextCreature() again
+          await this.processTurn();
+          return;
+        } else {
+          // Characters are not removed from the turn order when dead, skip their turn normally
+          await this.processNextTurn(false);
+          return;
+        }
+      }
+    }
+
     // Skip dead characters
     if (creature.isDead()) {
       await this.processNextTurn(false);
+      return;
     }
 
     if (creature.isCharacter()) {
@@ -362,39 +392,20 @@ export class FightService {
   }
 
   /**
-   * Process the end of round, e.g. apply DOTs or HOTs.
+   * Process the end of round: reset the DOT/HOT tracking flag and start the next round.
    */
   async processEndOfRound() {
-    // Execute and update end of round statuses
+    // Allow DOTs and HOTs to be applied again on each creature's first turn of the new round
     this.getAllCreatures().forEach(creature => {
-      // Apply the life changes from DOTs and HOTs
-      creature.applyDotsAndHots();
-
-      // Decrease the statuses duration and remove the expired ones
-      creature.decreaseStatusesDuration(StatusExpirationType.END_OF_ROUND);
+      creature.dotsAndHotsAppliedThisRound = false;
     });
 
-    // If there are dead enemies, remove them after a pause
-    if (this.fight.opposition.hasDeadEnemies()) {
-      await this.pause();
+    // Start the next round
+    if (!await this.processEndOfFight()) {
+      this.fight.round++;
+      messages.addParameterizedMessage(MessageType.START_ROUND, this.fight.round);
 
-      this.processDeadEnemies();
-
-      // Start the next round
-      if (!await this.processEndOfFight()) {
-        this.fight.round++;
-        messages.addParameterizedMessage(MessageType.START_ROUND, this.fight.round);
-
-        await this.processNextTurn(true);
-      }
-    } else {
-      // Start the next round
-      if (!await this.processEndOfFight()) {
-        this.fight.round++;
-        messages.addParameterizedMessage(MessageType.START_ROUND, this.fight.round);
-
-        await this.processNextTurn(true);
-      }
+      await this.processNextTurn(true);
     }
   }
 

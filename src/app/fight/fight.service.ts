@@ -129,7 +129,7 @@ export class FightService {
 
           // processDeadEnemies() already removed this creature from turnOrder.currentOrder,
           // so the next living creature is now at the front - do not call nextCreature() again
-          await this.processTurn();
+          await this.processNextTurn(false);
           return;
         } else {
           // Characters are not removed from the turn order when dead, skip their turn normally

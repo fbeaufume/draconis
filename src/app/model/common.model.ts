@@ -234,6 +234,11 @@ export enum GameState {
   END_OF_TURN,
 
   /**
+   * Start of a creature's turn: applying damage/heal over time effects (DOT/HOT).
+   */
+  START_OF_TURN,
+
+  /**
    * Enemy turn.
    */
   ENEMY_TURN,

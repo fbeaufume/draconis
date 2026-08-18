@@ -112,33 +112,59 @@ export class FightService {
 
     // Apply DOTs and HOTs on the creature's first turn of the round; this can kill it
     if (!creature.isEndOfRound() && !creature.dotsAndHotsAppliedThisRound) {
-      creature.applyDotsAndHots();
-      creature.decreaseStatusesDuration(StatusExpirationType.CREATURE_TURN_START);
       creature.dotsAndHotsAppliedThisRound = true;
 
-      if (creature.isDead()) {
-        if (creature.isEnemy()) {
-          // Remove the newly dead enemy from the opposition and the turn order, then move on
-          await this.pause();
-
-          this.processDeadEnemies();
-
-          if (await this.processEndOfFight()) {
-            return;
-          }
-
-          // processDeadEnemies() already removed this creature from turnOrder.currentOrder,
-          // so the next living creature is now at the front - do not call nextCreature() again
-          await this.processNextTurn(false);
-          return;
-        } else {
-          // Characters are not removed from the turn order when dead, skip their turn normally
-          await this.processNextTurn(false);
-          return;
-        }
+      if (creature.hasDotsOrHots()) {
+        await this.processStartOfTurn(creature);
+        return;
       }
     }
 
+    await this.processCreatureTurn(creature);
+  }
+
+  /**
+   * Apply the DOTs and HOTs of a creature in a dedicated game state, so the resulting damage/heal
+   * popup is only displayed briefly instead of lingering until the end of the creature's turn.
+   */
+  async processStartOfTurn(creature: Creature) {
+    this.state = GameState.START_OF_TURN;
+
+    creature.applyDotsAndHots();
+    creature.decreaseStatusesDuration(StatusExpirationType.CREATURE_TURN_START);
+
+    // Give some time to the player to see the DOT/HOT animation
+    await this.pause();
+
+    if (creature.isDead()) {
+      if (creature.isEnemy()) {
+        // Remove the newly dead enemy from the opposition and the turn order, then move on
+        this.processDeadEnemies();
+
+        if (await this.processEndOfFight()) {
+          return;
+        }
+
+        // processDeadEnemies() already removed this creature from turnOrder.currentOrder,
+        // so the next living creature is now at the front - do not call nextCreature() again
+        await this.processNextTurn(false);
+      } else {
+        // Characters are not removed from the turn order when dead, skip their turn normally
+        this.clearLifeChanges();
+        await this.processNextTurn(false);
+      }
+      return;
+    }
+
+    this.clearLifeChanges();
+
+    await this.processCreatureTurn(creature);
+  }
+
+  /**
+   * Determine the next step of a creature's turn once cooldowns, statuses and DOTs/HOTs have been processed.
+   */
+  async processCreatureTurn(creature: Creature) {
     // Skip dead characters
     if (creature.isDead()) {
       await this.processNextTurn(false);

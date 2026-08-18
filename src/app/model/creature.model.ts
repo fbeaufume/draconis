@@ -443,6 +443,14 @@ export abstract class Creature extends Identifiable {
   clearStatusApplications() {
     this.activeStatusApplications = [];
   }
+
+  /**
+   * Return true if the creature has at least one active DOT or HOT effect to apply.
+   */
+  hasDotsOrHots(): boolean {
+    return this.getStatusApplicationsByTag(StatusTypeTagType.DOT).some(sa => sa.originCreature != null)
+      || this.getStatusApplicationsByTag(StatusTypeTagType.HOT).some(sa => sa.originCreature != null);
+  }
 }
 
 /**

@@ -454,7 +454,7 @@ export abstract class Creature extends Identifiable {
 }
 
 /**
- * A special creature only used to mark the end of a round in thr turn order panel.
+ * A special creature only used to mark the end of a round in the turn order panel.
  */
 export class EndOfRound extends Creature {
 
